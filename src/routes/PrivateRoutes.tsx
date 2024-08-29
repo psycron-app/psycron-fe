@@ -1,5 +1,7 @@
+import { CalendarPage } from '@psycron/pages/calendar/CalendarPage';
 import { Dashboard } from '@psycron/pages/dashboard/Dashboard';
 import {
+	AVAILABILITY,
 	CHANGEPASSWORD,
 	DASHBOARD,
 	EDITUSER,
@@ -16,6 +18,7 @@ const privateRoutes = [
 	{ path: EDITUSER, element: <EditUser /> },
 	{ path: EDITUSERBYSESSION, element: <EditUser /> },
 	{ path: CHANGEPASSWORD, element: <EditPassword /> },
+	{ path: AVAILABILITY, element: <CalendarPage /> },
 ];
 
 export default privateRoutes;

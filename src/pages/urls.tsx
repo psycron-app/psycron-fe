@@ -26,3 +26,5 @@ export const CHANGEPASSWORD = `${EDITUSER}/password`;
 export const PATIENTS = 'patients';
 export const PAYMENTS = 'payments';
 export const APPOINTMENTS = 'appointments';
+
+export const AVAILABILITY = 'availability';

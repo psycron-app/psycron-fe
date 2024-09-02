@@ -23,7 +23,6 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 			fontSize: '1em',
 			fontWeight: '500',
 			color: textPrimary,
-			boxShadow: shadowMain,
 			textTransform: 'capitalize',
 			height: '40px',
 		},
@@ -60,7 +59,7 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 			backgroundColor: secondary.main,
 			'&:hover': {
 				backgroundColor: secondary.action.hover,
-				boxShadow: shadowMain,
+				boxShadow: shadowPress,
 			},
 			'&:focus': {
 				backgroundColor: secondary.action.press,
@@ -77,6 +76,7 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 			boxSizing: 'border-box',
 			backgroundColor: 'transparent',
 			'&:hover': {
+				backgroundColor: primary.action.hover,
 				border: generateBorder(primary.action.hover),
 				boxShadow: shadowMain,
 			},
@@ -95,6 +95,7 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 			backgroundColor: 'transparent',
 			boxSizing: 'border-box',
 			'&:hover': {
+				backgroundColor: secondary.action.hover,
 				border: generateBorder(secondary.action.hover),
 				boxShadow: shadowMain,
 			},

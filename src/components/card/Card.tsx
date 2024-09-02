@@ -1,8 +1,8 @@
-import { Box, CardContent, Divider } from '@mui/material';
+import { CardContent, Divider } from '@mui/material';
 
 import { CardActions } from './CardActions/CardActions';
 import { CardTitle } from './CardTitle/CardTitle';
-import { CardWrapper } from './Card.styles';
+import { CardWrapper, Content } from './Card.styles';
 import type { CardProps } from './Card.types';
 
 export const Card = ({
@@ -20,7 +20,7 @@ export const Card = ({
 						<Divider />
 					</>
 				) : null}
-				<Box>{children}</Box>
+				<Content>{children}</Content>
 				<CardActions {...cardActionsProps} />
 			</CardContent>
 		</CardWrapper>

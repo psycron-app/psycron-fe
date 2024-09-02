@@ -15,11 +15,13 @@ export const PASSRESET = 'password-reset/:token';
 // UNSUBSCRIBE
 export const UNSUBSCRIBE = ':token/unsubscribe';
 
+export const USERID = ':userId';
+
 // PRIVATE
 export const DASHBOARD = 'dashboard';
 // PRIVATE - USER
 export const EDITUSERPATH = 'edit';
-export const EDITUSER = 'edit/:userId';
+export const EDITUSER = `${EDITUSERPATH}/${USERID}`;
 export const EDITUSERBYSESSION = `${EDITUSER}/:session`;
 export const CHANGEPASSWORD = `${EDITUSER}/password`;
 
@@ -27,4 +29,7 @@ export const PATIENTS = 'patients';
 export const PAYMENTS = 'payments';
 export const APPOINTMENTS = 'appointments';
 
-export const AVAILABILITY = 'availability';
+export const AVAILABILITYPATH = 'availability';
+
+export const AVAILABILITY = `${AVAILABILITYPATH}/${USERID}`;
+export const AGENDA = 'agenda';

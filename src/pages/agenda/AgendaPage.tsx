@@ -1,9 +1,14 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Agenda } from '@psycron/components/Agenda/Agenda';
+// import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
+import { Agenda } from '@psycron/components/agenda/Agenda';
 import { FloatingButton } from '@psycron/components/button/Floating/FloatingButton';
 import { Calendar } from '@psycron/components/calendar/Calendar';
 import { Calendar as CalendarIcon } from '@psycron/components/icons';
+import { Modal } from '@psycron/components/modal/Modal';
+import { Text } from '@psycron/components/text/Text';
+import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import {
 	eachDayOfInterval,
 	endOfWeek,
@@ -12,8 +17,15 @@ import {
 } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
-export const CalendarPage = () => {
+import { AVAILABILITYPATH } from '../urls';
+
+export const AgendaPage = () => {
+	// const { t } = useTranslation();
 	const { locale } = useParams<{ locale: string }>();
+	const navigate = useNavigate();
+
+	const { userDetails } = useUserDetails();
+
 	const [isCalendarVisible, setIsCalendarVisible] = useState<boolean>(false);
 
 	const today = startOfToday();
@@ -45,6 +57,12 @@ export const CalendarPage = () => {
 		setIsCalendarVisible(false);
 	};
 
+	const shouldOpenModal = !userDetails?.availability?.length;
+
+	const handleClickEdit = () => {
+		navigate(`/${locale}/${AVAILABILITYPATH}/${userDetails?._id}`);
+	};
+
 	return (
 		<>
 			<FloatingButton
@@ -65,6 +83,26 @@ export const CalendarPage = () => {
 			</FloatingButton>
 
 			<Agenda selectedWeek={selectedWeek} />
+
+			<Modal
+				openModal={shouldOpenModal}
+				title='Oops something went wrong'
+				cardActionsProps={{
+					actionName: 'Set Availability',
+					hasSecondAction: true,
+					secondActionName: 'Later',
+					secondAction: () => navigate(-1),
+					onClick: handleClickEdit,
+				}}
+			>
+				<Box>
+					<Text>
+						It seems you didnt set you availability yet. Please provide us more
+						information related to your appointments, so your patients can
+						schedule it accordingly.
+					</Text>
+				</Box>
+			</Modal>
 		</>
 	);
 };

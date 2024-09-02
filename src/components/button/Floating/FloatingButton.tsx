@@ -24,6 +24,7 @@ export const FloatingButton = ({
 			{children}
 			<ContentWrapper
 				onMouseEnter={(e) => e.stopPropagation()}
+				onClick={(e) => e.stopPropagation()}
 				isVisible={isVisible}
 			>
 				{content}

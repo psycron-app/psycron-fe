@@ -37,6 +37,7 @@ export const SignIn = ({
 					flexDirection='column'
 					justifyContent='center'
 					alignItems='center'
+					pt={4}
 				>
 					<Button type='submit' fullWidth>
 						{t('components.form.signin.title')}

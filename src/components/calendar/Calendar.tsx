@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Box, IconButton } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { IconButton } from '@mui/material';
 import {
 	addDays,
 	addMonths,
@@ -16,12 +16,14 @@ import { ChevronLeft, ChevronRight } from '../icons';
 import { Text } from '../text/Text';
 
 import {
+	DaysWrapper,
 	StyledCalendarNumber,
 	StyledCalendarNumberWrapper,
 	StyledCalendarWrapper,
 	StyledChevronWrapper,
 	StyledPaper,
 	StyledTitle,
+	StyledWeekDays,
 } from './Calendar.styles';
 import type { ICalendarProps } from './Calendar.types';
 
@@ -29,8 +31,14 @@ export const Calendar = ({
 	handleDayClick,
 	dateLocale,
 	today,
+	isEditing,
+	isBig,
+	filteredDates,
+	selectAllRemaining,
 }: ICalendarProps) => {
 	const [currMonth, setCurrMonth] = useState<Date>(() => today);
+
+	const [selectedDates, setSelectedDates] = useState<Date[]>([]);
 
 	const getWeekDays = () => {
 		const start = startOfWeek(today, { locale: dateLocale });
@@ -65,10 +73,76 @@ export const Calendar = ({
 		setCurrMonth((prev) => addMonths(prev, 1));
 	};
 
+	const toggleDateSelection = (day: Date) => {
+		setSelectedDates((prevSelectedDates) => {
+			const isSelected = prevSelectedDates.some(
+				(selectedDay) =>
+					selectedDay.getDate() === day.getDate() &&
+					selectedDay.getMonth() === day.getMonth() &&
+					selectedDay.getFullYear() === day.getFullYear()
+			);
+
+			if (isSelected) {
+				return prevSelectedDates.filter(
+					(selectedDay) =>
+						!(
+							selectedDay.getDate() === day.getDate() &&
+							selectedDay.getMonth() === day.getMonth() &&
+							selectedDay.getFullYear() === day.getFullYear()
+						)
+				);
+			} else {
+				return [...prevSelectedDates, day];
+			}
+		});
+		handleDayClick?.(day);
+	};
+
+	useEffect(() => {
+		if (selectAllRemaining) {
+			setSelectedDates(filteredDates);
+		} else {
+			setSelectedDates([]);
+		}
+	}, [selectAllRemaining, filteredDates]);
+
+	const isCurrentMonth = (day: Date) => {
+		return (
+			day.getMonth() === currMonth.getMonth() &&
+			day.getFullYear() === currMonth.getFullYear()
+		);
+	};
+
+	const isCurrentDay = (day: Date) => {
+		return (
+			day.getDate() === today.getDate() &&
+			day.getMonth() === today.getMonth() &&
+			day.getFullYear() === today.getFullYear()
+		);
+	};
+
+	const isDateSelected = (day: Date) => {
+		return selectedDates?.some(
+			(selectedDay) =>
+				selectedDay.getDate() === day.getDate() &&
+				selectedDay.getMonth() === day.getMonth() &&
+				selectedDay.getFullYear() === day.getFullYear()
+		);
+	};
+
+	const isDateDisabled = (date: Date) => {
+		return !filteredDates.some(
+			(filteredDate) =>
+				filteredDate.getDate() === date.getDate() &&
+				filteredDate.getMonth() === date.getMonth() &&
+				filteredDate.getFullYear() === date.getFullYear()
+		);
+	};
+
 	return (
-		<StyledCalendarWrapper>
+		<StyledCalendarWrapper isBig={isBig}>
 			<StyledPaper>
-				<StyledTitle py={2}>
+				<StyledTitle isBig={isBig}>
 					<Text variant='body2' isFirstUpper>
 						{format(currMonth, 'MMMM yyyy', { locale: dateLocale })}
 					</Text>
@@ -81,50 +155,47 @@ export const Calendar = ({
 						</IconButton>
 					</StyledChevronWrapper>
 				</StyledTitle>
-				<Box
-					display='grid'
-					gridTemplateColumns='repeat(7, 1fr)'
-					textAlign='center'
-				>
+				<StyledWeekDays isBig={isBig}>
 					{daysOfWeek.map((day, index) => (
 						<Text isFirstUpper key={`${day}-${index}`} variant='body2'>
 							{day}
 						</Text>
 					))}
-				</Box>
-				<Box
-					display='grid'
-					gridTemplateColumns='repeat(7, 1fr)'
-					gridAutoRows='30px'
-					mt={1}
-				>
+				</StyledWeekDays>
+				<DaysWrapper isBig={isBig}>
 					{daysInCalendar.map((day, index) => {
-						const isCurrentMonth: boolean =
-							day.getMonth() === currMonth.getMonth() &&
-							day.getFullYear() === currMonth.getFullYear();
+						const currentMonth = isCurrentMonth(day);
 
-						const isCurrentDay: boolean =
-							day.getDate() === today.getDate() &&
-							day.getMonth() === today.getMonth() &&
-							day.getFullYear() === today.getFullYear();
+						const currentDay = isCurrentDay(day);
+
+						const seleted = isDateSelected(day);
+
+						const isDisabled = isDateDisabled(day);
 
 						return (
 							<StyledCalendarNumberWrapper
 								key={`${day}-${index}`}
-								isCurrentMonth={isCurrentMonth}
-								onClick={() => handleDayClick(day)}
+								isCurrentMonth={currentMonth}
+								isBig={isBig}
+								isDisabled={isDisabled}
+								onClick={() =>
+									isEditing ? toggleDateSelection(day) : handleDayClick(day)
+								}
 							>
 								<StyledCalendarNumber
 									variant='body2'
-									isCurrentDay={isCurrentDay}
-									isCurrentMonth={isCurrentMonth}
+									isCurrentDay={currentDay}
+									isCurrentMonth={currentMonth}
+									isSelected={seleted}
+									isBig={isBig}
+									isDisabled={isDisabled}
 								>
 									{format(day, 'd')}
 								</StyledCalendarNumber>
 							</StyledCalendarNumberWrapper>
 						);
 					})}
-				</Box>
+				</DaysWrapper>
 			</StyledPaper>
 		</StyledCalendarWrapper>
 	);

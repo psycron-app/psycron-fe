@@ -34,7 +34,7 @@ export const SignUp = ({
 					helperText={errors.email?.message || signUpError}
 				/>
 				<PasswordInput errors={errors} register={register} hasToConfirm />
-				<Box>
+				<Box pt={4}>
 					<Button type='submit' fullWidth>
 						{t('components.form.signup.title')}
 					</Button>

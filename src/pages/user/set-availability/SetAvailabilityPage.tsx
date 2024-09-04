@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
@@ -57,22 +58,6 @@ export const SetAvailabilityPage = () => {
 
 		return filteredDates;
 	};
-
-	// useEffect(() => {
-	// 	const options: IFilterOptions = {
-	// 		excludeWeekends: watch('excludeWeekends'),
-	// 		excludeSundays: watch('excludeSundays'),
-	// 		selectAllRemaining: watch('selectAllRemaining'),
-	// 	};
-
-	// 	const allDates = generateCalendarDates();
-	// 	const result = applyFilters(allDates, options);
-	// 	setFilteredDates(result);
-	// }, [
-	// 	watch('excludeWeekends'),
-	// 	watch('excludeSundays'),
-	// 	watch('selectAllRemaining'),
-	// ]);
 
 	useEffect(() => {
 		const options: IFilterOptions = {

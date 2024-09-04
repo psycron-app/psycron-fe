@@ -32,4 +32,5 @@ export const APPOINTMENTS = 'appointments';
 export const AVAILABILITYPATH = 'availability';
 
 export const AVAILABILITY = `${AVAILABILITYPATH}/${USERID}`;
+export const AVAILABILITYWIZARD = `${AVAILABILITYPATH}/create`;
 export const AGENDA = 'agenda';

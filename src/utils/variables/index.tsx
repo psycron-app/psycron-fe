@@ -1,10 +1,15 @@
 import ReactGA from 'react-ga4';
+import type { Locale } from 'date-fns';
 import {
+	addDays,
 	addMinutes,
 	differenceInDays,
 	differenceInHours,
 	differenceInMinutes,
 	format,
+	setHours,
+	startOfDay,
+	startOfWeek,
 } from 'date-fns';
 import type { TFunction } from 'i18next';
 
@@ -81,4 +86,31 @@ export const scrollToSection = (id: string) => {
 	if (element) {
 		element.scrollIntoView({ behavior: 'smooth' });
 	}
+};
+
+export const generateDayHours = () => {
+	const hours = Array.from({ length: 24 }).map((_, index) => {
+		return format(setHours(startOfDay(new Date()), index), 'HH:mm');
+	});
+	return hours;
+};
+
+export const generateTimeSlots = (duration: number) => {
+	const slots = [];
+	let currentTime = startOfDay(new Date());
+
+	while (currentTime.getDate() === startOfDay(new Date()).getDate()) {
+		slots.push(format(currentTime, 'HH:mm'));
+		currentTime = addMinutes(currentTime, duration);
+	}
+
+	return slots;
+};
+
+export const generateWeekDays = (locale: Locale): Date[] => {
+	const start = startOfWeek(new Date(), { locale });
+
+	const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(start, i));
+
+	return weekDays;
 };

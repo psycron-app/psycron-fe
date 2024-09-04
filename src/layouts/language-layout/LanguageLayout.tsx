@@ -5,6 +5,7 @@ import { AlertProvider } from '@psycron/context/alert/AlertContext';
 import { UserGeoLocationProvider } from '@psycron/context/CountryContext';
 import { AuthProvider } from '@psycron/context/user/auth/UserAuthenticationContext';
 import { UserDetailsProvider } from '@psycron/context/user/details/UserDetailsContext';
+import { WizardProvider } from '@psycron/context/wizard/WizardContext';
 import i18n from '@psycron/i18n';
 import { AnalyticsTracker } from '@psycron/routes/AnalyticsTracker';
 
@@ -22,8 +23,10 @@ export const LanguageLayout: FC = () => {
 			<AuthProvider>
 				<UserDetailsProvider>
 					<UserGeoLocationProvider>
-						<AnalyticsTracker />
-						<Outlet />
+						<WizardProvider>
+							<AnalyticsTracker />
+							<Outlet />
+						</WizardProvider>
 					</UserGeoLocationProvider>
 				</UserDetailsProvider>
 			</AuthProvider>

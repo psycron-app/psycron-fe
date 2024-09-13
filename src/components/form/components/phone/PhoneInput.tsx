@@ -6,8 +6,8 @@ import countryList from '@psycron/assets/countries/countries.json';
 import { Info, Logo } from '@psycron/components/icons';
 import { Select } from '@psycron/components/Select/Select';
 import { Tooltip } from '@psycron/components/tooltip/Tooltip';
-import { useUserGeolocation } from '@psycron/context/CountryContext';
-import type { CountryDataSimple } from '@psycron/context/CountryContext.types';
+import { useUserGeolocation } from '@psycron/context/geolocation/CountryContext';
+import type { CountryDataSimple } from '@psycron/context/geolocation/CountryContext.types';
 import { palette } from '@psycron/theme/palette/palette.theme';
 
 import { CountryFlag, PhoneNumberField } from './PhoneInput.styles';

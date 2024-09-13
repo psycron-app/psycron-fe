@@ -36,13 +36,15 @@ export const AppLayout: FC = () => {
 
 	return (
 		<LayoutWrapper>
-			<Box>
-				<Navbar />
-			</Box>
-			<Box>
-				<Divider
-					orientation={isMobile || isTablet ? 'horizontal' : 'vertical'}
-				/>
+			<Box zIndex={100} display='flex'>
+				<Box>
+					<Navbar />
+				</Box>
+				<Box>
+					<Divider
+						orientation={isMobile || isTablet ? 'horizontal' : 'vertical'}
+					/>
+				</Box>
 			</Box>
 			<Content>
 				<Outlet />

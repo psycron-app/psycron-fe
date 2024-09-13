@@ -33,10 +33,7 @@ export interface IBaseUser {
 	updatedAt?: Date;
 }
 export interface ITherapist extends IBaseUser {
-	availability: Array<{
-		date: Date;
-		slots: Array<{ endTime: string; startTime: string }>;
-	}>;
+	availability: IAvailability[];
 	password: string;
 	patients?: IPatient[];
 	role: 'THERAPIST' | 'ADMIN';
@@ -74,4 +71,39 @@ export interface INotification {
 	dateUpdated: Date;
 	from: string;
 	method: string;
+}
+
+export interface IAvailability {
+	completed: boolean;
+	consultationDuration: number;
+	createAvailabilitySession: ISessionAvailability;
+	date?: Date;
+	slots: ISlot[];
+	therapistId: string;
+	weekday:
+		| 'Monday'
+		| 'Tuesday'
+		| 'Wednesday'
+		| 'Thursday'
+		| 'Friday'
+		| 'Saturday'
+		| 'Sunday';
+}
+
+export interface ISessionAvailability {
+	completed?: boolean;
+	consultationDuration?: number;
+	step?: number;
+	unavailableHours?: {
+		endTime: string;
+		startTime: string;
+	}[];
+	weekdays?: string[];
+}
+
+export interface ISlot {
+	endTime: string;
+	note?: string;
+	startTime: string;
+	status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED';
 }

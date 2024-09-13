@@ -1,12 +1,11 @@
-import React, { createContext, useContext, useState } from 'react';
+import type { FC, ReactNode } from 'react';
+import { createContext, useContext, useState } from 'react';
 
 import type { WizardContextProps } from './WizardContext.types';
 
 const WizardContext = createContext<WizardContextProps | undefined>(undefined);
 
-export const WizardProvider: React.FC<{ children: React.ReactNode }> = ({
-	children,
-}) => {
+export const WizardProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [activeStep, setActiveStep] = useState<number>(0);
 	const [direction, setDirection] = useState<number>(0);
 

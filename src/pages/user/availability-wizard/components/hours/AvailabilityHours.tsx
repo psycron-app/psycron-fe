@@ -1,0 +1,66 @@
+import { Box, Grid } from '@mui/material';
+import { getAvailabilitySession } from '@psycron/api/user/availability';
+import { TimeSlotsRow } from '@psycron/components/agenda/components/TimeSlots/TimeSlotRow';
+import { WeekDaysHeader } from '@psycron/components/agenda/components/WeekDays/WeekDaysHeader';
+import { Help } from '@psycron/components/icons';
+import { Loader } from '@psycron/components/loader/Loader';
+import { Tooltip } from '@psycron/components/tooltip/Tooltip';
+import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { generateTimeSlots } from '@psycron/utils/variables';
+import { useQuery } from '@tanstack/react-query';
+
+import {
+	StyledIAvailabilityGrid,
+	StyledIAvailabilityHoursBoxWrapper,
+} from './AvailabilityHours.styles';
+
+export const AvailabilityHours = () => {
+	const { userDetails } = useUserDetails();
+
+	const latestSessionId =
+		userDetails?.availability?.[userDetails?.availability?.length - 1];
+
+	const { data: sessionData, isLoading } = useQuery({
+		queryKey: ['availabilitySession', latestSessionId],
+		queryFn: () => getAvailabilitySession(latestSessionId),
+		enabled: !!latestSessionId,
+		retry: 3,
+		retryDelay: 2000,
+	});
+
+	if (isLoading) {
+		return <Loader />;
+	}
+
+	if (!sessionData) {
+		return <Box p={5}>Nenhuma sessão disponível</Box>;
+	}
+
+	const { consultationDuration, weekdays } = sessionData;
+
+	const dayHours = generateTimeSlots(consultationDuration || 60);
+
+	return (
+		<StyledIAvailabilityHoursBoxWrapper>
+			<Box display='flex' justifyContent='flex-end' pb={2}>
+				<Tooltip title='You can select a intire row by clicking on the first slot and dragging until the last one, but only horizontally'>
+					<Help />
+				</Tooltip>
+			</Box>
+			<StyledIAvailabilityGrid container spacing={2}>
+				<WeekDaysHeader isSimple />
+				<Grid container spacing={1} columns={8}>
+					{dayHours.map((hour, index) => (
+						<TimeSlotsRow
+							key={`hour-${index}`}
+							hour={hour}
+							availableWeekdays={weekdays}
+							dayHours={dayHours}
+							isSimple
+						/>
+					))}
+				</Grid>
+			</StyledIAvailabilityGrid>
+		</StyledIAvailabilityHoursBoxWrapper>
+	);
+};

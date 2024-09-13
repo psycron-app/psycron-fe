@@ -2,30 +2,12 @@ import type { ITherapist } from '@psycron/context/user/auth/UserAuthenticationCo
 
 import apiClient from '../axios-instance';
 
-export interface IUserByIdResponse {
-	user: ITherapist;
-}
-
-export interface IEditUser {
-	data: Partial<ITherapist>;
-	userId: string;
-}
-
-export interface IPasswordChange {
-	confirmPassword: string;
-	newPassword: string;
-	password: string;
-}
-
-export interface IChangePass {
-	data: IPasswordChange;
-	userId: string;
-}
-
-export interface IResponse {
-	message: string;
-	status: string;
-}
+import type {
+	IChangePass,
+	IEditUser,
+	IResponse,
+	IUserByIdResponse,
+} from './index.types';
 
 export const getUserById = async (userId: string): Promise<ITherapist> => {
 	const response = await apiClient.get<IUserByIdResponse>(`/users/${userId}`);

@@ -6,6 +6,7 @@ export interface ICalendarProps {
 	handleDayClick?: (day: Date) => void;
 	isBig?: boolean;
 	isEditing?: boolean;
+	isWizard?: boolean;
 	selectAllRemaining?: boolean;
 	today: Date;
 }

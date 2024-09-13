@@ -5,11 +5,11 @@ import type { IWizardItem } from './WizardItem.types';
 
 export const WizardItem = ({ title, options }: IWizardItem) => {
 	return (
-		<Box>
+		<>
 			<WizardItemTitle variant='h4' fontWeight={600}>
 				{title}
 			</WizardItemTitle>
 			<Box py={5}>{options}</Box>
-		</Box>
+		</>
 	);
 };

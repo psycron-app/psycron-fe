@@ -35,10 +35,11 @@ export const Calendar = ({
 	isBig,
 	filteredDates,
 	selectAllRemaining,
+	isWizard,
 }: ICalendarProps) => {
 	const [currMonth, setCurrMonth] = useState<Date>(() => today);
 
-	const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+	const [selectedDates, setSelectedDates] = useState<Date[] | null>(null);
 
 	const getWeekDays = () => {
 		const start = startOfWeek(today, { locale: dateLocale });
@@ -73,30 +74,30 @@ export const Calendar = ({
 		setCurrMonth((prev) => addMonths(prev, 1));
 	};
 
-	const toggleDateSelection = (day: Date) => {
-		setSelectedDates((prevSelectedDates) => {
-			const isSelected = prevSelectedDates.some(
-				(selectedDay) =>
-					selectedDay.getDate() === day.getDate() &&
-					selectedDay.getMonth() === day.getMonth() &&
-					selectedDay.getFullYear() === day.getFullYear()
-			);
+	// const toggleDateSelection = (day: Date) => {
+	// 	setSelectedDates((prevSelectedDates) => {
+	// 		const isSelected = prevSelectedDates.some(
+	// 			(selectedDay) =>
+	// 				selectedDay.getDate() === day.getDate() &&
+	// 				selectedDay.getMonth() === day.getMonth() &&
+	// 				selectedDay.getFullYear() === day.getFullYear()
+	// 		);
 
-			if (isSelected) {
-				return prevSelectedDates.filter(
-					(selectedDay) =>
-						!(
-							selectedDay.getDate() === day.getDate() &&
-							selectedDay.getMonth() === day.getMonth() &&
-							selectedDay.getFullYear() === day.getFullYear()
-						)
-				);
-			} else {
-				return [...prevSelectedDates, day];
-			}
-		});
-		handleDayClick?.(day);
-	};
+	// 		if (isSelected) {
+	// 			return prevSelectedDates.filter(
+	// 				(selectedDay) =>
+	// 					!(
+	// 						selectedDay.getDate() === day.getDate() &&
+	// 						selectedDay.getMonth() === day.getMonth() &&
+	// 						selectedDay.getFullYear() === day.getFullYear()
+	// 					)
+	// 			);
+	// 		} else {
+	// 			return [...prevSelectedDates, day];
+	// 		}
+	// 	});
+	// 	handleDayClick?.(day);
+	// };
 
 	useEffect(() => {
 		if (selectAllRemaining) {
@@ -121,40 +122,43 @@ export const Calendar = ({
 		);
 	};
 
-	const isDateSelected = (day: Date) => {
-		return selectedDates?.some(
-			(selectedDay) =>
-				selectedDay.getDate() === day.getDate() &&
-				selectedDay.getMonth() === day.getMonth() &&
-				selectedDay.getFullYear() === day.getFullYear()
-		);
-	};
+	// const isDateSelected = (day: Date) => {
+	// 	return selectedDates?.some(
+	// 		(selectedDay) =>
+	// 			selectedDay.getDate() === day.getDate() &&
+	// 			selectedDay.getMonth() === day.getMonth() &&
+	// 			selectedDay.getFullYear() === day.getFullYear()
+	// 	);
+	// };
 
-	const isDateDisabled = (date: Date) => {
-		return !filteredDates.some(
-			(filteredDate) =>
-				filteredDate.getDate() === date.getDate() &&
-				filteredDate.getMonth() === date.getMonth() &&
-				filteredDate.getFullYear() === date.getFullYear()
-		);
-	};
+	// const isDateDisabled = (date: Date) => {
+	// 	return !filteredDates.some(
+	// 		(filteredDate) =>
+	// 			filteredDate.getDate() === date.getDate() &&
+	// 			filteredDate.getMonth() === date.getMonth() &&
+	// 			filteredDate.getFullYear() === date.getFullYear()
+	// 	);
+	// };
 
 	return (
 		<StyledCalendarWrapper isBig={isBig}>
 			<StyledPaper>
-				<StyledTitle isBig={isBig}>
-					<Text variant='body2' isFirstUpper>
-						{format(currMonth, 'MMMM yyyy', { locale: dateLocale })}
-					</Text>
-					<StyledChevronWrapper>
-						<IconButton onClick={handlePreviousMonth}>
-							<ChevronLeft />
-						</IconButton>
-						<IconButton onClick={handleNextMonth}>
-							<ChevronRight />
-						</IconButton>
-					</StyledChevronWrapper>
-				</StyledTitle>
+				{!isWizard ? (
+					<StyledTitle isBig={isBig}>
+						<Text variant='body2' isFirstUpper>
+							{format(currMonth, 'MMMM yyyy', { locale: dateLocale })}
+						</Text>
+						<StyledChevronWrapper>
+							<IconButton onClick={handlePreviousMonth}>
+								<ChevronLeft />
+							</IconButton>
+							<IconButton onClick={handleNextMonth}>
+								<ChevronRight />
+							</IconButton>
+						</StyledChevronWrapper>
+					</StyledTitle>
+				) : null}
+
 				<StyledWeekDays isBig={isBig}>
 					{daysOfWeek.map((day, index) => (
 						<Text isFirstUpper key={`${day}-${index}`} variant='body2'>
@@ -168,27 +172,27 @@ export const Calendar = ({
 
 						const currentDay = isCurrentDay(day);
 
-						const seleted = isDateSelected(day);
+						// const seleted = isDateSelected(day);
 
-						const isDisabled = isDateDisabled(day);
+						// const isDisabled = isDateDisabled(day);
 
 						return (
 							<StyledCalendarNumberWrapper
 								key={`${day}-${index}`}
 								isCurrentMonth={currentMonth}
 								isBig={isBig}
-								isDisabled={isDisabled}
-								onClick={() =>
-									isEditing ? toggleDateSelection(day) : handleDayClick(day)
-								}
+								isDisabled={false}
+								// onClick={() =>
+								// 	isEditing ? toggleDateSelection(day) : handleDayClick(day)
+								// }
 							>
 								<StyledCalendarNumber
 									variant='body2'
 									isCurrentDay={currentDay}
 									isCurrentMonth={currentMonth}
-									isSelected={seleted}
+									isSelected={false}
 									isBig={isBig}
-									isDisabled={isDisabled}
+									isDisabled={false}
 								>
 									{format(day, 'd')}
 								</StyledCalendarNumber>

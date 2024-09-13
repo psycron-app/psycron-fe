@@ -2,7 +2,7 @@ import type { FC } from 'react';
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { AlertProvider } from '@psycron/context/alert/AlertContext';
-import { UserGeoLocationProvider } from '@psycron/context/CountryContext';
+import { UserGeoLocationProvider } from '@psycron/context/geolocation/CountryContext';
 import { AuthProvider } from '@psycron/context/user/auth/UserAuthenticationContext';
 import { UserDetailsProvider } from '@psycron/context/user/details/UserDetailsContext';
 import { WizardProvider } from '@psycron/context/wizard/WizardContext';

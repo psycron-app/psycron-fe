@@ -1,5 +1,5 @@
 import { Box, LinearProgress, styled } from '@mui/material';
-import { isBiggerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueries';
+import { isSmallerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueries';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 import { motion } from 'framer-motion';
 
@@ -8,7 +8,7 @@ export const WizardWrapper = styled(Box)`
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	z-index: 100;
+	z-index: 10;
 `;
 
 export const WizardContentWrapper = styled(Box)`
@@ -18,7 +18,11 @@ export const WizardContentWrapper = styled(Box)`
 
 	position: relative;
 	overflow-y: hidden;
-	padding-top: ${spacing.small};
+	padding-top: 0;
+
+	${isSmallerThanMediumMedia} {
+		padding-top: ${spacing.small};
+	}
 `;
 
 export const WizardStepper = styled(LinearProgress)`
@@ -39,9 +43,7 @@ export const AnimationWrapper = styled(Box)`
 	overflow-y: hidden;
 `;
 
-export const WizardMotion = styled(motion.div, {
-	shouldForwardProp: (props) => props !== 'isLastStep',
-})<{ isLastStep: boolean }>`
+export const WizardMotion = styled(motion.div)`
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -49,10 +51,6 @@ export const WizardMotion = styled(motion.div, {
 	width: 100%;
 	position: relative;
 	overflow-y: auto;
-
-	${isBiggerThanMediumMedia} {
-		width: ${({ isLastStep }) => (isLastStep ? '100%' : '50%')};
-	}
 `;
 
 export const WizardActionWrapper = styled(Box)`

@@ -23,6 +23,7 @@ export const RadioButtonGroup = <T extends FieldValues>({
 						value={value}
 						control={<Radio {...register(name)} />}
 						label={label}
+						required
 					/>
 				))}
 			</RadioGroup>

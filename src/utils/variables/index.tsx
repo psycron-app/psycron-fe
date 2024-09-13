@@ -1,5 +1,4 @@
 import ReactGA from 'react-ga4';
-import type { Locale } from 'date-fns';
 import {
 	addDays,
 	addMinutes,
@@ -107,8 +106,8 @@ export const generateTimeSlots = (duration: number) => {
 	return slots;
 };
 
-export const generateWeekDays = (locale: Locale): Date[] => {
-	const start = startOfWeek(new Date(), { locale });
+export const generateWeekDays = (): Date[] => {
+	const start = startOfWeek(new Date());
 
 	const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(start, i));
 

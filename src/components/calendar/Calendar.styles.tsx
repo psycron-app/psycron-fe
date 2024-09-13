@@ -18,6 +18,10 @@ export const StyledTitle = styled(Box, {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+	position: sticky;
+	top: 1.5rem;
+
+	background-color: inherit;
 
 	${({ isBig }) =>
 		isBig
@@ -81,7 +85,7 @@ export const StyledChevronWrapper = styled(Box)`
 
 export const StyledPaper = styled(Paper)`
 	padding: ${spacing.small};
-
+	position: relative;
 	height: 100%;
 `;
 
@@ -93,6 +97,11 @@ export const StyledWeekDays = styled(Box, {
 	grid-auto-rows: ${({ isBig }) => isBig && '3.125rem'};
 	text-align: center;
 	align-items: center;
+
+	background-color: inherit;
+
+	position: sticky;
+	top: 6rem;
 
 	p {
 		font-size: ${({ isBig }) => (isBig ? '1.2rem' : '0.875rem')};

@@ -1,7 +1,8 @@
 import type { FC, ReactNode } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
 
-import { getUserCountryIPData } from './utils/getUserCountryIPData';
+import { getUserCountryIPData } from '../utils/getUserCountryIPData';
+
 import type {
 	CountryDataFull,
 	CountryDataSimple,
@@ -16,15 +17,15 @@ const DEFAULT_COUNTRY_DATA_SIMPLE: CountryDataSimple = {
 export const UserGeoLocationContext = createContext<UserGeoLocationContextType>(
 	{
 		countryData: DEFAULT_COUNTRY_DATA_SIMPLE,
-	},
+	}
 );
 
 export const UserGeoLocationProvider: FC<{ children: ReactNode }> = ({
 	children,
 }) => {
 	const [countryData, setCountryData] = useState<
-        CountryDataFull | CountryDataSimple
-    >(DEFAULT_COUNTRY_DATA_SIMPLE);
+		CountryDataFull | CountryDataSimple
+	>(DEFAULT_COUNTRY_DATA_SIMPLE);
 
 	useEffect(() => {
 		const fetchUserIPData = async () => {

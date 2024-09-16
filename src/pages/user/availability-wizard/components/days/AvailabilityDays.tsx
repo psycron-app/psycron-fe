@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
 import { RadioButtonGroup } from '@psycron/components/radio/RadioButton';
@@ -10,6 +11,7 @@ import type {
 } from '../../AvailabilityWizard.types';
 
 export const AvailabilityDays = () => {
+	const { t } = useTranslation();
 	const { register, watch } = useFormContext();
 
 	const [showDays, setShowDays] = useState<boolean>(false);
@@ -23,17 +25,41 @@ export const AvailabilityDays = () => {
 		label: string;
 		registerLabel: keyof IWeekDays;
 	}[] = [
-		{ label: 'Segunda-feira', registerLabel: 'monday' },
-		{ label: 'Terça-feira', registerLabel: 'tuesday' },
-		{ label: 'Quarta-feira', registerLabel: 'wednesday' },
-		{ label: 'Quinta-feira', registerLabel: 'thursday' },
-		{ label: 'Sexta-feira', registerLabel: 'friday' },
+		{
+			label: t('page.availability.wizard.availability-days.days.mon'),
+			registerLabel: 'monday',
+		},
+		{
+			label: t('page.availability.wizard.availability-days.days.tue'),
+			registerLabel: 'tuesday',
+		},
+		{
+			label: t('page.availability.wizard.availability-days.days.wed'),
+			registerLabel: 'wednesday',
+		},
+		{
+			label: t('page.availability.wizard.availability-days.days.thu'),
+			registerLabel: 'thursday',
+		},
+		{
+			label: t('page.availability.wizard.availability-days.days.fri'),
+			registerLabel: 'friday',
+		},
 	];
 
 	const options: { label: string; value: keyof IAvailabilityDaysForm }[] = [
-		{ label: 'Incluir Todos os dias', value: 'everyday' },
-		{ label: 'Excluir fins de semana', value: 'noWeekends' },
-		{ label: 'Incluir apenas dias específicos', value: 'specificDays' },
+		{
+			label: t('page.availability.wizard.availability-days.options.all'),
+			value: 'everyday',
+		},
+		{
+			label: t('page.availability.wizard.availability-days.options.weekends'),
+			value: 'noWeekends',
+		},
+		{
+			label: t('page.availability.wizard.availability-days.options.specific'),
+			value: 'specificDays',
+		},
 	];
 
 	return (

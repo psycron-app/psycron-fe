@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Box, Grid } from '@mui/material';
 import { getAvailabilitySession } from '@psycron/api/user/availability';
 import { TimeSlotsRow } from '@psycron/components/agenda/components/TimeSlots/TimeSlotRow';
@@ -15,6 +16,7 @@ import {
 } from './AvailabilityHours.styles';
 
 export const AvailabilityHours = () => {
+	const { t } = useTranslation();
 	const { userDetails } = useUserDetails();
 
 	const latestSessionId =
@@ -33,7 +35,7 @@ export const AvailabilityHours = () => {
 	}
 
 	if (!sessionData) {
-		return <Box p={5}>Nenhuma sessão disponível</Box>;
+		return <Box p={5}>{t('page.availability.wizard.hours.no-session')}</Box>;
 	}
 
 	const { consultationDuration, weekdays } = sessionData;

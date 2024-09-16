@@ -150,7 +150,8 @@
 		"link": {
 			"navigate": {
 				"back": "Voltar",
-				"next": "Prosseguir"
+				"next": "Prosseguir",
+				"finish": "Finalizar"
 			}
 		},
 		"footer": {
@@ -218,6 +219,56 @@
 			"item-special": "Um caractere especial {{rule}}",
 			"item-minimum": "9 dígitos",
 			"current-password": "Senha atual"
+		},
+		"availability": {
+			"wizard": {
+				"wizard-items": {
+					"intro": {
+						"label": "Introdução",
+						"title": "Vamos configurar sua disponibilidade. Podemos começar?"
+					},
+					"weekdays": {
+						"label": "Escolha os dias da semana",
+						"title": "Por favor nos informe os dias no qual você costuma atender os seus pacientes."
+					},
+					"duration": {
+						"label": "Duração da consulta",
+						"title": "Por favor nos informe quanto tempo dura a sua consulta."
+					},
+					"week-slots": {
+						"label": "Horários em uma semana"
+					}
+				},
+				"intro": {
+					"options": {
+						"proceed": "Sim!",
+						"finish-later": "Deixar para depois"
+					}
+				},
+				"availability-days": {
+					"days": {
+						"mon": "Segunda",
+						"tue": "Terça",
+						"wed": "Quarta",
+						"thu": "Quinta",
+						"fri": "Sexta"
+					},
+					"options": {
+						"all": "Incluir todos os dias",
+						"weekends": "Excluir fins de semana",
+						"specific": "Selecionar dias específicos"
+					}
+				},
+				"duration": {
+					"label": "Duração da consulta",
+					"note": "Caso você tenha mais de um tipo de consulta, nos informe a duração que você mais utiliza. Você poderá alterar isso no futuro, sem maiores problemas!"
+				},
+				"hours": {
+					"no-session": "Nenhuma sessão disponível"
+				},
+				"modal-title": "Repita sua disponibilidade semanal",
+				"modal-info": "Por favor, escolha uma das opções abaixo. Se você selecionar 'semanal,' sua disponibilidade será repetida até o final do mês. Se escolher 'mensal,' ela será repetida até o final do ano."
+			}
 		}
 	}
 }

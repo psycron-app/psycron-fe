@@ -1,4 +1,5 @@
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { AnimatedBackground } from '@psycron/components/animated-background/AnimatedBackground';
@@ -14,18 +15,19 @@ import { AvailabilityIntro } from './components/intro/AvailabilityIntro';
 import { StyledItemContentWrapper } from './AvailabilityWizard.styles';
 
 export const AvailabilityWizard = () => {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	const methods = useForm();
 
 	const steps = [
 		{
-			label: 'Introdução',
+			label: t('page.availability.wizard.wizard-items.intro.label'),
 			content: () => {
 				return (
 					<StyledItemContentWrapper>
 						<WizardItem
-							title='Vamos configurar sua disponibilidade. Pronto para começar?'
+							title={t('page.availability.wizard.wizard-items.intro.title')}
 							options={<AvailabilityIntro />}
 						/>
 					</StyledItemContentWrapper>
@@ -33,29 +35,29 @@ export const AvailabilityWizard = () => {
 			},
 		},
 		{
-			label: 'Selecione os dias da semana',
+			label: t('page.availability.wizard.wizard-items.weekdays.label'),
 			content: () => (
 				<StyledItemContentWrapper>
 					<WizardItem
-						title='Por favor nos informe os dias no qual você costuma atender os seus pacientes'
+						title={t('page.availability.wizard.wizard-items.weekdays.title')}
 						options={<AvailabilityDays />}
 					/>
 				</StyledItemContentWrapper>
 			),
 		},
 		{
-			label: 'Duração da consulta',
+			label: t('page.availability.wizard.wizard-items.duration.label'),
 			content: () => (
 				<StyledItemContentWrapper>
 					<WizardItem
-						title='Por favor nos informe quanto tempo dura a sua consulta'
+						title={t('page.availability.wizard.wizard-items.duration.title')}
 						options={<AvailabilityDuration />}
 					/>
 				</StyledItemContentWrapper>
 			),
 		},
 		{
-			label: 'Horários em uma semana',
+			label: t('page.availability.wizard.wizard-items.week-slots.label'),
 			content: () => (
 				<Box
 					display='flex'

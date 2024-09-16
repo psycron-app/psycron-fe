@@ -1,8 +1,10 @@
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Box, TextField } from '@mui/material';
 import { Text } from '@psycron/components/text/Text';
 
 export const AvailabilityDuration = () => {
+	const { t } = useTranslation();
 	const { register } = useFormContext();
 
 	return (
@@ -14,16 +16,14 @@ export const AvailabilityDuration = () => {
 				alignItems='center'
 			>
 				<TextField
-					label='Duração da consulta'
+					label={t('page.availability.wizard.duration.label')}
 					type='number'
 					{...register('duration')}
 				/>
 				<Text pl={3}>min</Text>
 			</Box>
 			<Text variant='caption' pt={5}>
-				Caso você tenha mais de um tipo de consulta, nos informe a duração que
-				você mais utiliza. Você poderá alterar isso no futuro, sem maiores
-				problemas!
+				{t('page.availability.wizard.duration.note')}
 			</Text>
 		</Box>
 	);

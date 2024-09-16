@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import type { CustomError } from '@psycron/api/error';
 import {
@@ -31,6 +32,7 @@ import {
 import type { IWizardProps, StepData } from './Wizard.types';
 
 export const Wizard = ({ steps, onComplete }: IWizardProps) => {
+	const { t } = useTranslation();
 	const { handleSubmit, getValues, register } = useFormContext();
 
 	const { showAlert } = useAlert();
@@ -149,14 +151,6 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 
 	const handleRecurrenceSelection = async () => {
 		const { selectedSlots, recurrencePattern } = getValues();
-		console.log(
-			'🚀 ~ handleRecurrenceSelection ~ recurrencePattern:',
-			recurrencePattern
-		);
-		console.log(
-			'🚀 ~ handleRecurrenceSelection ~ selectedSlots:',
-			selectedSlots
-		);
 
 		await completeAvailabilitySessionMutation.mutateAsync({
 			sessionId,
@@ -216,40 +210,33 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 					</AnimationWrapper>
 					<WizardActionWrapper>
 						<Button disabled={activeStep === 0} onClick={handleBack}>
-							Voltar
+							{t('components.link.navigate.back')}
 						</Button>
 						<Button
 							onClick={
 								activeStep === steps.length - 1 ? handleFinish : handleNext
 							}
-							type='submit'
+							// type='submit'
 						>
-							{activeStep === steps.length - 1 ? 'Finalizar' : 'Próximo'}
+							{activeStep === steps.length - 1
+								? t('components.link.navigate.finish')
+								: t('components.link.navigate.next')}
 						</Button>
 					</WizardActionWrapper>
 				</WizardContentWrapper>
-				{activeStep === steps.length ? (
-					<Box>
-						<Text>Todas as etapas foram concluídas!</Text>
-					</Box>
-				) : null}
 			</WizardWrapper>
 			<Modal
 				openModal={isModalOpen}
-				title='Would you like to replicate your week availability?'
+				title={t('page.availability.wizard.modal-title')}
 				cardActionsProps={{
-					actionName: 'Create pattern',
-					secondActionName: 'go back',
+					actionName: t('components.link.navigate.next'),
+					secondActionName: t('components.link.navigate.back'),
 					hasSecondAction: true,
 					onClick: handleSubmit(handleRecurrenceSelection),
 					secondAction: () => setIsModalOpen(false),
 				}}
 			>
-				<Text>
-					Please select one of the below. If you choose weekly, this will be
-					replicated until the end of the month, but if you choose monthly, it
-					will be replicated until the end of the year
-				</Text>
+				<Text>{t('page.availability.wizard.modal-info')}</Text>
 				<Box>
 					<RadioButtonGroup
 						items={recurrenceSelection}

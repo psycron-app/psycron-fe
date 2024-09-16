@@ -150,7 +150,8 @@
 		"link": {
 			"navigate": {
 				"back": "Back",
-				"next": "Proceed"
+				"next": "Proceed",
+				"finish": "Finish"
 			}
 		},
 		"footer": {
@@ -218,6 +219,56 @@
 			"item-special": "One special character {{rule}}",
 			"item-minimum": "9 characters long",
 			"current-password": "Current password"
+		},
+		"availability": {
+			"wizard": {
+				"wizard-items": {
+					"intro": {
+						"label": "Intro",
+						"title": "Let's setup your availability. Are you ready?"
+					},
+					"weekdays": {
+						"label": "Choose weekdays",
+						"title": "Tell us the days you usually see patients."
+					},
+					"duration": {
+						"label": "Appointment duration",
+						"title": "Let us know how long your sessions are."
+					},
+					"week-slots": {
+						"label": "Weekly time slots"
+					}
+				},
+				"intro": {
+					"options": {
+						"proceed": "Yes!",
+						"finish-later": "Set availability later"
+					}
+				},
+				"availability-days": {
+					"days": {
+						"mon": "Monday",
+						"tue": "Tuesday",
+						"wed": "Wednesday",
+						"thu": "Thursday",
+						"fri": "Friday"
+					},
+					"options": {
+						"all": "Include all days",
+						"weekends": "Don't include weekends",
+						"specific": "Select specific days"
+					}
+				},
+				"duration": {
+					"label": "Appointment duration",
+					"note": "If you have more than one type of appointment, please let us know the duration you use most often. You will be able to change this in the future without any issues!"
+				},
+				"hours": {
+					"no-session": "No session was found"
+				},
+				"modal-title": "Repeat your weekly availability",
+				"modal-info": "Please choose one of the options below. If you pick 'weekly,' your availability will be repeated until the end of the month. If you pick 'monthly,' it will be repeated until the end of the year."
+			}
 		}
 	}
 }

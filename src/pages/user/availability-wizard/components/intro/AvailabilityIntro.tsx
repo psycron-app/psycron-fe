@@ -1,17 +1,19 @@
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { RadioButtonGroup } from '@psycron/components/radio/RadioButton';
 
 export const AvailabilityIntro = () => {
+	const { t } = useTranslation();
 	const { register } = useFormContext();
 
 	const options = [
 		{
-			label: 'Sim',
+			label: t('page.availability.wizard.intro.options.proceed'),
 			value: 'proceed',
 		},
 		{
-			label: 'Deixar para depois',
+			label: t('page.availability.wizard.intro.options.finish-later'),
 			value: 'finishLater',
 		},
 	];

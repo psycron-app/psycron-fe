@@ -11,6 +11,7 @@ import {
 } from './TimeSlotRow.styles';
 import type {
 	ITimeSlotsRow,
+	IWeekdaysNames,
 	OnChange,
 	SelectedSlots,
 } from './TimeSlotRow.types';
@@ -23,13 +24,14 @@ export const TimeSlotsRow = ({
 	const { control, watch } = useFormContext();
 
 	const watchedSelectedSlots = watch('selectedSlots');
-	console.log('🚀 ~ watchedSelectedSlots:', watchedSelectedSlots);
 
 	const weekDays = generateWeekDays();
 
 	const isDayAvailable = (day: Date) => {
 		const dayName = format(day, 'EEEE');
-		return availableWeekdays.includes(dayName);
+		return availableWeekdays.some(
+			(weekday: { dayName: string }) => weekday.dayName === dayName
+		);
 	};
 
 	const slotIdFormat = (day: Date, time: string) => {
@@ -45,7 +47,7 @@ export const TimeSlotsRow = ({
 	};
 
 	const handleSlotClick = (
-		dayName: string,
+		dayName: IWeekdaysNames,
 		time: string,
 		value: SelectedSlots = [],
 		onChange: OnChange
@@ -97,7 +99,12 @@ export const TimeSlotsRow = ({
 									disabled={!dayAvailable}
 									isCurrentDay={!isSimple && isCurrentDay}
 									onClick={() =>
-										handleSlotClick(dayName, time, value, onChange)
+										handleSlotClick(
+											dayName as IWeekdaysNames,
+											time,
+											value,
+											onChange
+										)
 									}
 								/>
 							</StyledDaySlots>

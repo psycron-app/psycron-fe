@@ -21,10 +21,15 @@ export interface ISessionResponse {
 	createdAt: Date;
 	step: number;
 	updatedAt: Date;
-	weekdays: IWeekdays[];
+	weekdays: IWeekdays[]; // Corrected to the new format
 }
 
-export type IWeekdays =
+export interface IWeekdays {
+	dayName: IWeekdaysNames;
+	slots: string[];
+}
+
+export type IWeekdaysNames =
 	| 'Monday'
 	| 'Tuesday'
 	| 'Wednesday'
@@ -34,6 +39,7 @@ export type IWeekdays =
 	| 'Sunday';
 
 export interface ICompleteSessionAvailabilityData {
+	recurrencePattern: string;
 	selectedSlots: string[];
 	sessionId: string;
 }

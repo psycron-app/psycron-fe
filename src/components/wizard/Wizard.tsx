@@ -17,6 +17,8 @@ import { useMutation } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 
 import { Button } from '../button/Button';
+import { Modal } from '../modal/Modal';
+import { RadioButtonGroup } from '../radio/RadioButton';
 
 import {
 	AnimationWrapper,
@@ -29,7 +31,7 @@ import {
 import type { IWizardProps, StepData } from './Wizard.types';
 
 export const Wizard = ({ steps, onComplete }: IWizardProps) => {
-	const { watch, handleSubmit, getValues } = useFormContext();
+	const { handleSubmit, getValues, register } = useFormContext();
 
 	const { showAlert } = useAlert();
 
@@ -40,6 +42,7 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 	const { activeStep, handleNext, handleBack, direction } = useWizardContext();
 
 	const [sessionId, setSessionId] = useState<string | null>(null);
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
 	const initiateAvailabilitySessionMutation = useMutation({
 		mutationFn: initiateAvailabilitySession,
@@ -67,8 +70,7 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 	const completeAvailabilitySessionMutation = useMutation({
 		mutationFn: (data: ICompleteSessionAvailabilityData) =>
 			completeSessionAvailability(data.sessionId, data),
-		onSuccess: (data) => {
-			console.log('Sessão de disponibilidade concluída!', data);
+		onSuccess: () => {
 			showAlert({
 				message: 'Sessão de disponibilidade concluída!',
 				severity: 'success',
@@ -92,6 +94,7 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 	};
 
 	const isLastStep = activeStep === steps.length - 1;
+
 	const onSubmit = async () => {
 		const stepData = getValues();
 
@@ -99,25 +102,13 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 			await initiateAvailabilitySessionMutation.mutateAsync({
 				therapistId: userDetails?._id,
 			});
+			handleNext();
 		} else if (!isLastStep) {
 			await handleStepSubmit(stepData, activeStep);
+			handleNext();
 		} else if (isLastStep) {
-			const selectedSlots = stepData.selectedSlots;
-			console.log('🚀 ~ onSubmit ~ stepData:', stepData);
-
-			watch('selectedSlots');
-
-			if (sessionId && selectedSlots) {
-				console.log('🚀 ~ onSubmit ~ selectedSlots:', selectedSlots);
-				await completeAvailabilitySessionMutation.mutateAsync({
-					sessionId,
-					selectedSlots,
-				});
-			}
-			handleFinish();
+			setIsModalOpen(true);
 		}
-
-		handleNext();
 	};
 
 	const handleFinish = () => {
@@ -156,65 +147,118 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 		return 0;
 	};
 
+	const handleRecurrenceSelection = async () => {
+		const { selectedSlots, recurrencePattern } = getValues();
+		console.log(
+			'🚀 ~ handleRecurrenceSelection ~ recurrencePattern:',
+			recurrencePattern
+		);
+		console.log(
+			'🚀 ~ handleRecurrenceSelection ~ selectedSlots:',
+			selectedSlots
+		);
+
+		await completeAvailabilitySessionMutation.mutateAsync({
+			sessionId,
+			selectedSlots: selectedSlots,
+			recurrencePattern: recurrencePattern,
+		});
+
+		setIsModalOpen(false);
+		handleFinish();
+	};
+
+	const recurrenceSelection = [
+		{ label: 'Weekly', value: 'WEEKLY' },
+		{ label: 'Monthly', value: 'MONTHLY' },
+	];
+
 	return (
-		<WizardWrapper>
-			<Box display='flex'>
-				{steps.map((step, index) => (
-					<Box
-						key={index}
-						display='flex'
-						flexDirection='column'
-						alignItems='center'
-						width='100%'
-						mr={1}
-					>
-						<WizardStepper
-							variant='determinate'
-							value={getProgressValue(index)}
-						/>
-						{isBiggerThanMedium ? (
-							<Text variant='subtitle2' pt={4}>
-								{step.label}
-							</Text>
-						) : null}
-					</Box>
-				))}
-			</Box>
-			<WizardContentWrapper as='form' onSubmit={handleSubmit(onSubmit)}>
-				<AnimationWrapper>
-					<AnimatePresence custom={direction}>
-						<WizardMotion
-							key={activeStep}
-							variants={variants}
-							initial='enter'
-							animate='center'
-							exit='exit'
-							transition={{ type: 'tween', duration: 0.5 }}
-							custom={direction}
+		<>
+			<WizardWrapper>
+				<Box display='flex'>
+					{steps.map((step, index) => (
+						<Box
+							key={index}
+							display='flex'
+							flexDirection='column'
+							alignItems='center'
+							width='100%'
+							mr={1}
 						>
-							{steps[activeStep]?.content()}
-						</WizardMotion>
-					</AnimatePresence>
-				</AnimationWrapper>
-				<WizardActionWrapper>
-					<Button disabled={activeStep === 0} onClick={handleBack}>
-						Voltar
-					</Button>
-					<Button
-						onClick={
-							activeStep === steps.length - 1 ? handleFinish : handleNext
-						}
-						type='submit'
-					>
-						{activeStep === steps.length - 1 ? 'Finalizar' : 'Próximo'}
-					</Button>
-				</WizardActionWrapper>
-			</WizardContentWrapper>
-			{activeStep === steps.length ? (
-				<Box>
-					<Text>Todas as etapas foram concluídas!</Text>
+							<WizardStepper
+								variant='determinate'
+								value={getProgressValue(index)}
+							/>
+							{isBiggerThanMedium ? (
+								<Text variant='subtitle2' pt={4}>
+									{step.label}
+								</Text>
+							) : null}
+						</Box>
+					))}
 				</Box>
-			) : null}
-		</WizardWrapper>
+				<WizardContentWrapper as='form' onSubmit={handleSubmit(onSubmit)}>
+					<AnimationWrapper>
+						<AnimatePresence custom={direction}>
+							<WizardMotion
+								key={activeStep}
+								variants={variants}
+								initial='enter'
+								animate='center'
+								exit='exit'
+								transition={{ type: 'tween', duration: 0.5 }}
+								custom={direction}
+							>
+								{steps[activeStep]?.content()}
+							</WizardMotion>
+						</AnimatePresence>
+					</AnimationWrapper>
+					<WizardActionWrapper>
+						<Button disabled={activeStep === 0} onClick={handleBack}>
+							Voltar
+						</Button>
+						<Button
+							onClick={
+								activeStep === steps.length - 1 ? handleFinish : handleNext
+							}
+							type='submit'
+						>
+							{activeStep === steps.length - 1 ? 'Finalizar' : 'Próximo'}
+						</Button>
+					</WizardActionWrapper>
+				</WizardContentWrapper>
+				{activeStep === steps.length ? (
+					<Box>
+						<Text>Todas as etapas foram concluídas!</Text>
+					</Box>
+				) : null}
+			</WizardWrapper>
+			<Modal
+				openModal={isModalOpen}
+				title='Would you like to replicate your week availability?'
+				cardActionsProps={{
+					actionName: 'Create pattern',
+					secondActionName: 'go back',
+					hasSecondAction: true,
+					onClick: handleSubmit(handleRecurrenceSelection),
+					secondAction: () => setIsModalOpen(false),
+				}}
+			>
+				<Text>
+					Please select one of the below. If you choose weekly, this will be
+					replicated until the end of the month, but if you choose monthly, it
+					will be replicated until the end of the year
+				</Text>
+				<Box>
+					<RadioButtonGroup
+						items={recurrenceSelection}
+						register={register}
+						name='recurrencePattern'
+						required
+					/>
+				</Box>
+			</Modal>
+		</>
 	);
 };

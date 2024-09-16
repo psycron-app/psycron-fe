@@ -38,7 +38,7 @@ export const AvailabilityHours = () => {
 
 	const { consultationDuration, weekdays } = sessionData;
 
-	const dayHours = generateTimeSlots(consultationDuration || 60);
+	const dayHours = generateTimeSlots(consultationDuration);
 
 	return (
 		<StyledIAvailabilityHoursBoxWrapper>

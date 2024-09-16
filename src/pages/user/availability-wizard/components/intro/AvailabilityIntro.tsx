@@ -22,6 +22,7 @@ export const AvailabilityIntro = () => {
 				items={options}
 				register={register}
 				name='introDecision'
+				required
 			/>
 		</Box>
 	);

@@ -8,5 +8,6 @@ export interface IRadioButtonGroup<T extends FieldValues>
 	items: { label: string; value: string }[];
 	name: Path<T>;
 	register: UseFormRegister<T>;
+	required?: boolean;
 	row?: boolean;
 }

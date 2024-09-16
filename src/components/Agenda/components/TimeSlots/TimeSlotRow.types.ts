@@ -1,9 +1,8 @@
 export interface ITimeSlotsRow {
-	availableWeekdays: string[];
+	availableWeekdays: DaySlot[];
 	dayHours: string[];
 	hour: string;
 	isSimple?: boolean;
-
 	selectedWeek?: Date[];
 }
 
@@ -12,13 +11,18 @@ export interface AvailabilityFormData {
 }
 
 export interface DaySlot {
-	dayName: string;
+	dayName: IWeekdaysNames;
 	slots: Slot[];
 }
 
-export type SlotStateAction =
-	| { slot: string; type: 'ADD_SLOT'; weekday: string }
-	| { slot: string; type: 'REMOVE_SLOT'; weekday: string };
+export type IWeekdaysNames =
+	| 'Monday'
+	| 'Tuesday'
+	| 'Wednesday'
+	| 'Thursday'
+	| 'Friday'
+	| 'Saturday'
+	| 'Sunday';
 
 export type Slot = string;
 

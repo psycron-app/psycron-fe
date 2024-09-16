@@ -10,6 +10,7 @@ export const RadioButtonGroup = <T extends FieldValues>({
 	items,
 	row,
 	register,
+	required,
 	name,
 	...rest
 }: IRadioButtonGroup<T>) => {
@@ -23,7 +24,7 @@ export const RadioButtonGroup = <T extends FieldValues>({
 						value={value}
 						control={<Radio {...register(name)} />}
 						label={label}
-						required
+						required={required}
 					/>
 				))}
 			</RadioGroup>

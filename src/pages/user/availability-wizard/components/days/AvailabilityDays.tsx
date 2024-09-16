@@ -42,6 +42,7 @@ export const AvailabilityDays = () => {
 				items={options}
 				register={register}
 				name='availabilityDays'
+				required
 			/>
 			<Box>
 				{showDays && (

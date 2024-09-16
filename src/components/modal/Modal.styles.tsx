@@ -3,6 +3,7 @@ import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const StyledModal = styled(Modal)`
 	padding: ${spacing.mediumLarge};
+	z-index: 10000;
 `;
 
 export const StyledContentWrapper = styled(Box)`

@@ -8,12 +8,16 @@ export default defineConfig({
 	plugins: [
 		react({ jsxImportSource: '@emotion/react' }),
 		viteCompression({
-			algorithm: 'gzip', // Você pode usar 'brotliCompress' também
+			algorithm: 'gzip',
 		}),
 	],
 	resolve: {
 		alias: {
 			'@psycron': path.resolve(__dirname, './src'),
 		},
+	},
+	server: {
+		host: true,
+		port: 5173,
 	},
 });

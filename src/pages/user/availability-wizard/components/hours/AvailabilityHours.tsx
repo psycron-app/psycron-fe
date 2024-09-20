@@ -3,9 +3,7 @@ import { Box, Grid } from '@mui/material';
 import { getAvailabilitySession } from '@psycron/api/user/availability';
 import { TimeSlotsRow } from '@psycron/components/agenda/components/TimeSlots/TimeSlotRow';
 import { WeekDaysHeader } from '@psycron/components/agenda/components/WeekDays/WeekDaysHeader';
-import { Help } from '@psycron/components/icons';
 import { Loader } from '@psycron/components/loader/Loader';
-import { Tooltip } from '@psycron/components/tooltip/Tooltip';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { generateTimeSlots } from '@psycron/utils/variables';
 import { useQuery } from '@tanstack/react-query';
@@ -44,12 +42,7 @@ export const AvailabilityHours = () => {
 
 	return (
 		<StyledIAvailabilityHoursBoxWrapper>
-			<Box display='flex' justifyContent='flex-end' pb={2}>
-				<Tooltip title='You can select a intire row by clicking on the first slot and dragging until the last one, but only horizontally'>
-					<Help />
-				</Tooltip>
-			</Box>
-			<StyledIAvailabilityGrid container spacing={2}>
+			<StyledIAvailabilityGrid container>
 				<WeekDaysHeader isSimple />
 				<Grid container spacing={1} columns={8}>
 					{dayHours.map((hour, index) => (

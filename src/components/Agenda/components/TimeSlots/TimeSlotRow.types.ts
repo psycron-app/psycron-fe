@@ -29,3 +29,5 @@ export type Slot = string;
 export type SelectedSlots = DaySlot[];
 
 export type OnChange = (updatedSlots: SelectedSlots) => void;
+
+export type setValue = (name: string, value: unknown) => void;

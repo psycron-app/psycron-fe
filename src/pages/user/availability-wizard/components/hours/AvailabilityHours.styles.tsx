@@ -14,4 +14,12 @@ export const StyledIAvailabilityGrid = styled(Grid)`
 	overflow-x: auto;
 	border-radius: 1rem;
 	background-color: ${palette.background.paper};
+	border-left: 0;
+
+	scroll-snap-type: x mandatory;
+	-webkit-overflow-scrolling: touch;
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
 `;

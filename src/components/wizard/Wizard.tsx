@@ -216,7 +216,7 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 							onClick={
 								activeStep === steps.length - 1 ? handleFinish : handleNext
 							}
-							// type='submit'
+							type='submit'
 						>
 							{activeStep === steps.length - 1
 								? t('components.link.navigate.finish')

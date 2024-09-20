@@ -2,6 +2,16 @@ import { Box, styled } from '@mui/material';
 import { isBiggerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueries';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
+export const NavBarWrapper = styled(Box)`
+	z-index: 100;
+	display: flex;
+	flex-direction: column;
+
+	${isBiggerThanMediumMedia} {
+		flex-direction: row;
+	}
+`;
+
 export const Content = styled(Box)`
 	height: 100%;
 	width: 100%;

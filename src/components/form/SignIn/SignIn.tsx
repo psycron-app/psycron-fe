@@ -4,6 +4,7 @@ import { Button } from '@psycron/components/button/Button';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
 import { Link } from '@psycron/components/link/Link';
 import { Text } from '@psycron/components/text/Text';
+import { REQPASSRESET } from '@psycron/pages/urls';
 
 import { PasswordInput } from '../components/password/PasswordInput';
 import { SignLayout } from '../components/shared/SignLayout';
@@ -49,7 +50,7 @@ export const SignIn = ({
 						/>
 					</Box>
 					<Box>
-						<Link to='/reset-password'>
+						<Link to={REQPASSRESET}>
 							<Text variant='caption'>
 								{t('components.form.signin.forgot-password')}
 							</Text>

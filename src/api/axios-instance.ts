@@ -1,8 +1,13 @@
+import { ID_TOKEN } from '@psycron/utils/tokens';
 import axios from 'axios';
+const token = localStorage.getItem(ID_TOKEN);
 
 const apiClient = axios.create({
 	baseURL: import.meta.env.VITE_PSYCRON_BASE_API_URL,
-	headers: { 'Content-Type': 'application/json' },
+	headers: {
+		'Content-Type': 'application/json',
+		Authorization: token ? `Bearer ${token}` : import.meta.env.VITE_JWT_SECRET,
+	},
 	withCredentials: true,
 });
 

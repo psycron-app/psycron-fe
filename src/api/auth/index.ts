@@ -11,6 +11,7 @@ import type {
 	IEmailForm,
 	IEmailResponse,
 } from '@psycron/pages/auth/password/ResetPassword.types';
+import { ID_TOKEN } from '@psycron/utils/tokens';
 
 import apiClient from '../axios-instance';
 
@@ -33,7 +34,13 @@ export const logoutFc = async (): Promise<void> => {
 };
 
 export const getSession = async (): Promise<{ isAuthenticated: boolean }> => {
-	const response = await apiClient.get('/users/session');
+	const token = localStorage.getItem(ID_TOKEN);
+
+	const response = await apiClient.get('/users/session', {
+		headers: {
+			Authorization: `Bearer ${token}`,
+		},
+	});
 	return response.data;
 };
 

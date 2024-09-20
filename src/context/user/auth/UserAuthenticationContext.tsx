@@ -5,6 +5,7 @@ import type { CustomError } from '@psycron/api/error';
 import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
 import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
 import { DASHBOARD, HOMEPAGE } from '@psycron/pages/urls';
+import { ID_TOKEN } from '@psycron/utils/tokens';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import type {
@@ -43,7 +44,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 	const signInMutation = useMutation({
 		mutationFn: signInFc,
-		onSuccess: () => {
+		onSuccess: (res) => {
+			if (res.token) {
+				localStorage.setItem(ID_TOKEN, res.token);
+			}
 			setIsAuthenticated(true);
 			navigate(DASHBOARD);
 		},

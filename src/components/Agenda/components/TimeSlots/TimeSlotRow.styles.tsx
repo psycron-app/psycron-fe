@@ -7,7 +7,8 @@ export const StyledHourColl = styled(Grid)`
 	border-radius: 4px;
 	border: 1px solid ${palette.gray['04']};
 	border-bottom: 0;
-	border-right: 0;
+
+	border-left: 0;
 
 	width: 3.125rem;
 
@@ -28,6 +29,8 @@ export const StyledDaySlots = styled(Grid)`
 	height: 3.125rem;
 	width: 3.125rem;
 	text-align: center;
+
+	scroll-snap-align: start;
 `;
 
 export const SlotBox = styled(Box, {
@@ -39,6 +42,7 @@ export const SlotBox = styled(Box, {
 	border-radius: 4px;
 	border: 1px solid ${palette.gray['04']};
 	cursor: pointer;
+	user-select: none;
 
 	${({ disabled, isSelected }) =>
 		disabled

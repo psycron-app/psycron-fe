@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Text } from '@psycron/components/text/Text';
 import { generateWeekDays } from '@psycron/utils/variables';
@@ -23,9 +24,31 @@ export const TimeSlotsRow = ({
 }: ITimeSlotsRow) => {
 	const { control, watch } = useFormContext();
 
+	const [isDragging, setIsDragging] = useState<boolean>(false);
+	const [startSlot, setStartSlot] = useState<{
+		dayName: IWeekdaysNames;
+		time: string;
+	} | null>(null);
+
 	const watchedSelectedSlots = watch('selectedSlots');
 
 	const weekDays = generateWeekDays();
+
+	useEffect(() => {
+		const handleTouchMove = (event: TouchEvent) => {
+			if (isDragging) {
+				event.preventDefault();
+			}
+		};
+
+		document.addEventListener('touchmove', handleTouchMove, {
+			passive: false,
+		});
+
+		return () => {
+			document.removeEventListener('touchmove', handleTouchMove);
+		};
+	}, [isDragging]);
 
 	const isDayAvailable = (day: Date) => {
 		const dayName = format(day, 'EEEE');
@@ -35,7 +58,7 @@ export const TimeSlotsRow = ({
 	};
 
 	const slotIdFormat = (day: Date, time: string) => {
-		const dayName = format(day, 'EEEE');
+		const dayName = format(day, 'EEEE') as IWeekdaysNames;
 		return { dayName, time };
 	};
 
@@ -74,6 +97,52 @@ export const TimeSlotsRow = ({
 		onChange(updatedSlots.filter((d) => d.slots.length > 0));
 	};
 
+	const handleStart = (
+		dayName: IWeekdaysNames,
+		time: string,
+		value: SelectedSlots = [],
+		onChange: OnChange
+	) => {
+		setIsDragging(true);
+		setStartSlot({ dayName, time });
+		handleSlotClick(dayName, time, value, onChange);
+	};
+
+	const handleMove = (
+		dayName: IWeekdaysNames,
+		time: string,
+		value: SelectedSlots = [],
+		onChange: OnChange
+	) => {
+		if (isDragging && startSlot) {
+			const startIndex = weekDays.findIndex(
+				(day) => format(day, 'EEEE') === startSlot.dayName
+			);
+			const endIndex = weekDays.findIndex(
+				(day) => format(day, 'EEEE') === dayName
+			);
+			const isSameHour = startSlot.time === time;
+
+			const minIndex = Math.min(startIndex, endIndex);
+			const maxIndex = Math.max(startIndex, endIndex);
+
+			for (let i = minIndex; i <= maxIndex; i++) {
+				const currentDayName = format(weekDays[i], 'EEEE') as IWeekdaysNames;
+				handleSlotClick(
+					currentDayName,
+					isSameHour ? startSlot.time : time,
+					value,
+					onChange
+				);
+			}
+		}
+	};
+
+	const handleEnd = () => {
+		setIsDragging(false);
+		setStartSlot(null);
+	};
+
 	return (
 		<Controller
 			name='selectedSlots'
@@ -98,14 +167,13 @@ export const TimeSlotsRow = ({
 									isSelected={isSelected}
 									disabled={!dayAvailable}
 									isCurrentDay={!isSimple && isCurrentDay}
-									onClick={() =>
-										handleSlotClick(
-											dayName as IWeekdaysNames,
-											time,
-											value,
-											onChange
-										)
+									onMouseDown={() =>
+										handleStart(dayName, time, value, onChange)
 									}
+									onMouseEnter={() =>
+										handleMove(dayName, time, value, onChange)
+									}
+									onMouseUp={handleEnd}
 								/>
 							</StyledDaySlots>
 						);

@@ -9,7 +9,7 @@ import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext
 import useViewport from '@psycron/hooks/useViewport';
 import { SIGNIN } from '@psycron/pages/urls';
 
-import { Content, LayoutWrapper } from './AppLayout.styles';
+import { Content, LayoutWrapper, NavBarWrapper } from './AppLayout.styles';
 
 export const AppLayout: FC = () => {
 	const { isMobile, isTablet } = useViewport();
@@ -17,7 +17,8 @@ export const AppLayout: FC = () => {
 
 	const location = useLocation();
 
-	const { isUserDetailsVisible, userDetails } = useUserDetails();
+	const { isUserDetailsVisible, userDetails, isUserDetailsLoading } =
+		useUserDetails();
 
 	const mockUserDetailsCardProps = {
 		plan: {
@@ -26,7 +27,7 @@ export const AppLayout: FC = () => {
 		},
 	};
 
-	if (isSessionLoading) {
+	if (isSessionLoading || isUserDetailsLoading) {
 		return <Loader />;
 	}
 
@@ -36,7 +37,7 @@ export const AppLayout: FC = () => {
 
 	return (
 		<LayoutWrapper>
-			<Box zIndex={100} display='flex'>
+			<NavBarWrapper>
 				<Box>
 					<Navbar />
 				</Box>
@@ -45,7 +46,7 @@ export const AppLayout: FC = () => {
 						orientation={isMobile || isTablet ? 'horizontal' : 'vertical'}
 					/>
 				</Box>
-			</Box>
+			</NavBarWrapper>
 			<Content>
 				<Outlet />
 				{isUserDetailsVisible && (

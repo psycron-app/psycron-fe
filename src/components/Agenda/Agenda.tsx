@@ -1,8 +1,11 @@
 import { Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Grid, Icon } from '@mui/material';
+import { Grid, Icon } from '@mui/material';
 import type { IAvailabilityDate } from '@psycron/api/user/index.types';
-import { generateTimeSlots, generateWeekDays } from '@psycron/utils/variables';
+import {
+	generateTimeSlots,
+	generateWeekDaysFromSelected,
+} from '@psycron/utils/variables';
 
 import { Available, UnAvailable } from '../icons';
 import { Loader } from '../loader/Loader';
@@ -18,19 +21,14 @@ import {
 } from './Agenda.styles';
 import type { IAgenda } from './Agenda.types';
 
-export const Agenda = ({
-	selectedDay,
-	dateLocale,
-	availability,
-	isLoading,
-}: IAgenda) => {
+export const Agenda = ({ selectedDay, availability, isLoading }: IAgenda) => {
 	const { t } = useTranslation();
 
 	const dayHours = generateTimeSlots(
 		availability?.latestAvailability?.consultationDuration
 	);
 
-	const weekDays = generateWeekDays();
+	const weekDays = generateWeekDaysFromSelected(selectedDay);
 
 	const filterDayHoursByAvailability = (
 		dayHours: string[],
@@ -96,13 +94,21 @@ export const Agenda = ({
 		return t(`page.availability.agenda.status.${status.toLowerCase()}`, status);
 	};
 
+	const isSelectedDay = (date1: Date, date2: Date) => {
+		return (
+			date1.getDate() === date2.getDate() &&
+			date1.getMonth() === date2.getMonth() &&
+			date1.getFullYear() === date2.getFullYear()
+		);
+	};
+
 	if (isLoading) {
 		<Loader />;
 	}
 
 	return (
 		<Grid container width='100%' overflow={'auto'} height={'100%'}>
-			<WeekDaysHeader />
+			<WeekDaysHeader selectedDay={selectedDay} />
 			<Grid container spacing={1} columns={8} mt={5}>
 				{filteredDayHours.map((hour, index) => (
 					<Fragment key={`hour-slot-${index}`}>
@@ -126,12 +132,16 @@ export const Agenda = ({
 							const translatedStatus = translateSlotStatus(slotStatus);
 							const statusIcon = getStatusIcon(slotStatus);
 
+							const isSelected = isSelectedDay(selectedDay, day);
+
 							return (
 								<StyledGridSlots
 									key={`day-slot-${index}`}
 									item
 									xs={1}
 									isAvailable={isAvailable}
+									isBooked={isBooked}
+									isSelected={isSelected}
 								>
 									<StyledSlotsWrapper>
 										{shouldShow ? (

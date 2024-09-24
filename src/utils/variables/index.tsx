@@ -115,6 +115,14 @@ export const generateWeekDays = (): Date[] => {
 	return weekDays;
 };
 
+export const generateWeekDaysFromSelected = (referenceDate: Date): Date[] => {
+	const start = startOfWeek(referenceDate);
+
+	const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(start, i));
+
+	return weekDays;
+};
+
 export const getWeekDays = (today: Date, dateLocale: Locale) => {
 	const start = startOfWeek(today, { locale: dateLocale });
 	return Array.from({ length: 7 }).map((_, index) => {

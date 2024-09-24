@@ -12,6 +12,7 @@ import { StyledPaperModal } from './Dashboard.styled';
 
 export const Dashboard = () => {
 	const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
+	const [selectedDay, setSelectedDay] = useState<Date | null>(null);
 
 	const {
 		isUserDetailsLoading,
@@ -25,6 +26,11 @@ export const Dashboard = () => {
 	const dateLocale = locale.includes('en') ? enGB : ptBR;
 
 	const today = startOfToday();
+
+	const handleDayClick = (day: Date) => {
+		setIsDateClicked(true);
+		setSelectedDay(day);
+	};
 
 	if (isUserDetailsLoading) {
 		<Loader />;
@@ -41,7 +47,7 @@ export const Dashboard = () => {
 							</Skeleton>
 						) : (
 							<Calendar
-								handleDayClick={() => setIsDateClicked(true)}
+								handleDayClick={handleDayClick}
 								dateLocale={dateLocale}
 								today={today}
 								availabilityDates={
@@ -53,11 +59,10 @@ export const Dashboard = () => {
 					</Box>
 				) : null}
 			</Box>
-			<Modal open={true}>
+			<Modal open={isDateClicked} onClose={() => setIsDateClicked(false)}>
 				<StyledPaperModal>
 					<Agenda
-						selectedDay={today}
-						dateLocale={dateLocale}
+						selectedDay={selectedDay}
 						availability={therapistLatestAvailability}
 						isLoading={therapistLatestAvailabilityLoading}
 					/>

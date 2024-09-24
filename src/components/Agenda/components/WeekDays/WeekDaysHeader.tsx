@@ -1,6 +1,9 @@
 import { useParams } from 'react-router-dom';
 import { Text } from '@psycron/components/text/Text';
-import { generateWeekDays } from '@psycron/utils/variables';
+import {
+	generateWeekDays,
+	generateWeekDaysFromSelected,
+} from '@psycron/utils/variables';
 import { format } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
@@ -12,11 +15,13 @@ import {
 } from './WeekDaysHeader.styles';
 import type { IWeekDaysHeader } from './WeekDaysHeader.types';
 
-export const WeekDaysHeader = ({ isSimple }: IWeekDaysHeader) => {
+export const WeekDaysHeader = ({ isSimple, selectedDay }: IWeekDaysHeader) => {
 	const { locale } = useParams<{ locale: string }>();
 	const dateLocale = locale.includes('en') ? enGB : ptBR;
 
-	const daysOfWeek = generateWeekDays();
+	const daysOfWeek = selectedDay
+		? generateWeekDaysFromSelected(selectedDay)
+		: generateWeekDays();
 
 	return (
 		<WeekDaysHeaderGrid container spacing={2} columns={8}>

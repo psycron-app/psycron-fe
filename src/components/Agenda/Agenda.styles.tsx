@@ -15,8 +15,9 @@ export const StyledHoursWrapper = styled(Box)`
 `;
 
 export const StyledGridSlots = styled(Grid, {
-	shouldForwardProp: (props) => props !== 'isAvailable',
-})<{ isAvailable: boolean }>`
+	shouldForwardProp: (props) =>
+		props !== 'isAvailable' && props !== 'isBooked' && props !== 'isSelected',
+})<{ isAvailable: boolean; isBooked: boolean; isSelected: boolean }>`
 	height: 3.125rem;
 	width: 3.125rem;
 	text-align: center;
@@ -27,9 +28,26 @@ export const StyledGridSlots = styled(Grid, {
 	border-radius: 4px;
 
 	${({ isAvailable }) =>
-		isAvailable &&
+		isAvailable
+			? css`
+					border: 1px solid ${palette.success.main};
+				`
+			: css`
+					border: 1px solid ${palette.gray['02']};
+				`}
+
+	${({ isBooked }) =>
+		isBooked &&
 		css`
-			border: 1px solid ${palette.success.main};
+			border: 1px solid ${palette.alert.main};
+		`}
+
+
+	${({ isSelected }) =>
+		isSelected &&
+		css`
+			border: 1px solid ${palette.info.main};
+			background-color: ${palette.info.light};
 		`}
 `;
 

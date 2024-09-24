@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
+import type { IAvailabilityDate } from '@psycron/api/user/index.types';
 import { getWeekDays } from '@psycron/utils/variables';
 import {
 	addMonths,
@@ -25,7 +26,7 @@ import {
 	StyledTitle,
 	StyledWeekDays,
 } from './Calendar.styles';
-import type { IAvailabilityDates, ICalendarProps } from './Calendar.types';
+import type { ICalendarProps } from './Calendar.types';
 
 export const Calendar = ({
 	handleDayClick,
@@ -131,7 +132,7 @@ export const Calendar = ({
 
 	const isAvailableDate = (
 		day: Date,
-		availabilityDates?: IAvailabilityDates[]
+		availabilityDates?: IAvailabilityDate[]
 	) => {
 		return availabilityDates?.some((availability) => {
 			const availableDate = new Date(availability.date);
@@ -179,19 +180,13 @@ export const Calendar = ({
 
 						const isAvailable = isDateAvailable(day);
 
-						// const seleted = isDateSelected(day);
-
-						// const isDisabled = isDateDisabled(day);
-
 						return (
 							<StyledCalendarNumberWrapper
 								key={`${day}-${index}`}
 								isCurrentMonth={currentMonth}
 								isBig={isBig}
 								isDisabled={false}
-								// onClick={() =>
-								// 	isEditing ? toggleDateSelection(day) : handleDayClick(day)
-								// }
+								onClick={() => handleDayClick(day)}
 							>
 								<StyledCalendarNumber
 									variant='body2'

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IconButton } from '@mui/material';
 import type { IAvailabilityDate } from '@psycron/api/user/index.types';
 import { getWeekDays } from '@psycron/utils/variables';
@@ -33,13 +33,9 @@ export const Calendar = ({
 	dateLocale,
 	today,
 	isBig,
-	filteredDates,
-	selectAllRemaining,
 	availabilityDates,
 }: ICalendarProps) => {
 	const [currMonth, setCurrMonth] = useState<Date>(() => today);
-
-	const [selectedDates, setSelectedDates] = useState<Date[] | null>(null);
 
 	const daysOfWeek = getWeekDays(today, dateLocale);
 
@@ -64,39 +60,6 @@ export const Calendar = ({
 		setCurrMonth((prev) => addMonths(prev, 1));
 	};
 
-	// const toggleDateSelection = (day: Date) => {
-	// 	setSelectedDates((prevSelectedDates) => {
-	// 		const isSelected = prevSelectedDates.some(
-	// 			(selectedDay) =>
-	// 				selectedDay.getDate() === day.getDate() &&
-	// 				selectedDay.getMonth() === day.getMonth() &&
-	// 				selectedDay.getFullYear() === day.getFullYear()
-	// 		);
-
-	// 		if (isSelected) {
-	// 			return prevSelectedDates.filter(
-	// 				(selectedDay) =>
-	// 					!(
-	// 						selectedDay.getDate() === day.getDate() &&
-	// 						selectedDay.getMonth() === day.getMonth() &&
-	// 						selectedDay.getFullYear() === day.getFullYear()
-	// 					)
-	// 			);
-	// 		} else {
-	// 			return [...prevSelectedDates, day];
-	// 		}
-	// 	});
-	// 	handleDayClick?.(day);
-	// };
-
-	useEffect(() => {
-		if (selectAllRemaining) {
-			setSelectedDates(filteredDates);
-		} else {
-			setSelectedDates([]);
-		}
-	}, [selectAllRemaining, filteredDates]);
-
 	const isCurrentMonth = (day: Date) => {
 		return (
 			day.getMonth() === currMonth.getMonth() &&
@@ -111,24 +74,6 @@ export const Calendar = ({
 			day.getFullYear() === today.getFullYear()
 		);
 	};
-
-	// const isDateSelected = (day: Date) => {
-	// 	return selectedDates?.some(
-	// 		(selectedDay) =>
-	// 			selectedDay.getDate() === day.getDate() &&
-	// 			selectedDay.getMonth() === day.getMonth() &&
-	// 			selectedDay.getFullYear() === day.getFullYear()
-	// 	);
-	// };
-
-	// const isDateDisabled = (date: Date) => {
-	// 	return !filteredDates.some(
-	// 		(filteredDate) =>
-	// 			filteredDate.getDate() === date.getDate() &&
-	// 			filteredDate.getMonth() === date.getMonth() &&
-	// 			filteredDate.getFullYear() === date.getFullYear()
-	// 	);
-	// };
 
 	const isAvailableDate = (
 		day: Date,

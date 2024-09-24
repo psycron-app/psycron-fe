@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getUserById } from '@psycron/api/user';
+import { getTherapistLatestAvailability, getUserById } from '@psycron/api/user';
 import { EDITUSERPATH } from '@psycron/pages/urls';
 import { useQuery } from '@tanstack/react-query';
 
@@ -85,10 +85,24 @@ export const useUserDetails = (passedUserId?: string) => {
 		enabled: !!userId,
 	});
 
+	const {
+		data: therapistLatestAvailability,
+		isLoading: therapistLatestAvailabilityLoading,
+		isSuccess: therapistLatestAvailabilitySuccess,
+	} = useQuery({
+		queryKey: ['therapistAvailability'],
+		queryFn: () => getTherapistLatestAvailability(userDetails._id),
+		enabled: !!userId,
+		staleTime: 0,
+	});
+
 	return {
 		...context,
 		userDetails,
 		isUserDetailsLoading,
 		isUserDetailsSucces,
+		therapistLatestAvailability,
+		therapistLatestAvailabilityLoading,
+		therapistLatestAvailabilitySuccess,
 	};
 };

@@ -52,6 +52,7 @@ export const SlotBox = styled(Box, {
 				`
 			: isSelected
 				? css`
+						border: 1px solid ${palette.secondary.light};
 						background-color: ${palette.secondary.main};
 					`
 				: css`

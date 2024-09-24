@@ -1,7 +1,5 @@
-import { AgendaPage } from '@psycron/pages/agenda/AgendaPage';
 import { Dashboard } from '@psycron/pages/dashboard/Dashboard';
 import {
-	AGENDA,
 	AVAILABILITY,
 	AVAILABILITYWIZARD,
 	CHANGEPASSWORD,
@@ -23,7 +21,7 @@ const privateRoutes = [
 	{ path: EDITUSERBYSESSION, element: <EditUser /> },
 	{ path: CHANGEPASSWORD, element: <EditPassword /> },
 	{ path: AVAILABILITYWIZARD, element: <AvailabilityWizard /> },
-	{ path: AGENDA, element: <AgendaPage /> },
+
 	{ path: AVAILABILITY, element: <SetAvailabilityPage /> },
 ];
 

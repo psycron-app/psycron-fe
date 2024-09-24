@@ -3,6 +3,7 @@ import type { ITherapist } from '@psycron/context/user/auth/UserAuthenticationCo
 import apiClient from '../axios-instance';
 
 import type {
+	IAvailabilityResponse,
 	IChangePass,
 	IEditUser,
 	IResponse,
@@ -31,6 +32,14 @@ export const changePassword = async ({ data, userId }: IChangePass) => {
 	const response = await apiClient.post<IResponse>(
 		`/users/password-change/${userId}`,
 		data
+	);
+
+	return response.data;
+};
+
+export const getTherapistLatestAvailability = async (therapistId: string) => {
+	const response = await apiClient.get<IAvailabilityResponse>(
+		`/users/availability/${therapistId}?latest=true`
 	);
 
 	return response.data;

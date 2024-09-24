@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { IconButton } from '@mui/material';
+import { getWeekDays } from '@psycron/utils/variables';
 import {
-	addDays,
 	addMonths,
 	eachDayOfInterval,
 	endOfMonth,
@@ -25,33 +25,22 @@ import {
 	StyledTitle,
 	StyledWeekDays,
 } from './Calendar.styles';
-import type { ICalendarProps } from './Calendar.types';
+import type { IAvailabilityDates, ICalendarProps } from './Calendar.types';
 
 export const Calendar = ({
 	handleDayClick,
 	dateLocale,
 	today,
-	isEditing,
 	isBig,
 	filteredDates,
 	selectAllRemaining,
-	isWizard,
+	availabilityDates,
 }: ICalendarProps) => {
 	const [currMonth, setCurrMonth] = useState<Date>(() => today);
 
 	const [selectedDates, setSelectedDates] = useState<Date[] | null>(null);
 
-	const getWeekDays = () => {
-		const start = startOfWeek(today, { locale: dateLocale });
-		return Array.from({ length: 7 }).map((_, index) => {
-			const day = addDays(start, index);
-			return format(day, 'EEEE', { locale: dateLocale })
-				.charAt(0)
-				.toUpperCase();
-		});
-	};
-
-	const daysOfWeek = getWeekDays();
+	const daysOfWeek = getWeekDays(today, dateLocale);
 
 	const startOfCurrentMonth = startOfMonth(currMonth);
 	const endOfCurrentMonth = endOfMonth(currMonth);
@@ -140,24 +129,40 @@ export const Calendar = ({
 	// 	);
 	// };
 
+	const isAvailableDate = (
+		day: Date,
+		availabilityDates?: IAvailabilityDates[]
+	) => {
+		return availabilityDates?.some((availability) => {
+			const availableDate = new Date(availability.date);
+			return (
+				availableDate.getDate() === day.getDate() &&
+				availableDate.getMonth() === day.getMonth() &&
+				availableDate.getFullYear() === day.getFullYear()
+			);
+		});
+	};
+
+	const isDateAvailable = (day: Date) => {
+		return isAvailableDate(day, availabilityDates);
+	};
+
 	return (
 		<StyledCalendarWrapper isBig={isBig}>
 			<StyledPaper>
-				{!isWizard ? (
-					<StyledTitle isBig={isBig}>
-						<Text variant='body2' isFirstUpper>
-							{format(currMonth, 'MMMM yyyy', { locale: dateLocale })}
-						</Text>
-						<StyledChevronWrapper>
-							<IconButton onClick={handlePreviousMonth}>
-								<ChevronLeft />
-							</IconButton>
-							<IconButton onClick={handleNextMonth}>
-								<ChevronRight />
-							</IconButton>
-						</StyledChevronWrapper>
-					</StyledTitle>
-				) : null}
+				<StyledTitle isBig={isBig}>
+					<Text variant='body2' isFirstUpper>
+						{format(currMonth, 'MMMM yyyy', { locale: dateLocale })}
+					</Text>
+					<StyledChevronWrapper>
+						<IconButton onClick={handlePreviousMonth}>
+							<ChevronLeft />
+						</IconButton>
+						<IconButton onClick={handleNextMonth}>
+							<ChevronRight />
+						</IconButton>
+					</StyledChevronWrapper>
+				</StyledTitle>
 
 				<StyledWeekDays isBig={isBig}>
 					{daysOfWeek.map((day, index) => (
@@ -171,6 +176,8 @@ export const Calendar = ({
 						const currentMonth = isCurrentMonth(day);
 
 						const currentDay = isCurrentDay(day);
+
+						const isAvailable = isDateAvailable(day);
 
 						// const seleted = isDateSelected(day);
 
@@ -193,6 +200,7 @@ export const Calendar = ({
 									isSelected={false}
 									isBig={isBig}
 									isDisabled={false}
+									isAvailable={isAvailable}
 								>
 									{format(day, 'd')}
 								</StyledCalendarNumber>

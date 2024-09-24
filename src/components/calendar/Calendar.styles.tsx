@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import { Box, css, Paper, styled } from '@mui/material';
 import {
 	isBiggerThanMediumMedia,
@@ -175,6 +174,9 @@ export const StyledCalendarNumberWrapper = styled(Box, {
 		width: ${({ isBig }) => (isBig ? '3.75rem' : '1.875rem')};
 		height: ${({ isBig }) => (isBig ? '3.75rem' : '1.875rem')};
 		box-shadow: ${shadowMain};
+		border: 1px solid;
+		border-color: ${({ isCurrentMonth }) =>
+			isCurrentMonth ? palette.primary.main : palette.primary.light};
 	}
 `;
 
@@ -184,8 +186,10 @@ export const StyledCalendarNumber = styled(Text, {
 		props !== 'isCurrentMonth' &&
 		props !== 'isSelected' &&
 		props !== 'isBig' &&
-		props !== 'isDisabled',
+		props !== 'isDisabled' &&
+		props !== 'isAvailable',
 })<{
+	isAvailable: boolean;
 	isBig: boolean;
 	isCurrentDay: boolean;
 	isCurrentMonth: boolean;
@@ -249,5 +253,14 @@ export const StyledCalendarNumber = styled(Text, {
 			:hover {
 				cursor: not-allowed;
 			}
+		`}
+
+	${({ isAvailable, isBig }) =>
+		isAvailable &&
+		css`
+			border: 1px solid ${palette.secondary.main};
+			border-radius: 50%;
+			height: ${isBig ? '3.75rem' : '1.875rem'};
+			width: ${isBig ? '3.75rem' : '1.875rem'};
 		`}
 `;

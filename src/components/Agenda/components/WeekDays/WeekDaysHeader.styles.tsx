@@ -24,6 +24,7 @@ export const WeekDayWrapper = styled(Box)`
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	flex-direction: column;
 `;
 
 export const THWeekDays = styled(Grid)`

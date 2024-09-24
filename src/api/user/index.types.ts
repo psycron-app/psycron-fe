@@ -24,3 +24,31 @@ export interface IResponse {
 	message: string;
 	status: string;
 }
+
+export interface ITherapistById {
+	therapistId: string;
+}
+
+export interface IAvailabilityResponse {
+	latestAvailability: {
+		_id: string;
+		availabilityDates: IAvailabilityDate[];
+		consultationDuration: number;
+		createAvailabilitySession: string;
+		createdAt: string;
+		therapistId: string;
+		updatedAt: string;
+	};
+}
+
+export interface IAvailabilityDate {
+	date: string;
+	slots: ISlot[];
+}
+
+export interface ISlot {
+	_id: string;
+	endTime: string;
+	startTime: string;
+	status: string;
+}

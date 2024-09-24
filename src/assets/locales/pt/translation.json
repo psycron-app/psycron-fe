@@ -268,7 +268,14 @@
 				},
 				"modal-title": "Repita sua disponibilidade semanal",
 				"modal-info": "Por favor, escolha uma das opções abaixo. Se você selecionar 'semanal,' sua disponibilidade será repetida até o final do mês. Se escolher 'mensal,' ela será repetida até o final do ano."
-			}
+			},
+				"agenda": {
+					"status": {
+						"available": "Disponível",
+						"unavailable": "Indisponível",
+						"booked": "Reservado"
+					}
+				}
 		}
 	}
 }

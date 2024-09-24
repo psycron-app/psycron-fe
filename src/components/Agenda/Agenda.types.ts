@@ -1,4 +1,9 @@
+import type { IAvailabilityResponse } from '@psycron/api/user/index.types';
+import type { Locale } from 'date-fns';
+
 export interface IAgenda {
-	isSimple?: boolean;
-	selectedWeek: Date[];
+	availability?: IAvailabilityResponse;
+	dateLocale: Locale;
+	isLoading: boolean;
+	selectedDay: Date;
 }

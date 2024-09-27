@@ -7,6 +7,7 @@ import { SignUp } from '@psycron/components/form/SignUp/SignUp';
 import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
 import { Loader } from '@psycron/components/loader/Loader';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
+import i18n from '@psycron/i18n';
 
 import { DASHBOARD } from '../urls';
 
@@ -15,7 +16,7 @@ import { AuthPageWrapper } from './index.styles';
 export const AuthPage = () => {
 	const { signIn, signUp, isSessionLoading, isAuthenticated } = useAuth();
 
-	const { pathname, state } = useLocation();
+	const { pathname } = useLocation();
 
 	const {
 		register,
@@ -36,7 +37,7 @@ export const AuthPage = () => {
 	}
 
 	if (isAuthenticated) {
-		return <Navigate to={state?.from?.pathname || DASHBOARD} replace />;
+		return <Navigate to={`/${i18n.language}/${DASHBOARD}`} replace />;
 	}
 
 	return (

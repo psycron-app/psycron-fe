@@ -22,6 +22,7 @@ import { DashboardIcon as IconDashboardIcon } from './DashboardIcon';
 import { Error as IconError } from './Error';
 import { HealthTracker as IconHealthTracker } from './HealthTracker';
 import { Info as IconInfo } from './Info';
+import { Share as IconShare } from './Share';
 import { UnAvailable as IconUnAvailable } from './UnAvailable';
 export { Language } from './Language';
 
@@ -94,3 +95,4 @@ export const Filter = withIconColor(IconFilter);
 export const FilterClose = withIconColor(IconFilterClose);
 export const Available = withIconColor(IconAvailable);
 export const UnAvailable = withIconColor(IconUnAvailable);
+export const Share = withIconColor(IconShare);

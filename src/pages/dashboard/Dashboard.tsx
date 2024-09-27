@@ -4,6 +4,7 @@ import { Box, Modal, Skeleton } from '@mui/material';
 import { Agenda } from '@psycron/components/agenda/Agenda';
 import { Calendar } from '@psycron/components/calendar/Calendar';
 import { Loader } from '@psycron/components/loader/Loader';
+import { ShareButton } from '@psycron/components/share/share-button/ShareButton';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { startOfToday } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
@@ -66,6 +67,7 @@ export const Dashboard = () => {
 						availability={therapistLatestAvailability}
 						isLoading={therapistLatestAvailabilityLoading}
 					/>
+					<ShareButton />
 				</StyledPaperModal>
 			</Modal>
 		</>

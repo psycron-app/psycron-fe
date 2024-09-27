@@ -41,6 +41,7 @@ export const getSession = async (): Promise<{ isAuthenticated: boolean }> => {
 			Authorization: `Bearer ${token}`,
 		},
 	});
+
 	return response.data;
 };
 

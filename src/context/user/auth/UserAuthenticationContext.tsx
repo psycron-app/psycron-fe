@@ -25,6 +25,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 	const [user, setUser] = useState<ITherapist | null>(null);
 
+	const authToken = localStorage.getItem(ID_TOKEN);
+
 	const {
 		data: sessionData,
 		isLoading: isSessionLoading,
@@ -33,6 +35,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	} = useQuery<IUserData>({
 		queryKey: ['session'],
 		queryFn: getSession,
+		enabled: !!authToken,
 	});
 
 	useEffect(() => {
@@ -71,6 +74,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		mutationFn: logoutFc,
 		onSuccess: () => {
 			setIsAuthenticated(false);
+			setUser(null);
 			navigate(HOMEPAGE);
 		},
 	});

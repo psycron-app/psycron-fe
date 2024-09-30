@@ -160,6 +160,22 @@
 			"credit": {
 				"illustration": "Ilustrações por <owner>Icons 8</owner> de <page>Ouch!</page>"
 			}
+		},
+		"share-button": {
+			"alert": {
+				"success": "Compartilhado com sucesso!",
+				"success-copy": "Link copiado com sucesso!",
+				"error": "Erro ao compartilhar, tente novamente mais tarde.",
+				"error-copy": "Erro ao copiar o link, tente novamente mais tarde."
+			},
+				"tooltip-tile": "Compartilhar {{with}}",
+				"share-with-patients": "com seus pacientes",
+				"share-infos": {
+					"availability": {
+						"title": "{{therapistName}} compartilhou com você a disponibilidade",
+						"text": "Entre aqui para agendar o seu horário"
+					}
+				}
 		}
 	},
 	"page": {
@@ -269,13 +285,13 @@
 				"modal-title": "Repita sua disponibilidade semanal",
 				"modal-info": "Por favor, escolha uma das opções abaixo. Se você selecionar 'semanal,' sua disponibilidade será repetida até o final do mês. Se escolher 'mensal,' ela será repetida até o final do ano."
 			},
-				"agenda": {
-					"status": {
-						"available": "Disponível",
-						"unavailable": "Indisponível",
-						"booked": "Reservado"
-					}
+			"agenda": {
+				"status": {
+					"available": "Disponível",
+					"unavailable": "Indisponível",
+					"booked": "Reservado"
 				}
+			}
 		}
 	}
 }

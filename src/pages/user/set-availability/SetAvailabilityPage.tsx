@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
-import { FloatingButton } from '@psycron/components/button/Floating/FloatingButton';
+import { FloatingButton } from '@psycron/components/button/floating/FloatingButton';
 import { Calendar } from '@psycron/components/calendar/Calendar';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
 import { Filter } from '@psycron/components/icons';
@@ -123,7 +123,6 @@ export const SetAvailabilityPage = () => {
 				today={today}
 				filteredDates={filteredDates}
 				selectAllRemaining={selectAllRemaining}
-				isEditing
 				isBig
 			/>
 		</Box>

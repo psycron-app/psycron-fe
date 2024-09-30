@@ -1,4 +1,4 @@
-export const Share: React.FC = (props) => (
+export const Mail: React.FC = (props) => (
 	<svg
 		xmlns='http://www.w3.org/2000/svg'
 		width='24'
@@ -11,8 +11,7 @@ export const Share: React.FC = (props) => (
 		strokeLinejoin='round'
 		{...props}
 	>
-		<path d='M12 22a10 10 0 1 1 10-10' />
-		<path d='M22 22 12 12' />
-		<path d='M22 16v6h-6' />
+		<rect width='20' height='16' x='2' y='4' rx='2' />
+		<path d='m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7' />
 	</svg>
 );

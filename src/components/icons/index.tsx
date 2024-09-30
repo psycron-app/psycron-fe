@@ -19,17 +19,21 @@ import { CheckFail as IconCheckFail } from './CheckFail';
 import { CheckSuccess as IconCheckSuccess } from './CheckSuccess';
 import { Close as IconClose } from './Close';
 import { DashboardIcon as IconDashboardIcon } from './DashboardIcon';
+import { Dots as IconDots } from './Dots';
 import { Error as IconError } from './Error';
 import { HealthTracker as IconHealthTracker } from './HealthTracker';
 import { Info as IconInfo } from './Info';
+import { Mail as IconMail } from './Mail';
 import { Share as IconShare } from './Share';
 import { UnAvailable as IconUnAvailable } from './UnAvailable';
+
 export { Language } from './Language';
 
 import { AddPatient as IconAddPatient } from './user/patient/AddPatient';
 import { PatientList as IconPatientList } from './user/patient/PatientList';
 import { PatientManager as IconPatientManager } from './user/patient/PatientManager';
 import { RemovePatient as IconRemovePatient } from './user/patient/RemovePatient';
+import { Copy as IconCopy } from './Copy';
 import { Edit as IconEdit } from './Edit';
 import { FilterIcon as IconFilter } from './Filter';
 import { FilterCloseIcon as IconFilterClose } from './FilterClose';
@@ -37,6 +41,7 @@ import { HelpIcon as IconHelp } from './Help';
 import { Login as IconLogin } from './Login';
 import { Logout as IconLogout } from './Logout';
 import { Menu as IconMenu } from './Menu';
+import { Messenger as IconMessenger } from './Messenger';
 import { Notifications as IconNotifications } from './Notifications';
 import { NotVisible as IconNotVisible } from './NotVisible';
 import { Password as IconPassword } from './Password';
@@ -49,6 +54,7 @@ import { PlanUnpaid as IconPlanUnpaid } from './PlanUnpaid';
 import { Play as IconPlay } from './Play';
 import { SendInvoice as IconSendInvoice } from './SendInvoice';
 import { Visible as IconVisible } from './Visible';
+import { WhatsApp as IconWhatsApp } from './Whatsapp';
 
 export const Pause = withIconColor(IconPause);
 export const Play = withIconColor(IconPlay);
@@ -96,3 +102,9 @@ export const FilterClose = withIconColor(IconFilterClose);
 export const Available = withIconColor(IconAvailable);
 export const UnAvailable = withIconColor(IconUnAvailable);
 export const Share = withIconColor(IconShare);
+export const Copy = withIconColor(IconCopy);
+
+export const WhatsApp = withIconColor(IconWhatsApp);
+export const Mail = withIconColor(IconMail);
+export const Messenger = withIconColor(IconMessenger);
+export const Dots = withIconColor(IconDots);

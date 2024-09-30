@@ -1,64 +1,52 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Box, Modal, Skeleton } from '@mui/material';
+import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Box, Modal } from '@mui/material';
 import { Agenda } from '@psycron/components/agenda/Agenda';
-import { Calendar } from '@psycron/components/calendar/Calendar';
+import { ShareButton } from '@psycron/components/button/share/ShareButton';
 import { Loader } from '@psycron/components/loader/Loader';
-import { ShareButton } from '@psycron/components/share/share-button/ShareButton';
-import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
-import { startOfToday } from 'date-fns';
-import { enGB, ptBR } from 'date-fns/locale';
+import { useDashboardLogic } from '@psycron/hooks/useDashboardLogic';
 
+import { CalendarSection } from './components/calendar-section/CalendarSection';
 import { StyledPaperModal } from './Dashboard.styled';
 
 export const Dashboard = () => {
-	const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
-	const [selectedDay, setSelectedDay] = useState<Date | null>(null);
+	const { t } = useTranslation();
 
 	const {
 		isUserDetailsLoading,
 		therapistLatestAvailability,
 		therapistLatestAvailabilityLoading,
 		userDetails,
-	} = useUserDetails();
+		dateLocale,
+		today,
+		isDateClicked,
+		selectedDay,
+		setIsDateClicked,
+		handleDayClick,
+	} = useDashboardLogic();
 
-	const { locale } = useParams<{ locale: string }>();
+	const availabilityDates = useMemo(
+		() =>
+			therapistLatestAvailability?.latestAvailability?.availabilityDates || [],
+		[therapistLatestAvailability]
+	);
 
-	const dateLocale = locale.includes('en') ? enGB : ptBR;
-
-	const today = startOfToday();
-
-	const handleDayClick = (day: Date) => {
-		setIsDateClicked(true);
-		setSelectedDay(day);
-	};
-
-	if (isUserDetailsLoading) {
+	if (isUserDetailsLoading || therapistLatestAvailabilityLoading) {
 		<Loader />;
 	}
 
 	return (
 		<>
 			<Box>
-				{userDetails?.availability?.length > 0 ? (
-					<Box>
-						{therapistLatestAvailabilityLoading ? (
-							<Skeleton animation='wave'>
-								<Calendar dateLocale={dateLocale} today={today} />
-							</Skeleton>
-						) : (
-							<Calendar
-								handleDayClick={handleDayClick}
-								dateLocale={dateLocale}
-								today={today}
-								availabilityDates={
-									therapistLatestAvailability?.latestAvailability
-										?.availabilityDates
-								}
-							/>
-						)}
-					</Box>
-				) : null}
+				{userDetails?.availability?.length > 0 && (
+					<CalendarSection
+						locale={dateLocale}
+						today={today}
+						dates={availabilityDates}
+						dayClick={handleDayClick}
+						isLoading={therapistLatestAvailabilityLoading}
+					/>
+				)}
 			</Box>
 			<Modal open={isDateClicked} onClose={() => setIsDateClicked(false)}>
 				<StyledPaperModal>
@@ -67,7 +55,19 @@ export const Dashboard = () => {
 						availability={therapistLatestAvailability}
 						isLoading={therapistLatestAvailabilityLoading}
 					/>
-					<ShareButton />
+					<Box display='flex' justifyContent='flex-end' pt={2}>
+						<ShareButton
+							titleKey={t(
+								'components.share-button.share-infos.availability.title',
+								{ therapistName: userDetails?.firstName }
+							)}
+							textKey={t(
+								'components.share-button.share-infos.availability.text'
+							)}
+							url={`${userDetails?._id}/book-appointment`}
+							shareWith={t('components.share-button.share-with-patients')}
+						/>
+					</Box>
 				</StyledPaperModal>
 			</Modal>
 		</>

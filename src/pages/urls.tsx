@@ -38,6 +38,6 @@ export const AVAILABILITYPATH = 'availability';
 export const AVAILABILITY = `${AVAILABILITYPATH}/${USERID}`;
 export const AVAILABILITYWIZARD = `${AVAILABILITYPATH}/create`;
 export const AGENDA = 'agenda';
-export const BOOKAPPOINTMENT = `${USERID}/book-appointment`;
+export const BOOKAPPOINTMENT = `${USERID}/book-appointment/:first?`;
 export const APPOINTMENTCONFIRMATIONPATH = `${PATIENTID}/${APPOINTMENTCONFIRMATION}`;
 export const RESCHEDULEAPPOINTMENT = `${DOMAIN}/${APPOINTMENTID}/edit-appointment`;

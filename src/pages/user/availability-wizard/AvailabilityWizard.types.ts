@@ -1,5 +1,5 @@
 import type { UseFormRegister, UseFormSetValue } from 'react-hook-form';
-import type { AvailabilityFormData } from '@psycron/components/agenda/components/WeekDays/WeekDays.types';
+import type { AvailabilityFormData } from '@psycron/components/agenda/components/time-slots/TimeSlotRow.types';
 
 export interface IAvailabilityForm {
 	availabilityDays: boolean;

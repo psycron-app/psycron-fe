@@ -13,7 +13,11 @@ import { startOfToday } from 'date-fns';
 export const BookAppointment = () => {
 	const { t } = useTranslation();
 
-	const { locale, userId } = useParams<{ locale: string; userId: string }>();
+	const { locale, userId, first } = useParams<{
+		first?: string;
+		locale: string;
+		userId: string;
+	}>();
 
 	const {
 		therapistLatestAvailability,
@@ -60,7 +64,7 @@ export const BookAppointment = () => {
 					selectedDay={today}
 					availability={therapistLatestAvailability}
 					isLoading={therapistLatestAvailabilityLoading || isUserDetailsLoading}
-					isFirstAppointment
+					isFirstAppointment={!!first}
 				/>
 			</Box>
 		</SEOProvider>

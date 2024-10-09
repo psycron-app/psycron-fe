@@ -42,7 +42,7 @@ export const AppointmentConfirmation = () => {
 	}
 
 	const formattedSelectedSession = formatSessionDateToLocale(
-		latestSession.date.toLocaleString(),
+		latestSession?.date.toLocaleString(),
 		locale
 	);
 

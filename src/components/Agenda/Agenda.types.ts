@@ -5,3 +5,11 @@ export interface IAgenda {
 	isLoading: boolean;
 	selectedDay: Date;
 }
+
+export type StyledAgendaStatusProps =
+	| 'available'
+	| 'booked'
+	| 'beforeToday'
+	| 'selected'
+	| 'clicked'
+	| 'default';

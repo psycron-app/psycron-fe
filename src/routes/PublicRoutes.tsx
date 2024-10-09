@@ -13,8 +13,8 @@ import {
 	SIGNUP,
 	UNSUBSCRIBE,
 } from '@psycron/pages/urls';
-import { AppointmentConfirmation } from '@psycron/pages/user/book-appointment/AppointmentConfirmation';
-import { BookAppointment } from '@psycron/pages/user/book-appointment/BookAppointment';
+import { BookAppointment } from '@psycron/pages/user/appointment/booking/BookAppointment';
+import { AppointmentConfirmation } from '@psycron/pages/user/appointment/confirmation/AppointmentConfirmation';
 
 const publicRoutes = [
 	{ path: HOMEPAGE, element: <Home /> },

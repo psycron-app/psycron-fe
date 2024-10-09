@@ -7,6 +7,7 @@ import {
 	formatDateTimeToLocale,
 	generateTimeSlots,
 	generateWeekDaysFromSelected,
+	isBeforeToday,
 } from '@psycron/utils/variables';
 
 import { Available, ClockIn, UnAvailable } from '../icons';
@@ -23,7 +24,7 @@ import {
 	StyledHoursWrapper,
 	StyledSlotsWrapper,
 } from './Agenda.styles';
-import type { IAgenda } from './Agenda.types';
+import type { IAgenda, StyledAgendaStatusProps } from './Agenda.types';
 
 export const Agenda = ({ selectedDay, availability, isLoading }: IAgenda) => {
 	const { t } = useTranslation();
@@ -133,11 +134,18 @@ export const Agenda = ({ selectedDay, availability, isLoading }: IAgenda) => {
 		);
 	};
 
-	const handleBookAppointment = (day: Date, hour: string) => {
+	const handleBookAppointment = (
+		day: Date,
+		hour: string,
+		status: StyledAgendaStatusProps
+	) => {
 		const selectedDateHour = new Date(day.setHours(Number(hour.split(':')[0])));
 
 		const slotKey = `${day.toDateString()}_${hour}`;
 
+		if (status === 'booked' || status === 'beforeToday') {
+			return;
+		}
 		setClickedSlot(slotKey);
 		setIsClicked(true);
 		setSelectedSlot(selectedDateHour);
@@ -172,17 +180,27 @@ export const Agenda = ({ selectedDay, availability, isLoading }: IAgenda) => {
 									availability.latestAvailability.availabilityDates
 								);
 
-								const isAvailable = slotStatus === 'AVAILABLE';
-								const isBooked = slotStatus === 'BOOKED';
+								let status: StyledAgendaStatusProps = 'default';
 
-								const shouldShow = isAvailable || isBooked;
-
-								const translatedStatus = translateSlotStatus(slotStatus);
+								if (slotStatus === 'AVAILABLE') {
+									status = 'available';
+								} else if (slotStatus === 'BOOKED') {
+									status = 'booked';
+								}
 
 								const isSelected = isSelectedDay(selectedDay, day);
-
+								const beforeToday = isBeforeToday(day);
 								const slotKey = `${day.toDateString()}_${hour}`;
 
+								if (isSelected) {
+									status = 'selected';
+								} else if (beforeToday) {
+									status = 'beforeToday';
+								} else if (clickedSlot === slotKey) {
+									status = 'clicked';
+								}
+
+								const translatedStatus = translateSlotStatus(slotStatus);
 								const statusIcon = getStatusIcon(
 									slotStatus,
 									slotKey,
@@ -194,14 +212,11 @@ export const Agenda = ({ selectedDay, availability, isLoading }: IAgenda) => {
 										key={`day-slot-${index}`}
 										item
 										xs={1}
-										isAvailable={isAvailable}
-										isBooked={isBooked}
-										isSelected={isSelected}
-										isClicked={clickedSlot === slotKey}
-										onClick={() => handleBookAppointment(day, hour)}
+										status={status}
+										onClick={() => handleBookAppointment(day, hour, status)}
 									>
 										<StyledSlotsWrapper>
-											{shouldShow ? (
+											{status !== 'default' ? (
 												<Tooltip title={translatedStatus}>
 													<Icon>{statusIcon}</Icon>
 												</Tooltip>

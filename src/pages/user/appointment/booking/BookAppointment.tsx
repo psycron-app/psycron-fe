@@ -60,6 +60,7 @@ export const BookAppointment = () => {
 					selectedDay={today}
 					availability={therapistLatestAvailability}
 					isLoading={therapistLatestAvailabilityLoading || isUserDetailsLoading}
+					isFirstAppointment
 				/>
 			</Box>
 		</SEOProvider>

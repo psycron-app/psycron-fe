@@ -9,7 +9,7 @@ import {
 	generateWeekDaysFromSelected,
 	isBeforeToday,
 } from '@psycron/utils/variables';
-import { addDays, subDays } from 'date-fns';
+import { addDays, isBefore, subDays } from 'date-fns';
 
 import {
 	Available,
@@ -73,8 +73,9 @@ export const Agenda = ({
 		setCurrentWeekStart(nextWeekStart);
 	};
 
+	const previousWeekStart = subDays(currentWeekStart, 7);
+
 	const goToPreviousWeek = () => {
-		const previousWeekStart = subDays(currentWeekStart, 7);
 		setCurrentWeekStart(previousWeekStart);
 	};
 
@@ -192,7 +193,10 @@ export const Agenda = ({
 					<Grid container spacing={1} columns={8}>
 						<Grid item xs={1} columns={1}>
 							<Box display='flex' justifyContent='flex-start'>
-								<IconButton onClick={goToPreviousWeek}>
+								<IconButton
+									onClick={goToPreviousWeek}
+									disabled={isBefore(previousWeekStart, selectedDay)}
+								>
 									<ChevronLeft />
 								</IconButton>
 							</Box>

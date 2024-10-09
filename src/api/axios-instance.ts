@@ -1,28 +1,25 @@
 import { ID_TOKEN } from '@psycron/utils/tokens';
 import axios from 'axios';
 
-// Cria a instância do Axios com a baseURL
 const apiClient = axios.create({
-	baseURL: import.meta.env.VITE_PSYCRON_BASE_API_URL, // URL base correta
+	baseURL: import.meta.env.VITE_PSYCRON_BASE_API_URL,
 	headers: {
 		'Content-Type': 'application/json',
 	},
-	withCredentials: true, // Para enviar cookies, se necessário
+	withCredentials: true,
 });
 
-// Interceptor de requisição para sempre pegar o token do localStorage
 apiClient.interceptors.request.use(
 	(config) => {
-		const token = localStorage.getItem(ID_TOKEN); // Obtém o token atual
+		const token = localStorage.getItem(ID_TOKEN);
 		if (token) {
-			config.headers['Authorization'] = `Bearer ${token}`; // Define o token no cabeçalho
+			config.headers['Authorization'] = `Bearer ${token}`;
 		}
 		return config;
 	},
 	(error) => Promise.reject(error)
 );
 
-// Interceptor de resposta para capturar erros
 apiClient.interceptors.response.use(
 	(response) => response,
 	(error) => {

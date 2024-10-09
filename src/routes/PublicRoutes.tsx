@@ -1,7 +1,7 @@
 import { AuthPage } from '@psycron/pages/auth';
 import { ChangePassword } from '@psycron/pages/auth/password/ChangePassword';
 import { ResetPassword } from '@psycron/pages/auth/password/ResetPassword';
-import { Home } from '@psycron/pages/home';
+import { Home } from '@psycron/pages/home/HomePage';
 import { Unsubscribe } from '@psycron/pages/unsubscribe/Unsubscribe';
 import {
 	APPOINTMENTCONFIRMATIONPATH,

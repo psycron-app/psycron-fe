@@ -19,26 +19,28 @@ export const ContactsForm = <T extends FieldValues>({
 }: ContactsFormProps<T> & TextFieldProps) => {
 	const { t } = useTranslation();
 
-	const { email, phone, whatsapp } = defaultValues;
-
 	const [hasWhatsApp, setHasWhatsApp] = useState<boolean>(false);
+
 	const [isPhoneWpp, setIsPhoneWpp] = useState<boolean>(true);
 
 	useEffect(() => {
+		const phoneValue = getPhoneValue('phone' as Path<T>);
 		if (isPhoneWpp) {
-			const phoneValue = getPhoneValue('phone' as Path<T>);
 			setPhoneValue('whatsapp' as Path<T>, phoneValue);
 		}
 	}, [getPhoneValue, isPhoneWpp, setPhoneValue]);
 
 	return (
 		<Box>
-			<Box pb={4}>
+			<Box pb={1}>
 				<TextField
 					label={t('globals.email')}
 					fullWidth
 					id='email'
-					defaultValue={email}
+					defaultValue={defaultValues?.email}
+					placeholder={
+						!defaultValues?.email && t('components.input.text.email')
+					}
 					{...register('email' as Path<T>)}
 					autoComplete='email'
 					error={!!errors?.email}
@@ -52,7 +54,7 @@ export const ContactsForm = <T extends FieldValues>({
 					errors={errors}
 					register={register}
 					registerName='phone'
-					defaultValue={phone}
+					defaultValue={defaultValues?.phone}
 					disabled={disabled}
 				/>
 			</Box>
@@ -60,7 +62,8 @@ export const ContactsForm = <T extends FieldValues>({
 				<Box display='flex'>
 					<Switch
 						onChange={() => setHasWhatsApp((prev) => !prev)}
-						value={hasWhatsApp}
+						value={!hasWhatsApp}
+						defaultChecked={hasWhatsApp}
 						label={t('components.form.contacts-form.contact-via', {
 							method: 'Whatsapp',
 						})}
@@ -72,7 +75,7 @@ export const ContactsForm = <T extends FieldValues>({
 						<Switch
 							onChange={() => setIsPhoneWpp((prev) => !prev)}
 							value={isPhoneWpp}
-							defaultChecked
+							defaultChecked={isPhoneWpp}
 							label={t('components.form.contacts-form.contact-via-same')}
 						/>
 					</Box>
@@ -85,7 +88,7 @@ export const ContactsForm = <T extends FieldValues>({
 								errors={errors}
 								register={register}
 								registerName='whatsapp'
-								defaultValue={whatsapp}
+								defaultValue={defaultValues?.whatsapp}
 							/>
 						) : null}
 					</Box>

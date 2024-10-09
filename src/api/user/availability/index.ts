@@ -2,6 +2,8 @@ import apiClient from '@psycron/api/axios-instance';
 import type { IAvailability } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
 import type {
+	Appointment,
+	BookAppointmentResponse,
 	IAvailabilityData,
 	ICompleteSessionAvailabilityData,
 	ICompleteSessionAvailabilityResponse,
@@ -52,4 +54,17 @@ export const getAvailabilitySession = async (
 		`/users/availability/session/${sessionId}`
 	);
 	return response.data.session;
+};
+
+export const bookAppointment = async (
+	data: Appointment
+): Promise<BookAppointmentResponse> => {
+	const { therapistId } = data;
+
+	const response = await apiClient.post(
+		`/users/availability/${therapistId}/book`,
+		data
+	);
+
+	return response.data;
 };

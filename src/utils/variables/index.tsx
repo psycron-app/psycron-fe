@@ -130,3 +130,83 @@ export const getWeekDays = (today: Date, dateLocale: Locale) => {
 		return format(day, 'EEEE', { locale: dateLocale }).charAt(0).toUpperCase();
 	});
 };
+
+export const generateUserTimeZone = () => {
+	return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};
+
+export const formatDateTimeToLocale = (
+	dateTimeStr: string,
+	locale: string
+): string => {
+	const [datePart, timePart] = dateTimeStr.split('_');
+
+	const date = new Date(`${datePart} ${timePart}`);
+
+	if (isNaN(date.getTime())) {
+		throw new Error('Data inválida');
+	}
+
+	const formattedTime = new Intl.DateTimeFormat(locale, {
+		hour: 'numeric',
+		minute: 'numeric',
+		hour12: true,
+	}).format(date);
+
+	if (locale === 'en') {
+		return `${date.toDateString()} at ${formattedTime}`;
+	}
+
+	if (locale === 'pt') {
+		const dayOfWeek = new Intl.DateTimeFormat('pt', { weekday: 'long' }).format(
+			date
+		);
+		const formattedDate = `${dayOfWeek} (${date.toLocaleDateString('pt', {
+			day: '2-digit',
+			month: '2-digit',
+		})})`;
+		return `${formattedDate} às ${formattedTime}`;
+	}
+
+	return new Intl.DateTimeFormat(locale, {
+		dateStyle: 'full',
+		timeStyle: 'short',
+	}).format(date);
+};
+
+export const formatSessionDateToLocale = (
+	dateString: string,
+	locale: string
+): string => {
+	const date = new Date(dateString);
+
+	if (isNaN(date.getTime())) {
+		throw new Error('Data inválida');
+	}
+
+	const formattedTime = new Intl.DateTimeFormat(locale, {
+		hour: 'numeric',
+		minute: 'numeric',
+		hour12: true,
+	}).format(date);
+
+	if (locale === 'en') {
+		return `${date.toDateString()} at ${formattedTime}`;
+	}
+
+	if (locale === 'pt') {
+		const dayOfWeek = new Intl.DateTimeFormat('pt', { weekday: 'long' }).format(
+			date
+		);
+		const formattedDate = `${dayOfWeek} (${date.toLocaleDateString('pt', {
+			day: '2-digit',
+			month: '2-digit',
+		})})`;
+		return `${formattedDate} às ${formattedTime}`;
+	}
+
+	return new Intl.DateTimeFormat(locale, {
+		dateStyle: 'full',
+		timeStyle: 'short',
+	}).format(date);
+};

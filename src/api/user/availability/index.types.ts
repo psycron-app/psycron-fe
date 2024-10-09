@@ -42,6 +42,7 @@ export interface ICompleteSessionAvailabilityData {
 	recurrencePattern: string;
 	selectedSlots: string[];
 	sessionId: string;
+	timezone: string;
 }
 
 export interface ICompleteSessionAvailabilityResponse {
@@ -63,4 +64,14 @@ export interface ICompleteSessionAvailabilityResponse {
 		updatedAt: string;
 	};
 	status: string;
+}
+
+export interface Appointment {
+	availabilityId: string;
+	dateHour: Date;
+	therapistId: string;
+}
+
+export interface BookAppointmentResponse {
+	message: string;
 }

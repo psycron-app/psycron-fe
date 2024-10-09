@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
 import {
+	StyledDayName,
 	THEmpty,
 	THWeekDays,
 	WeekDaysHeaderGrid,
@@ -23,13 +24,19 @@ export const WeekDaysHeader = ({ isSimple, selectedDay }: IWeekDaysHeader) => {
 		? generateWeekDaysFromSelected(selectedDay)
 		: generateWeekDays();
 
+	const weekDayName = (dayName: Date) => {
+		return locale.includes('en')
+			? format(dayName, 'EE', { locale: dateLocale })
+			: format(dayName, 'EE', { locale: dateLocale }).slice(0, 3);
+	};
+
 	return (
 		<WeekDaysHeaderGrid container spacing={2} columns={8}>
 			<THEmpty item xs={1} />
 			{daysOfWeek.map((day, index) => (
 				<THWeekDays key={`header-${index}`} item xs={1}>
 					<WeekDayWrapper>
-						<Text>{format(day, 'EE', { locale: dateLocale })}</Text>
+						<StyledDayName>{weekDayName(day)}</StyledDayName>
 						{!isSimple ? <Text>{format(day, 'd')}</Text> : null}
 					</WeekDayWrapper>
 				</THWeekDays>

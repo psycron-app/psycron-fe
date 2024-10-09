@@ -33,6 +33,7 @@ import { AddPatient as IconAddPatient } from './user/patient/AddPatient';
 import { PatientList as IconPatientList } from './user/patient/PatientList';
 import { PatientManager as IconPatientManager } from './user/patient/PatientManager';
 import { RemovePatient as IconRemovePatient } from './user/patient/RemovePatient';
+import { ClockIn as IconClockIn } from './ClockIn';
 import { Copy as IconCopy } from './Copy';
 import { Edit as IconEdit } from './Edit';
 import { FilterIcon as IconFilter } from './Filter';
@@ -57,6 +58,7 @@ import { Visible as IconVisible } from './Visible';
 import { WhatsApp as IconWhatsApp } from './Whatsapp';
 
 export const Pause = withIconColor(IconPause);
+export const ClockIn = withIconColor(IconClockIn);
 export const Play = withIconColor(IconPlay);
 export const Edit = withIconColor(IconEdit);
 export const PatientManager = withIconColor(IconPatientManager);

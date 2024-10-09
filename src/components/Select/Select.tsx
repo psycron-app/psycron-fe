@@ -1,9 +1,14 @@
 import { forwardRef } from 'react';
 import type { SelectChangeEvent, SelectProps } from '@mui/material';
-import { MenuItem, Select as MuiSelect, Typography } from '@mui/material';
+import { MenuItem } from '@mui/material';
+import { Text } from '@psycron/components/text/Text';
 import { ChevronDown } from 'lucide-react';
 
-import { ControlledWrapper, StyledInputLabel } from './Select.styles';
+import {
+	ControlledWrapper,
+	StyledInputLabel,
+	StyledMUISelect,
+} from './Select.styles';
 import type { SelectComponentProps } from './Select.types';
 
 export const Select = forwardRef<
@@ -21,6 +26,7 @@ export const Select = forwardRef<
 			subtitle,
 			width,
 			name,
+			hidePrimaryValue,
 		},
 		ref
 	) => {
@@ -34,7 +40,7 @@ export const Select = forwardRef<
 				width={width}
 			>
 				<StyledInputLabel id={labelId}>{selectLabel}</StyledInputLabel>
-				<MuiSelect
+				<StyledMUISelect
 					variant='standard'
 					name={name}
 					value={value}
@@ -57,13 +63,16 @@ export const Select = forwardRef<
 							divider={index !== items.length - 1}
 							key={`item-${name}-${value}`}
 						>
-							{name}
+							{!hidePrimaryValue ? <Text variant='caption'>{name}</Text> : null}
+
 							{subtitle ? (
-								<Typography variant='caption'>{value}</Typography>
+								<Text variant='caption' pl={2}>
+									{value}
+								</Text>
 							) : null}
 						</MenuItem>
 					))}
-				</MuiSelect>
+				</StyledMUISelect>
 			</ControlledWrapper>
 		);
 	}

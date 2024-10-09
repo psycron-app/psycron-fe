@@ -14,4 +14,5 @@ export const Content = styled(Box)`
 	min-height: 5rem;
 	padding: ${spacing.small};
 	text-align: left;
+	padding-top: ${spacing.medium};
 `;

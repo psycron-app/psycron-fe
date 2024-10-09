@@ -90,7 +90,7 @@ export const PhoneInput = <T extends FieldValues>({
 			alignItems='center'
 			columnSpacing={2}
 		>
-			<Grid item xs={1}>
+			<Grid item xs={1} pl={0}>
 				<CountryFlag>
 					{countryData.callingCode === null ? (
 						<Logo />
@@ -110,6 +110,7 @@ export const PhoneInput = <T extends FieldValues>({
 					fullWidth
 					onChangeSelect={handlePhoneChange}
 					disabled={disabled}
+					hidePrimaryValue
 				/>
 			</Grid>
 			<Grid item xs={6.5}>

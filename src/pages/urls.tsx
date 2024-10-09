@@ -4,6 +4,11 @@ export const HOMEPAGE = '';
 export const LOCALISATION = ':locale';
 export const BASE_API_URL = 'https://api.psycron.app/api/v1/';
 
+// ID
+export const USERID = ':userId';
+export const PATIENTID = ':patientId';
+export const APPOINTMENTID = ':appointmentId';
+
 // PUBLIC
 // AUTH
 export const SIGNIN = 'sign-in';
@@ -14,8 +19,6 @@ export const PASSRESET = 'password-reset/:token';
 
 // UNSUBSCRIBE
 export const UNSUBSCRIBE = ':token/unsubscribe';
-
-export const USERID = ':userId';
 
 // PRIVATE
 export const DASHBOARD = 'dashboard';
@@ -28,6 +31,7 @@ export const CHANGEPASSWORD = `${EDITUSER}/password`;
 export const PATIENTS = 'patients';
 export const PAYMENTS = 'payments';
 export const APPOINTMENTS = 'appointments';
+export const APPOINTMENTCONFIRMATION = 'appointment-confirmation';
 
 export const AVAILABILITYPATH = 'availability';
 
@@ -35,3 +39,5 @@ export const AVAILABILITY = `${AVAILABILITYPATH}/${USERID}`;
 export const AVAILABILITYWIZARD = `${AVAILABILITYPATH}/create`;
 export const AGENDA = 'agenda';
 export const BOOKAPPOINTMENT = `${USERID}/book-appointment`;
+export const APPOINTMENTCONFIRMATIONPATH = `${PATIENTID}/${APPOINTMENTCONFIRMATION}`;
+export const RESCHEDULEAPPOINTMENT = `${DOMAIN}/${APPOINTMENTID}/edit-appointment`;

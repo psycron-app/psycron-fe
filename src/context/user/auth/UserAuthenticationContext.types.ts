@@ -43,9 +43,10 @@ export interface ITherapist extends IBaseUser {
 }
 
 export interface IPatient extends IBaseUser {
-	createdBy?: string;
+	createdBy?: ITherapist;
 	receivedNotifications?: INotification[];
 	role: 'PATIENT';
+	sessionDates: ISessionDate[];
 }
 
 export interface IContactInfo {
@@ -106,4 +107,16 @@ export interface ISlot {
 	note?: string;
 	startTime: string;
 	status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED';
+}
+
+export interface ISessionDate {
+	date: Date;
+	slot: ISlot;
+}
+
+export interface IBookSessionWithLink {
+	availabilityId: string;
+	patient: Partial<IPatient>;
+	selectedSlot: Date;
+	timeZone: string;
 }

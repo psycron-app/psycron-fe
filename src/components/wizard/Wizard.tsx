@@ -14,6 +14,7 @@ import { useAlert } from '@psycron/context/alert/AlertContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { useWizardContext } from '@psycron/context/wizard/WizardContext';
 import useViewport from '@psycron/hooks/useViewport';
+import { generateUserTimeZone } from '@psycron/utils/variables';
 import { useMutation } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 
@@ -150,12 +151,14 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 	};
 
 	const handleRecurrenceSelection = async () => {
+		const timeZone = generateUserTimeZone();
 		const { selectedSlots, recurrencePattern } = getValues();
 
 		await completeAvailabilitySessionMutation.mutateAsync({
 			sessionId,
 			selectedSlots: selectedSlots,
 			recurrencePattern: recurrencePattern,
+			timezone: timeZone,
 		});
 
 		setIsModalOpen(false);

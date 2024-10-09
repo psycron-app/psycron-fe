@@ -23,6 +23,10 @@ export const NameForm = <T extends FieldValues>({
 					fullWidth
 					id='firstName'
 					defaultValue={placeholderFirstName}
+					placeholder={
+						!placeholderFirstName?.length &&
+						t('components.input.text.first-name')
+					}
 					{...register('firstName' as Path<T>)}
 					error={!!errors.firstName}
 					helperText={errors.firstName?.message as string}
@@ -36,6 +40,9 @@ export const NameForm = <T extends FieldValues>({
 					fullWidth
 					id='lastName'
 					defaultValue={placeholderLastName}
+					placeholder={
+						!placeholderLastName?.length && t('components.input.text.last-name')
+					}
 					{...register('lastName' as Path<T>)}
 					error={!!errors?.lastName}
 					helperText={errors?.lastName?.message as string}

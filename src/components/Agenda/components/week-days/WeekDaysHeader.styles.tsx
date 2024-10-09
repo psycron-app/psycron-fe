@@ -1,4 +1,5 @@
 import { Box, Grid, styled } from '@mui/material';
+import { Text } from '@psycron/components/text/Text';
 import { palette } from '@psycron/theme/palette/palette.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
@@ -37,4 +38,9 @@ export const THWeekDays = styled(Grid)`
 	&:last-child {
 		border-top-right-radius: 1rem;
 	}
+`;
+
+export const StyledDayName = styled(Text)`
+	text-transform: uppercase;
+	font-weight: 700;
 `;

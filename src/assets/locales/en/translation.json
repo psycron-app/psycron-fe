@@ -35,12 +35,17 @@
 		},
 		"success": {
 			"subscribed": "You were successfully subscribed. Please check your email!"
-		}
+		},
+		"date": "Date",
+		"time": "Time",
+		"date-time": "Date and Time: ",
+		"therapist": "Therapist"
 	},
 	"components": {
 		"form": {
 			"confirm-password": "Confirm password",
 			"keep-loggedin": "Please keep me logged in",
+			"not-valid": "Some fields are missing",
 			"signup": {
 				"title": "Sign up",
 				"firstName": "First name",
@@ -87,6 +92,11 @@
 				"select-label": "Country",
 				"phone-num-label": "{{registerName}} number here",
 				"phone-number-guide": "Please provide a phone number including the city code if applicable."
+			},
+			"text": {
+				"first-name": "Your first name here",
+				"last-name": "Your last name here",
+				"email": "Your email here"
 			}
 		},
 		"navbar": {
@@ -151,7 +161,9 @@
 			"navigate": {
 				"back": "Back",
 				"next": "Proceed",
-				"finish": "Finish"
+				"finish": "Finish",
+				"confirm": "Confirm",
+				"cancel": "Cancel"
 			}
 		},
 		"footer": {
@@ -170,12 +182,12 @@
 			},
 			"tooltip-tile": "Share {{with}}",
 			"share-with-patients": "with your patients",
-				"share-infos": {
-					"availability": {
-						"title": "{{therapistName}} shared with you their availability",
-						"text": "Enter here to book an appointment"
-					}
+			"share-infos": {
+				"availability": {
+					"title": "{{therapistName}} shared with you their availability",
+					"text": "Enter here to book an appointment"
 				}
+			}
 		}
 	},
 	"page": {
@@ -292,6 +304,20 @@
 					"booked": "Booked"
 				}
 			}
+		},
+		"book-appointment": {
+			"title": "{{therapisName}}'s Open Appointments",
+			"description": "Quickly schedule your therapy session. Check available times and choose the best slot to book your appointment easily and conveniently."
+		},
+		"booking-confirmation": {
+			"title": "Your Appointment with <strong>{{therapistName}} </strong> is confirmed 🎉",
+			"subtitle": "We're excited to see you soon!",
+			"whats-next": "<strong>{{therapistName}}</strong> will reach out with additional details as the appointment date approaches.",
+			"advise": "Please be available a few minutes early.",
+			"reschedule": "You can reschedule your appointment up to 1 day before the session.",
+			"cancel": "To reschedule or cancel , please <strong>click here</strong>",
+			"help": "If you have any questions or need assistance, feel free to contact us at",
+			"thanks": "Thank you! We’re here to support you. Looking forward to your session!"
 		}
 	}
 }

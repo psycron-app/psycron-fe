@@ -1,6 +1,7 @@
 import type { SelectChangeEvent } from '@mui/material';
 
 export interface SelectComponentProps {
+	hidePrimaryValue?: boolean;
 	items: { name: string; value: string | number }[];
 	onChangeSelect: (e: SelectChangeEvent<string>) => void;
 	required?: boolean;

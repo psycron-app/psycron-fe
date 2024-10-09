@@ -35,12 +35,17 @@
 		},
 		"success": {
 			"subscribed": "Você foi inscrito com sucesso. Por favor verifique o seu -mail!"
-		}
+		},
+		"date": "Data",
+		"time": "Hora",
+		"date-time": "Data e Hora: ",
+		"therapist": "Terapeuta"
 	},
 	"components": {
 		"form": {
 			"confirm-password": "Confirmar senha",
 			"keep-loggedin": "Por favor, mantenha-me conectado",
+			"not-valid": "Alguns campos estão faltando",
 			"signup": {
 				"title": "Cadastre-se",
 				"firstName": "Nome",
@@ -87,6 +92,11 @@
 				"select-label": "País",
 				"phone-num-label": "Número de {{registerName}}",
 				"phone-number-guide": "Por favor, forneça seu número de telefone com o código da cidade"
+			},
+			"text": {
+				"first-name": "Seu primeiro nome",
+				"last-name": "Seu último sobrenome",
+				"email": "Seu e-mail"
 			}
 		},
 		"navbar": {
@@ -151,7 +161,9 @@
 			"navigate": {
 				"back": "Voltar",
 				"next": "Prosseguir",
-				"finish": "Finalizar"
+				"finish": "Finalizar",
+				"confirm": "Confirmar",
+				"cancel": "Cancelar"
 			}
 		},
 		"footer": {
@@ -168,14 +180,14 @@
 				"error": "Erro ao compartilhar, tente novamente mais tarde.",
 				"error-copy": "Erro ao copiar o link, tente novamente mais tarde."
 			},
-				"tooltip-tile": "Compartilhar {{with}}",
-				"share-with-patients": "com seus pacientes",
-				"share-infos": {
-					"availability": {
-						"title": "{{therapistName}} compartilhou com você a disponibilidade",
-						"text": "Entre aqui para agendar o seu horário"
-					}
+			"tooltip-tile": "Compartilhar {{with}}",
+			"share-with-patients": "com seus pacientes",
+			"share-infos": {
+				"availability": {
+					"title": "{{therapistName}} compartilhou com você a disponibilidade",
+					"text": "Entre aqui para agendar o seu horário"
 				}
+			}
 		}
 	},
 	"page": {
@@ -292,6 +304,20 @@
 					"booked": "Reservado"
 				}
 			}
+		},
+		"book-appointment": {
+			"title": "Horários Disponíveis de {{therapisName}}",
+			"description": "Agende facilmente sua consulta. Veja os horários disponíveis e escolha o melhor momento para marcar sua sessão de forma rápida e prática."
+		},
+		"booking-confirmation": {
+			"title": "Sua consulta com <strong>{{therapistName}}</strong> está confirmada 🎉",
+			"subtitle": "Estamos ansiosos para te ver em breve!",
+			"whats-next": "<strong>{{therapistName}}</strong> entrará em contato com mais detalhes quando estiver perto da consulta",
+			"advise": "Pedimos para que você esteja disponível alguns minutos antes da consula começar",
+			"reschedule": "Você pode remarcar a sua consulta até 1 dia de antecedência.",
+			"cancel": "Para remarcar ou cancelar, por favor <strong>clique aqui</strong>",
+			"help": "Caso tenha alguma dúvida ou precise de ajuda, entre em contato conosco via ",
+			"thanks": "Estamos aqui para te apoiar. Aguardamos sua consulta!"
 		}
 	}
 }

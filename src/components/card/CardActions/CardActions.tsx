@@ -12,6 +12,7 @@ export const CardActions = ({
 	tertiaryActionName,
 	hasTertiary,
 	hasSecondAction,
+	type,
 }: CardActionsProps) => {
 	return (
 		<Grid container columns={12} justifyContent='flex-end'>
@@ -21,9 +22,6 @@ export const CardActions = ({
 				marginBottom={2}
 				columnSpacing={3}
 			>
-				<Grid item>
-					<Button onClick={onClick}>{actionName}</Button>
-				</Grid>
 				{hasSecondAction ? (
 					<Grid item>
 						<Button onClick={secondAction} secondary>
@@ -31,14 +29,15 @@ export const CardActions = ({
 						</Button>
 					</Grid>
 				) : null}
+				<Grid item>
+					<Button onClick={onClick} type={type}>
+						{actionName}
+					</Button>
+				</Grid>
 			</Grid>
 			{hasTertiary ? (
 				<Grid item>
-					<Box
-						display='flex'
-						flexDirection='row'
-						justifyContent='flex-end'
-					>
+					<Box display='flex' flexDirection='row' justifyContent='flex-end'>
 						<Button onClick={tertiaryAction} tertiary>
 							{tertiaryActionName}
 						</Button>

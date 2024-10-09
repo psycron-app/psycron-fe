@@ -21,7 +21,7 @@ export const Card = ({
 					</>
 				) : null}
 				<Content>{children}</Content>
-				<CardActions {...cardActionsProps} />
+				<CardActions {...cardActionsProps} type={cardActionsProps.type} />
 			</CardContent>
 		</CardWrapper>
 	);

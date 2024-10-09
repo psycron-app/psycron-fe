@@ -8,7 +8,7 @@ import type {
 import type { IContactInfo } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
 export interface ContactsFormProps<T extends FieldValues> {
-	defaultValues: IContactInfo;
+	defaultValues?: IContactInfo;
 	disabled?: boolean;
 	errors: FieldErrors<T>;
 	getPhoneValue: UseFormGetValues<FieldValues>;

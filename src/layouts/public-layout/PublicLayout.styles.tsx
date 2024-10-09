@@ -8,6 +8,8 @@ export const PublicLayoutWrapper = styled(Box)`
 	flex-direction: column;
 	width: 100%;
 	justify-content: flex-start;
+
+	height: calc(100% - var(--footer-height));
 `;
 
 export const PublicLayoutContent = styled(Box)`
@@ -20,7 +22,6 @@ export const PublicLayoutContent = styled(Box)`
 `;
 
 export const FooterWrapper = styled(Box)`
-	position: relative;
 	padding: 0 ${spacing.large} ${spacing.small};
 	z-index: 2;
 	height: var(--footer-height);
@@ -28,6 +29,10 @@ export const FooterWrapper = styled(Box)`
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	position: fixed;
+	bottom: 0;
+	width: 100%;
 `;
 
 export const FooterContent = styled(Box)`

@@ -14,12 +14,12 @@ export const Button = ({
 }: IButtonProps) => {
 	const bttnColor = () => {
 		switch (true) {
-		case secondary:
-			return 'secondary';
-		case tertiary:
-			return 'tertiary';
-		default:
-			return 'primary';
+			case secondary:
+				return 'secondary';
+			case tertiary:
+				return 'tertiary';
+			default:
+				return 'primary';
 		}
 	};
 
@@ -28,9 +28,9 @@ export const Button = ({
 			color={bttnColor()}
 			variant={secondary ? 'outlined' : 'contained'}
 			size={small ? 'small' : 'medium'}
-			onClick={type === 'submit' ? undefined : onClick}
-			fullWidth={fullWidth}
 			type={type}
+			fullWidth={fullWidth}
+			onClick={onClick}
 			{...props}
 		>
 			{children}

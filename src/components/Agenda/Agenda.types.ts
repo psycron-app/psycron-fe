@@ -2,6 +2,7 @@ import type { IAvailabilityResponse } from '@psycron/api/user/index.types';
 
 export interface IAgenda {
 	availability?: IAvailabilityResponse;
+	isFirstAppointment?: boolean;
 	isLoading: boolean;
 	selectedDay: Date;
 }

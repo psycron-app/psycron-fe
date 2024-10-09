@@ -1,7 +1,7 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Box, Grid, Icon } from '@mui/material';
+import { Box, Grid, Icon, IconButton } from '@mui/material';
 import type { IAvailabilityDate } from '@psycron/api/user/index.types';
 import {
 	formatDateTimeToLocale,
@@ -9,8 +9,15 @@ import {
 	generateWeekDaysFromSelected,
 	isBeforeToday,
 } from '@psycron/utils/variables';
+import { addDays, subDays } from 'date-fns';
 
-import { Available, ClockIn, UnAvailable } from '../icons';
+import {
+	Available,
+	ChevronLeft,
+	ChevronRight,
+	ClockIn,
+	UnAvailable,
+} from '../icons';
 import { Loader } from '../loader/Loader';
 import { Modal } from '../modal/Modal';
 import { Text } from '../text/Text';
@@ -26,13 +33,20 @@ import {
 } from './Agenda.styles';
 import type { IAgenda, StyledAgendaStatusProps } from './Agenda.types';
 
-export const Agenda = ({ selectedDay, availability, isLoading }: IAgenda) => {
+export const Agenda = ({
+	selectedDay,
+	availability,
+	isLoading,
+	isFirstAppointment,
+}: IAgenda) => {
 	const { t } = useTranslation();
 
 	const { userId, locale } = useParams<{
 		locale: string;
 		userId: string;
 	}>();
+
+	const [currentWeekStart, setCurrentWeekStart] = useState<Date>(selectedDay);
 
 	const [isClicked, setIsClicked] = useState<boolean>(false);
 	const [clickedSlot, setClickedSlot] = useState<string | null>(null);
@@ -52,7 +66,17 @@ export const Agenda = ({ selectedDay, availability, isLoading }: IAgenda) => {
 		availability?.latestAvailability?.consultationDuration
 	);
 
-	const weekDays = generateWeekDaysFromSelected(selectedDay);
+	const weekDays = generateWeekDaysFromSelected(currentWeekStart);
+
+	const goToNextWeek = () => {
+		const nextWeekStart = addDays(currentWeekStart, 7);
+		setCurrentWeekStart(nextWeekStart);
+	};
+
+	const goToPreviousWeek = () => {
+		const previousWeekStart = subDays(currentWeekStart, 7);
+		setCurrentWeekStart(previousWeekStart);
+	};
 
 	const filterDayHoursByAvailability = (
 		dayHours: string[],
@@ -164,7 +188,26 @@ export const Agenda = ({ selectedDay, availability, isLoading }: IAgenda) => {
 	return (
 		<>
 			<Grid container width='100%' overflow={'auto'} height={'100%'}>
-				<WeekDaysHeader selectedDay={selectedDay} />
+				{isFirstAppointment ? (
+					<Grid container spacing={1} columns={8}>
+						<Grid item xs={1} columns={1}>
+							<Box display='flex' justifyContent='flex-start'>
+								<IconButton onClick={goToPreviousWeek}>
+									<ChevronLeft />
+								</IconButton>
+							</Box>
+						</Grid>
+						<Grid item xs={6} columns={5}></Grid>
+						<Grid item xs={1} columns={1}>
+							<Box display='flex' justifyContent='flex-end'>
+								<IconButton onClick={goToNextWeek}>
+									<ChevronRight />
+								</IconButton>
+							</Box>
+						</Grid>
+					</Grid>
+				) : null}
+				<WeekDaysHeader selectedDay={currentWeekStart} />
 				<Grid container spacing={1} columns={8} mt={5}>
 					{filteredDayHours.map((hour, index) => (
 						<Fragment key={`hour-slot-${index}`}>
@@ -194,7 +237,7 @@ export const Agenda = ({ selectedDay, availability, isLoading }: IAgenda) => {
 
 								if (isSelected) {
 									status = 'selected';
-								} else if (beforeToday) {
+								} else if (beforeToday && isFirstAppointment) {
 									status = 'beforeToday';
 								} else if (clickedSlot === slotKey) {
 									status = 'clicked';

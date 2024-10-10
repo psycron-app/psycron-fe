@@ -1,4 +1,7 @@
-import type { ITherapist } from '@psycron/context/user/auth/UserAuthenticationContext.types';
+import type {
+	ISlot,
+	ITherapist,
+} from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
 export interface IUserByIdResponse {
 	user: ITherapist;
@@ -44,11 +47,4 @@ export interface IAvailabilityResponse {
 export interface IAvailabilityDate {
 	date: string;
 	slots: ISlot[];
-}
-
-export interface ISlot {
-	_id: string;
-	endTime: string;
-	startTime: string;
-	status: string;
 }

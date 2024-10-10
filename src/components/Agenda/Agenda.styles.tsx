@@ -106,6 +106,7 @@ export const StyledGridSlots = styled(Grid, {
 	align-items: center;
 	border-radius: 4px;
 	background-color: ${palette.background.default};
+
 	cursor: ${({ status }) =>
 		status === 'booked' || status === 'beforeToday'
 			? 'not-allowed'

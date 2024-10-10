@@ -188,6 +188,10 @@
 					"text": "Enter here to book an appointment"
 				}
 			}
+		},
+		"agenda": {
+			"modal": "You are booking for {{appointment}}",
+			"your-details": "Your details"
 		}
 	},
 	"page": {
@@ -307,7 +311,8 @@
 		},
 		"book-appointment": {
 			"title": "{{therapisName}}'s Open Appointments",
-			"description": "Quickly schedule your therapy session. Check available times and choose the best slot to book your appointment easily and conveniently."
+			"description": "Quickly schedule your therapy session. Check available times and choose the best slot to book your appointment easily and conveniently.",
+			"confirmation-should-replicate": "Would you like to set this day as your default choice for future appointments?"
 		},
 		"booking-confirmation": {
 			"title": "Your Appointment with <strong>{{therapistName}} </strong> is confirmed 🎉",

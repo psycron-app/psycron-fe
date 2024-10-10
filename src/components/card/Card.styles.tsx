@@ -1,12 +1,12 @@
 import styled from '@emotion/styled';
 import { Box, Card as MUICard } from '@mui/material';
-import { shadowMain } from '@psycron/theme/shadow/shadow.theme';
+import { smallShadow } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const CardWrapper = styled(MUICard, {
 	shouldForwardProp: (props) => props !== 'isModal',
 })<{ isModal?: boolean }>`
-	box-shadow: ${shadowMain};
+	box-shadow: ${smallShadow};
 	margin: ${spacing.mediumSmall} ${spacing.small};
 `;
 

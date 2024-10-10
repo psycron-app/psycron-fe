@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box, Grid, Icon, IconButton } from '@mui/material';
 import type { IAvailabilityDate } from '@psycron/api/user/index.types';
+import { usePatient } from '@psycron/context/patient/PatientContext';
 import {
 	formatDateTimeToLocale,
 	generateTimeSlots,
@@ -45,6 +46,8 @@ export const Agenda = ({
 		locale: string;
 		userId: string;
 	}>();
+
+	const { bookAppointmentFromLinkMttnIsLoading } = usePatient();
 
 	const [currentWeekStart, setCurrentWeekStart] = useState<Date>(selectedDay);
 
@@ -286,18 +289,26 @@ export const Agenda = ({
 					secondAction: handleCancel,
 				}}
 			>
-				<Box>
-					<Text>
-						Você está marcando a sua consulta para {slotToValidString}
-					</Text>
-				</Box>
-				<ConfirmationModal
-					openConfirmationModal={proceed}
-					handleCancelConfirmation={handleCancel}
-					selectedSlot={selectedSlot}
-					therapistId={userId}
-					availabilityId={availability?.latestAvailability?._id}
-				/>
+				{bookAppointmentFromLinkMttnIsLoading ? (
+					<Loader />
+				) : (
+					<>
+						<Box>
+							<Text pb={5}>
+								{t('components.agenda.modal', {
+									appointment: slotToValidString,
+								})}
+							</Text>
+						</Box>
+						<ConfirmationModal
+							openConfirmationModal={proceed}
+							handleCancelConfirmation={handleCancel}
+							selectedSlot={selectedSlot}
+							therapistId={userId}
+							availabilityId={availability?.latestAvailability?._id}
+						/>
+					</>
+				)}
 			</Modal>
 		</>
 	);

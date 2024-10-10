@@ -188,6 +188,10 @@
 					"text": "Entre aqui para agendar o seu horário"
 				}
 			}
+		},
+		"agenda": {
+			"modal": "Você está marcando a sua consulta para {{appointment}}",
+			"your-details": "Seus detalhes"
 		}
 	},
 	"page": {
@@ -307,7 +311,8 @@
 		},
 		"book-appointment": {
 			"title": "Horários Disponíveis de {{therapisName}}",
-			"description": "Agende facilmente sua consulta. Veja os horários disponíveis e escolha o melhor momento para marcar sua sessão de forma rápida e prática."
+			"description": "Agende facilmente sua consulta. Veja os horários disponíveis e escolha o melhor momento para marcar sua sessão de forma rápida e prática.",
+			"confirmation-should-replicate": "Deseja usar esse dia como sua escolha padrão para futuras consultas?"
 		},
 		"booking-confirmation": {
 			"title": "Sua consulta com <strong>{{therapistName}}</strong> está confirmada 🎉",

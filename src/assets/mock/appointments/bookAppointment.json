@@ -1,0 +1,18 @@
+{
+    "therapistId": "66c4b4ecbc4627fc2370ba93",
+    "data": {
+        "availabilityId": "66fbfc3ca6b7f26b47e37a1a",
+        "selectedSlot": "2024-10-11T16:00:00.000Z",
+        "timeZone": "Europe/Tallinn",
+        "shouldReplicate": "true",
+        "patient": {
+            "contacts": {
+                "email": "magnago.gustavo@icloud.com",
+                "phone": "+372",
+                "whatsapp": "+372"
+            },
+            "firstName": "Gustavo",
+            "lastName": "Magnago"
+        }
+    }
+}

@@ -7,6 +7,8 @@ import { NameForm } from '@psycron/components/form/components/name/NameForm';
 import { formatPhoneNumber } from '@psycron/components/form/components/phone/utils';
 import { Loader } from '@psycron/components/loader/Loader';
 import { Modal } from '@psycron/components/modal/Modal';
+import { RadioButtonGroup } from '@psycron/components/radio/RadioButton';
+import { Text } from '@psycron/components/text/Text';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { usePatient } from '@psycron/context/patient/PatientContext';
 import { generateUserTimeZone } from '@psycron/utils/variables';
@@ -39,8 +41,15 @@ export const ConfirmationModal = ({
 	const patientTimeZone = generateUserTimeZone();
 
 	const handleConfirmBook = () => {
-		const { firstName, lastName, email, phone, whatsapp, countryCode } =
-			getValues();
+		const {
+			firstName,
+			lastName,
+			email,
+			phone,
+			whatsapp,
+			countryCode,
+			shouldReplicate,
+		} = getValues();
 
 		if (!firstName?.length || !lastName?.length || !email?.length) {
 			return showAlert({
@@ -61,6 +70,7 @@ export const ConfirmationModal = ({
 				availabilityId,
 				selectedSlot,
 				timeZone: patientTimeZone,
+				shouldReplicate,
 				patient: {
 					contacts: { email, phone: phoneNumber, whatsapp: whatsappNumber },
 					firstName,
@@ -80,13 +90,18 @@ export const ConfirmationModal = ({
 		}
 	};
 
+	const recurrenceSelection = [
+		{ label: 'Yes', value: 'true' },
+		{ label: 'No', value: 'false' },
+	];
+
 	if (bookAppointmentFromLinkMttnIsLoading) {
 		return <Loader />;
 	}
 
 	return (
 		<Modal
-			title='Your details'
+			title={t('components.agenda.your-details')}
 			openModal={openConfirmationModal}
 			cardActionsProps={{
 				actionName: t('components.link.navigate.confirm'),
@@ -106,6 +121,14 @@ export const ConfirmationModal = ({
 							errors={errors}
 							getPhoneValue={getValues}
 							setPhoneValue={setValue}
+						/>
+						<Text>
+							{t('page.book-appointment.confirmation-should-replicate')}
+						</Text>
+						<RadioButtonGroup
+							register={register}
+							items={recurrenceSelection}
+							name='shouldReplicate'
 						/>
 					</Box>
 				</Box>

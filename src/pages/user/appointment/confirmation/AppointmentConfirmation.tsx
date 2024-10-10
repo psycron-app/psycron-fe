@@ -23,6 +23,7 @@ export const AppointmentConfirmation = () => {
 	const { t } = useTranslation();
 
 	const { patientDetails, isPatientDetailsLoading } = usePatient(patientId);
+	console.log('🚀 ~ AppointmentConfirmation ~ patientDetails:', patientDetails);
 
 	const latestSession = useMemo(() => {
 		if (

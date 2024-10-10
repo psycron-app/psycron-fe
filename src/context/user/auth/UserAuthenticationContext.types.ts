@@ -106,7 +106,7 @@ export interface ISlot {
 	endTime: string;
 	note?: string;
 	startTime: string;
-	status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED';
+	status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED' | 'ONHOLD';
 }
 
 export interface ISessionDate {
@@ -118,5 +118,6 @@ export interface IBookSessionWithLink {
 	availabilityId: string;
 	patient: Partial<IPatient>;
 	selectedSlot: Date;
+	shouldReplicate?: boolean;
 	timeZone: string;
 }

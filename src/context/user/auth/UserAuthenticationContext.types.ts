@@ -43,7 +43,7 @@ export interface ITherapist extends IBaseUser {
 }
 
 export interface IPatient extends IBaseUser {
-	createdBy?: ITherapist;
+	createdBy?: ITherapist | string;
 	receivedNotifications?: INotification[];
 	role: 'PATIENT';
 	sessionDates: ISessionDate[];

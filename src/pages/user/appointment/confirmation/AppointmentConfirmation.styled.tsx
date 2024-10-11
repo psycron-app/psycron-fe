@@ -3,6 +3,14 @@ import { Text } from '@psycron/components/text/Text';
 import { palette } from '@psycron/theme/palette/palette.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
+export const ConfirmationPageWrapper = styled(Box)`
+	height: 100%;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+`;
+
 export const StyledTitle = styled(Text)`
 	font-size: 1.9rem;
 	font-weight: 700;

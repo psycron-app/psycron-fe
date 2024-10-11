@@ -6,9 +6,11 @@ import { Link } from '@psycron/components/link/Link';
 import { Loader } from '@psycron/components/loader/Loader';
 import { Text } from '@psycron/components/text/Text';
 import { usePatient } from '@psycron/context/patient/PatientContext';
+import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { formatSessionDateToLocale } from '@psycron/utils/variables';
 
 import {
+	ConfirmationPageWrapper,
 	StrongText,
 	StyledSubTitle,
 	StyledTitle,
@@ -23,7 +25,9 @@ export const AppointmentConfirmation = () => {
 	const { t } = useTranslation();
 
 	const { patientDetails, isPatientDetailsLoading } = usePatient(patientId);
-	console.log('🚀 ~ AppointmentConfirmation ~ patientDetails:', patientDetails);
+	const { userDetails, isUserDetailsLoading } = useUserDetails(
+		String(patientDetails?.createdBy)
+	);
 
 	const latestSession = useMemo(() => {
 		if (
@@ -38,9 +42,11 @@ export const AppointmentConfirmation = () => {
 		];
 	}, [patientDetails]);
 
-	if (isPatientDetailsLoading) {
+	if (isPatientDetailsLoading || isUserDetailsLoading) {
 		return <Loader />;
 	}
+
+	const { firstName, lastName } = userDetails;
 
 	const formattedSelectedSession = formatSessionDateToLocale(
 		latestSession?.date.toLocaleString(),
@@ -48,57 +54,48 @@ export const AppointmentConfirmation = () => {
 	);
 
 	return (
-		<Box
-			height={'100%'}
-			width={'100%'}
-			display='flex'
-			flexDirection='column'
-			alignItems='center'
-			justifyContent='center'
-		>
-			<Box>
-				<Box pb={5}>
-					<StyledTitle variant='h2' display='flex' justifyContent='center'>
-						<Trans
-							i18nKey={'page.booking-confirmation.title'}
-							values={{ therapistName: 'Jupiter Ferraz' }}
-							components={{ strong: <StrongText /> }}
-						/>
-					</StyledTitle>
-					<StyledSubTitle variant='h4' pt={3}>
-						{t('page.booking-confirmation.subtitle')}
-					</StyledSubTitle>
-				</Box>
-				<Paper>
-					<Box
-						p={5}
-						display='flex'
-						flexDirection='column'
-						justifyContent='center'
-					>
-						<Box display='flex' flexDirection='row' justifyContent='center'>
-							<Text>{t('globals.date-time')}</Text>
-							<Text pl={1} isFirstUpper>
-								{formattedSelectedSession}
-							</Text>
-						</Box>
-						<Text variant='caption' pt={2}>
-							{t('page.booking-confirmation.advise')}
+		<ConfirmationPageWrapper>
+			<Box pb={5}>
+				<StyledTitle variant='h2' display='flex' justifyContent='center'>
+					<Trans
+						i18nKey={'page.booking-confirmation.title'}
+						values={{ therapistName: `${firstName} ${lastName}` }}
+						components={{ strong: <StrongText /> }}
+					/>
+				</StyledTitle>
+				<StyledSubTitle variant='h4' pt={3}>
+					{t('page.booking-confirmation.subtitle')}
+				</StyledSubTitle>
+			</Box>
+			<Paper>
+				<Box
+					p={5}
+					display='flex'
+					flexDirection='column'
+					justifyContent='center'
+				>
+					<Box display='flex' flexDirection='row' justifyContent='center'>
+						<Text>{t('globals.date-time')}</Text>
+						<Text pl={1} isFirstUpper>
+							{formattedSelectedSession}
 						</Text>
 					</Box>
-				</Paper>
-				<Box py={5}>
-					<Text variant='subtitle2'>
-						{t('page.booking-confirmation.reschedule')}
-					</Text>
-					<Text variant='subtitle2' display='flex' justifyContent='center'>
-						<Trans
-							i18nKey={'page.booking-confirmation.cancel'}
-							components={{ strong: <Link to={''}> </Link> }}
-						/>
+					<Text variant='caption' pt={2}>
+						{t('page.booking-confirmation.advise')}
 					</Text>
 				</Box>
+			</Paper>
+			<Box py={5}>
+				<Text variant='subtitle2'>
+					{t('page.booking-confirmation.reschedule')}
+				</Text>
+				<Text variant='subtitle2' display='flex' justifyContent='center'>
+					<Trans
+						i18nKey={'page.booking-confirmation.cancel'}
+						components={{ strong: <Link to={''}> </Link> }}
+					/>
+				</Text>
 			</Box>
-		</Box>
+		</ConfirmationPageWrapper>
 	);
 };

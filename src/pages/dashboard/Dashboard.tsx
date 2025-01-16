@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, Modal } from '@mui/material';
 import { Agenda } from '@psycron/components/agenda/Agenda';
@@ -23,13 +22,8 @@ export const Dashboard = () => {
 		selectedDay,
 		setIsDateClicked,
 		handleDayClick,
+		therapistLatestAvailabilityDates,
 	} = useDashboardLogic();
-
-	const availabilityDates = useMemo(
-		() =>
-			therapistLatestAvailability?.latestAvailability?.availabilityDates || [],
-		[therapistLatestAvailability]
-	);
 
 	if (isUserDetailsLoading || therapistLatestAvailabilityLoading) {
 		<Loader />;
@@ -42,7 +36,7 @@ export const Dashboard = () => {
 					<CalendarSection
 						locale={dateLocale}
 						today={today}
-						dates={availabilityDates}
+						dates={therapistLatestAvailabilityDates}
 						dayClick={handleDayClick}
 						isLoading={therapistLatestAvailabilityLoading}
 					/>

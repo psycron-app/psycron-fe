@@ -54,7 +54,7 @@ export interface ICompleteSessionAvailabilityResponse {
 				endTime: string;
 				note?: string;
 				startTime: string;
-				status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED';
+				status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED' | 'ONHOLD' | 'CANCELLED';
 			}>;
 		}>;
 		consultationDuration: number;

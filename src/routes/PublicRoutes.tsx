@@ -8,6 +8,7 @@ import {
 	BOOKAPPOINTMENT,
 	HOMEPAGE,
 	PASSRESET,
+	PATIENTAPPOINTMENTSLIST,
 	REQPASSRESET,
 	SIGNIN,
 	SIGNUP,
@@ -15,6 +16,7 @@ import {
 } from '@psycron/pages/urls';
 import { BookAppointment } from '@psycron/pages/user/appointment/booking/BookAppointment';
 import { AppointmentConfirmation } from '@psycron/pages/user/appointment/confirmation/AppointmentConfirmation';
+import { AppointmentsList } from '@psycron/pages/user/appointment/list/patient/AppointmentsList';
 
 const publicRoutes = [
 	{ path: HOMEPAGE, element: <Home /> },
@@ -25,6 +27,7 @@ const publicRoutes = [
 	{ path: PASSRESET, element: <ChangePassword /> },
 	{ path: BOOKAPPOINTMENT, element: <BookAppointment /> },
 	{ path: APPOINTMENTCONFIRMATIONPATH, element: <AppointmentConfirmation /> },
+	{ path: PATIENTAPPOINTMENTSLIST, element: <AppointmentsList /> },
 ];
 
 export default publicRoutes;

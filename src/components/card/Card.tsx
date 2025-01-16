@@ -10,19 +10,22 @@ export const Card = ({
 	cardTitle,
 	cardTitleProps,
 	cardActionsProps,
+	isLoading,
 }: CardProps) => {
 	return (
 		<CardWrapper>
-			<CardContent>
-				{cardTitle ? (
-					<>
-						<CardTitle {...cardTitleProps} />
-						<Divider />
-					</>
-				) : null}
-				<Content>{children}</Content>
-				<CardActions {...cardActionsProps} type={cardActionsProps.type} />
-			</CardContent>
+			{!isLoading && (
+				<CardContent>
+					{cardTitle ? (
+						<>
+							<CardTitle {...cardTitleProps} />
+							<Divider />
+						</>
+					) : null}
+					<Content>{children}</Content>
+					<CardActions {...cardActionsProps} type={cardActionsProps.type} />
+				</CardContent>
+			)}
 		</CardWrapper>
 	);
 };

@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { Box, Grid } from '@mui/material';
 import { Divider } from '@psycron/components/divider/Divider';
 import useViewport from '@psycron/hooks/useViewport';
@@ -14,61 +13,79 @@ import {
 } from './TableBody.styles';
 import type { ITableBodyProps } from './TableBody.types';
 
-export const TableBody = ({ bodyItems, hoveredColumn }: ITableBodyProps) => {
-	const navigate = useNavigate();
+export const TableBody = ({
+	bodyItems,
+	hoveredColumn,
+	isSmall,
+}: ITableBodyProps) => {
 	const { isTablet, isMobile } = useViewport();
 
-	const handleMobileClick = () => {
-		if (isMobile) return navigate('/edit-user');
-		return;
-	};
-
 	return (
-		<Box mt={5}>
-			<Box minHeight={isTablet || isMobile ? 510 : 530}>
-				{bodyItems.map((row, rowIndex) => (
-					<TableBodyWrapper
-						container
-						columns={row.length}
-						key={`table-row-${rowIndex}`}
-					>
-						<StyledRow>
-							{row.map(
-								({ icon, numeric, label, action, isPatients, id }, index) => (
-									<Grid
-										key={`table-cell-${rowIndex}-${index}`}
-										item
-										xs={tableBones(action, index, isTablet || isMobile)}
-										onClick={handleMobileClick}
-										display='flex'
-									>
-										<TableBodyRowItem isHovered={hoveredColumn === id}>
-											<TableBodyRow>
-												<TableCell
-													icon={icon}
-													label={label}
-													numeric={numeric}
-													action={action}
-													isPatients={isPatients}
-													id={id}
-												/>
-											</TableBodyRow>
-										</TableBodyRowItem>
-										{index !== row.length - 1 && !(isTablet || isMobile) ? (
-											<Divider small />
-										) : null}
-									</Grid>
-								)
-							)}
-						</StyledRow>
-						{rowIndex !== bodyItems.length - 1 ? (
-							<Box width={'100%'} my={2}>
-								<Divider small />
-							</Box>
-						) : null}
-					</TableBodyWrapper>
-				))}
-			</Box>
-		</Box>
+		<Grid
+			container
+			columns={bodyItems.length}
+			mt={5}
+			minHeight={
+				isTablet || isMobile ? (isSmall ? 430 : 510) : isSmall ? 450 : 530
+			}
+		>
+			{bodyItems.map((row, rowIndex) => (
+				<TableBodyWrapper
+					container
+					columns={row.length}
+					key={`table-row-${rowIndex}`}
+				>
+					<StyledRow>
+						{row.map(
+							(
+								{
+									icon,
+									numeric,
+									label,
+									action,
+									isPatients,
+									id,
+									tooltip,
+									iconElements,
+									session,
+								},
+								index
+							) => (
+								<Grid
+									key={`table-cell-${rowIndex}-${index}`}
+									item
+									xs={tableBones(action, index)}
+									display='flex'
+								>
+									<TableBodyRowItem isHovered={hoveredColumn === id}>
+										<TableBodyRow>
+											<TableCell
+												icon={icon}
+												label={label}
+												numeric={numeric}
+												action={action}
+												isPatients={isPatients}
+												id={id}
+												tooltip={tooltip}
+												iconElements={iconElements}
+												session={session}
+											/>
+										</TableBodyRow>
+									</TableBodyRowItem>
+									{index !== row.length - 1 && !(isTablet || isMobile) ? (
+										<Divider small />
+									) : null}
+								</Grid>
+							)
+						)}
+					</StyledRow>
+					{rowIndex !== bodyItems.length - 1 ? (
+						<Box width={'100%'} my={2}>
+							<Divider small />
+						</Box>
+					) : null}
+				</TableBodyWrapper>
+			))}
+		</Grid>
 	);
 };

@@ -3,7 +3,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { Loader } from './components/loader/Loader';
-import { AppLayout } from './layouts/app-layout/AppLayout';
+import { AppLayout } from './layouts/app/app-layout/AppLayout';
 import { LanguageLayout } from './layouts/language-layout/LanguageLayout';
 import { PublicLayout } from './layouts/public-layout/PublicLayout';
 import { LOCALISATION } from './pages/urls';

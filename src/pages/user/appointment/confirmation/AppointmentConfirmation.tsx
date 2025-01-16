@@ -25,6 +25,7 @@ export const AppointmentConfirmation = () => {
 	const { t } = useTranslation();
 
 	const { patientDetails, isPatientDetailsLoading } = usePatient(patientId);
+
 	const { userDetails, isUserDetailsLoading } = useUserDetails(
 		String(patientDetails?.createdBy)
 	);
@@ -49,7 +50,7 @@ export const AppointmentConfirmation = () => {
 	const { firstName, lastName } = userDetails;
 
 	const formattedSelectedSession = formatSessionDateToLocale(
-		latestSession?.date.toLocaleString(),
+		latestSession.sessions[0].date.toLocaleString(),
 		locale
 	);
 
@@ -92,7 +93,13 @@ export const AppointmentConfirmation = () => {
 				<Text variant='subtitle2' display='flex' justifyContent='center'>
 					<Trans
 						i18nKey={'page.booking-confirmation.cancel'}
-						components={{ strong: <Link to={''}> </Link> }}
+						components={{
+							strong: (
+								<Link to={`${patientDetails._id}/appointments`} replace>
+									{' '}
+								</Link>
+							),
+						}}
 					/>
 				</Text>
 			</Box>

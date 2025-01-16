@@ -9,7 +9,12 @@ import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext
 import useViewport from '@psycron/hooks/useViewport';
 import { SIGNIN } from '@psycron/pages/urls';
 
-import { Content, LayoutWrapper, NavBarWrapper } from './AppLayout.styles';
+import {
+	Content,
+	DividerWrapper,
+	LayoutWrapper,
+	NavBarWrapper,
+} from './AppLayout.styles';
 
 export const AppLayout: FC = () => {
 	const { isMobile, isTablet } = useViewport();
@@ -41,11 +46,11 @@ export const AppLayout: FC = () => {
 				<Box>
 					<Navbar />
 				</Box>
-				<Box>
+				<DividerWrapper>
 					<Divider
 						orientation={isMobile || isTablet ? 'horizontal' : 'vertical'}
 					/>
-				</Box>
+				</DividerWrapper>
 			</NavBarWrapper>
 			<Content>
 				<Outlet />

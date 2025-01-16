@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { Box, IconButton } from '@mui/material';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import useClickOutside from '@psycron/hooks/useClickoutside';
@@ -43,9 +44,28 @@ export const Navbar = () => {
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const { isMobile, isTablet } = useViewport();
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-	const { toggleUserDetails, userDetails } = useUserDetails();
+
+	const [isAppointmentTipOpen, setIsAppointmentTipOpen] =
+		useState<boolean>(true);
+
+	const { toggleUserDetails, userDetails, emptyAvailability } =
+		useUserDetails();
+
+	const { pathname } = useLocation();
 
 	useClickOutside(dropdownRef, () => setIsMenuOpen(false));
+
+	useEffect(() => {
+		if (
+			emptyAvailability &&
+			!(pathname.includes('appointments') || pathname.includes('availability'))
+		) {
+			setIsAppointmentTipOpen(true);
+		} else {
+			setIsAppointmentTipOpen(false);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [pathname]);
 
 	const handleMenuClick = (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -70,16 +90,21 @@ export const Navbar = () => {
 			name: t('globals.patients'),
 			icon: <PatientList />,
 			path: PATIENTS,
+			disabled: true,
 		},
 		{
 			name: t('globals.billing-manager'),
 			icon: <Payment />,
 			path: PAYMENTS,
+			disabled: true,
 		},
 		{
-			name: t('globals.appointments-manager'),
+			name: emptyAvailability
+				? t('globals.appointments-manager')
+				: t('globals.appointments'),
 			icon: <Calendar />,
 			path: APPOINTMENTS,
+			open: isAppointmentTipOpen,
 		},
 	];
 

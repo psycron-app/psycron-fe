@@ -261,7 +261,7 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a46"
                     },
                     {
@@ -411,13 +411,13 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a5f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a60"
                     },
                     {
@@ -429,13 +429,13 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a62"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a63"
                     },
                     {
@@ -483,8 +483,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37a6b"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -513,7 +513,7 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a70"
                     },
                     {
@@ -531,7 +531,7 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a73"
                     }
                 ],
@@ -561,7 +561,7 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a78"
                     },
                     {
@@ -591,13 +591,13 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a7d"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
+                        "status": "BOOKED",
                         "_id": "66fbfc3ca6b7f26b47e37a7e"
                     },
                     {
@@ -633,14 +633,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37a84"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37a85"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -651,14 +651,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37a87"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37a88"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -705,8 +705,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37a90"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -735,8 +735,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37a95"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -753,8 +753,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37a98"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37a94"
@@ -783,8 +783,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37a9d"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -813,14 +813,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aa2"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a78308294e"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aa3"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -855,14 +855,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aa9"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aaa"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -873,14 +873,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aac"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aad"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -927,8 +927,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ab5"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -957,8 +957,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aba"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -975,8 +975,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37abd"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37ab9"
@@ -1005,8 +1005,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ac2"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -1035,14 +1035,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ac7"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082950"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ac8"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -1077,14 +1077,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ace"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37acf"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -1095,14 +1095,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ad1"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ad2"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -1149,8 +1149,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ada"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -1179,8 +1179,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37adf"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -1197,8 +1197,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ae2"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37ade"
@@ -1227,8 +1227,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ae7"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -1257,14 +1257,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aec"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082952"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aed"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -1299,14 +1299,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37af3"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37af4"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -1317,14 +1317,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37af6"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37af7"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -1371,8 +1371,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37aff"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -1401,8 +1401,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b04"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -1419,8 +1419,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b07"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37b03"
@@ -1449,8 +1449,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b0c"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -1479,14 +1479,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b11"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082954"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b12"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -1521,14 +1521,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b18"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b19"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -1539,14 +1539,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b1b"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b1c"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -1593,8 +1593,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b24"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -1623,8 +1623,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b29"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -1641,8 +1641,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b2c"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37b28"
@@ -1671,8 +1671,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b31"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -1701,14 +1701,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b36"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082956"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b37"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -1743,14 +1743,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b3d"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b3e"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -1761,14 +1761,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b40"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b41"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -1815,8 +1815,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b49"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -1845,8 +1845,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b4e"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -1863,8 +1863,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b51"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37b4d"
@@ -1893,8 +1893,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b56"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -1923,14 +1923,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b5b"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082958"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b5c"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -1965,14 +1965,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b62"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b63"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -1983,14 +1983,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b65"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b66"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -2037,8 +2037,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b6e"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -2067,8 +2067,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b73"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -2085,8 +2085,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b76"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37b72"
@@ -2115,8 +2115,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b7b"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -2145,14 +2145,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b80"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a78308295a"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b81"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -2187,14 +2187,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b87"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b88"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -2205,14 +2205,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b8a"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b8b"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -2259,8 +2259,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b93"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -2289,8 +2289,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b98"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -2307,8 +2307,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37b9b"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37b97"
@@ -2337,8 +2337,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ba0"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -2367,14 +2367,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ba5"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a78308295c"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37ba6"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -2409,14 +2409,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bac"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bad"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -2427,14 +2427,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37baf"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bb0"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -2481,8 +2481,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bb8"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -2511,8 +2511,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bbd"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -2529,8 +2529,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bc0"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37bbc"
@@ -2559,8 +2559,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bc5"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -2589,14 +2589,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bca"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a78308295e"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bcb"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -2631,14 +2631,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bd1"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bd2"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -2649,14 +2649,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bd4"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bd5"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -2703,8 +2703,8 @@
                     {
                         "startTime": "12:00",
                         "endTime": "13:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bdd"
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
                     },
                     {
                         "startTime": "11:00",
@@ -2733,8 +2733,8 @@
                     {
                         "startTime": "09:00",
                         "endTime": "10:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37be2"
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
                     },
                     {
                         "startTime": "13:00",
@@ -2751,8 +2751,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37be5"
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
                     }
                 ],
                 "_id": "66fbfc3ca6b7f26b47e37be1"
@@ -2781,8 +2781,8 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bea"
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
                     },
                     {
                         "startTime": "14:00",
@@ -2811,14 +2811,14 @@
                     {
                         "startTime": "17:00",
                         "endTime": "18:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bef"
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082960"
                     },
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bf0"
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
                     },
                     {
                         "startTime": "14:00",
@@ -2853,14 +2853,14 @@
                     {
                         "startTime": "19:00",
                         "endTime": "20:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bf6"
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
                     },
                     {
                         "startTime": "16:00",
                         "endTime": "17:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bf7"
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
                     },
                     {
                         "startTime": "15:00",
@@ -2871,14 +2871,14 @@
                     {
                         "startTime": "14:00",
                         "endTime": "15:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bf9"
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
                     },
                     {
                         "startTime": "13:00",
                         "endTime": "14:00",
-                        "status": "AVAILABLE",
-                        "_id": "66fbfc3ca6b7f26b47e37bfa"
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
                     },
                     {
                         "startTime": "12:00",
@@ -2893,7 +2893,8 @@
         "consultationDuration": 60,
         "createAvailabilitySession": "66fbfc08a6b7f26b47e3798e",
         "createdAt": "2024-10-01T13:42:20.905Z",
-        "updatedAt": "2024-10-08T12:34:22.440Z",
-        "__v": 0
+        "updatedAt": "2024-10-14T14:29:58.950Z",
+        "__v": 1,
+        "conflicts": []
     }
 }

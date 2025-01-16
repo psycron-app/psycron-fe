@@ -23,7 +23,7 @@ import menuItemStyles from './select/menu-item/menuItem.theme';
 import selectStyles from './select/select.theme';
 import { spacing } from './spacing/spacing.theme';
 import switchStyles from './swtich/switch.theme';
-import tooltipeStyles from './tooltip/tooltip.theme';
+import tooltipStyles from './tooltip/tooltip.theme';
 
 declare module '@mui/material/styles' {
 	interface Palette {
@@ -68,7 +68,7 @@ const theme = createTheme({
 			styleOverrides: dividerStyles(createTheme({ palette })),
 		},
 		MuiTooltip: {
-			styleOverrides: tooltipeStyles(createTheme({ palette })),
+			styleOverrides: tooltipStyles(createTheme({ palette })),
 		},
 		MuiLinearProgress: {
 			styleOverrides: progressBarStyles(createTheme({ palette })),

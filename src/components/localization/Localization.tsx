@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
-import { Select } from '../Select/Select';
+import { Select } from '../select/Select';
 
 import { StyledSelectWrapper } from './Localization.styles';
 

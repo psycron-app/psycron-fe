@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IconButton } from '@mui/material';
 import type { IAvailabilityDate } from '@psycron/api/user/index.types';
-import { getWeekDays } from '@psycron/utils/variables';
+import { getWeekDays, isCurrentDay } from '@psycron/utils/variables';
 import {
 	addMonths,
 	eachDayOfInterval,
@@ -64,14 +64,6 @@ export const Calendar = ({
 		return (
 			day.getMonth() === currMonth.getMonth() &&
 			day.getFullYear() === currMonth.getFullYear()
-		);
-	};
-
-	const isCurrentDay = (day: Date) => {
-		return (
-			day.getDate() === today.getDate() &&
-			day.getMonth() === today.getMonth() &&
-			day.getFullYear() === today.getFullYear()
 		);
 	};
 

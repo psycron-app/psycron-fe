@@ -32,11 +32,12 @@ export const AvailabilityHours = () => {
 		return <Loader />;
 	}
 
-	if (!sessionData) {
+	if (!latestSessionId) {
 		return <Box p={5}>{t('page.availability.wizard.hours.no-session')}</Box>;
 	}
 
 	const { consultationDuration, weekdays } = sessionData;
+	console.log('🚀 ~ AvailabilityHours ~ weekdays:', weekdays);
 
 	const dayHours = generateTimeSlots(consultationDuration);
 

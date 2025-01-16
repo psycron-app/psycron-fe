@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getTherapistLatestAvailability, getUserById } from '@psycron/api/user';
 import { EDITUSERPATH } from '@psycron/pages/urls';
@@ -83,6 +83,7 @@ export const useUserDetails = (passedUserId?: string) => {
 		queryKey: ['userDetails', userId],
 		queryFn: () => getUserById(userId),
 		enabled: !!userId,
+		retry: false,
 	});
 
 	const {
@@ -93,8 +94,17 @@ export const useUserDetails = (passedUserId?: string) => {
 		queryKey: ['therapistAvailability'],
 		queryFn: () => getTherapistLatestAvailability(userDetails._id),
 		enabled: !!userId,
+		retry: false,
 		staleTime: 0,
 	});
+
+	const therapistLatestAvailabilityDates = useMemo(
+		() =>
+			therapistLatestAvailability?.latestAvailability?.availabilityDates || [],
+		[therapistLatestAvailability]
+	);
+
+	const emptyAvailability = therapistLatestAvailabilityDates?.length < 1;
 
 	return {
 		...context,
@@ -104,5 +114,7 @@ export const useUserDetails = (passedUserId?: string) => {
 		therapistLatestAvailability,
 		therapistLatestAvailabilityLoading,
 		therapistLatestAvailabilitySuccess,
+		therapistLatestAvailabilityDates,
+		emptyAvailability,
 	};
 };

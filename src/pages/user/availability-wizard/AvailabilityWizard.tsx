@@ -1,7 +1,6 @@
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Box } from '@mui/material';
 import { AnimatedBackground } from '@psycron/components/animated-background/AnimatedBackground';
 import { Wizard } from '@psycron/components/wizard/Wizard';
 import { WizardItem } from '@psycron/components/wizard/wizard-item/WizardItem';
@@ -12,7 +11,10 @@ import { AvailabilityDays } from './components/days/AvailabilityDays';
 import { AvailabilityDuration } from './components/duration/AvailabilityDuration';
 import { AvailabilityHours } from './components/hours/AvailabilityHours';
 import { AvailabilityIntro } from './components/intro/AvailabilityIntro';
-import { StyledItemContentWrapper } from './AvailabilityWizard.styles';
+import {
+	StyledAvailabilityHoursWrapper,
+	StyledItemContentWrapper,
+} from './AvailabilityWizard.styles';
 
 export const AvailabilityWizard = () => {
 	const { t } = useTranslation();
@@ -59,15 +61,9 @@ export const AvailabilityWizard = () => {
 		{
 			label: t('page.availability.wizard.wizard-items.week-slots.label'),
 			content: () => (
-				<Box
-					display='flex'
-					flexDirection='column'
-					width='100%'
-					height='100%'
-					position='relative'
-				>
+				<StyledAvailabilityHoursWrapper>
 					<AvailabilityHours />
-				</Box>
+				</StyledAvailabilityHoursWrapper>
 			),
 		},
 	];

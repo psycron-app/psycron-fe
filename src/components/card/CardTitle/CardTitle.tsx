@@ -29,9 +29,15 @@ export const CardTitle = ({
 				justifyContent='space-between'
 				alignItems='center'
 			>
-				<Grid item xs={8}>
+				<Grid item xs={hasFirstChip ? 8 : 12}>
 					<TitleWrapper>
-						<Text variant='h5' isFirstUpper>
+						<Text
+							variant='h5'
+							isFirstUpper
+							textAlign='left'
+							fontSize={'1rem'}
+							fontWeight={600}
+						>
 							{title}
 						</Text>
 						{subheader?.length ? (

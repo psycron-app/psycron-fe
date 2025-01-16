@@ -9,8 +9,10 @@ import {
 	format,
 	setHours,
 	startOfDay,
+	startOfToday,
 	startOfWeek,
 } from 'date-fns';
+import { format as TZFormat, toZonedTime } from 'date-fns-tz';
 import type { TFunction } from 'i18next';
 
 export * from './env';
@@ -135,6 +137,25 @@ export const generateUserTimeZone = () => {
 	return Intl.DateTimeFormat().resolvedOptions().timeZone;
 };
 
+export const formatTimeToTimeZone = (
+	time: string,
+	date: Date,
+	timeZone: string
+): string => {
+	// Example: '19:00', 'Thu Oct 17 2024 19:00:00 GMT+0300', Europe/Tallinn
+	const dateISO = new Date(date).toISOString().split('T')[0];
+	const dateTimeString = `${dateISO}T${time}:00`;
+
+	const zonedDate = toZonedTime(new Date(dateTimeString), timeZone);
+
+	const is12HourFormat =
+		timeZone.includes('America') || timeZone === 'US/Eastern';
+
+	return TZFormat(zonedDate, is12HourFormat ? 'hh:mm a' : 'HH:mm', {
+		timeZone,
+	});
+};
+
 export const formatDateTimeToLocale = (
 	dateTimeStr: string,
 	locale: string
@@ -218,4 +239,14 @@ export const isBeforeToday = (date: Date): boolean => {
 	date.setHours(0, 0, 0, 0);
 
 	return date < today;
+};
+
+export const isCurrentDay = (day: Date) => {
+	const today = startOfToday();
+
+	return (
+		day.getDate() === today.getDate() &&
+		day.getMonth() === today.getMonth() &&
+		day.getFullYear() === today.getFullYear()
+	);
 };

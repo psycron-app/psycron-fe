@@ -14,14 +14,15 @@ export const Table = ({
 	bodyItems,
 	columnsToHideTablet,
 	columnsToHideMobile,
+	isSmall,
 }: ITableProps) => {
 	const { isTablet, isMobile } = useViewport();
 
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [sortConfig, setSortConfig] = useState<{
-    direction: 'asc' | 'desc';
-    key: string;
-  } | null>(null);
+		direction: 'asc' | 'desc';
+		key: string;
+	} | null>(null);
 
 	const [hoveredColumn, setHoveredColumn] = useState<string | null>(null);
 
@@ -53,9 +54,9 @@ export const Table = ({
 		if (sortConfig !== null) {
 			sortedItems = sortedItems.sort((a, b) => {
 				const aValue =
-          a.find((item) => item.id === sortConfig.key)?.label ?? '';
+					a.find((item) => item.id === sortConfig.key)?.label ?? '';
 				const bValue =
-          b.find((item) => item.id === sortConfig.key)?.label ?? '';
+					b.find((item) => item.id === sortConfig.key)?.label ?? '';
 
 				const aNumber = parseFloat(aValue);
 				const bNumber = parseFloat(bValue);
@@ -122,12 +123,14 @@ export const Table = ({
 				<TableHead
 					headItems={filteredHeadItems}
 					onSort={handleSort}
-					onHover={handleHover}
+					onHover={!isSmall ? handleHover : undefined}
+					isSmall={isSmall}
 				/>
 				<Divider />
 				<TableBody
 					bodyItems={filteredBodyItems}
 					hoveredColumn={hoveredColumn}
+					isSmall={isSmall}
 				/>
 				<Pagination
 					totalPages={totalPages}

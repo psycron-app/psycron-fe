@@ -288,6 +288,7 @@ export const Agenda = ({
 					secondActionName: t('components.link.navigate.back'),
 					secondAction: handleCancel,
 				}}
+				isLoading={bookAppointmentFromLinkMttnIsLoading}
 			>
 				{bookAppointmentFromLinkMttnIsLoading ? (
 					<Loader />

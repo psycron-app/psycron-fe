@@ -1,4 +1,5 @@
 import type {
+	IRefreshToken,
 	ISignInForm,
 	ISignInResponse,
 } from '@psycron/components/form/SignIn/SignIn.types';
@@ -62,4 +63,14 @@ export const resetPassword = async (
 		confirmPassword,
 	});
 	return response.data;
+};
+
+export const refreshTokenService = async (
+	refreshToken: string
+): Promise<IRefreshToken> => {
+	const { data } = await apiClient.post('/token/refresh-token', {
+		refreshToken,
+	});
+
+	return data;
 };

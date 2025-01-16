@@ -11,12 +11,14 @@
 		"patients-manager": "Genrecie seus pacientes",
 		"billing-manager": "Gerencie seus pagamentos",
 		"subscription-manager": "Gerencie sua assinatura",
+		"appointments": "Atendimentos",
 		"appointments-manager": "Gerencie seus atendimentos",
 		"change-language": "Mude o idioma",
 		"help": "Centro de suporte",
 		"logout": "Sair",
 		"plan": "Plano",
 		"cancel": "Cancelar",
+		"edit": "Alterar",
 		"date-time-format": "{{format}}",
 		"time-remaining": {
 			"days": "Em {{count}} dia(s)",
@@ -39,7 +41,14 @@
 		"date": "Data",
 		"time": "Hora",
 		"date-time": "Data e Hora: ",
-		"therapist": "Terapeuta"
+		"therapist": "Terapeuta",
+		"appointment-status": {
+			"booked": "Confirmado",
+			"available": "Disponível",
+			"onhold": "Em espera",
+			"blocked": "Bloqueado",
+			"cancelled": "Cancelado"
+		}
 	},
 	"components": {
 		"form": {
@@ -257,7 +266,8 @@
 				"wizard-items": {
 					"intro": {
 						"label": "Introdução",
-						"title": "Vamos configurar sua disponibilidade. Podemos começar?"
+						"title": "Vamos configurar sua disponibilidade. Podemos começar?",
+						"alert": "Você vai precisar finalizar a sua configuração de disponibilidade depois"
 					},
 					"weekdays": {
 						"label": "Escolha os dias da semana",
@@ -323,6 +333,33 @@
 			"cancel": "Para remarcar ou cancelar, por favor <strong>clique aqui</strong>",
 			"help": "Caso tenha alguma dúvida ou precise de ajuda, entre em contato conosco via ",
 			"thanks": "Estamos aqui para te apoiar. Aguardamos sua consulta!"
+		},
+		"appointment-list": {
+			"date": "Data",
+			"starts": "Começa",
+			"ends": "Termina",
+			"modal": {
+				"title": "Tem certeza que você deseja {{action}} esta sessão?"
+			},
+			"description": "Aqui você poderá configurar seus horários para consultas e compartilhá-los com seus pacientes. Vamos guiar você por um processo simples para definir seus horários de atendimento, de maneira que eles sejam replicados ao longo das semanas ou até o final do ano. O processo é flexível e você poderá ajustar as informações a qualquer momento no futuro.",
+			"guide": {
+				"step1": {
+					"title": "Decida se quer começar agora ou depois",
+					"description": "Se preferir, você pode voltar a esta etapa mais tarde. Sabemos que nem sempre é possível configurar tudo de imediato, então você terá a opção de retomar o processo no momento que for mais conveniente."
+				},
+				"step2": {
+					"title": "Defina seus dias de folga",
+					"description": "Nos informe quais dias da semana você não estará disponível para consultas. Esses dias ficarão bloqueados, mas poderão ser alterados no futuro, se necessário."
+				},
+				"step3": {
+					"title": "Duração da sessão",
+					"description": "Informe a duração média das suas consultas. Caso ofereça mais de um tipo de sessão, vamos definir um padrão agora e você poderá ajustar os tempos conforme o paciente e o tipo de terapia."
+				},
+				"step4": {
+					"title": "Escolha seus horários",
+					"description": "De maneira visual e interativa, você poderá selecionar os horários em que estará disponível para consultas ao longo da semana. É um processo flexível: se suas preferências mudarem, você pode ajustar seus horários a qualquer momento."
+				}
+			}
 		}
 	}
 }

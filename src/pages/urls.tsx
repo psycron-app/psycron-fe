@@ -30,10 +30,10 @@ export const CHANGEPASSWORD = `${EDITUSER}/password`;
 
 export const PATIENTS = 'patients';
 export const PAYMENTS = 'payments';
-export const APPOINTMENTS = 'appointments';
-export const APPOINTMENTCONFIRMATION = 'appointment-confirmation';
-
 export const AVAILABILITYPATH = 'availability';
+export const APPOINTMENTS = 'appointments';
+export const APPOINTMENT = 'appointment';
+export const APPOINTMENTCONFIRMATION = `${APPOINTMENT}-confirmation`;
 
 export const AVAILABILITY = `${AVAILABILITYPATH}/${USERID}`;
 export const AVAILABILITYWIZARD = `${AVAILABILITYPATH}/create`;
@@ -41,3 +41,4 @@ export const AGENDA = 'agenda';
 export const BOOKAPPOINTMENT = `${USERID}/book-appointment/:first?`;
 export const APPOINTMENTCONFIRMATIONPATH = `${PATIENTID}/${APPOINTMENTCONFIRMATION}`;
 export const RESCHEDULEAPPOINTMENT = `${DOMAIN}/${APPOINTMENTID}/edit-appointment`;
+export const PATIENTAPPOINTMENTSLIST = `${PATIENTID}/${APPOINTMENTS}`;

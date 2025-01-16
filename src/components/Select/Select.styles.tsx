@@ -11,7 +11,7 @@ export const ControlledWrapper = styled(FormControl)<{ width?: string }>`
 	width: ${({ width }) => width};
 
 	& svg {
-		height: auto;
+		height: auto !important;
 	}
 `;
 

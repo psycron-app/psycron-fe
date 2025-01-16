@@ -17,7 +17,7 @@ export const Content = styled(Box)`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	margin-top: ${spacing.medium};
+	padding-top: ${spacing.medium};
 	padding: 0;
 
 	overflow-y: scroll;
@@ -27,7 +27,6 @@ export const Content = styled(Box)`
 
 	${isBiggerThanMediumMedia} {
 		margin-top: 0;
-		padding: ${spacing.medium} ${spacing.small} 0;
 	}
 `;
 
@@ -43,5 +42,15 @@ export const LayoutWrapper = styled(Box)`
 
 	${isBiggerThanMediumMedia} {
 		flex-direction: row;
+	}
+`;
+
+export const DividerWrapper = styled(Box)`
+	padding-right: 0;
+	padding-bottom: ${spacing.mediumSmall};
+
+	${isBiggerThanMediumMedia} {
+		padding-right: ${spacing.small};
+		padding-bottom: 0;
 	}
 `;

@@ -212,15 +212,10 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 						</AnimatePresence>
 					</AnimationWrapper>
 					<WizardActionWrapper>
-						<Button disabled={activeStep === 0} onClick={handleBack}>
+						<Button onClick={handleBack}>
 							{t('components.link.navigate.back')}
 						</Button>
-						<Button
-							onClick={
-								activeStep === steps.length - 1 ? handleFinish : handleNext
-							}
-							type='submit'
-						>
+						<Button type='submit'>
 							{activeStep === steps.length - 1
 								? t('components.link.navigate.finish')
 								: t('components.link.navigate.next')}

@@ -56,6 +56,7 @@ export const ResetPassword = () => {
 						autoComplete='email'
 						error={!!errors.email || !!resetPassError?.length}
 						helperText={resetPassError}
+						maxWidth='25rem'
 					/>
 					<Box
 						display='flex'

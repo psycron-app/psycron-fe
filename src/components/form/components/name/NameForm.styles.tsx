@@ -6,6 +6,7 @@ export const NameFormWrapper = styled(Box)`
 	width: 100%;
 
 	flex-direction: column;
+	padding-bottom: ${spacing.xs};
 `;
 
 export const StyledNameInput = styled(TextField)`

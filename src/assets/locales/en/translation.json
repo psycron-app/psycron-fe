@@ -11,12 +11,14 @@
 		"patients-manager": "Patients manager",
 		"billing-manager": "Billing manager",
 		"subscription-manager": "Subscription manager",
-		"appointments-manager": "Appointments manager",
+		"appointments": "Appointments",
+		"appointments-manager": "Manage your appointments",
 		"change-language": "Change language",
 		"help": "Help center",
 		"logout": "Logout",
 		"plan": "Plan",
 		"cancel": "Cancel",
+		"edit": "Edit",
 		"date-time-format": "{{format}}",
 		"time-remaining": {
 			"days": "In {{count}} day(s)",
@@ -39,7 +41,14 @@
 		"date": "Date",
 		"time": "Time",
 		"date-time": "Date and Time: ",
-		"therapist": "Therapist"
+		"therapist": "Therapist",
+		"appointment-status": {
+			"booked": "Booked",
+			"available": "Available",
+			"onhold": "on Hold",
+			"blocked": "Blocked",
+			"cancelled": "Cancelled"
+		}
 	},
 	"components": {
 		"form": {
@@ -257,7 +266,8 @@
 				"wizard-items": {
 					"intro": {
 						"label": "Intro",
-						"title": "Let's setup your availability. Are you ready?"
+						"title": "Let's setup your availability. Are you ready?",
+						"alert": "You will need to finish your availability setup later"
 					},
 					"weekdays": {
 						"label": "Choose weekdays",
@@ -323,6 +333,33 @@
 			"cancel": "To reschedule or cancel , please <strong>click here</strong>",
 			"help": "If you have any questions or need assistance, feel free to contact us at",
 			"thanks": "Thank you! We’re here to support you. Looking forward to your session!"
+		},
+		"appointment-list": {
+			"date": "Date",
+			"starts": "Starts at",
+			"ends": "Ends at",
+			"modal": {
+				"title": "Are you sure you want to {{action}} this appointment"
+			},
+			"description": "Here you can set up your availability for appointments and share it with your patients. We will guide you through a simple process to define your available times, which will be replicated across the weeks or until the end of the year. The process is flexible, and you will be able to adjust the information at any time in the future.",
+			"guide": {
+				"step1": {
+					"title": "Decide if you want to start now or later",
+					"description": "If you prefer, you can return to this step later. We understand that it’s not always possible to set everything up immediately, so you will have the option to resume the process at a more convenient time."
+				},
+				"step2": {
+					"title": "Set your off days",
+					"description": "Let us know which days of the week you will not be available for appointments. These days will be blocked, but you can change them in the future, if necessary."
+				},
+				"step3": {
+					"title": "Session duration",
+					"description": "Provide the average duration of your appointments. If you offer more than one type of session, we will set a default now, and you can adjust the times later according to the patient and type of therapy."
+				},
+				"step4": {
+					"title": "Choose your available times",
+					"description": "In a visual and interactive way, you can select the times you will be available for appointments throughout the week. It’s a flexible process: if your preferences change, you can adjust your schedule at any time."
+				}
+			}
 		}
 	}
 }

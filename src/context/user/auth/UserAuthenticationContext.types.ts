@@ -6,11 +6,11 @@ export interface AuthContextType {
 	isAuthenticated: boolean;
 	isSessionLoading: boolean;
 	isSessionSuccess: boolean;
+	isSignInMutationLoading: boolean;
+	isSignUpMutationLoading: boolean;
 	logout: () => void;
 	signIn: (data: ISignInForm) => void;
-	signInError: string | null;
 	signUp: (data: ISignUpForm) => void;
-	signUpError: string | null;
 	user?: ITherapist;
 }
 
@@ -46,7 +46,12 @@ export interface IPatient extends IBaseUser {
 	createdBy?: ITherapist | string;
 	receivedNotifications?: INotification[];
 	role: 'PATIENT';
-	sessionDates: ISessionDate[];
+	sessionDates: ISessionDatesGroup[];
+}
+
+export interface ISessionDatesGroup {
+	_id?: string;
+	sessions: ISessionDate[];
 }
 
 export interface IContactInfo {
@@ -103,15 +108,18 @@ export interface ISessionAvailability {
 }
 
 export interface ISlot {
+	_id: string;
 	endTime: string;
 	note?: string;
 	startTime: string;
-	status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED' | 'ONHOLD';
+	status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED' | 'ONHOLD' | 'CANCELLED';
 }
 
 export interface ISessionDate {
+	_id: string;
 	date: Date;
-	slot: ISlot;
+	slot?: ISlot;
+	slots?: ISlot[];
 }
 
 export interface IBookSessionWithLink {

@@ -16,6 +16,7 @@ export const PublicLayoutContent = styled(Box)`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	padding: 0;
 	z-index: 2;
 

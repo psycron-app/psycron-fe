@@ -6,6 +6,7 @@ export const Tooltip = ({
 	children,
 	placement,
 	title,
+	open,
 	...rest
 }: TooltipProps) => {
 	const Title = (
@@ -15,7 +16,7 @@ export const Tooltip = ({
 	);
 
 	return (
-		<MUITooltip arrow placement={placement} title={Title} {...rest}>
+		<MUITooltip arrow placement={placement} title={Title} open={open} {...rest}>
 			<IconButton>{children}</IconButton>
 		</MUITooltip>
 	);

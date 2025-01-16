@@ -8,6 +8,7 @@ export const Modal = ({
 	title,
 	children,
 	cardActionsProps,
+	isLoading,
 }: IModal) => {
 	return (
 		<StyledModal open={openModal}>
@@ -18,6 +19,7 @@ export const Modal = ({
 						title: title,
 					}}
 					cardTitle={!!title?.length}
+					isLoading={isLoading}
 				>
 					{children}
 				</Card>

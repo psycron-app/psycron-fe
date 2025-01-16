@@ -2,6 +2,7 @@ import type { FC } from 'react';
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { AlertProvider } from '@psycron/context/alert/AlertContext';
+import { AppointmentActionsProvider } from '@psycron/context/appointment/appointment-actions/AppointmentActionsContext';
 import { UserGeoLocationProvider } from '@psycron/context/geolocation/CountryContext';
 import { PatientProvider } from '@psycron/context/patient/PatientContext';
 import { AuthProvider } from '@psycron/context/user/auth/UserAuthenticationContext';
@@ -26,8 +27,10 @@ export const LanguageLayout: FC = () => {
 					<PatientProvider>
 						<UserGeoLocationProvider>
 							<WizardProvider>
-								<AnalyticsTracker />
-								<Outlet />
+								<AppointmentActionsProvider>
+									<AnalyticsTracker />
+									<Outlet />
+								</AppointmentActionsProvider>
 							</WizardProvider>
 						</UserGeoLocationProvider>
 					</PatientProvider>

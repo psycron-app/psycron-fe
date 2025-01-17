@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getTherapistLatestAvailability, getUserById } from '@psycron/api/user';
 import { EDITUSERPATH } from '@psycron/pages/urls';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useAuth } from '../auth/UserAuthenticationContext';
 import type { ITherapist } from '../auth/UserAuthenticationContext.types';
@@ -67,6 +67,7 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 };
 
 export const useUserDetails = (passedUserId?: string) => {
+	const queryClient = useQueryClient();
 	const context = useContext(UserDetailsContext);
 	if (!context) {
 		throw new Error('useUserDetails must be used within a UserDetailsProvider');
@@ -84,6 +85,8 @@ export const useUserDetails = (passedUserId?: string) => {
 		queryFn: () => getUserById(userId),
 		enabled: !!userId,
 		retry: false,
+		staleTime: 1000 * 60 * 5,
+		gcTime: 1000 * 60 * 10,
 	});
 
 	const {
@@ -93,10 +96,29 @@ export const useUserDetails = (passedUserId?: string) => {
 	} = useQuery({
 		queryKey: ['therapistAvailability'],
 		queryFn: () => getTherapistLatestAvailability(userDetails._id),
-		enabled: !!userId,
+		enabled: !!userId && !!userDetails?._id,
 		retry: false,
-		staleTime: 0,
+		staleTime: 1000 * 60 * 5,
+		gcTime: 1000 * 60 * 10,
 	});
+
+	const therapistId = useMemo(() => userDetails?._id, [userDetails]);
+
+	const prefetchTherapistAvailability = async () => {
+		try {
+			if (userDetails?._id) {
+				await queryClient.prefetchQuery({
+					queryKey: ['therapistAvailability'],
+					queryFn: () => getTherapistLatestAvailability(userDetails._id),
+				});
+			}
+		} catch (error) {
+			console.error('Failed to prefetch therapist availability:', error);
+		}
+	};
+
+	const isUserDetailsContextLoading =
+		therapistLatestAvailabilityLoading || isUserDetailsLoading;
 
 	const therapistLatestAvailabilityDates = useMemo(
 		() =>
@@ -104,7 +126,22 @@ export const useUserDetails = (passedUserId?: string) => {
 		[therapistLatestAvailability]
 	);
 
-	const emptyAvailability = therapistLatestAvailabilityDates?.length < 1;
+	const allDataLoaded = useMemo(
+		() =>
+			!therapistLatestAvailabilityLoading &&
+			!isUserDetailsLoading &&
+			therapistLatestAvailabilitySuccess &&
+			isUserDetailsSucces,
+		[
+			therapistLatestAvailabilityLoading,
+			isUserDetailsLoading,
+			therapistLatestAvailabilitySuccess,
+			isUserDetailsSucces,
+		]
+	);
+
+	const emptyAvailability =
+		allDataLoaded && therapistLatestAvailabilityDates?.length < 1;
 
 	return {
 		...context,
@@ -116,5 +153,8 @@ export const useUserDetails = (passedUserId?: string) => {
 		therapistLatestAvailabilitySuccess,
 		therapistLatestAvailabilityDates,
 		emptyAvailability,
+		prefetchTherapistAvailability,
+		isUserDetailsContextLoading,
+		therapistId,
 	};
 };

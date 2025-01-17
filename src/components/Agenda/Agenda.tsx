@@ -17,6 +17,7 @@ import {
 	ChevronLeft,
 	ChevronRight,
 	ClockIn,
+	Lock,
 	UnAvailable,
 } from '../icons';
 import { Loader } from '../loader/Loader';
@@ -39,6 +40,7 @@ export const Agenda = ({
 	availability,
 	isLoading,
 	isFirstAppointment,
+	isBig,
 }: IAgenda) => {
 	const { t } = useTranslation();
 
@@ -145,6 +147,8 @@ export const Agenda = ({
 				return <Available />;
 			case 'booked':
 				return <UnAvailable />;
+			case 'unavailable':
+				return <Lock />;
 			default:
 				return null;
 		}
@@ -215,7 +219,7 @@ export const Agenda = ({
 					</Grid>
 				) : null}
 				<WeekDaysHeader selectedDay={currentWeekStart} />
-				<Grid container spacing={1} columns={8} mt={5}>
+				<Grid container spacing={1} columns={8} mt={5} rowGap={isBig ? 4 : 0}>
 					{filteredDayHours.map((hour, index) => (
 						<Fragment key={`hour-slot-${index}`}>
 							<StyledGridHours item xs={1} columns={1}>
@@ -270,7 +274,11 @@ export const Agenda = ({
 												<Tooltip title={translatedStatus}>
 													<Icon>{statusIcon}</Icon>
 												</Tooltip>
-											) : null}
+											) : (
+												<Tooltip title={translateSlotStatus('unavailable')}>
+													<Icon>{statusIcon}</Icon>
+												</Tooltip>
+											)}
 										</StyledSlotsWrapper>
 									</StyledGridSlots>
 								);

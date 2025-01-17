@@ -27,14 +27,10 @@ export const AppointmentPage = () => {
 	const { t } = useTranslation();
 
 	const {
-		therapistLatestAvailabilityDates,
 		therapistLatestAvailabilityLoading,
 		emptyAvailability,
+		isUserDetailsLoading,
 	} = useUserDetails();
-	console.log(
-		'🚀 ~ AppointmentPage ~ therapistLatestAvailabilityDates:',
-		therapistLatestAvailabilityDates
-	);
 
 	const { therapistLatestAvailability } = useDashboardLogic();
 
@@ -66,7 +62,7 @@ export const AppointmentPage = () => {
 	return (
 		<PageLayout
 			title={t('globals.appointments')}
-			isLoading={therapistLatestAvailabilityLoading}
+			isLoading={therapistLatestAvailabilityLoading || isUserDetailsLoading}
 		>
 			<Box height={'100%'} position={'relative'}>
 				{emptyAvailability ? (
@@ -101,6 +97,7 @@ export const AppointmentPage = () => {
 							selectedDay={currentDay}
 							availability={therapistLatestAvailability}
 							isLoading={therapistLatestAvailabilityLoading}
+							isBig
 						/>
 					</Box>
 				)}

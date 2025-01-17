@@ -25,6 +25,7 @@ import { Dots as IconDots } from './Dots';
 import { Error as IconError } from './Error';
 import { HealthTracker as IconHealthTracker } from './HealthTracker';
 import { Info as IconInfo } from './Info';
+import { Lock as IconLock } from './Lock';
 import { Mail as IconMail } from './Mail';
 import { Share as IconShare } from './Share';
 import { UnAvailable as IconUnAvailable } from './UnAvailable';
@@ -110,6 +111,7 @@ export const Available = withIconColor(IconAvailable);
 export const UnAvailable = withIconColor(IconUnAvailable);
 export const Share = withIconColor(IconShare);
 export const Copy = withIconColor(IconCopy);
+export const Lock = withIconColor(IconLock);
 
 export const WhatsApp = withIconColor(IconWhatsApp);
 export const Watch = withIconColor(IconWatch);

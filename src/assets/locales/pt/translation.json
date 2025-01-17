@@ -315,7 +315,8 @@
 				"status": {
 					"available": "Disponível",
 					"unavailable": "Indisponível",
-					"booked": "Reservado"
+					"booked": "Reservado",
+					"empty": "Vazio"
 				}
 			}
 		},

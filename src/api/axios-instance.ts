@@ -39,6 +39,7 @@ apiClient.interceptors.response.use(
 
 				const { accessToken, refreshToken } =
 					await refreshTokenService(storedRefreshToken);
+
 				localStorage.setItem(ID_TOKEN, accessToken);
 				localStorage.setItem(REFRESH_TOKEN, refreshToken);
 

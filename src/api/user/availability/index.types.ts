@@ -1,3 +1,8 @@
+import type {
+	IPatient,
+	ISlot,
+} from '@psycron/context/user/auth/UserAuthenticationContext.types';
+
 export interface IInitiateAvailabilityResponse {
 	sessionId: string;
 }
@@ -54,7 +59,7 @@ export interface ICompleteSessionAvailabilityResponse {
 				endTime: string;
 				note?: string;
 				startTime: string;
-				status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED' | 'ONHOLD' | 'CANCELLED';
+				status: ISlot['status'];
 			}>;
 		}>;
 		consultationDuration: number;
@@ -74,4 +79,14 @@ export interface Appointment {
 
 export interface BookAppointmentResponse {
 	message: string;
+}
+
+export interface AppointmentDetailsBySlotIdResponse {
+	appointment: {
+		date: Date;
+		endTime: string;
+		patient: Partial<IPatient>;
+		startTime: string;
+		status: ISlot['status'];
+	};
 }

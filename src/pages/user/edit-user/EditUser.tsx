@@ -166,6 +166,7 @@ export const EditUser = () => {
 							setPhoneValue={setValue}
 							defaultValues={userDetails?.contacts}
 							disabled={!isEditContacts}
+							setValue={setValue}
 						/>
 						<EditButton>
 							<Switch

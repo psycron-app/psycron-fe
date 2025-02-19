@@ -72,7 +72,7 @@ export const usePatient = (patientId?: string) => {
 	} = useQuery<IPatient>({
 		queryKey: ['userDetails', patientId],
 		queryFn: () => getPatientById(patientId),
-		enabled: !!patientId,
+		enabled: Boolean(patientId && patientId !== 'undefined'),
 	});
 
 	return {

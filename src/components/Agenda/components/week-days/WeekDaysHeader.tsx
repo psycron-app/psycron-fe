@@ -30,9 +30,15 @@ export const WeekDaysHeader = ({ isSimple, selectedDay }: IWeekDaysHeader) => {
 			: format(dayName, 'EE', { locale: dateLocale }).slice(0, 3);
 	};
 
+	const currentMonth = format(selectedDay || new Date(), 'MMM', {
+		locale: dateLocale,
+	});
+
 	return (
 		<WeekDaysHeaderGrid container spacing={2} columns={8}>
-			<THEmpty item xs={1} />
+			<THEmpty item xs={1}>
+				<Text>{currentMonth.toUpperCase()}</Text>
+			</THEmpty>
 			{daysOfWeek.map((day, index) => (
 				<THWeekDays key={`header-${index}`} item xs={1}>
 					<WeekDayWrapper>

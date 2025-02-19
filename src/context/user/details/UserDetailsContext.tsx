@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getTherapistLatestAvailability, getUserById } from '@psycron/api/user';
+import { getAppointmentDetailsBySlotId } from '@psycron/api/user/availability';
 import { EDITUSERPATH } from '@psycron/pages/urls';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -66,7 +67,7 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 	);
 };
 
-export const useUserDetails = (passedUserId?: string) => {
+export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 	const queryClient = useQueryClient();
 	const context = useContext(UserDetailsContext);
 	if (!context) {
@@ -102,6 +103,17 @@ export const useUserDetails = (passedUserId?: string) => {
 		gcTime: 1000 * 60 * 10,
 	});
 
+	const {
+		data: appointmentDetailsBySlotId,
+		isLoading: isAppointmentDetailsBySlotIdLoading,
+		isSuccess: isAppointmentDetailsBySlotIdSuccess,
+	} = useQuery({
+		queryKey: ['getAppointmentDetailsBySlotId', slotId],
+		queryFn: () => getAppointmentDetailsBySlotId(userDetails._id, slotId),
+		enabled: !!userDetails?._id && !!slotId,
+		retry: false,
+	});
+
 	const therapistId = useMemo(() => userDetails?._id, [userDetails]);
 
 	const prefetchTherapistAvailability = async () => {
@@ -113,6 +125,7 @@ export const useUserDetails = (passedUserId?: string) => {
 				});
 			}
 		} catch (error) {
+			// eslint-disable-next-line no-console
 			console.error('Failed to prefetch therapist availability:', error);
 		}
 	};
@@ -156,5 +169,8 @@ export const useUserDetails = (passedUserId?: string) => {
 		prefetchTherapistAvailability,
 		isUserDetailsContextLoading,
 		therapistId,
+		appointmentDetailsBySlotId,
+		isAppointmentDetailsBySlotIdLoading,
+		isAppointmentDetailsBySlotIdSuccess,
 	};
 };

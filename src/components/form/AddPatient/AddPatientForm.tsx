@@ -58,6 +58,7 @@ export const AddPatientForm = ({ shortButton }: AddPatientProps) => {
 						errors={errors}
 						getPhoneValue={getValues}
 						setPhoneValue={setValue}
+						setValue={setValue}
 					/>
 				</Grid>
 			</FormWrapper>

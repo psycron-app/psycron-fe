@@ -6,7 +6,7 @@ import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
 import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { DASHBOARD, HOMEPAGE } from '@psycron/pages/urls';
-import { ID_TOKEN } from '@psycron/utils/tokens';
+import { ID_TOKEN, REFRESH_TOKEN } from '@psycron/utils/tokens';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import type { JwtPayload } from 'jwt-decode';
 import { jwtDecode } from 'jwt-decode';
@@ -75,6 +75,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			if (res.token) {
 				localStorage.setItem(ID_TOKEN, res.token);
 			}
+			if (res.refreshToken) {
+				localStorage.setItem(REFRESH_TOKEN, res.refreshToken);
+			}
 			setIsAuthenticated(true);
 			navigate(DASHBOARD);
 		},
@@ -91,6 +94,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		onSuccess: (res) => {
 			if (res.token) {
 				localStorage.setItem(ID_TOKEN, res.token);
+			}
+			if (res.refreshToken) {
+				localStorage.setItem(REFRESH_TOKEN, res.refreshToken);
 			}
 			setIsAuthenticated(true);
 			navigate(DASHBOARD);

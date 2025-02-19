@@ -17,12 +17,12 @@ export const CountryFlag = styled.div`
 `;
 
 export const PhoneNumberField = styled(TextField)`
-	& input[type='number'] {
+	& input[type='tel'] {
 		appearance: textfield; /* Firefox */
 	}
 
-	& input[type='number']::-webkit-outer-spin-button,
-	& input[type='number']::-webkit-inner-spin-button {
+	& input[type='tel']::-webkit-outer-spin-button,
+	& input[type='tel']::-webkit-inner-spin-button {
 		-webkit-appearance: none; /* Chrome, Safari, Edge */
 		margin: 0;
 	}

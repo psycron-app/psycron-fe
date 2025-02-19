@@ -48,7 +48,10 @@
 			"onhold": "Em espera",
 			"blocked": "Bloqueado",
 			"cancelled": "Cancelado"
-		}
+		},
+		"contacts": "Contatos",
+		"starts": "Começa às",
+		"ends": "Termina às"
 	},
 	"components": {
 		"form": {
@@ -200,7 +203,15 @@
 		},
 		"agenda": {
 			"modal": "Você está marcando a sua consulta para {{appointment}}",
-			"your-details": "Seus detalhes"
+			"your-details": "Seus detalhes",
+			"next-week": "Próxima semana",
+			"previous-week": "Semana anterior",
+			"today": "Hoje",
+			"Month": "Mês",
+			"appointment-details": {
+				"mailto-subject": "🔔 Sobre sua consulta com {{therapistName}} 🔔",
+				"whatsapp-subject": "Olá, tudo bem? Estou enviando essa mensagem sobre sua consulta comigo, {{therapisName}}"
+			}
 		}
 	},
 	"page": {
@@ -317,6 +328,9 @@
 					"unavailable": "Indisponível",
 					"booked": "Reservado",
 					"empty": "Vazio"
+				},
+				"therapist-edit-modal": {
+					"title": "Altere sua disponibilidade"
 				}
 			}
 		},

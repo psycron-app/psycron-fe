@@ -48,6 +48,14 @@
 			"onhold": "on Hold",
 			"blocked": "Blocked",
 			"cancelled": "Cancelled"
+		},
+		"contacts": "Contacts",
+		"starts": "Starts at",
+		"ends": "Ends at",
+		"notification": {
+			"email": "Send email",
+			"phone": "Call patient",
+			"whatsapp": "Send WhatsApp message"
 		}
 	},
 	"components": {
@@ -200,7 +208,15 @@
 		},
 		"agenda": {
 			"modal": "You are booking for {{appointment}}",
-			"your-details": "Your details"
+			"your-details": "Your details",
+			"next-week": "Next week",
+			"previous-week": "Previous week",
+			"today": "Today",
+			"month": "Month",
+			"appointment-details": {
+				"mailto-subject": "🔔 About your appointment with {{therapistName}} 🔔",
+				"whatsapp-subject": "Hello, how is it going? I am sending this message regarding your appointment with me, {{therapistName}}"
+			}
 		}
 	},
 	"page": {
@@ -317,6 +333,9 @@
 					"unavailable": "Unavailable",
 					"booked": "Booked",
 					"empty": "Empty"
+				},
+				"therapist-edit-modal": {
+					"title": "Edit your availability"
 				}
 			}
 		},

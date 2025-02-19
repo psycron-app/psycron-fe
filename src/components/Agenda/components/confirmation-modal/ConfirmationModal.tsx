@@ -121,6 +121,7 @@ export const ConfirmationModal = ({
 							errors={errors}
 							getPhoneValue={getValues}
 							setPhoneValue={setValue}
+							setValue={setValue}
 						/>
 						<Text>
 							{t('page.book-appointment.confirmation-should-replicate')}

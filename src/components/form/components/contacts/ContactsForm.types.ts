@@ -15,4 +15,5 @@ export interface ContactsFormProps<T extends FieldValues> {
 	hasWpp?: boolean;
 	register: UseFormRegister<T>;
 	setPhoneValue: UseFormSetValue<FieldValues>;
+	setValue: UseFormSetValue<T>;
 }

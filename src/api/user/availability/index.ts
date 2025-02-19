@@ -3,6 +3,7 @@ import type { IAvailability } from '@psycron/context/user/auth/UserAuthenticatio
 
 import type {
 	Appointment,
+	AppointmentDetailsBySlotIdResponse,
 	BookAppointmentResponse,
 	IAvailabilityData,
 	ICompleteSessionAvailabilityData,
@@ -66,5 +67,17 @@ export const bookAppointment = async (
 		data
 	);
 
+	return response.data;
+};
+
+export const getAppointmentDetailsBySlotId = async (
+	therapistId: string,
+	slotId: string
+): Promise<AppointmentDetailsBySlotIdResponse> => {
+	console.log('🚀 ~ slotId:', slotId);
+	console.log('🚀 ~ therapistId:', therapistId);
+	const response = await apiClient.get(
+		`/users/${therapistId}/availability/${slotId}`
+	);
 	return response.data;
 };

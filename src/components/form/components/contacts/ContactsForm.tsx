@@ -16,6 +16,7 @@ export const ContactsForm = <T extends FieldValues>({
 	register,
 	defaultValues,
 	disabled,
+	setValue,
 }: ContactsFormProps<T> & TextFieldProps) => {
 	const { t } = useTranslation();
 
@@ -27,6 +28,11 @@ export const ContactsForm = <T extends FieldValues>({
 		const phoneValue = getPhoneValue('phone' as Path<T>);
 		if (isPhoneWpp) {
 			setPhoneValue('whatsapp' as Path<T>, phoneValue);
+		} else {
+			setPhoneValue(
+				'whatsapp' as Path<T>,
+				getPhoneValue('whatsapp' as Path<T>)
+			);
 		}
 	}, [getPhoneValue, isPhoneWpp, setPhoneValue]);
 
@@ -56,6 +62,7 @@ export const ContactsForm = <T extends FieldValues>({
 					registerName='phone'
 					defaultValue={defaultValues?.phone}
 					disabled={disabled}
+					setValue={setValue}
 				/>
 			</Box>
 			<Box>
@@ -80,19 +87,18 @@ export const ContactsForm = <T extends FieldValues>({
 						/>
 					</Box>
 				) : null}
-
-				{hasWhatsApp ? (
+				<input type='hidden' {...register('whatsapp' as Path<T>)} />
+				{hasWhatsApp && !isPhoneWpp && (
 					<Box>
-						{!isPhoneWpp ? (
-							<PhoneInput
-								errors={errors}
-								register={register}
-								registerName='whatsapp'
-								defaultValue={defaultValues?.whatsapp}
-							/>
-						) : null}
+						<PhoneInput
+							errors={errors}
+							register={register}
+							registerName='whatsapp'
+							defaultValue={defaultValues?.whatsapp}
+							setValue={setValue}
+						/>
 					</Box>
-				) : null}
+				)}
 			</Box>
 		</Box>
 	);

@@ -98,6 +98,7 @@ export const AppointmentPage = () => {
 							availability={therapistLatestAvailability}
 							isLoading={therapistLatestAvailabilityLoading}
 							isBig
+							isTherapist
 						/>
 					</Box>
 				)}

@@ -74,8 +74,6 @@ export const getAppointmentDetailsBySlotId = async (
 	therapistId: string,
 	slotId: string
 ): Promise<AppointmentDetailsBySlotIdResponse> => {
-	console.log('🚀 ~ slotId:', slotId);
-	console.log('🚀 ~ therapistId:', therapistId);
 	const response = await apiClient.get(
 		`/users/${therapistId}/availability/${slotId}`
 	);

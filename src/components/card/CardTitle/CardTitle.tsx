@@ -61,7 +61,7 @@ export const CardTitle = ({
 										{firstChipName}
 									</Button>
 								</Box>
-							) : React.isValidElement(firstChipName) ? ( // Check if firstChipName is a valid ReactElement
+							) : React.isValidElement(firstChipName) ? (
 								<Tooltip title={firstChipTooltip}>
 									{firstChipName as ReactElement}
 								</Tooltip>

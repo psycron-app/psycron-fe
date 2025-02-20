@@ -52,13 +52,14 @@ export const AddPatientForm = ({ shortButton }: AddPatientProps) => {
 				onClose={() => setOpen(false)}
 			>
 				<Grid container>
-					<NameForm register={register} errors={errors} />
+					<NameForm register={register} errors={errors} required />
 					<ContactsForm
 						register={register}
 						errors={errors}
 						getPhoneValue={getValues}
 						setPhoneValue={setValue}
 						setValue={setValue}
+						required
 					/>
 				</Grid>
 			</FormWrapper>

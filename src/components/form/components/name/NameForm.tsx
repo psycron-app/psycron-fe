@@ -12,6 +12,7 @@ export const NameForm = <T extends FieldValues>({
 	placeholderFirstName,
 	placeholderLastName,
 	disabled,
+	required,
 }: NameFormProps<T> & TextFieldProps) => {
 	const { t } = useTranslation();
 
@@ -30,7 +31,7 @@ export const NameForm = <T extends FieldValues>({
 					{...register('firstName' as Path<T>)}
 					error={!!errors.firstName}
 					helperText={errors.firstName?.message as string}
-					required
+					required={required}
 					disabled={disabled}
 				/>
 			</Box>
@@ -46,7 +47,7 @@ export const NameForm = <T extends FieldValues>({
 					{...register('lastName' as Path<T>)}
 					error={!!errors?.lastName}
 					helperText={errors?.lastName?.message as string}
-					required
+					required={required}
 					disabled={disabled}
 				/>
 			</Box>

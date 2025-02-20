@@ -11,9 +11,10 @@ export interface ContactsFormProps<T extends FieldValues> {
 	defaultValues?: IContactInfo;
 	disabled?: boolean;
 	errors: FieldErrors<T>;
-	getPhoneValue: UseFormGetValues<FieldValues>;
+	getPhoneValue: UseFormGetValues<T>;
 	hasWpp?: boolean;
 	register: UseFormRegister<T>;
-	setPhoneValue: UseFormSetValue<FieldValues>;
+	required: boolean;
+	setPhoneValue: UseFormSetValue<T>;
 	setValue: UseFormSetValue<T>;
 }

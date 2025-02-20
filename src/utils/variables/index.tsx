@@ -7,16 +7,26 @@ import {
 	differenceInHours,
 	differenceInMinutes,
 	format,
+	parseISO,
 	setHours,
 	startOfDay,
 	startOfToday,
 	startOfWeek,
 } from 'date-fns';
+import { de, enUS, es, fr, ptBR } from 'date-fns/locale';
 import { format as TZFormat, toZonedTime } from 'date-fns-tz';
 import type { TFunction } from 'i18next';
 
 export * from './env';
 export * from './urls';
+
+const locales: Record<string, Locale> = {
+	en: enUS,
+	pt: ptBR,
+	es: es,
+	fr: fr,
+	de: de,
+};
 
 export const formatDateTime = (
 	dateTimeString: string,
@@ -27,6 +37,20 @@ export const formatDateTime = (
 		date,
 		t('globals.date-time-format', { format: 'MMMM d, yyyy h:mmaaa' })
 	);
+};
+
+export const formatDate = (date: Date, locale: string): string => {
+	const selectedLocale = locales[locale] || enUS;
+	return format(date, 'EEEE, dd/MM/yy', { locale: selectedLocale });
+};
+
+export const formatDateFromISO = (
+	dateString: string,
+	locale: string
+): string => {
+	const date = parseISO(dateString);
+	const selectedLocale = locales[locale] || enUS;
+	return format(date, 'EEEE, dd/MM/yy', { locale: selectedLocale });
 };
 
 export const getTimeRemaining = (

@@ -20,6 +20,7 @@ export const PhoneInput = <T extends FieldValues>({
 	defaultValue,
 	setValue,
 	disabled,
+	required,
 }: PhoneInputProps<T>) => {
 	const { t } = useTranslation();
 	const { countryData } = useUserGeolocation();
@@ -27,58 +28,66 @@ export const PhoneInput = <T extends FieldValues>({
 	const [selectedCountry, setSelectedCountry] = useState<
 		CountryDataSimple & { name?: string }
 	>(countryData);
-	const [defaultNumberVal, setDefaultNumberVal] = useState<string>('');
+	const [phoneNumber, setPhoneNumber] = useState<string>('');
 
-	// Lista de países para seleção
 	const countries = countryList.map((c) => ({
 		name: c.name,
 		value: c.dialCode,
 	}));
 
-	// Encontrar país pelo código
-	const findCountry = (
-		countries: { name: string; value: string }[],
-		value?: string
-	) => countries.find((country) => value?.includes(country.value));
-
-	const foundCountryCode = findCountry(countries, defaultValue);
-
-	// 🔥 1. Sincroniza o valor inicial do telefone com o formulário
 	useEffect(() => {
 		if (defaultValue) {
-			const phoneWithoutCountryCode = defaultValue.replace(
-				String(foundCountryCode?.value),
-				''
+			const foundCountry = countries.find((c) =>
+				defaultValue.startsWith(c.value)
 			);
-			setDefaultNumberVal(phoneWithoutCountryCode);
+			const countryCode = foundCountry?.value ?? countryData.callingCode;
+			const number = defaultValue.replace(countryCode, '').trim();
 
-			// 🔥 Corrigindo a tipagem de `setValue`
-			setValue(
-				registerName as Path<T>,
-				phoneWithoutCountryCode as PathValue<T, Path<T>>
+			setSelectedCountry((prev) =>
+				prev.callingCode === countryCode
+					? prev
+					: {
+							callingCode: countryCode,
+							countryEmoji: countryList.find((c) => c.dialCode === countryCode)
+								?.flag,
+						}
 			);
+
+			if (phoneNumber !== number) {
+				setPhoneNumber(number);
+				setValue(registerName as Path<T>, number as PathValue<T, Path<T>>);
+				setValue(
+					'countryCode' as Path<T>,
+					countryCode as PathValue<T, Path<T>>
+				);
+			}
 		}
-	}, [defaultValue, registerName, setValue, foundCountryCode]);
+	}, [
+		defaultValue,
+		registerName,
+		setValue,
+		countries,
+		countryData,
+		phoneNumber,
+	]);
 
-	// 🔥 2. Atualiza o valor do telefone no formulário ao digitar
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
-		setDefaultNumberVal(newValue);
+		setPhoneNumber(newValue);
 		setValue(registerName as Path<T>, newValue as PathValue<T, Path<T>>);
 	};
 
-	// 🔥 3. Captura o autofill do Chrome
 	const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
 		setValue(registerName as Path<T>, newValue as PathValue<T, Path<T>>);
 	};
 
-	// Atualiza o código do país ao mudar a seleção
 	const handlePhoneChange = (e: SelectChangeEvent<string>) => {
+		const newCountry = countryList.find((c) => c.dialCode === e.target.value);
+
 		setSelectedCountry({
 			callingCode: e.target.value,
-			countryEmoji: countryList.find((c) => c.dialCode === e.target.value)
-				?.flag,
+			countryEmoji: newCountry?.flag,
 		});
 		setValue('countryCode' as Path<T>, e.target.value as PathValue<T, Path<T>>);
 	};
@@ -105,7 +114,7 @@ export const PhoneInput = <T extends FieldValues>({
 			<Grid item xs={4}>
 				<Select
 					items={countries}
-					required
+					required={required}
 					selectLabel={t('components.input.phone-input.select-label')}
 					{...register('countryCode' as Path<T>)}
 					subtitle
@@ -122,10 +131,10 @@ export const PhoneInput = <T extends FieldValues>({
 					label={t('components.input.phone-input.phone-num-label', {
 						registerName: inputRegisterName,
 					})}
-					required
+					required={required}
 					fullWidth
-					value={defaultNumberVal}
-					{...register(registerName as Path<T>, { required: true })}
+					value={phoneNumber}
+					{...register(registerName as Path<T>)}
 					autoComplete='tel'
 					error={!!errors?.[registerName]}
 					helperText={errors?.[registerName]?.message as string}

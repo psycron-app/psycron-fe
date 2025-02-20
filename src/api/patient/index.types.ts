@@ -18,3 +18,23 @@ export interface IBookAppointmentResponse extends IResponse {
 export interface IPatientByIdResponse {
 	user: IPatient;
 }
+
+export interface PatientFormData {
+	_id?: string;
+	countryCode?: string;
+	email: string;
+	firstName: string;
+	lastName: string;
+	phone: string;
+	whatsapp: string;
+}
+export interface IEditPatientDetailsById {
+	patient: PatientFormData;
+	patientId: string;
+}
+
+export interface IEditPatientDetailsByIdResponse {
+	message: string;
+	patient: PatientFormData;
+	status: string;
+}

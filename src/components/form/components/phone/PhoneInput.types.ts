@@ -11,5 +11,6 @@ export interface PhoneInputProps<T extends FieldValues> {
 	errors: FieldErrors<T>;
 	register: UseFormRegister<T>;
 	registerName: 'phone' | 'whatsapp';
+	required: boolean;
 	setValue: UseFormSetValue<T>;
 }

@@ -40,6 +40,7 @@
 		},
 		"date": "Date",
 		"time": "Time",
+		"at": "at",
 		"date-time": "Date and Time: ",
 		"therapist": "Therapist",
 		"appointment-status": {
@@ -214,8 +215,12 @@
 			"today": "Today",
 			"month": "Month",
 			"appointment-details": {
+				"title": "Appointment Details",
 				"mailto-subject": "🔔 About your appointment with {{therapistName}} 🔔",
-				"whatsapp-subject": "Hello, how is it going? I am sending this message regarding your appointment with me, {{therapistName}}"
+				"whatsapp-subject": "Hello, how is it going? I am sending this message regarding your appointment with me, {{therapistName}}",
+				"next-sessions": "Next appointments",
+				"edit-patient-details": "Edit Patient Details",
+				"edit-patient-appointment": "Edit appointment"
 			}
 		}
 	},

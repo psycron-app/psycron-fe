@@ -1,4 +1,5 @@
 import { Box, Modal, styled } from '@mui/material';
+import { isSmallerThanTabletMedia } from '@psycron/theme/media-queries/mediaQueries';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const StyledModal = styled(Modal)`
@@ -15,4 +16,8 @@ export const StyledContentWrapper = styled(Box)`
 	transform: translate(-50%, -50%);
 	width: 50%;
 	height: auto;
+
+	${isSmallerThanTabletMedia} {
+		width: 100%;
+	}
 `;

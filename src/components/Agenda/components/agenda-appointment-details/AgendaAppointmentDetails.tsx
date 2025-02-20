@@ -1,16 +1,49 @@
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { Box, Tooltip } from '@mui/material';
+import type { PatientFormData } from '@psycron/api/patient/index.types';
+import { ContactsForm } from '@psycron/components/form/components/contacts/ContactsForm';
+import { NameForm } from '@psycron/components/form/components/name/NameForm';
 import { ContactLink } from '@psycron/components/link/contact/ContactLink';
 import { Loader } from '@psycron/components/loader/Loader';
+import { Modal } from '@psycron/components/modal/Modal';
 import { Text } from '@psycron/components/text/Text';
+import { usePatient } from '@psycron/context/patient/PatientContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { formatDate } from '@psycron/utils/variables';
 
+import {
+	StyledNextSessionText,
+	StyledPatientDetails,
+	StyledSessionDatesList,
+	StyledSessionDatesTitle,
+	StyledWrapper,
+} from './AgendaAppointmentDetails.styles';
 import type { IAgendaAppointmentDetails } from './AgendaAppointmentDetails.types';
 
 export const AgendaAppointmentDetails = ({
 	selectedSlotId,
+	isTherapistEditing,
+	setIsTherapistEditing,
 }: IAgendaAppointmentDetails) => {
 	const { t } = useTranslation();
+
+	const { locale } = useParams<{
+		locale: string;
+	}>();
+
+	const [isEditing, setIsEditing] = useState<boolean>(isTherapistEditing);
+
+	useEffect(() => {
+		setIsEditing(isTherapistEditing);
+	}, [isTherapistEditing]);
+
+	const toggleEditing = () => {
+		setIsEditing(false);
+		if (setIsTherapistEditing) setIsTherapistEditing(false);
+	};
 
 	const {
 		appointmentDetailsBySlotId,
@@ -19,10 +52,40 @@ export const AgendaAppointmentDetails = ({
 		userDetails,
 	} = useUserDetails('', selectedSlotId);
 
+	const {
+		patientDetails,
+		isPatientDetailsLoading,
+		updatePatientDetails,
+		updatePatientIsLoading,
+	} = usePatient(appointmentDetailsBySlotId?.appointment?.patient?._id);
+
+	const {
+		register,
+		handleSubmit,
+		getValues,
+		setValue,
+		reset,
+		formState: { errors },
+	} = useForm();
+
+	useEffect(() => {
+		if (patientDetails) {
+			reset({
+				firstName: patientDetails.firstName,
+				lastName: patientDetails.lastName,
+				email: patientDetails.contacts.email,
+				phone: patientDetails.contacts?.phone,
+				whatsapp: patientDetails.contacts?.whatsapp,
+			});
+		}
+	}, [patientDetails, reset, getValues]);
+
 	if (
 		isAppointmentDetailsBySlotIdLoading ||
 		!appointmentDetailsBySlotId?.appointment ||
-		isUserDetailsLoading
+		isUserDetailsLoading ||
+		isPatientDetailsLoading ||
+		updatePatientIsLoading
 	) {
 		return <Loader />;
 	}
@@ -38,53 +101,155 @@ export const AgendaAppointmentDetails = ({
 			lastName,
 			contacts: { whatsapp, phone, email },
 		},
+		date,
 		startTime,
 		endTime,
 	} = appointmentDetailsBySlotId.appointment;
+
+	const patientName = `${firstName} ${lastName}`;
+	const formattedClickedSlot = formatDate(date, locale);
+
+	const { sessionDates } = patientDetails;
+
+	const latestSessionDate = sessionDates?.slice(-1)[0];
+
+	const sortedSessions = latestSessionDate?.sessions.sort(
+		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+	);
+
+	const today = new Date();
+
+	const futureSessions = sortedSessions?.filter(
+		(session) =>
+			new Date(session.date).setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0)
+	);
 
 	const wppText = t('components.agenda.appointment-details.whatsapp-subject', {
 		therapistName,
 	});
 
+	const handleSave = async (data: PatientFormData) => {
+		const formattedData = {
+			firstName: data.firstName,
+			lastName: data.lastName,
+			email: data.email,
+			phone: data.phone.startsWith('+')
+				? data.phone
+				: `${data.countryCode}${data.phone}`,
+			whatsapp: data.whatsapp.startsWith('+')
+				? data.whatsapp
+				: `${data.countryCode}${data.whatsapp}`,
+		};
+
+		updatePatientDetails({
+			patientId: patientDetails._id,
+			patient: formattedData,
+		});
+		toggleEditing();
+	};
+
 	return (
-		<Box>
-			<Box>
-				<Text>
-					{t('globals.patient')}: {firstName} {lastName}
-				</Text>
+		<StyledWrapper>
+			<StyledPatientDetails>
+				<Box>
+					<Box display='flex'>
+						<Text fontWeight={600} pr={1}>
+							{t('globals.patient')}:
+						</Text>
+						<Text>{patientName}</Text>
+					</Box>
+					<Box px={1} py={2}>
+						<Text fontWeight={600}>{t('globals.whatsapp')}:</Text>
+						<ContactLink
+							type='whatsapp'
+							value={whatsapp}
+							message={wppText}
+							tooltip={t('globals.notification.whatsapp')}
+						/>
 
-				<Box px={1} py={2}>
-					<Text display='flex'>{t('globals.whatsapp')}:</Text>
-					<ContactLink
-						type='whatsapp'
-						value={whatsapp}
-						message={wppText}
-						tooltip={t('globals.notification.whatsapp')}
-					/>
-
-					<Text display='flex'>{t('globals.phone')}:</Text>
-					<ContactLink
-						type='phone'
-						value={phone}
-						tooltip={t('globals.notification.phone')}
-					/>
-					<Text display='flex'>{t('globals.email')}:</Text>
-					<ContactLink
-						type='email'
-						value={email}
-						message={t('components.agenda.appointment-details.mailto-subject', {
-							therapistName,
-						})}
-						tooltip={t('globals.notification.email')}
-					/>
+						<Text fontWeight={600}>{t('globals.phone')}:</Text>
+						<ContactLink
+							type='phone'
+							value={phone}
+							tooltip={t('globals.notification.phone')}
+						/>
+						<Text fontWeight={600}>{t('globals.email')}:</Text>
+						<ContactLink
+							type='email'
+							value={email}
+							message={t(
+								'components.agenda.appointment-details.mailto-subject',
+								{
+									therapistName,
+								}
+							)}
+							tooltip={t('globals.notification.email')}
+						/>
+					</Box>
 				</Box>
-			</Box>
-			<Text>
-				{t('globals.starts')}: {startTime}
-			</Text>
-			<Text>
-				{t('globals.ends')}: {endTime}
-			</Text>
-		</Box>
+				<Box display='flex'>
+					<Text pr={1} fontWeight={600}>
+						{t('globals.date')}:
+					</Text>
+					<Text isFirstUpper fontWeight={600}>
+						{formattedClickedSlot}
+					</Text>
+				</Box>
+				<Text fontWeight={600}>
+					{t('globals.starts')}: {startTime}
+				</Text>
+				<Text fontWeight={600}>
+					{t('globals.ends')}: {endTime}
+				</Text>
+			</StyledPatientDetails>
+			<StyledSessionDatesList>
+				<StyledSessionDatesTitle>
+					{t('components.agenda.appointment-details.next-sessions')}:
+				</StyledSessionDatesTitle>
+				<Box>
+					{sortedSessions && sortedSessions.length > 0 ? (
+						<Box>
+							{futureSessions.map((session) => (
+								<Box key={session._id} py={2} display='flex'>
+									<Text fontWeight={500} pr={1} fontSize={'0.9rem'}>
+										{t('globals.date')}:
+									</Text>
+									<Tooltip title={t('globals.edit')} arrow placement='right'>
+										<StyledNextSessionText>
+											{` ${new Date(session.date).toLocaleDateString()} ${t('globals.at')} ${session.slots[0].startTime} h`}
+										</StyledNextSessionText>
+									</Tooltip>
+								</Box>
+							))}
+						</Box>
+					) : (
+						''
+					)}
+				</Box>
+			</StyledSessionDatesList>
+
+			<Modal
+				cardActionsProps={{
+					actionName: 'Save',
+					hasSecondAction: true,
+					onClick: handleSubmit(handleSave),
+					secondAction: toggleEditing,
+					secondActionName: 'Cancel',
+				}}
+				openModal={isEditing}
+			>
+				<form onSubmit={handleSubmit(handleSave)}>
+					<NameForm register={register} errors={errors} required={false} />
+					<ContactsForm
+						register={register}
+						errors={errors}
+						getPhoneValue={getValues}
+						setPhoneValue={setValue}
+						setValue={setValue}
+						required={false}
+					/>
+				</form>
+			</Modal>
+		</StyledWrapper>
 	);
 };

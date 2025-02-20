@@ -60,8 +60,7 @@ export const Agenda = ({
 
 	// isTherapist click states
 	const [isTherapistClick, setIsTherapistClick] = useState<boolean>(false);
-	const [proceedTherapistClick, setProceedTherapistClick] =
-		useState<boolean>(false);
+	const [isTherapistEditing, setIsTherapistEditing] = useState<boolean>(false);
 
 	const [slotToValidString, setSlotToValidString] = useState<string>('');
 
@@ -161,7 +160,7 @@ export const Agenda = ({
 
 	const handleIsTherapistClickCancel = useCallback(() => {
 		setIsTherapistClick(false);
-		setProceedTherapistClick(false);
+		setIsTherapistEditing(false);
 		setClickedSlot(null);
 	}, []);
 
@@ -309,16 +308,26 @@ export const Agenda = ({
 			{/* therapist user edit slots modal */}
 			<Modal
 				openModal={isTherapistClick && selectedSlotId !== null}
-				title={'Appointment Details'}
+				title={t('components.agenda.appointment-details.title')}
 				cardActionsProps={{
-					actionName: 'Edit',
-					onClick: () => setProceedTherapistClick(true),
+					actionName: t(
+						'components.agenda.appointment-details.edit-patient-details'
+					),
+					onClick: () => setIsTherapistEditing(true),
 					hasSecondAction: true,
 					secondActionName: t('components.link.navigate.back'),
 					secondAction: handleIsTherapistClickCancel,
+					hasTertiary: true,
+					tertiaryActionName: t(
+						'components.agenda.appointment-details.edit-patient-appointment'
+					),
 				}}
 			>
-				<AgendaAppointmentDetails selectedSlotId={selectedSlotId} />
+				<AgendaAppointmentDetails
+					selectedSlotId={selectedSlotId}
+					isTherapistEditing={isTherapistEditing}
+					setIsTherapistEditing={setIsTherapistEditing}
+				/>
 			</Modal>
 		</>
 	);

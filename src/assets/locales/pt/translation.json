@@ -40,6 +40,7 @@
 		},
 		"date": "Data",
 		"time": "Hora",
+		"at": "às",
 		"date-time": "Data e Hora: ",
 		"therapist": "Terapeuta",
 		"appointment-status": {
@@ -209,8 +210,12 @@
 			"today": "Hoje",
 			"Month": "Mês",
 			"appointment-details": {
+				"title": "Detalhes da sessão",
 				"mailto-subject": "🔔 Sobre sua consulta com {{therapistName}} 🔔",
-				"whatsapp-subject": "Olá, tudo bem? Estou enviando essa mensagem sobre sua consulta comigo, {{therapisName}}"
+				"whatsapp-subject": "Olá, tudo bem? Estou enviando essa mensagem sobre sua consulta comigo, {{therapisName}}",
+				"next-sessions": "Próximas sessões",
+				"edit-patient-details": "Alterar detalhes do paciente",
+				"edit-patient-appointment": "Alterar sessão"
 			}
 		}
 	},

@@ -17,6 +17,7 @@ export const ContactsForm = <T extends FieldValues>({
 	defaultValues,
 	disabled,
 	setValue,
+	required,
 }: ContactsFormProps<T> & TextFieldProps) => {
 	const { t } = useTranslation();
 
@@ -51,7 +52,7 @@ export const ContactsForm = <T extends FieldValues>({
 					autoComplete='email'
 					error={!!errors?.email}
 					helperText={errors?.email?.message as string}
-					required
+					required={required}
 					disabled={disabled}
 				/>
 			</Box>
@@ -60,9 +61,10 @@ export const ContactsForm = <T extends FieldValues>({
 					errors={errors}
 					register={register}
 					registerName='phone'
-					defaultValue={defaultValues?.phone}
+					defaultValue={getPhoneValue('phone' as Path<T>)}
 					disabled={disabled}
 					setValue={setValue}
+					required={required}
 				/>
 			</Box>
 			<Box>
@@ -94,8 +96,9 @@ export const ContactsForm = <T extends FieldValues>({
 							errors={errors}
 							register={register}
 							registerName='whatsapp'
-							defaultValue={defaultValues?.whatsapp}
+							defaultValue={getPhoneValue('whatsapp' as Path<T>)}
 							setValue={setValue}
+							required={required}
 						/>
 					</Box>
 				)}

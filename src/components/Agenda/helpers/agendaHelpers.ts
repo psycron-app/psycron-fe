@@ -42,10 +42,12 @@ export const getSlotStatus = (
 	return slot ? slot.status : 'BLOCKED';
 };
 
-export const isSelectedDay = (date1: Date, date2: Date) => {
+export const isSelectedDay = (selectedDay?: Date, day?: Date) => {
+	if (!selectedDay || !day) return false;
+
 	return (
-		date1.getDate() === date2.getDate() &&
-		date1.getMonth() === date2.getMonth() &&
-		date1.getFullYear() === date2.getFullYear()
+		selectedDay.getDate() === day.getDate() &&
+		selectedDay.getMonth() === day.getMonth() &&
+		selectedDay.getFullYear() === day.getFullYear()
 	);
 };

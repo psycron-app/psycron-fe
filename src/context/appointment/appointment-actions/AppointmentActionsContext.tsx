@@ -1,9 +1,15 @@
 import { createContext, useContext, useState } from 'react';
-import { cancelAppointment } from '@psycron/api/appointment';
-import type { ICancelAppointment } from '@psycron/api/appointment/index.types';
+import { useNavigate } from 'react-router-dom';
+import { cancelAppointment, editAppointment } from '@psycron/api/appointment';
+import type {
+	ICancelAppointment,
+	IEditAppointment,
+} from '@psycron/api/appointment/index.types';
 import type { CustomError } from '@psycron/api/error';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import type { ISessionDate } from '@psycron/context/user/auth/UserAuthenticationContext.types';
+import i18n from '@psycron/i18n';
+import { APPOINTMENTS } from '@psycron/pages/urls';
 import { useMutation } from '@tanstack/react-query';
 
 import type {
@@ -21,6 +27,8 @@ export const AppointmentActionsProvider = ({
 	const [openEditModal, setOpenEditModal] = useState(false);
 	const [openCancelModal, setOpenCancelModal] = useState(false);
 	const [selectedSession, setSelectedSession] = useState(null);
+
+	const navigate = useNavigate();
 
 	const { showAlert } = useAlert();
 
@@ -60,6 +68,27 @@ export const AppointmentActionsProvider = ({
 		cancelAppointmentMutation.mutate(data);
 	};
 
+	const editAppointmentMutation = useMutation({
+		mutationFn: editAppointment,
+		onSuccess: (data) => {
+			showAlert({
+				severity: 'success',
+				message: data.message,
+			});
+			navigate(`/${i18n.language}/${APPOINTMENTS}`);
+		},
+		onError: (error: CustomError) => {
+			showAlert({
+				severity: 'error',
+				message: error.message,
+			});
+		},
+	});
+
+	const editAppointmentMttn = (data: IEditAppointment) => {
+		editAppointmentMutation.mutate(data);
+	};
+
 	return (
 		<AppointmentActionsContext.Provider
 			value={{
@@ -70,6 +99,8 @@ export const AppointmentActionsProvider = ({
 				handleCancelClick,
 				closeModals,
 				cancelAppointmentMttn,
+				editAppointmentMttn,
+				isEditAppointmentLoading: editAppointmentMutation.isPending,
 			}}
 		>
 			{children}

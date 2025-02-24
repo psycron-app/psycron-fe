@@ -6,6 +6,7 @@ import type { StyledAgendaStatusProps } from './components/agenda-slot/AgendaSlo
 export interface IAgenda {
 	availability?: IAvailabilityResponse;
 	isBig?: boolean;
+	isEditingMode?: boolean;
 	isFirstAppointment?: boolean;
 	isLoading: boolean;
 	isTherapist?: boolean;

@@ -216,6 +216,9 @@
 				"next-sessions": "Próximas sessões",
 				"edit-patient-details": "Alterar detalhes do paciente",
 				"edit-patient-appointment": "Alterar sessão"
+			},
+			"edit-appointment": {
+				"confirmation": "Tem certeza de que quer reagendar esta consulta?"
 			}
 		}
 	},
@@ -325,7 +328,8 @@
 					"no-session": "Nenhuma sessão disponível"
 				},
 				"modal-title": "Repita sua disponibilidade semanal",
-				"modal-info": "Por favor, escolha uma das opções abaixo. Se você selecionar 'semanal,' sua disponibilidade será repetida até o final do mês. Se escolher 'mensal,' ela será repetida até o final do ano."
+				"modal-info": "Por favor, escolha uma das opções abaixo. Se você selecionar 'semanal,' sua disponibilidade será repetida até o final do mês. Se escolher 'mensal,' ela será repetida até o final do ano.",
+				"complete": "Sessão de disponibilidade concluída!"
 			},
 			"agenda": {
 				"status": {

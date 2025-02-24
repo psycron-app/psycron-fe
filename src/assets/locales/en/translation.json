@@ -221,6 +221,9 @@
 				"next-sessions": "Next appointments",
 				"edit-patient-details": "Edit Patient Details",
 				"edit-patient-appointment": "Edit appointment"
+			},
+			"edit-appointment": {
+				"confirmation": "Are you sure you want to reschedule this appointment?"
 			}
 		}
 	},
@@ -330,7 +333,8 @@
 					"no-session": "No session was found"
 				},
 				"modal-title": "Repeat your weekly availability",
-				"modal-info": "Please choose one of the options below. If you pick 'weekly,' your availability will be repeated until the end of the month. If you pick 'monthly,' it will be repeated until the end of the year."
+				"modal-info": "Please choose one of the options below. If you pick 'weekly,' your availability will be repeated until the end of the month. If you pick 'monthly,' it will be repeated until the end of the year.",
+				"complete": "Availability created with success"
 			},
 			"agenda": {
 				"status": {

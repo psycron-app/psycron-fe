@@ -1,5 +1,4 @@
 import { Box, Grid, styled } from '@mui/material';
-import { palette } from '@psycron/theme/palette/palette.theme';
 
 export const StyledIAvailabilityHoursBoxWrapper = styled(Box)`
 	display: flex;
@@ -13,7 +12,7 @@ export const StyledIAvailabilityGrid = styled(Grid)`
 	overflow-y: auto;
 	overflow-x: auto;
 	border-radius: 1rem;
-	background-color: ${palette.background.paper};
+
 	border-left: 0;
 
 	scroll-snap-type: x mandatory;

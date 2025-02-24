@@ -9,6 +9,7 @@ import {
 	EDITUSERBYSESSION,
 } from '@psycron/pages/urls';
 import { AppointmentPage } from '@psycron/pages/user/appointment/Appointment';
+import { EditAppointment } from '@psycron/pages/user/appointment/edit/EditAppointment';
 import { AvailabilityWizard } from '@psycron/pages/user/availability-wizard/AvailabilityWizard';
 import { EditPassword } from '@psycron/pages/user/edit-password/EditPassword';
 import { EditUser } from '@psycron/pages/user/edit-user/EditUser';
@@ -23,6 +24,7 @@ const privateRoutes = [
 	{ path: EDITUSERBYSESSION, element: <EditUser /> },
 	{ path: CHANGEPASSWORD, element: <EditPassword /> },
 	{ path: APPOINTMENTS, element: <AppointmentPage /> },
+	{ path: `${APPOINTMENTS}/:oldSessionSlotId`, element: <EditAppointment /> },
 	{ path: AVAILABILITYWIZARD, element: <AvailabilityWizard /> },
 	{ path: AVAILABILITY, element: <SetAvailabilityPage /> },
 ];

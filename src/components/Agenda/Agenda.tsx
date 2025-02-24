@@ -1,9 +1,12 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Box, Grid, IconButton } from '@mui/material';
+import { useAppointmentActions } from '@psycron/context/appointment/appointment-actions/AppointmentActionsContext';
 import { usePatient } from '@psycron/context/patient/PatientContext';
+import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import {
+	formatDate,
 	formatDateTimeToLocale,
 	generateTimeSlots,
 	generateWeekDaysFromSelected,
@@ -37,23 +40,30 @@ export const Agenda = ({
 	isFirstAppointment,
 	isBig,
 	isTherapist,
+	isEditingMode,
 }: IAgenda) => {
 	const { t } = useTranslation();
 
-	const { userId, locale } = useParams<{
+	const {
+		userId,
+		locale,
+		oldSessionSlotId: selectedSlotIdFromURL,
+	} = useParams<{
 		locale: string;
+		oldSessionSlotId: string;
 		userId: string;
 	}>();
 
-	const { bookAppointmentFromLinkMttnIsLoading } = usePatient();
+	const navigate = useNavigate();
+
+	const { editAppointmentMttn, isEditAppointmentLoading } =
+		useAppointmentActions();
 
 	const [currentWeekStart, setCurrentWeekStart] = useState<Date>(selectedDay);
 
 	const [isClicked, setIsClicked] = useState<boolean>(false);
 	const [clickedSlot, setClickedSlot] = useState<string | null>(null);
-
 	const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
-
 	const [selectedSlotId, setSelectedSlotId] = useState<string | null>(null);
 
 	const [proceed, setProceed] = useState<boolean>(false);
@@ -63,6 +73,36 @@ export const Agenda = ({
 	const [isTherapistEditing, setIsTherapistEditing] = useState<boolean>(false);
 
 	const [slotToValidString, setSlotToValidString] = useState<string>('');
+
+	// isEditingMode
+	const [selectedEditingSlot, setSelectedEditingSlot] =
+		useState<IAgendaClick | null>(null);
+
+	const [selectedEditingDay, setSelectedEditingDay] = useState<string | null>(
+		null
+	);
+	const [selectedEditingHour, setSelectedEditingHour] = useState<string | null>(
+		null
+	);
+
+	const [isConfirmingEdit, setIsConfirmingEdit] = useState<boolean>(false);
+
+	const { isUserDetailsLoading, userDetails, appointmentDetailsBySlotId } =
+		useUserDetails('', selectedSlotIdFromURL);
+
+	const patientIdFromAppointment =
+		appointmentDetailsBySlotId?.appointment.patient?._id;
+
+	const { bookAppointmentFromLinkMttnIsLoading } = usePatient(
+		patientIdFromAppointment
+	);
+
+	useEffect(() => {
+		if (selectedEditingSlot !== null && selectedEditingSlot.day) {
+			setSelectedEditingDay(formatDate(selectedEditingSlot?.day, locale));
+			setSelectedEditingHour(selectedEditingSlot.hour);
+		}
+	}, [locale, selectedEditingSlot]);
 
 	useEffect(() => {
 		if (isClicked && clickedSlot) {
@@ -94,10 +134,12 @@ export const Agenda = ({
 		);
 	};
 
-	const previousWeekStart = subDays(currentWeekStart, 7);
+	const previousWeekStart = selectedDay
+		? subDays(currentWeekStart, 7)
+		: undefined;
 
 	const goToPreviousWeek = () => {
-		setCurrentWeekStart(previousWeekStart);
+		if (selectedDay) setCurrentWeekStart(previousWeekStart);
 	};
 
 	const filteredDayHours = filterDayHoursByAvailability(
@@ -138,6 +180,8 @@ export const Agenda = ({
 
 		if (!foundSlot) return;
 
+		console.log('✅ Slot encontrado:', foundSlot);
+
 		setSelectedSlotId(foundSlot._id);
 		setIsTherapistClick(true);
 	};
@@ -145,9 +189,19 @@ export const Agenda = ({
 	const handleClick = (props: IAgendaClick) => {
 		const { slotStatus, beforeToday, status, hour, day } = props;
 
+		if (isEditingMode && beforeToday) return null;
+		if (isEditingMode && status !== 'available') return null;
+
+		if (isEditingMode) {
+			setSelectedEditingSlot({ day, hour, slotStatus, status, beforeToday });
+			setIsConfirmingEdit(true);
+
+			return;
+		}
+
 		if (isTherapist) {
 			return handleTherapistClick({ day, hour, status, slotStatus });
-		} else if (!beforeToday && slotStatus === 'AVAILABLE') {
+		} else if (!beforeToday && slotStatus === 'AVAILABLE' && selectedDay) {
 			return handleBookAppointment({ day, hour, status });
 		}
 	};
@@ -164,7 +218,61 @@ export const Agenda = ({
 		setClickedSlot(null);
 	}, []);
 
-	if (isLoading) {
+	const handleEditAppointment = (oldSessionSlotId: string) => {
+		console.log(
+			'🚀 ~ handleEditAppointment ~ oldSessionSlotId:',
+			oldSessionSlotId
+		);
+		if (!oldSessionSlotId || !availability) return;
+
+		const foundDate = availability.latestAvailability.availabilityDates.find(
+			(dateObj) => dateObj.slots.some((slot) => slot._id === oldSessionSlotId)
+		)?.date;
+
+		if (!foundDate) return;
+
+		const formattedDate = new Date(foundDate).toISOString().split('T')[0];
+
+		navigate(`${oldSessionSlotId}?date=${formattedDate}`);
+	};
+
+	const handleSaveEditAppointment = (
+		selectedEditingSlot: IAgendaClick,
+		selectedSlotIdFromURL: string
+	) => {
+		if (selectedEditingSlot && userDetails) {
+			const foundSelectedDay =
+				availability.latestAvailability.availabilityDates.find((date) => {
+					const parsedDate = new Date(date?.date);
+					return (
+						parsedDate.toDateString() === selectedEditingSlot.day.toDateString()
+					);
+				});
+
+			const foundSlot = foundSelectedDay?.slots.find(
+				(slot) => slot.startTime === selectedEditingSlot.hour
+			);
+			console.log(
+				'🚀 ~ handleSaveEditAppointment ~ formattedEditAppointmentData.selectedSlotIdFromURL:',
+				selectedSlotIdFromURL
+			);
+
+			const formattedEditAppointmentData = {
+				newData: {
+					newDate: selectedEditingSlot.day,
+					newStartTime: selectedEditingSlot.hour,
+					newSessionSlotId: foundSlot._id,
+				},
+				oldSessionSlotId: selectedSlotIdFromURL,
+				therapistId: userDetails._id,
+			};
+
+			editAppointmentMttn(formattedEditAppointmentData);
+			// setIsConfirmingEdit(false);
+		}
+	};
+
+	if (isLoading || isUserDetailsLoading || isEditAppointmentLoading) {
 		return <Loader />;
 	}
 
@@ -311,16 +419,22 @@ export const Agenda = ({
 				title={t('components.agenda.appointment-details.title')}
 				cardActionsProps={{
 					actionName: t(
-						'components.agenda.appointment-details.edit-patient-details'
+						'components.agenda.appointment-details.edit-patient-appointment'
 					),
-					onClick: () => setIsTherapistEditing(true),
+					// actionName: t(
+					// 	'components.agenda.appointment-details.edit-patient-details'
+					// ),
+					// onClick: () => setIsTherapistEditing(true),
+					onClick: () => {
+						handleEditAppointment(selectedSlotId);
+					},
 					hasSecondAction: true,
 					secondActionName: t('components.link.navigate.back'),
 					secondAction: handleIsTherapistClickCancel,
-					hasTertiary: true,
-					tertiaryActionName: t(
-						'components.agenda.appointment-details.edit-patient-appointment'
-					),
+					// hasTertiary: true,
+					// tertiaryActionName: t(
+					// 	'components.agenda.appointment-details.edit-patient-appointment'
+					// ),
 				}}
 			>
 				<AgendaAppointmentDetails
@@ -328,6 +442,39 @@ export const Agenda = ({
 					isTherapistEditing={isTherapistEditing}
 					setIsTherapistEditing={setIsTherapistEditing}
 				/>
+			</Modal>
+			<Modal
+				openModal={isConfirmingEdit}
+				title={'Editing appointment'}
+				cardActionsProps={{
+					actionName: 'Confirm',
+					onClick: () =>
+						handleSaveEditAppointment(
+							selectedEditingSlot,
+							selectedSlotIdFromURL
+						),
+					hasSecondAction: true,
+					secondActionName: t('components.link.navigate.back'),
+					secondAction: () => setIsConfirmingEdit(false),
+				}}
+			>
+				{selectedEditingSlot && (
+					<Box>
+						<Text>{t('components.agenda.edit-appointment.confirmation')}</Text>
+						<Box display='flex' py={1}>
+							<Text fontWeight={600} pr={1}>
+								{t('globals.date')}:
+							</Text>
+							<Text>{selectedEditingDay}</Text>
+						</Box>
+						<Box display='flex' py={1}>
+							<Text fontWeight={600} pr={1}>
+								{t('globals.starts')}:
+							</Text>
+							<Text>{selectedEditingHour}</Text>
+						</Box>
+					</Box>
+				)}
 			</Modal>
 		</>
 	);

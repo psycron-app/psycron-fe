@@ -55,30 +55,30 @@ export const AgendaAppointmentDetails = ({
 	const {
 		patientDetails,
 		isPatientDetailsLoading,
-		updatePatientDetails,
+		// updatePatientDetails,
 		updatePatientIsLoading,
 	} = usePatient(appointmentDetailsBySlotId?.appointment?.patient?._id);
 
-	const {
-		register,
-		handleSubmit,
-		getValues,
-		setValue,
-		reset,
-		formState: { errors },
-	} = useForm();
+	// const {
+	// 	register,
+	// 	handleSubmit,
+	// 	getValues,
+	// 	setValue,
+	// 	reset,
+	// 	formState: { errors },
+	// } = useForm();
 
-	useEffect(() => {
-		if (patientDetails) {
-			reset({
-				firstName: patientDetails.firstName,
-				lastName: patientDetails.lastName,
-				email: patientDetails.contacts.email,
-				phone: patientDetails.contacts?.phone,
-				whatsapp: patientDetails.contacts?.whatsapp,
-			});
-		}
-	}, [patientDetails, reset, getValues]);
+	// useEffect(() => {
+	// 	if (patientDetails) {
+	// 		reset({
+	// 			firstName: patientDetails.firstName,
+	// 			lastName: patientDetails.lastName,
+	// 			email: patientDetails.contacts.email,
+	// 			phone: patientDetails.contacts?.phone,
+	// 			whatsapp: patientDetails.contacts?.whatsapp,
+	// 		});
+	// 	}
+	// }, [patientDetails, reset, getValues]);
 
 	if (
 		isAppointmentDetailsBySlotIdLoading ||
@@ -128,25 +128,25 @@ export const AgendaAppointmentDetails = ({
 		therapistName,
 	});
 
-	const handleSave = async (data: PatientFormData) => {
-		const formattedData = {
-			firstName: data.firstName,
-			lastName: data.lastName,
-			email: data.email,
-			phone: data.phone.startsWith('+')
-				? data.phone
-				: `${data.countryCode}${data.phone}`,
-			whatsapp: data.whatsapp.startsWith('+')
-				? data.whatsapp
-				: `${data.countryCode}${data.whatsapp}`,
-		};
+	// const handleSave = async (data: PatientFormData) => {
+	// 	const formattedData = {
+	// 		firstName: data.firstName,
+	// 		lastName: data.lastName,
+	// 		email: data.email,
+	// 		phone: data.phone.startsWith('+')
+	// 			? data.phone
+	// 			: `${data.countryCode}${data.phone}`,
+	// 		whatsapp: data.whatsapp.startsWith('+')
+	// 			? data.whatsapp
+	// 			: `${data.countryCode}${data.whatsapp}`,
+	// 	};
 
-		updatePatientDetails({
-			patientId: patientDetails._id,
-			patient: formattedData,
-		});
-		toggleEditing();
-	};
+	// 	updatePatientDetails({
+	// 		patientId: patientDetails._id,
+	// 		patient: formattedData,
+	// 	});
+	// 	toggleEditing();
+	// };
 
 	return (
 		<StyledWrapper>
@@ -216,7 +216,7 @@ export const AgendaAppointmentDetails = ({
 									</Text>
 									<Tooltip title={t('globals.edit')} arrow placement='right'>
 										<StyledNextSessionText>
-											{` ${new Date(session.date).toLocaleDateString()} ${t('globals.at')} ${session.slots[0].startTime} h`}
+											{` ${formatDate(session.date, locale)} ${t('globals.at')} ${session.slots[0].startTime} h`}
 										</StyledNextSessionText>
 									</Tooltip>
 								</Box>
@@ -228,7 +228,7 @@ export const AgendaAppointmentDetails = ({
 				</Box>
 			</StyledSessionDatesList>
 
-			<Modal
+			{/* <Modal
 				cardActionsProps={{
 					actionName: 'Save',
 					hasSecondAction: true,
@@ -249,7 +249,7 @@ export const AgendaAppointmentDetails = ({
 						required={false}
 					/>
 				</form>
-			</Modal>
+			</Modal> */}
 		</StyledWrapper>
 	);
 };

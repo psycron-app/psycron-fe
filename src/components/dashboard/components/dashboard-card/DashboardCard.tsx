@@ -51,17 +51,18 @@ export const DashboardCard = ({
 	const [updatedItems, setUpdatedItems] = useState(items);
 	const { t } = useTranslation();
 	const intervalRef = useRef<number | null>(null);
-	const nowDate = format(new Date(), 'yyyy-MM-dd\'T\'HH:mm:ss');
+	// eslint-disable-next-line quotes
+	const nowDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss");
 
 	const updateAppointmentTimes = (
 		items: IDashboarcCardItemProps[],
-		pauseDuration: number,
+		pauseDuration: number
 	) => {
 		return items.map((appointment) => {
 			const nextAppointment = parseISO(appointment.appointmentInfo.next);
 			const updatedNextAppointment = addMilliseconds(
 				nextAppointment,
-				pauseDuration,
+				pauseDuration
 			);
 			return {
 				...appointment,
@@ -80,13 +81,13 @@ export const DashboardCard = ({
 			const endTime = Date.now();
 			const pauseDuration = differenceInMilliseconds(
 				new Date(endTime),
-				new Date(startTime),
+				new Date(startTime)
 			);
 			setFullPausedTime(fullPausedTime + pauseDuration);
 			setShouldProceed(true);
 			const updatedAppointments = updateAppointmentTimes(
 				items,
-				fullPausedTime + pauseDuration,
+				fullPausedTime + pauseDuration
 			);
 			setUpdatedItems(updatedAppointments);
 		}
@@ -101,7 +102,7 @@ export const DashboardCard = ({
 			const appointmentStart = parseISO(appointmentInfo.next);
 			const appointmentEnd = addMinutes(
 				appointmentStart,
-				appointmentInfo.duration,
+				appointmentInfo.duration
 			);
 			const isCurrentDay = isWithinInterval(appointmentStart, {
 				start: startOfCurrentDay,
@@ -109,9 +110,8 @@ export const DashboardCard = ({
 			});
 
 			return isCurrentDay
-				? (isAfter(now, appointmentStart) &&
-                      isBefore(now, appointmentEnd)) ||
-                      isAfter(appointmentStart, now)
+				? (isAfter(now, appointmentStart) && isBefore(now, appointmentEnd)) ||
+						isAfter(appointmentStart, now)
 				: null;
 		});
 	};
@@ -119,19 +119,19 @@ export const DashboardCard = ({
 	const sortedItems = [...filterItems(nowDate)].sort(
 		(a, b) =>
 			new Date(a.appointmentInfo.next).getTime() -
-            new Date(b.appointmentInfo.next).getTime(),
+			new Date(b.appointmentInfo.next).getTime()
 	);
 
 	const isSessionHappening = (
 		nextAppointment: string,
-		sessionDuration: number,
+		sessionDuration: number
 	) => {
 		const appointmentStart = parseISO(nextAppointment);
 		const now = new Date();
 		const appointmentEnd = addMinutes(appointmentStart, sessionDuration);
 
 		const isHappening =
-            isAfter(now, appointmentStart) && isBefore(now, appointmentEnd);
+			isAfter(now, appointmentStart) && isBefore(now, appointmentEnd);
 
 		return isHappening && !isPatientCard ? (
 			<Timer>
@@ -170,7 +170,8 @@ export const DashboardCard = ({
 
 	useEffect(() => {
 		intervalRef.current = window.setInterval(() => {
-			const now = format(new Date(), 'yyyy-MM-dd\'T\'HH:mm:ss');
+			// eslint-disable-next-line quotes
+			const now = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss");
 			setUpdatedItems(filterItems(now));
 		}, 1000);
 
@@ -201,31 +202,22 @@ export const DashboardCard = ({
 					{items.length === 0 || sortedItems.length === 0 ? (
 						<>
 							<EmptyState
-								ariaLabel={
-									isPatientCard ? 'patients' : 'appointments'
-								}
+								ariaLabel={isPatientCard ? 'patients' : 'appointments'}
 								img={
 									isPatientCard
 										? './images/relax.png'
 										: './images/empty-appointments.png'
 								}
 								isAppointment={!isPatientCard}
-								today={
-									items.length > 0 && sortedItems.length === 0
-								}
+								today={items.length > 0 && sortedItems.length === 0}
 							/>
 						</>
 					) : (
 						<>
 							{sortedItems.map(
 								(
-									{
-										firstName,
-										lastName,
-										appointmentInfo,
-										patientId,
-									},
-									index,
+									{ firstName, lastName, appointmentInfo, patientId },
+									index
 								) => (
 									<>
 										<DashboardCardItem
@@ -240,11 +232,11 @@ export const DashboardCard = ({
 										<>
 											{isSessionHappening(
 												appointmentInfo.next,
-												appointmentInfo.duration,
+												appointmentInfo.duration
 											)}
 										</>
 									</>
-								),
+								)
 							)}
 						</>
 					)}
@@ -267,14 +259,10 @@ export const DashboardCard = ({
 					>
 						<ModalPauseTimerContent>
 							<Text variant='subtitle1' textAlign='left'>
-								{t(
-									'components.dashboard.card.delay-notification',
-								)}
+								{t('components.dashboard.card.delay-notification')}
 							</Text>
 							<Text variant='subtitle1'>
-								{t(
-									'components.dashboard.card.delay-confirmation',
-								)}
+								{t('components.dashboard.card.delay-confirmation')}
 							</Text>
 						</ModalPauseTimerContent>
 					</Card>

@@ -15,7 +15,7 @@ import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext
 import { useWizardContext } from '@psycron/context/wizard/WizardContext';
 import useViewport from '@psycron/hooks/useViewport';
 import { generateUserTimeZone } from '@psycron/utils/variables';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 
 import { Button } from '../button/Button';
@@ -41,6 +41,7 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 	const { isBiggerThanMedium } = useViewport();
 
 	const { userDetails } = useUserDetails();
+	const queryClient = useQueryClient();
 
 	const { activeStep, handleNext, handleBack, direction } = useWizardContext();
 
@@ -62,6 +63,12 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 
 	const updateAvailabilitySessionMutation = useMutation({
 		mutationFn: updateAvailabilitySession,
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({
+				queryKey: ['userDetails', userDetails?._id],
+			});
+		},
+
 		onError: (error: CustomError) => {
 			showAlert({
 				message: error.message,
@@ -75,7 +82,7 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 			completeSessionAvailability(data.sessionId, data),
 		onSuccess: () => {
 			showAlert({
-				message: 'Sessão de disponibilidade concluída!',
+				message: t('page.availability.wizard.complete'),
 				severity: 'success',
 			});
 		},

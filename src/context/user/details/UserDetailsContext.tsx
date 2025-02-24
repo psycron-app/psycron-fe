@@ -1,12 +1,18 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getTherapistLatestAvailability, getUserById } from '@psycron/api/user';
-import { getAppointmentDetailsBySlotId } from '@psycron/api/user/availability';
+import {
+	getAppointmentDetailsBySlotId,
+	getAvailabilitySession,
+} from '@psycron/api/user/availability';
 import { EDITUSERPATH } from '@psycron/pages/urls';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useAuth } from '../auth/UserAuthenticationContext';
-import type { ITherapist } from '../auth/UserAuthenticationContext.types';
+import type {
+	IAvailability,
+	ITherapist,
+} from '../auth/UserAuthenticationContext.types';
 
 import type {
 	UserDetailsContextType,
@@ -94,6 +100,7 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		data: therapistLatestAvailability,
 		isLoading: therapistLatestAvailabilityLoading,
 		isSuccess: therapistLatestAvailabilitySuccess,
+		refetch: refetchTherapistAvailability,
 	} = useQuery({
 		queryKey: ['therapistAvailability'],
 		queryFn: () => getTherapistLatestAvailability(userDetails._id),
@@ -134,27 +141,21 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		therapistLatestAvailabilityLoading || isUserDetailsLoading;
 
 	const therapistLatestAvailabilityDates = useMemo(
-		() =>
-			therapistLatestAvailability?.latestAvailability?.availabilityDates || [],
+		() => therapistLatestAvailability?.latestAvailability?.availabilityDates,
 		[therapistLatestAvailability]
 	);
 
-	const allDataLoaded = useMemo(
-		() =>
-			!therapistLatestAvailabilityLoading &&
-			!isUserDetailsLoading &&
-			therapistLatestAvailabilitySuccess &&
-			isUserDetailsSucces,
-		[
-			therapistLatestAvailabilityLoading,
-			isUserDetailsLoading,
-			therapistLatestAvailabilitySuccess,
-			isUserDetailsSucces,
-		]
-	);
+	const emptyAvailability = therapistLatestAvailabilityDates?.length < 1;
 
-	const emptyAvailability =
-		allDataLoaded && therapistLatestAvailabilityDates?.length < 1;
+	const latestSessionId =
+		userDetails?.availability?.[userDetails?.availability?.length - 1];
+
+	const { data: sessionData, isLoading: sessionDataIsLoading } = useQuery({
+		queryKey: ['availabilitySession', latestSessionId],
+		queryFn: () =>
+			getAvailabilitySession(latestSessionId as Partial<IAvailability>),
+		enabled: !!latestSessionId,
+	});
 
 	return {
 		...context,
@@ -172,5 +173,9 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		appointmentDetailsBySlotId,
 		isAppointmentDetailsBySlotIdLoading,
 		isAppointmentDetailsBySlotIdSuccess,
+		refetchTherapistAvailability,
+		sessionData,
+		sessionDataIsLoading,
+		latestSessionId,
 	};
 };

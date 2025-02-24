@@ -97,6 +97,13 @@ export const usePatient = (patientId?: string) => {
 		throw new Error('usePatient must be used within an PatientProvider');
 	}
 
+	const queryClient = useQueryClient();
+
+	const cachedPatient = queryClient.getQueryData<IPatient>([
+		'patientDetails',
+		patientId,
+	]);
+
 	const {
 		data: patientDetails,
 		isLoading: isPatientDetailsLoading,
@@ -105,6 +112,7 @@ export const usePatient = (patientId?: string) => {
 		queryKey: ['patientDetails', patientId],
 		queryFn: () => getPatientById(patientId),
 		enabled: Boolean(patientId && patientId !== 'undefined'),
+		initialData: cachedPatient,
 	});
 
 	return {

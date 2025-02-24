@@ -26,13 +26,8 @@ export const AppointmentsList = () => {
 
 	const { t } = useTranslation();
 	const { isMobile } = useViewport();
-	const {
-		openEditModal,
-		openCancelModal,
-		closeModals,
-		selectedSession,
-		cancelAppointmentMttn,
-	} = useAppointmentActions();
+	const { openEditModal, openCancelModal, closeModals, selectedSession } =
+		useAppointmentActions();
 
 	const { patientDetails, isPatientDetailsLoading } = usePatient(patientId);
 
@@ -54,7 +49,6 @@ export const AppointmentsList = () => {
 		return <Loader />;
 	}
 	const { _id: latestSessionId, sessions } = latestSession;
-	console.log('🚀 ~ AppointmentsList ~ latestSession:', latestSession);
 
 	const headItems: ITableCellProps[] = [
 		{
@@ -156,10 +150,6 @@ export const AppointmentsList = () => {
 	);
 
 	const handleCancelAction = () => {
-		console.log(
-			'🚀 ~ handleCancelAction ~ data.data.selectedSession:',
-			selectedSession
-		);
 		const data = {
 			data: {
 				date: selectedSession?.date,

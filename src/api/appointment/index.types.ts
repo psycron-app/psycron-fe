@@ -11,6 +11,16 @@ export interface ICancelAppointmentData {
 	startTime: string;
 }
 
-export interface ICancelAppointmentResponse {
+export interface ICancelEditAppointmentResponse {
 	message: string;
+}
+
+export interface IEditAppointment {
+	newData: {
+		newDate: Date;
+		newSessionSlotId: string;
+		newStartTime: string;
+	};
+	oldSessionSlotId: string;
+	therapistId: string;
 }

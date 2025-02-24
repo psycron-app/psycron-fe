@@ -45,6 +45,7 @@ export interface IAvailabilityResponse {
 }
 
 export interface IAvailabilityDate {
+	_id: string;
 	date: string;
 	slots: ISlot[];
 }

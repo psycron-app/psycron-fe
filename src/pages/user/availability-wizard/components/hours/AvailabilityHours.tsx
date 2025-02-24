@@ -1,12 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import { Box, Grid } from '@mui/material';
-import { getAvailabilitySession } from '@psycron/api/user/availability';
 import { TimeSlotsRow } from '@psycron/components/agenda/components/time-slots/TimeSlotRow';
 import { WeekDaysHeader } from '@psycron/components/agenda/components/week-days/WeekDaysHeader';
 import { Loader } from '@psycron/components/loader/Loader';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { generateTimeSlots } from '@psycron/utils/variables';
-import { useQuery } from '@tanstack/react-query';
 
 import {
 	StyledIAvailabilityGrid,
@@ -15,20 +13,10 @@ import {
 
 export const AvailabilityHours = () => {
 	const { t } = useTranslation();
-	const { userDetails } = useUserDetails();
+	const { latestSessionId, sessionDataIsLoading, sessionData } =
+		useUserDetails();
 
-	const latestSessionId =
-		userDetails?.availability?.[userDetails?.availability?.length - 1];
-
-	const { data: sessionData, isLoading } = useQuery({
-		queryKey: ['availabilitySession', latestSessionId],
-		queryFn: () => getAvailabilitySession(latestSessionId),
-		enabled: !!latestSessionId,
-		retry: 3,
-		retryDelay: 2000,
-	});
-
-	if (isLoading) {
+	if (sessionDataIsLoading) {
 		return <Loader />;
 	}
 
@@ -37,7 +25,6 @@ export const AvailabilityHours = () => {
 	}
 
 	const { consultationDuration, weekdays } = sessionData;
-	console.log('🚀 ~ AvailabilityHours ~ weekdays:', weekdays);
 
 	const dayHours = generateTimeSlots(consultationDuration);
 

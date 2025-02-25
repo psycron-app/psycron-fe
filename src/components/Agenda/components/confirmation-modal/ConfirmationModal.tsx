@@ -114,7 +114,7 @@ export const ConfirmationModal = ({
 		>
 			<form ref={formRef} onSubmit={handleSubmit(handleConfirmBook)}>
 				<Box>
-					<NameForm register={register} errors={errors} />
+					<NameForm register={register} errors={errors} required />
 					<Box pt={6}>
 						<ContactsForm
 							register={register}
@@ -122,6 +122,7 @@ export const ConfirmationModal = ({
 							getPhoneValue={getValues}
 							setPhoneValue={setValue}
 							setValue={setValue}
+							required
 						/>
 						<Text>
 							{t('page.book-appointment.confirmation-should-replicate')}

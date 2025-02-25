@@ -1,3 +1,4 @@
+// import { BlankPage } from '@psycron/pages/blank/BlankPage';
 import { Dashboard } from '@psycron/pages/dashboard/Dashboard';
 import {
 	APPOINTMENTS,
@@ -27,6 +28,7 @@ const privateRoutes = [
 	{ path: `${APPOINTMENTS}/:oldSessionSlotId`, element: <EditAppointment /> },
 	{ path: AVAILABILITYWIZARD, element: <AvailabilityWizard /> },
 	{ path: AVAILABILITY, element: <SetAvailabilityPage /> },
+	// { path: 'blank', element: <BlankPage /> },
 ];
 
 export default privateRoutes;

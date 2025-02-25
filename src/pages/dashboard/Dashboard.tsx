@@ -48,6 +48,7 @@ export const Dashboard = () => {
 						selectedDay={selectedDay}
 						availability={therapistLatestAvailability}
 						isLoading={therapistLatestAvailabilityLoading}
+						isTherapist
 					/>
 					<Box display='flex' justifyContent='flex-end' pt={2}>
 						<ShareButton

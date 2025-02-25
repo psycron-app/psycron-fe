@@ -104,7 +104,9 @@ export const ShareButton = ({ titleKey, textKey, url }: IShareButton) => {
 				placement='left'
 				onClick={() => setOpenShareButton((prev) => !prev)}
 			>
-				<Share />
+				<span>
+					<Share />
+				</span>
 			</Tooltip>
 			{openShareButton ? (
 				<ShareButtonsWrapper>

@@ -5,6 +5,7 @@ import { Box, Grid, IconButton } from '@mui/material';
 import { useAppointmentActions } from '@psycron/context/appointment/appointment-actions/AppointmentActionsContext';
 import { usePatient } from '@psycron/context/patient/PatientContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { APPOINTMENTS } from '@psycron/pages/urls';
 import {
 	formatDate,
 	formatDateTimeToLocale,
@@ -233,7 +234,7 @@ export const Agenda = ({
 
 		const formattedDate = new Date(foundDate).toISOString().split('T')[0];
 
-		navigate(`${oldSessionSlotId}?date=${formattedDate}`);
+		navigate(`../${APPOINTMENTS}/${oldSessionSlotId}?date=${formattedDate}`);
 	};
 
 	const handleSaveEditAppointment = (

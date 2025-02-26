@@ -10,7 +10,7 @@ import { useAlert } from '@psycron/context/alert/AlertContext';
 import type { ISessionDate } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 import i18n from '@psycron/i18n';
 import { APPOINTMENTS } from '@psycron/pages/urls';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import type {
 	AppointmentActionsProviderProps,
@@ -31,6 +31,8 @@ export const AppointmentActionsProvider = ({
 	const navigate = useNavigate();
 
 	const { showAlert } = useAlert();
+
+	const queryClient = useQueryClient();
 
 	const handleEditClick = (session: ISessionDate) => {
 		setSelectedSession(session);
@@ -75,7 +77,17 @@ export const AppointmentActionsProvider = ({
 				severity: 'success',
 				message: data.message,
 			});
-			navigate(`/${i18n.language}/${APPOINTMENTS}`);
+			queryClient.invalidateQueries({ queryKey: ['userDetails'] });
+			queryClient.invalidateQueries({ queryKey: ['therapistAvailability'] });
+			queryClient.invalidateQueries({
+				queryKey: ['getAppointmentDetailsBySlotId'],
+			});
+
+			queryClient
+				.refetchQueries({ queryKey: ['therapistAvailability'] })
+				.then(() => {
+					navigate(`/${i18n.language}/${APPOINTMENTS}`);
+				});
 		},
 		onError: (error: CustomError) => {
 			showAlert({

@@ -15,7 +15,6 @@ const decryptData = (encryptedData: string, key: string) => {
 	}
 };
 
-// 🔹 Hook principal para armazenar dados com segurança e expiração
 export const useSecureStorage = (
 	key: string,
 	value?: string,
@@ -55,6 +54,7 @@ export const useSecureStorage = (
 
 				setStoredValue(parsedData.value);
 			} catch (error) {
+				// eslint-disable-next-line no-console
 				console.error('Failed to decrypt data:', error);
 			}
 		}

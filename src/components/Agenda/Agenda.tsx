@@ -43,7 +43,6 @@ export const Agenda = ({
 	isTherapist,
 	isEditingMode,
 }: IAgenda) => {
-	console.log('🚀 ~ availability:', availability);
 	const { t } = useTranslation();
 
 	const {
@@ -89,13 +88,17 @@ export const Agenda = ({
 
 	const [isConfirmingEdit, setIsConfirmingEdit] = useState<boolean>(false);
 
-	const { isUserDetailsLoading, userDetails, appointmentDetailsBySlotId } =
-		useUserDetails('', selectedSlotIdFromURL);
+	const {
+		isUserDetailsLoading,
+		userDetails,
+		appointmentDetailsBySlotId,
+		therapistId,
+	} = useUserDetails('', selectedSlotIdFromURL);
 
 	const patientIdFromAppointment =
 		appointmentDetailsBySlotId?.appointment.patient?._id;
 
-	const { bookAppointmentFromLinkMttnIsLoading } = usePatient(
+	const { bookAppointmentFromLinkMttnIsLoading, latestPatientId } = usePatient(
 		patientIdFromAppointment
 	);
 
@@ -182,15 +185,12 @@ export const Agenda = ({
 
 		if (!foundSlot) return;
 
-		console.log('✅ Slot encontrado:', foundSlot);
-
 		setSelectedSlotId(foundSlot._id);
 		setIsTherapistClick(true);
 	};
 
 	const handleClick = (props: IAgendaClick) => {
 		const { slotStatus, beforeToday, status, hour, day } = props;
-		console.log('🚀 ~ handleClick ~ props:', props);
 
 		if (isEditingMode && beforeToday) return null;
 		if (isEditingMode && status !== 'available') return null;
@@ -222,10 +222,6 @@ export const Agenda = ({
 	}, []);
 
 	const handleEditAppointment = (oldSessionSlotId: string) => {
-		console.log(
-			'🚀 ~ handleEditAppointment ~ oldSessionSlotId:',
-			oldSessionSlotId
-		);
 		if (!oldSessionSlotId || !availability) return;
 
 		const foundDate = availability.latestAvailability.availabilityDates.find(
@@ -243,36 +239,38 @@ export const Agenda = ({
 		selectedEditingSlot: IAgendaClick,
 		selectedSlotIdFromURL: string
 	) => {
-		if (selectedEditingSlot && userDetails) {
-			const foundSelectedDay =
-				availability.latestAvailability.availabilityDates.find((date) => {
-					const parsedDate = new Date(date?.date);
-					return (
-						parsedDate.toDateString() === selectedEditingSlot.day.toDateString()
-					);
-				});
-
-			const foundSlot = foundSelectedDay?.slots.find(
-				(slot) => slot.startTime === selectedEditingSlot.hour
-			);
-			console.log(
-				'🚀 ~ handleSaveEditAppointment ~ formattedEditAppointmentData.selectedSlotIdFromURL:',
-				selectedSlotIdFromURL
-			);
-
-			const formattedEditAppointmentData = {
-				newData: {
-					newDate: selectedEditingSlot.day,
-					newStartTime: selectedEditingSlot.hour,
-					newSessionSlotId: foundSlot._id,
-				},
-				oldSessionSlotId: selectedSlotIdFromURL,
-				therapistId: userDetails._id,
-			};
-
-			editAppointmentMttn(formattedEditAppointmentData);
-			// setIsConfirmingEdit(false);
+		if (
+			!selectedEditingSlot ||
+			!therapistId ||
+			!latestPatientId ||
+			!selectedSlotIdFromURL
+		) {
+			return;
 		}
+
+		const foundSelectedDay =
+			availability.latestAvailability.availabilityDates.find(
+				(date) =>
+					new Date(date.date).toDateString() ===
+					selectedEditingSlot.day.toDateString()
+			);
+
+		const foundSlot = foundSelectedDay.slots.find(
+			(slot) => slot.startTime === selectedEditingSlot.hour
+		);
+
+		const formattedEditAppointmentData = {
+			newData: {
+				newDate: selectedEditingSlot.day,
+				newSessionSlotId: foundSlot._id,
+			},
+			oldSessionSlotId: selectedSlotIdFromURL,
+			therapistId: userDetails._id,
+			patientId: patientIdFromAppointment,
+		};
+
+		editAppointmentMttn(formattedEditAppointmentData);
+		setIsConfirmingEdit(false);
 	};
 
 	if (isLoading || isUserDetailsLoading || isEditAppointmentLoading) {

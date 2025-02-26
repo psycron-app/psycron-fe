@@ -23,10 +23,11 @@ export const editAppointment = async ({
 	therapistId,
 	oldSessionSlotId,
 	newData,
+	patientId,
 }: IEditAppointment) => {
 	const response = await apiClient.post<ICancelEditAppointmentResponse>(
 		`/patient/${therapistId}/appointment/${oldSessionSlotId}/edit`,
-		newData
+		{ ...newData, patientId }
 	);
 
 	return response.data;

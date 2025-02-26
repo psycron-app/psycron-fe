@@ -19,8 +19,8 @@ export interface IEditAppointment {
 	newData: {
 		newDate: Date;
 		newSessionSlotId: string;
-		newStartTime: string;
 	};
 	oldSessionSlotId: string;
+	patientId: string;
 	therapistId: string;
 }

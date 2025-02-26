@@ -1,14 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box, Tooltip } from '@mui/material';
-import type { PatientFormData } from '@psycron/api/patient/index.types';
-import { ContactsForm } from '@psycron/components/form/components/contacts/ContactsForm';
-import { NameForm } from '@psycron/components/form/components/name/NameForm';
 import { ContactLink } from '@psycron/components/link/contact/ContactLink';
 import { Loader } from '@psycron/components/loader/Loader';
-import { Modal } from '@psycron/components/modal/Modal';
 import { Text } from '@psycron/components/text/Text';
 import { usePatient } from '@psycron/context/patient/PatientContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
@@ -25,25 +19,13 @@ import type { IAgendaAppointmentDetails } from './AgendaAppointmentDetails.types
 
 export const AgendaAppointmentDetails = ({
 	selectedSlotId,
-	isTherapistEditing,
-	setIsTherapistEditing,
+	handleEditAppointment,
 }: IAgendaAppointmentDetails) => {
 	const { t } = useTranslation();
 
 	const { locale } = useParams<{
 		locale: string;
 	}>();
-
-	const [isEditing, setIsEditing] = useState<boolean>(isTherapistEditing);
-
-	useEffect(() => {
-		setIsEditing(isTherapistEditing);
-	}, [isTherapistEditing]);
-
-	const toggleEditing = () => {
-		setIsEditing(false);
-		if (setIsTherapistEditing) setIsTherapistEditing(false);
-	};
 
 	const {
 		appointmentDetailsBySlotId,
@@ -55,30 +37,9 @@ export const AgendaAppointmentDetails = ({
 	const {
 		patientDetails,
 		isPatientDetailsLoading,
-		// updatePatientDetails,
+
 		updatePatientIsLoading,
 	} = usePatient(appointmentDetailsBySlotId?.appointment?.patient?._id);
-
-	// const {
-	// 	register,
-	// 	handleSubmit,
-	// 	getValues,
-	// 	setValue,
-	// 	reset,
-	// 	formState: { errors },
-	// } = useForm();
-
-	// useEffect(() => {
-	// 	if (patientDetails) {
-	// 		reset({
-	// 			firstName: patientDetails.firstName,
-	// 			lastName: patientDetails.lastName,
-	// 			email: patientDetails.contacts.email,
-	// 			phone: patientDetails.contacts?.phone,
-	// 			whatsapp: patientDetails.contacts?.whatsapp,
-	// 		});
-	// 	}
-	// }, [patientDetails, reset, getValues]);
 
 	if (
 		isAppointmentDetailsBySlotIdLoading ||
@@ -215,41 +176,20 @@ export const AgendaAppointmentDetails = ({
 										{t('globals.date')}:
 									</Text>
 									<Tooltip title={t('globals.edit')} arrow placement='right'>
-										<StyledNextSessionText>
+										<StyledNextSessionText
+											onClick={() =>
+												handleEditAppointment(session.slots[0]._id)
+											}
+										>
 											{` ${formatDate(session.date, locale)} ${t('globals.at')} ${session.slots[0].startTime} h`}
 										</StyledNextSessionText>
 									</Tooltip>
 								</Box>
 							))}
 						</Box>
-					) : (
-						''
-					)}
+					) : null}
 				</Box>
 			</StyledSessionDatesList>
-
-			{/* <Modal
-				cardActionsProps={{
-					actionName: 'Save',
-					hasSecondAction: true,
-					onClick: handleSubmit(handleSave),
-					secondAction: toggleEditing,
-					secondActionName: 'Cancel',
-				}}
-				openModal={isEditing}
-			>
-				<form onSubmit={handleSubmit(handleSave)}>
-					<NameForm register={register} errors={errors} required={false} />
-					<ContactsForm
-						register={register}
-						errors={errors}
-						getPhoneValue={getValues}
-						setPhoneValue={setValue}
-						setValue={setValue}
-						required={false}
-					/>
-				</form>
-			</Modal> */}
 		</StyledWrapper>
 	);
 };

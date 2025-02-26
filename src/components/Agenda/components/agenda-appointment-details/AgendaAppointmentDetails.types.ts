@@ -1,5 +1,4 @@
 export interface IAgendaAppointmentDetails {
-	isTherapistEditing: boolean;
+	handleEditAppointment: (oldSessionSlotId: string) => void;
 	selectedSlotId: string | null;
-	setIsTherapistEditing?: (value: boolean) => void;
 }

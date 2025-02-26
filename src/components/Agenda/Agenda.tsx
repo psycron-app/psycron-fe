@@ -43,6 +43,7 @@ export const Agenda = ({
 	isTherapist,
 	isEditingMode,
 }: IAgenda) => {
+	console.log('🚀 ~ availability:', availability);
 	const { t } = useTranslation();
 
 	const {
@@ -189,6 +190,7 @@ export const Agenda = ({
 
 	const handleClick = (props: IAgendaClick) => {
 		const { slotStatus, beforeToday, status, hour, day } = props;
+		console.log('🚀 ~ handleClick ~ props:', props);
 
 		if (isEditingMode && beforeToday) return null;
 		if (isEditingMode && status !== 'available') return null;

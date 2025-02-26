@@ -12,9 +12,11 @@ import type {
 	IEmailForm,
 	IEmailResponse,
 } from '@psycron/pages/auth/password/ResetPassword.types';
-import { ID_TOKEN } from '@psycron/utils/tokens';
+import { ENCRYPTION_KEY, ID_TOKEN } from '@psycron/utils/tokens';
 
 import apiClient from '../axios-instance';
+
+import type { IEncryptionKeyResponse } from './index.types';
 
 export const signInFc = async (data: ISignInForm): Promise<ISignInResponse> => {
 	const response = await apiClient.post<ISignInResponse>('/users/login', data);
@@ -73,4 +75,26 @@ export const refreshTokenService = async (
 	});
 
 	return data;
+};
+
+export const getEncryptionKey = async (): Promise<string | null> => {
+	const cachedKey = sessionStorage.getItem(ENCRYPTION_KEY);
+	if (cachedKey) return cachedKey;
+
+	const response = await apiClient.get<IEncryptionKeyResponse>(
+		'token/encryption-key',
+		{
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem(ID_TOKEN)}`,
+			},
+		}
+	);
+
+	const encryptionKey = response.data.key;
+
+	if (encryptionKey) {
+		sessionStorage.setItem(ENCRYPTION_KEY, encryptionKey);
+	}
+
+	return encryptionKey;
 };

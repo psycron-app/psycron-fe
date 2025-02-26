@@ -10,8 +10,10 @@ import type {
 	IBookAppointment,
 	IEditPatientDetailsById,
 } from '@psycron/api/patient/index.types';
+import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import i18n from '@psycron/i18n';
 import { APPOINTMENTCONFIRMATION } from '@psycron/pages/urls';
+import { LATESTPATIENT_ID } from '@psycron/utils/tokens';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useAlert } from '../alert/AlertContext';
@@ -115,10 +117,18 @@ export const usePatient = (patientId?: string) => {
 		initialData: cachedPatient,
 	});
 
+	const latestPatientId = useSecureStorage(
+		LATESTPATIENT_ID,
+		patientDetails?._id,
+		30,
+		'session'
+	);
+
 	return {
 		...context,
 		patientDetails,
 		isPatientDetailsLoading,
 		isPatientDetailsSucces,
+		latestPatientId,
 	};
 };

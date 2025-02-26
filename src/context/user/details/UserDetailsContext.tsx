@@ -5,7 +5,9 @@ import {
 	getAppointmentDetailsBySlotId,
 	getAvailabilitySession,
 } from '@psycron/api/user/availability';
+import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import { EDITUSERPATH } from '@psycron/pages/urls';
+import { THERAPIST_ID } from '@psycron/utils/tokens';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useAuth } from '../auth/UserAuthenticationContext';
@@ -81,6 +83,7 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 	}
 
 	const { user } = context;
+
 	const userId = passedUserId || user?._id;
 
 	const {
@@ -121,7 +124,12 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		retry: false,
 	});
 
-	const therapistId = useMemo(() => userDetails?._id, [userDetails]);
+	const therapistId = useSecureStorage(
+		THERAPIST_ID,
+		userDetails?._id,
+		1440,
+		'local'
+	);
 
 	const prefetchTherapistAvailability = async () => {
 		try {

@@ -11,6 +11,7 @@ export const Card = ({
 	cardTitleProps,
 	cardActionsProps,
 	isLoading,
+	onClose,
 }: CardProps) => {
 	return (
 		<CardWrapper>
@@ -18,7 +19,7 @@ export const Card = ({
 				<CardContent>
 					{cardTitle ? (
 						<>
-							<CardTitle {...cardTitleProps} />
+							<CardTitle {...cardTitleProps} onClose={onClose} />
 							<Divider />
 						</>
 					) : null}

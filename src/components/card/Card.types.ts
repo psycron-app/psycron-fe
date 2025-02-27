@@ -12,4 +12,5 @@ export interface CardProps extends CardTypes {
 	cardActionsProps: CardActionsProps;
 	cardTitleProps: CardTitleProps;
 	isLoading?: boolean;
+	onClose?: () => void;
 }

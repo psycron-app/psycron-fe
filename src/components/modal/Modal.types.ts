@@ -8,6 +8,7 @@ export interface IModal {
 	cardTitleProps?: CardTitleProps;
 	children: ReactNode;
 	isLoading?: boolean;
+	onClose?: () => void;
 	openModal: boolean;
 	title?: string;
 }

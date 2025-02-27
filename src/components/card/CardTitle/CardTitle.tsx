@@ -1,8 +1,9 @@
 /* eslint-disable indent */
 import type { ReactElement } from 'react';
 import React from 'react';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, IconButton } from '@mui/material';
 import { Button } from '@psycron/components/button/Button';
+import { Close } from '@psycron/components/icons';
 import { Text } from '@psycron/components/text/Text';
 import { Tooltip } from '@psycron/components/tooltip/Tooltip';
 import { palette } from '@psycron/theme/palette/palette.theme';
@@ -20,6 +21,7 @@ export const CardTitle = ({
 	secondChip,
 	secondChipName,
 	firstChipTooltip,
+	onClose,
 }: CardTitleProps) => {
 	return (
 		<CardTitleWrapper>
@@ -48,6 +50,11 @@ export const CardTitle = ({
 							>
 								{subheader}
 							</Text>
+						) : null}
+						{onClose ? (
+							<IconButton onClick={onClose}>
+								<Close />
+							</IconButton>
 						) : null}
 					</TitleWrapper>
 				</Grid>

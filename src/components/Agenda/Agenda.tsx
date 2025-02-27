@@ -416,6 +416,7 @@ export const Agenda = ({
 			<Modal
 				openModal={isTherapistClick && selectedSlotId !== null}
 				title={t('components.agenda.appointment-details.title')}
+				onClose={handleIsTherapistClickCancel}
 				cardActionsProps={{
 					actionName: t(
 						'components.agenda.appointment-details.edit-patient-appointment'

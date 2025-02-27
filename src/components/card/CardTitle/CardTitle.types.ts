@@ -6,6 +6,7 @@ export type CardTitleProps = {
 	firstChipTooltip?: string;
 	hasFirstChip?: boolean;
 	hasSecondChip?: boolean;
+	onClose?: () => void;
 	secondChip?: () => void;
 	secondChipName?: string;
 	subheader?: string;

@@ -7,8 +7,12 @@ import { Text } from '@psycron/components/text/Text';
 import { SEOProvider } from '@psycron/context/seo/SEOContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { DOMAIN } from '@psycron/pages/urls';
-import { palette } from '@psycron/theme/palette/palette.theme';
 import { startOfToday } from 'date-fns';
+
+import {
+	StyledBookAppointmentPgWrapper,
+	StyledBookingAgendaWrapper,
+} from './BookAppointment.styles';
 
 export const BookAppointment = () => {
 	const { t } = useTranslation();
@@ -56,17 +60,23 @@ export const BookAppointment = () => {
 
 	return (
 		<SEOProvider seo={homepageSEO}>
-			<Box bgcolor={palette.background.default} py={10} px={5}>
-				<Box>
-					<Text>{pageTitle}</Text>
+			<StyledBookAppointmentPgWrapper>
+				<Box pb={6}>
+					<Text fontWeight={700} fontSize='1.5rem'>
+						{pageTitle}
+					</Text>
 				</Box>
-				<Agenda
-					selectedDay={today}
-					availability={therapistLatestAvailability}
-					isLoading={therapistLatestAvailabilityLoading || isUserDetailsLoading}
-					isFirstAppointment={!!first}
-				/>
-			</Box>
+				<StyledBookingAgendaWrapper>
+					<Agenda
+						selectedDay={today}
+						availability={therapistLatestAvailability}
+						isLoading={
+							therapistLatestAvailabilityLoading || isUserDetailsLoading
+						}
+						isFirstAppointment={!!first}
+					/>
+				</StyledBookingAgendaWrapper>
+			</StyledBookAppointmentPgWrapper>
 		</SEOProvider>
 	);
 };

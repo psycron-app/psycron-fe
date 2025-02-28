@@ -1,7 +1,10 @@
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Grid, IconButton } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import { Loader } from '@psycron/components/loader/Loader';
+import { Modal } from '@psycron/components/modal/Modal';
+import { Text } from '@psycron/components/text/Text';
 import { useAppointmentActions } from '@psycron/context/appointment/appointment-actions/AppointmentActionsContext';
 import { usePatient } from '@psycron/context/patient/PatientContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
@@ -13,12 +16,7 @@ import {
 	generateWeekDaysFromSelected,
 	isBeforeToday,
 } from '@psycron/utils/variables';
-import { addDays, isBefore, subDays } from 'date-fns';
-
-import { ChevronLeft, ChevronRight } from '../icons';
-import { Loader } from '../loader/Loader';
-import { Modal } from '../modal/Modal';
-import { Text } from '../text/Text';
+import { addDays, subDays } from 'date-fns';
 
 import { AgendaAppointmentDetails } from './components/agenda-appointment-details/AgendaAppointmentDetails';
 import { AgendaPagination } from './components/agenda-pagination/AgendaPagination';
@@ -288,28 +286,6 @@ export const Agenda = ({
 	return (
 		<>
 			<Grid container width='100%' overflow={'auto'} height={'100%'}>
-				{isFirstAppointment ? (
-					<Grid container spacing={1} columns={8}>
-						<Grid item xs={1} columns={1}>
-							<Box display='flex' justifyContent='flex-start'>
-								<IconButton
-									onClick={goToPreviousWeek}
-									disabled={isBefore(previousWeekStart, selectedDay)}
-								>
-									<ChevronLeft />
-								</IconButton>
-							</Box>
-						</Grid>
-						<Grid item xs={6} columns={5}></Grid>
-						<Grid item xs={1} columns={1}>
-							<Box display='flex' justifyContent='flex-end'>
-								<IconButton onClick={goToNextWeek}>
-									<ChevronRight />
-								</IconButton>
-							</Box>
-						</Grid>
-					</Grid>
-				) : null}
 				<WeekDaysHeader selectedDay={currentWeekStart} />
 				<Grid container spacing={1} columns={8} mt={5} rowGap={isBig ? 4 : 0}>
 					{filteredDayHours.map((hour, hourIndex) => (
@@ -392,6 +368,7 @@ export const Agenda = ({
 				onGoToMonthView={() => console.log('Open month view')}
 				disablePrevious={!hasPreviousDates()}
 				disableNext={!hasNextDates()}
+				isTherapist={isTherapist}
 			/>
 			<Modal
 				openModal={isClicked}

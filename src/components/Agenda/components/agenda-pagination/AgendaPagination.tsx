@@ -22,6 +22,7 @@ export const AgendaPagination = ({
 	onGoToMonthView,
 	disablePrevious,
 	disableNext,
+	isTherapist,
 }: IAgendaPaginationProps) => {
 	const { t } = useTranslation();
 
@@ -49,12 +50,14 @@ export const AgendaPagination = ({
 					</Tooltip>
 				</StyledPgButtonWrapper>
 				<IcontMonthWrapper>
-					<Tooltip
-						title={t('components.agenda.month')}
-						onClick={onGoToMonthView}
-					>
-						<Month />
-					</Tooltip>
+					{isTherapist && (
+						<Tooltip
+							title={t('components.agenda.month')}
+							onClick={onGoToMonthView}
+						>
+							<Month />
+						</Tooltip>
+					)}
 				</IcontMonthWrapper>
 			</StyledAgendaPagination>
 		</>

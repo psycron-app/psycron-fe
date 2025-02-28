@@ -57,6 +57,14 @@ export const AppointmentActionsProvider = ({
 				severity: 'success',
 				message: data.message,
 			});
+
+			queryClient.invalidateQueries({ queryKey: ['therapistAvailability'] });
+			queryClient.invalidateQueries({ queryKey: ['userDetails'] });
+			queryClient
+				.refetchQueries({ queryKey: ['therapistAvailability'] })
+				.then(() => {
+					navigate(`/${i18n.language}/${APPOINTMENTS}`);
+				});
 		},
 		onError: (error: CustomError) => {
 			showAlert({
@@ -113,6 +121,7 @@ export const AppointmentActionsProvider = ({
 				cancelAppointmentMttn,
 				editAppointmentMttn,
 				isEditAppointmentLoading: editAppointmentMutation.isPending,
+				isCancelAppointmentLoading: cancelAppointmentMutation.isPending,
 			}}
 		>
 			{children}

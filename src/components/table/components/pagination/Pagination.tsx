@@ -1,6 +1,7 @@
-import { Box, Pagination as MUIPagination } from '@mui/material';
+import { Box } from '@mui/material';
 import useViewport from '@psycron/hooks/useViewport';
 
+import { StyledMUIPagination } from './Pagination.styles';
 import type { IPaginationProps } from './Pagination.types';
 
 export const Pagination = ({
@@ -20,7 +21,7 @@ export const Pagination = ({
 			alignItems='center'
 			height='100%'
 		>
-			<MUIPagination
+			<StyledMUIPagination
 				count={totalPages}
 				page={currentPage}
 				onChange={onPageChange}

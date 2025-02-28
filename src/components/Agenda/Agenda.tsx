@@ -271,6 +271,10 @@ export const Agenda = ({
 		setIsConfirmingEdit(false);
 	};
 
+	const handleDeleteAppointment = (patientId: string) => {
+		navigate(`../${APPOINTMENTS}/cancel/${patientId}`);
+	};
+
 	if (isLoading || isUserDetailsLoading || isEditAppointmentLoading) {
 		return <Loader />;
 	}
@@ -425,8 +429,8 @@ export const Agenda = ({
 						handleEditAppointment(selectedSlotId);
 					},
 					hasSecondAction: true,
-					secondActionName: t('components.link.navigate.back'),
-					secondAction: handleIsTherapistClickCancel,
+					secondActionName: t('components.agenda.cancel-appointment.title'),
+					secondAction: () => handleDeleteAppointment(latestPatientId),
 				}}
 			>
 				<AgendaAppointmentDetails
@@ -434,9 +438,13 @@ export const Agenda = ({
 					handleEditAppointment={handleEditAppointment}
 				/>
 			</Modal>
+
 			<Modal
 				openModal={isConfirmingEdit}
-				title={'Editing appointment'}
+				onClose={() => setIsConfirmingEdit(false)}
+				title={t(
+					'components.agenda.appointment-details.edit-patient-appointment'
+				)}
 				cardActionsProps={{
 					actionName: 'Confirm',
 					onClick: () =>

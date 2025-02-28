@@ -3,6 +3,7 @@ import { EditUser } from '@psycron/components/icons';
 import { Text } from '@psycron/components/text/Text';
 import { Tooltip } from '@psycron/components/tooltip/Tooltip';
 import { useAppointmentActions } from '@psycron/context/appointment/appointment-actions/AppointmentActionsContext';
+import useViewport from '@psycron/hooks/useViewport';
 import { formatDateTime } from '@psycron/utils/variables';
 
 import {
@@ -26,7 +27,10 @@ export const TableCell = ({
 	tooltip,
 	iconElements,
 	session,
+	onCellClick,
 }: ITableCellProps) => {
+	const { isMobile, isTablet } = useViewport();
+
 	const { t } = useTranslation();
 
 	const { handleEditClick, handleCancelClick } = useAppointmentActions();
@@ -43,8 +47,10 @@ export const TableCell = ({
 					width='100%'
 					textAlign={align(icon, numeric)}
 					variant='subtitle2'
-					fontSize='0.8rem'
-					textTransform='capitalize'
+					fontSize={isMobile || isTablet ? '0.8rem' : '1rem'}
+					fontWeight={600}
+					display='flex'
+					justifyContent='center'
 					m={1}
 				>
 					{label}
@@ -78,14 +84,14 @@ export const TableCell = ({
 							variant='body2'
 							fontSize='0.8rem'
 						>
-							{formatDateTime(label, t)}
+							{formatDateTime(String(label), t)}
 						</Text>
 					</DateCell>
 				);
 
 			case 'hasDiscount':
 				return (
-					<HasDiscountCell label={label}>
+					<HasDiscountCell label={String(label)}>
 						<Text
 							textAlign={align(icon, numeric)}
 							variant='body2'
@@ -116,6 +122,7 @@ export const TableCell = ({
 						textAlign={align(icon, numeric)}
 						variant='body2'
 						fontSize='0.8rem'
+						textTransform='capitalize'
 						p={2}
 					>
 						{label}
@@ -133,7 +140,10 @@ export const TableCell = ({
 	};
 
 	return (
-		<StyledCellWrapper>
+		<StyledCellWrapper
+			onClick={() => onCellClick?.()}
+			style={{ cursor: onCellClick ? 'pointer' : 'default' }}
+		>
 			{action ? (
 				!isHead ? (
 					<StyledIconWrapper>

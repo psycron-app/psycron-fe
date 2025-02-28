@@ -9,8 +9,12 @@ export const TitleWrapper = styled(Box)`
 	justify-content: space-between;
 `;
 
-export const CardTitleWrapper = styled(Box)`
+export const CardTitleWrapper = styled(Box, {
+	shouldForwardProp: (props) => props !== 'hasTitle',
+})<{ hasTitle?: boolean }>`
 	display: flex;
 	justify-content: space-between;
 	padding: ${spacing.small};
+
+	padding-bottom: ${({ hasTitle }) => (hasTitle ? spacing.small : 0)};
 `;

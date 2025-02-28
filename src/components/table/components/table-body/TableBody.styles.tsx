@@ -26,6 +26,9 @@ export const TableBodyRowItem = styled(Box, {
 		css`
 			scale: 1.1;
 			color: ${palette.primary.dark};
+			& p {
+				font-weight: 700;
+			}
 		`}
 `;
 

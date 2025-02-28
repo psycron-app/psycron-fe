@@ -18,6 +18,7 @@
 		"logout": "Logout",
 		"plan": "Plan",
 		"cancel": "Cancel",
+		"delete": "Delete",
 		"edit": "Edit",
 		"date-time-format": "{{format}}",
 		"time-remaining": {
@@ -30,6 +31,11 @@
 		"paused": "Paused",
 		"proceed": "Proceed",
 		"resume": "Resume",
+		"reason": "Reason",
+		"global-reason": "Global reason",
+		"custom-reason": "Describe the reason",
+		"select": "Select",
+		"unselect": "Unselect",
 		"error": {
 			"already-subscribed": "Your email is already subscribed",
 			"internal-server-error": "Something went wrong, please try again later",
@@ -57,6 +63,15 @@
 			"email": "Send email",
 			"phone": "Call patient",
 			"whatsapp": "Send WhatsApp message"
+		},
+		"cancellation-reason": {
+			"1": "Emergency (Personal/Health Issue)",
+			"2": "Schedule Conflict",
+			"3": "Financial Issues",
+			"4": "Mental Issues",
+			"5": "No-Show",
+			"6": "Closed appointment(s)",
+			"7": "Other"
 		}
 	},
 	"components": {
@@ -223,7 +238,15 @@
 				"edit-patient-appointment": "Edit appointment"
 			},
 			"edit-appointment": {
+				"title": "Edit appointment",
 				"confirmation": "Are you sure you want to reschedule this appointment?"
+			},
+			"cancel-appointment": {
+				"title": "Cancel appointment(s)",
+				"select-all": "{{select}} All",
+				"global-reason": "Please, select a global reason:",
+				"confirmation": "Are you sure you want to cancel all appointments?",
+				"review": "Review the dates you selected"
 			}
 		}
 	},
@@ -389,6 +412,10 @@
 					"description": "In a visual and interactive way, you can select the times you will be available for appointments throughout the week. It’s a flexible process: if your preferences change, you can adjust your schedule at any time."
 				}
 			}
+		},
+		"cancel-appointment": {
+			"title": "Cancel Appointment(s)",
+			"sub-title": "Please select the appointment(s) you want to cancel"
 		}
 	}
 }

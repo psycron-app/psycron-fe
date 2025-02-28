@@ -8,8 +8,9 @@ export interface ITableCellPropsBase {
 	isHead?: boolean;
 	isLast?: boolean;
 	isPatients?: boolean;
-	label: string;
+	label: string | JSX.Element;
 	numeric?: boolean;
+	onCellClick?: () => void;
 	session?: ISessionDate;
 }
 

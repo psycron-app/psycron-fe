@@ -18,6 +18,7 @@
 		"logout": "Sair",
 		"plan": "Plano",
 		"cancel": "Cancelar",
+		"delete": "Excluir",
 		"edit": "Alterar",
 		"date-time-format": "{{format}}",
 		"time-remaining": {
@@ -30,6 +31,11 @@
 		"paused": "Pausada",
 		"proceed": "Continuar",
 		"resume": "Retomar",
+		"reason": "Motivo",
+		"global-reason": "Motivo geral",
+		"custom-reason": "Descreva o motivo",
+		"select": "Selecione",
+		"unselect": "Desmarcar",
 		"error": {
 			"already-subscribed": "Você já está na nossa lista de espera",
 			"internal-server-error": "Algo aconteceu errado, tente novamente mais tarde",
@@ -52,7 +58,21 @@
 		},
 		"contacts": "Contatos",
 		"starts": "Começa às",
-		"ends": "Termina às"
+		"ends": "Termina às",
+		"notification": {
+			"email": "Enviar e-mail",
+			"phone": "Ligar",
+			"whatsapp": "Enviar WhatsApp"
+		},
+		"cancellation-reason": {
+			"1": "Emergência (Questão Pessoal/Saúde)",
+			"2": "Conflito de Agenda",
+			"3": "Problemas Financeiros",
+			"4": "Questões de Saúde Mental",
+			"5": "Não Comparecimento",
+			"6": "Consulta Encerrada",
+			"7": "Outro"
+		}
 	},
 	"components": {
 		"form": {
@@ -218,7 +238,15 @@
 				"edit-patient-appointment": "Alterar sessão"
 			},
 			"edit-appointment": {
+				"title": "Editar consulta",
 				"confirmation": "Tem certeza de que quer reagendar esta consulta?"
+			},
+			"cancel-appointment": {
+				"title": "Cancelar consulta(s)",
+				"select-all": "{{select}} Todas",
+				"global-reason": "Por favor, selecione um motivo geral:",
+				"confirmation": "Você tem certeza que deseja cancelar todas as consultas?",
+				"review": "Revise as datas que você selecionou"
 			}
 		}
 	},
@@ -384,6 +412,10 @@
 					"description": "De maneira visual e interativa, você poderá selecionar os horários em que estará disponível para consultas ao longo da semana. É um processo flexível: se suas preferências mudarem, você pode ajustar seus horários a qualquer momento."
 				}
 			}
+		},
+		"cancel-appointment": {
+			"title": "Cancelamento de Consulta(s)",
+			"sub-title": "Por favor selecione a(s) consulta(s) que você quer cancelar"
 		}
 	}
 }

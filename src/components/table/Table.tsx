@@ -58,8 +58,8 @@ export const Table = ({
 				const bValue =
 					b.find((item) => item.id === sortConfig.key)?.label ?? '';
 
-				const aNumber = parseFloat(aValue);
-				const bNumber = parseFloat(bValue);
+				const aNumber = parseFloat(String(aValue));
+				const bNumber = parseFloat(String(bValue));
 
 				if (!isNaN(aNumber) && !isNaN(bNumber)) {
 					return sortConfig.direction === 'asc'

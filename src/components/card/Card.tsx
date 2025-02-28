@@ -17,10 +17,10 @@ export const Card = ({
 		<CardWrapper>
 			{!isLoading && (
 				<CardContent>
-					{cardTitle ? (
+					{cardTitle || onClose ? (
 						<>
 							<CardTitle {...cardTitleProps} onClose={onClose} />
-							<Divider />
+							{cardTitle ? <Divider /> : null}
 						</>
 					) : null}
 					<Content>{children}</Content>

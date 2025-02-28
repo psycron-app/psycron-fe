@@ -8,11 +8,10 @@ import type {
 
 export const cancelAppointment = async ({
 	therapistId,
-	sessionDateId,
 	data,
-}: ICancelAppointment) => {
+}: ICancelAppointment): Promise<ICancelEditAppointmentResponse> => {
 	const response = await apiClient.post<ICancelEditAppointmentResponse>(
-		`/patient/${therapistId}/appointment/${sessionDateId}/cancel`,
+		`/patient/${therapistId}/appointment/cancel`,
 		data
 	);
 

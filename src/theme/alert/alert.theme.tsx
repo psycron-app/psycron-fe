@@ -5,7 +5,7 @@ import type { Palette } from '../palette/palette.types';
 import { smallShadow } from '../shadow/shadow.theme';
 import { spacing } from '../spacing/spacing.theme';
 
-const alertStyles = ({ palette }: Theme): Record<string, CSSObject> => {
+export const alertStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 	const { success, error, info, alert } = palette as unknown as Palette;
 
 	return {
@@ -34,4 +34,10 @@ const alertStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 	};
 };
 
-export default alertStyles;
+export const snackBarStyles = (): Record<string, CSSObject> => {
+	return {
+		root: {
+			zIndex: 99999,
+		},
+	};
+};

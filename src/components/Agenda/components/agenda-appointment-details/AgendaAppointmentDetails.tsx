@@ -34,12 +34,8 @@ export const AgendaAppointmentDetails = ({
 		userDetails,
 	} = useUserDetails('', selectedSlotId);
 
-	const {
-		patientDetails,
-		isPatientDetailsLoading,
-
-		updatePatientIsLoading,
-	} = usePatient(appointmentDetailsBySlotId?.appointment?.patient?._id);
+	const { patientDetails, isPatientDetailsLoading, updatePatientIsLoading } =
+		usePatient(appointmentDetailsBySlotId?.appointment?.patient?._id);
 
 	if (
 		isAppointmentDetailsBySlotIdLoading ||
@@ -88,26 +84,6 @@ export const AgendaAppointmentDetails = ({
 	const wppText = t('components.agenda.appointment-details.whatsapp-subject', {
 		therapistName,
 	});
-
-	// const handleSave = async (data: PatientFormData) => {
-	// 	const formattedData = {
-	// 		firstName: data.firstName,
-	// 		lastName: data.lastName,
-	// 		email: data.email,
-	// 		phone: data.phone.startsWith('+')
-	// 			? data.phone
-	// 			: `${data.countryCode}${data.phone}`,
-	// 		whatsapp: data.whatsapp.startsWith('+')
-	// 			? data.whatsapp
-	// 			: `${data.countryCode}${data.whatsapp}`,
-	// 	};
-
-	// 	updatePatientDetails({
-	// 		patientId: patientDetails._id,
-	// 		patient: formattedData,
-	// 	});
-	// 	toggleEditing();
-	// };
 
 	return (
 		<StyledWrapper>

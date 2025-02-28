@@ -48,6 +48,7 @@ export const TableBody = ({
 									tooltip,
 									iconElements,
 									session,
+									onCellClick,
 								},
 								index
 							) => (
@@ -57,7 +58,11 @@ export const TableBody = ({
 									xs={tableBones(action, index)}
 									display='flex'
 								>
-									<TableBodyRowItem isHovered={hoveredColumn === id}>
+									<TableBodyRowItem
+										isHovered={hoveredColumn === id}
+										onClick={() => onCellClick?.()}
+										style={{ cursor: onCellClick ? 'pointer' : 'default' }}
+									>
 										<TableBodyRow>
 											<TableCell
 												icon={icon}
@@ -69,6 +74,7 @@ export const TableBody = ({
 												tooltip={tooltip}
 												iconElements={iconElements}
 												session={session}
+												onCellClick={onCellClick}
 											/>
 										</TableBodyRow>
 									</TableBodyRowItem>

@@ -11,6 +11,7 @@ export interface IAppointmentActionsContext {
 	editAppointmentMttn: (data: IEditAppointment) => void;
 	handleCancelClick: (session: ISessionDate) => void;
 	handleEditClick: (session: ISessionDate) => void;
+	isCancelAppointmentLoading: boolean;
 	isEditAppointmentLoading: boolean;
 	openCancelModal: boolean;
 	openEditModal: boolean;

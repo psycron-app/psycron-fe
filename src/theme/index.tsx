@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material';
 
-import alertStyles from './alert/alert.theme';
+import { alertStyles, snackBarStyles } from './alert/alert.theme';
 import avatarStyles from './avatar/avatar.theme';
 import buttonStyles from './button/button.theme';
 import linkStyles from './button/link/link.theme';
@@ -17,6 +17,7 @@ import paginationItemStyles from './pagination/pagination.theme';
 import { palette } from './palette/palette.theme';
 import type { GrayShades } from './palette/palette.types';
 import paperStyles from './paper/paper.theme';
+import popoverStyles from './popover/popover.theme';
 import progressBarStyles from './progress-bar/progressBar.theme';
 import radioStyles from './radio/radio.theme';
 import menuItemStyles from './select/menu-item/menuItem.theme';
@@ -111,6 +112,12 @@ const theme = createTheme({
 		},
 		MuiTextField: {
 			styleOverrides: textFieldStyles(),
+		},
+		MuiPopover: {
+			styleOverrides: popoverStyles(),
+		},
+		MuiSnackbar: {
+			styleOverrides: snackBarStyles(),
 		},
 	},
 });

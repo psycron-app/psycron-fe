@@ -21,10 +21,10 @@ export const CardTitle = ({
 	secondChip,
 	secondChipName,
 	firstChipTooltip,
-	onClose,
+	onClose = () => {},
 }: CardTitleProps) => {
 	return (
-		<CardTitleWrapper>
+		<CardTitleWrapper hasTitle={title?.length > 0}>
 			<Grid
 				container
 				columns={12}
@@ -51,11 +51,11 @@ export const CardTitle = ({
 								{subheader}
 							</Text>
 						) : null}
-						{onClose ? (
+						{onClose && (
 							<IconButton onClick={onClose}>
 								<Close />
 							</IconButton>
-						) : null}
+						)}
 					</TitleWrapper>
 				</Grid>
 				{hasFirstChip ? (

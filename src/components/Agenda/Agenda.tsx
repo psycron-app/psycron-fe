@@ -275,6 +275,12 @@ export const Agenda = ({
 		navigate(`../${APPOINTMENTS}/cancel/${patientId}`);
 	};
 
+	const selectedDaysSet = new Set(
+		weekDays
+			.filter((day) => isSelectedDay(selectedDay, day))
+			.map((day) => day.toDateString())
+	);
+
 	if (isLoading || isUserDetailsLoading || isEditAppointmentLoading) {
 		return <Loader />;
 	}
@@ -306,8 +312,8 @@ export const Agenda = ({
 				) : null}
 				<WeekDaysHeader selectedDay={currentWeekStart} />
 				<Grid container spacing={1} columns={8} mt={5} rowGap={isBig ? 4 : 0}>
-					{filteredDayHours.map((hour, index) => (
-						<Fragment key={`hour-slot-${index}`}>
+					{filteredDayHours.map((hour, hourIndex) => (
+						<Fragment key={`hour-slot-${hourIndex}`}>
 							<StyledGridHours item xs={1} columns={1}>
 								<StyledHoursWrapper>
 									<Text variant='caption'>{hour}</Text>
@@ -337,18 +343,18 @@ export const Agenda = ({
 									default:
 										status = 'default';
 								}
-
-								const isSelected = isSelectedDay(selectedDay, day);
 								const beforeToday = isBeforeToday(day);
 								const slotKey = `${day.toDateString()}_${hour}`;
 
-								if (isSelected) {
-									status = 'selected';
-								} else if (beforeToday && isFirstAppointment) {
+								if (beforeToday && isFirstAppointment) {
 									status = 'beforeToday';
 								} else if (clickedSlot === slotKey) {
 									status = 'clicked';
 								}
+
+								const isSelected = selectedDaysSet.has(day.toDateString());
+								const isFirstSlot = hourIndex === 0;
+								const isLastSlot = hourIndex === filteredDayHours.length - 1;
 
 								return (
 									<AgendaSlot
@@ -360,6 +366,9 @@ export const Agenda = ({
 										clickedSlot={clickedSlot}
 										beforeToday={beforeToday}
 										isTherapist={isTherapist}
+										isSelectedDay={isSelected}
+										isFirstSlot={isFirstSlot}
+										isLastSlot={isLastSlot}
 										handleSlotClick={() =>
 											handleClick({
 												day,

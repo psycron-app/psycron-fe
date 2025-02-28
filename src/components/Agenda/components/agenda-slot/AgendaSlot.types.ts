@@ -6,6 +6,9 @@ export interface IAgendaSlot {
 	day: Date;
 	handleSlotClick: () => void;
 	hour: string;
+	isFirstSlot?: boolean;
+	isLastSlot?: boolean;
+	isSelectedDay?: boolean;
 	isTherapist?: boolean;
 	slotStatus: ISlot['status'];
 	status: StyledAgendaStatusProps;

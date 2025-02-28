@@ -21,6 +21,9 @@ export const AgendaSlot = ({
 	beforeToday,
 	handleSlotClick,
 	isTherapist,
+	isSelectedDay,
+	isFirstSlot,
+	isLastSlot,
 }: IAgendaSlot) => {
 	const { t } = useTranslation();
 
@@ -102,6 +105,9 @@ export const AgendaSlot = ({
 			onClick={handleSlotClick}
 			isBeforeToday={beforeToday}
 			isTherapist={isTherapist}
+			isSelectedDay={isSelectedDay}
+			isFirstSlot={isFirstSlot}
+			isLastSlot={isLastSlot}
 		>
 			<StyledSlotsWrapper>
 				{renderTooltip(

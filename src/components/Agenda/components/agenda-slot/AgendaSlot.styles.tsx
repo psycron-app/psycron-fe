@@ -1,14 +1,23 @@
-import { Box, Grid, styled } from '@mui/material';
+import { Box, css, Grid, styled } from '@mui/material';
 import { palette } from '@psycron/theme/palette/palette.theme';
 import { shadowPress } from '@psycron/theme/shadow/shadow.theme';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import type { StyledAgendaStatusProps } from './AgendaSlot.types';
 
 export const StyledGridSlots = styled(Grid, {
 	shouldForwardProp: (props) =>
-		props !== 'status' && props !== 'isBeforeToday' && props !== 'isTherapist',
+		props !== 'status' &&
+		props !== 'isBeforeToday' &&
+		props !== 'isTherapist' &&
+		props !== 'isSelectedDay' &&
+		props !== 'isFirstSlot' &&
+		props !== 'isLastSlot',
 })<{
 	isBeforeToday: boolean;
+	isFirstSlot: boolean;
+	isLastSlot: boolean;
+	isSelectedDay: boolean;
 	isTherapist: boolean;
 	status: StyledAgendaStatusProps;
 }>`
@@ -18,7 +27,8 @@ export const StyledGridSlots = styled(Grid, {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	border-radius: 4px;
+	border-radius: ${spacing.space};
+	overflow: hidden;
 
 	cursor: ${({ status, isBeforeToday }) =>
 		status === 'booked' || status === 'unavailable' || isBeforeToday
@@ -32,8 +42,6 @@ export const StyledGridSlots = styled(Grid, {
 					return palette.success.main;
 				case 'booked':
 					return palette.error.main;
-				case 'selected':
-					return palette.info.main;
 				case 'clicked':
 					return palette.secondary.main;
 				default:
@@ -47,10 +55,10 @@ export const StyledGridSlots = styled(Grid, {
 				return palette.success.light;
 			case 'booked':
 				return palette.error.light;
-			case 'selected':
-				return palette.info.light;
 			case 'clicked':
 				return palette.secondary.light;
+			case 'unavailable':
+				return palette.gray['01'];
 			default:
 				return palette.background.default;
 		}
@@ -80,6 +88,28 @@ export const StyledGridSlots = styled(Grid, {
 			}
 		}};
 	}
+
+	${({ isSelectedDay, isFirstSlot, isLastSlot }) =>
+		isSelectedDay &&
+		css`
+			border-left: 4px solid ${palette.info.main};
+			border-right: 4px solid ${palette.info.main};
+			border-radius: 0;
+
+			${isFirstSlot &&
+			css`
+				border-top: 4px solid ${palette.info.main};
+				border-top-left-radius: ${spacing.small};
+				border-top-right-radius: ${spacing.small};
+			`}
+
+			${isLastSlot &&
+			css`
+				border-bottom: 4px solid ${palette.info.main};
+				border-bottom-left-radius: ${spacing.small};
+				border-bottom-right-radius: ${spacing.small};
+			`}
+		`}
 `;
 
 export const StyledSlotsWrapper = styled(Box)`

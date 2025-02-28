@@ -3,7 +3,8 @@ import { palette } from '@psycron/theme/palette/palette.theme';
 import { shadowPress } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
-import type { StyledAgendaStatusProps } from './AgendaSlot.types';
+import type { StyledGridSlotsProps } from './AgendaSlot.types';
+import { getBackgroundColor, getBorderColor, getSVGColor } from './utils';
 
 export const StyledGridSlots = styled(Grid, {
 	shouldForwardProp: (props) =>
@@ -13,14 +14,7 @@ export const StyledGridSlots = styled(Grid, {
 		props !== 'isSelectedDay' &&
 		props !== 'isFirstSlot' &&
 		props !== 'isLastSlot',
-})<{
-	isBeforeToday: boolean;
-	isFirstSlot: boolean;
-	isLastSlot: boolean;
-	isSelectedDay: boolean;
-	isTherapist: boolean;
-	status: StyledAgendaStatusProps;
-}>`
+})<StyledGridSlotsProps>`
 	height: 3.125rem;
 	width: 3.125rem;
 	text-align: center;
@@ -30,41 +24,17 @@ export const StyledGridSlots = styled(Grid, {
 	border-radius: ${spacing.space};
 	overflow: hidden;
 
-	cursor: ${({ status, isBeforeToday }) =>
-		status === 'booked' || status === 'unavailable' || isBeforeToday
+	cursor: ${({ status, isBeforeToday, isTherapist }) =>
+		!isTherapist &&
+		(status === 'booked' || status === 'unavailable' || isBeforeToday)
 			? 'not-allowed'
 			: 'pointer'};
 
-	border: 1px solid
-		${({ status }) => {
-			switch (status) {
-				case 'available':
-					return palette.success.main;
-				case 'booked':
-					return palette.error.main;
-				case 'clicked':
-					return palette.secondary.main;
-				default:
-					return 'transparent';
-			}
-		}};
-
-	background-color: ${({ status }) => {
-		switch (status) {
-			case 'available':
-				return palette.success.light;
-			case 'booked':
-				return palette.error.light;
-			case 'clicked':
-				return palette.secondary.light;
-			case 'unavailable':
-				return palette.gray['01'];
-			default:
-				return palette.background.default;
-		}
-	}};
+	border: 1px solid ${({ status }) => getBorderColor(status)};
+	background-color: ${({ status }) => getBackgroundColor(status)};
 
 	opacity: ${({ isBeforeToday }) => (isBeforeToday ? 0.5 : 1)};
+
 	transition:
 		opacity 0.3s ease-in-out,
 		background-color 0.3s ease-in-out;
@@ -72,21 +42,7 @@ export const StyledGridSlots = styled(Grid, {
 	box-shadow: ${({ status }) => (status === 'clicked' ? shadowPress : 'none')};
 
 	& svg {
-		color: ${({ status }) => {
-			switch (status) {
-				case 'available':
-					return palette.success.dark;
-				case 'booked':
-					return palette.error.main;
-				case 'selected':
-					return palette.info.main;
-				case 'clicked':
-					return palette.secondary.main;
-
-				default:
-					return 'inherit';
-			}
-		}};
+		color: ${({ status }) => getSVGColor(status)};
 	}
 
 	${({ isSelectedDay, isFirstSlot, isLastSlot }) =>
@@ -112,13 +68,22 @@ export const StyledGridSlots = styled(Grid, {
 		`}
 `;
 
-export const StyledSlotsWrapper = styled(Box)`
+export const StyledSlotsWrapper = styled(Box, {
+	shouldForwardProp: (props) => props !== 'disableInteractivity',
+})<{ disableInteractivity: boolean }>`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	cursor: inherit;
 
-	& > button {
-		cursor: inherit;
+	:hover {
+		cursor: ${({ disableInteractivity }) =>
+			disableInteractivity ? 'not-allowed' : 'inherit'};
+	}
+
+	& > * {
+		:hover {
+			cursor: ${({ disableInteractivity }) =>
+				disableInteractivity ? 'not-allowed' : 'inherit'};
+		}
 	}
 `;

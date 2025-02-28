@@ -23,3 +23,12 @@ export type StyledAgendaStatusProps =
 	| 'default'
 	| 'empty'
 	| 'unavailable';
+
+export type StyledGridSlotsProps = {
+	isBeforeToday: boolean;
+	isFirstSlot: boolean;
+	isLastSlot: boolean;
+	isSelectedDay: boolean;
+	isTherapist: boolean;
+	status: StyledAgendaStatusProps;
+};

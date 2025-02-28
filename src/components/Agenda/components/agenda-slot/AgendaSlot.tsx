@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Icon } from '@mui/material';
 import {
@@ -26,10 +27,22 @@ export const AgendaSlot = ({
 	isLastSlot,
 }: IAgendaSlot) => {
 	const { t } = useTranslation();
+	const [isTooltipOpen, setIsTooltipOpen] = useState<boolean>(false);
 
 	const isToday = isCurrentDay(new Date());
 
 	const slotKey = `${day.toDateString()}_${hour}`;
+
+	const disableTooltip = !isTherapist && slotStatus === 'BLOCKED';
+
+	const handleMouseEnter = () => {
+		if (!disableTooltip) setIsTooltipOpen(true);
+	};
+
+	// 🔥 Fechar tooltip quando sair do hover
+	const handleMouseLeave = () => {
+		setIsTooltipOpen(false);
+	};
 
 	const translateSlotStatus = (status: string) => {
 		return t(`page.availability.agenda.status.${status.toLowerCase()}`, status);
@@ -62,32 +75,23 @@ export const AgendaSlot = ({
 		translatedStatus: string,
 		slotKey: string,
 		clickedSlot: string | null,
-		isToday: boolean
-	) => {
-		if (isToday) {
-			return (
-				<Tooltip
-					title={
-						slotStatus ? translatedStatus : translateSlotStatus('unavailable')
-					}
-				>
-					<Icon>
-						{getStatusIcon(slotStatus, slotKey, clickedSlot, isTherapist)}
-					</Icon>
-				</Tooltip>
-			);
-		}
 
-		if (!slotStatus || slotStatus.toLowerCase() === 'default') {
-			return (
-				<Tooltip title={translateSlotStatus('unavailable')}>
-					<Icon />
-				</Tooltip>
-			);
-		}
+		isTherapist: boolean
+	) => {
+		const getTooltipTitle = () => {
+			if (!slotStatus || slotStatus.toLowerCase() === 'default') {
+				return translateSlotStatus('unavailable');
+			}
+			return slotStatus ? translatedStatus : translateSlotStatus('unavailable');
+		};
 
 		return (
-			<Tooltip title={translatedStatus}>
+			<Tooltip
+				title={getTooltipTitle()}
+				disableInteractive={disableTooltip}
+				disabled={disableTooltip}
+				open={isTooltipOpen}
+			>
 				<Icon>
 					{getStatusIcon(slotStatus, slotKey, clickedSlot, isTherapist)}
 				</Icon>
@@ -108,8 +112,14 @@ export const AgendaSlot = ({
 			isSelectedDay={isSelectedDay}
 			isFirstSlot={isFirstSlot}
 			isLastSlot={isLastSlot}
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
 		>
-			<StyledSlotsWrapper>
+			<StyledSlotsWrapper
+				disableInteractivity={disableTooltip}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
+			>
 				{renderTooltip(
 					slotStatus,
 					translatedStatus,

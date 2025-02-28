@@ -37,7 +37,6 @@ export const Agenda = ({
 	availability,
 	isLoading,
 	isFirstAppointment,
-	isBig,
 	isTherapist,
 	isEditingMode,
 }: IAgenda) => {
@@ -287,7 +286,7 @@ export const Agenda = ({
 		<>
 			<Grid container width='100%' overflow={'auto'} height={'100%'}>
 				<WeekDaysHeader selectedDay={currentWeekStart} />
-				<Grid container spacing={1} columns={8} mt={5} rowGap={isBig ? 4 : 0}>
+				<Grid container columns={8} mt={5}>
 					{filteredDayHours.map((hour, hourIndex) => (
 						<Fragment key={`hour-slot-${hourIndex}`}>
 							<StyledGridHours item xs={1} columns={1}>

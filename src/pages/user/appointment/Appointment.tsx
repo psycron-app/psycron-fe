@@ -92,14 +92,16 @@ export const AppointmentPage = () => {
 						</StyledProceedContainer>
 					</>
 				) : (
-					<Box>
-						<Agenda
-							selectedDay={currentDay}
-							availability={therapistLatestAvailability}
-							isLoading={therapistLatestAvailabilityLoading}
-							isBig
-							isTherapist
-						/>
+					<Box display='flex' flexDirection='column' pt={10}>
+						<Box>
+							<Agenda
+								selectedDay={currentDay}
+								availability={therapistLatestAvailability}
+								isLoading={therapistLatestAvailabilityLoading}
+								isBig
+								isTherapist
+							/>
+						</Box>
 					</Box>
 				)}
 			</Box>

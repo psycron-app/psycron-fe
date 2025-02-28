@@ -12,6 +12,7 @@ export const useDashboardLogic = () => {
 		therapistLatestAvailabilityLoading,
 		userDetails,
 		therapistLatestAvailabilityDates,
+		emptyAvailability,
 	} = useUserDetails();
 
 	const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
@@ -37,5 +38,6 @@ export const useDashboardLogic = () => {
 		setIsDateClicked,
 		handleDayClick,
 		therapistLatestAvailabilityDates,
+		emptyAvailability,
 	};
 };

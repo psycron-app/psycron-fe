@@ -150,6 +150,9 @@
 				"delay-confirmation": "Are you sure you want to pause the timer?",
 				"pause": "Sause timer",
 				"session-progress": "Session progress:"
+			},
+			"availability-card": {
+				"first-availability": "Please create your first availability here"
 			}
 		},
 		"appointments": {

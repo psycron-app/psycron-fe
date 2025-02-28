@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from 'react';
 import { createContext, useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import type { WizardContextProps } from './WizardContext.types';
 
@@ -9,14 +10,20 @@ export const WizardProvider: FC<{ children: ReactNode }> = ({ children }) => {
 	const [activeStep, setActiveStep] = useState<number>(0);
 	const [direction, setDirection] = useState<number>(0);
 
+	const navigate = useNavigate();
+
 	const handleNext = () => {
 		setDirection(1);
 		setActiveStep((prev) => prev + 1);
 	};
 
 	const handleBack = () => {
-		setDirection(-1);
-		setActiveStep((prev) => prev - 1);
+		if (activeStep === 0) {
+			navigate(-1);
+		} else {
+			setDirection(-1);
+			setActiveStep((prev) => prev - 1);
+		}
 	};
 
 	return (

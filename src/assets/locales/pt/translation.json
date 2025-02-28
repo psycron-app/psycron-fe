@@ -150,6 +150,9 @@
 				"delay-confirmation": "Você tem certeza que quer pausar o cronômetro?",
 				"pause": "Pausar cronômetro",
 				"session-progress": "Progresso da sessão:"
+			},
+			"availability-card": {
+				"first-availability": "Crie sua disponibilidade de agenda aqui"
 			}
 		},
 		"appointments": {

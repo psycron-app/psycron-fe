@@ -1,15 +1,21 @@
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Box, Modal } from '@mui/material';
 import { Agenda } from '@psycron/components/agenda/Agenda';
 import { ShareButton } from '@psycron/components/button/share/ShareButton';
 import { Loader } from '@psycron/components/loader/Loader';
+import { Skeleton } from '@psycron/components/skeleton/Skeleton';
 import { useDashboardLogic } from '@psycron/hooks/useDashboardLogic';
+
+import { AVAILABILITYWIZARD } from '../urls';
 
 import { CalendarSection } from './components/calendar-section/CalendarSection';
 import { StyledPaperModal } from './Dashboard.styled';
 
 export const Dashboard = () => {
 	const { t } = useTranslation();
+
+	const navigate = useNavigate();
 
 	const {
 		isUserDetailsLoading,
@@ -23,7 +29,10 @@ export const Dashboard = () => {
 		setIsDateClicked,
 		handleDayClick,
 		therapistLatestAvailabilityDates,
+		emptyAvailability,
 	} = useDashboardLogic();
+
+	const createAvailabilityLink = () => navigate(`../${AVAILABILITYWIZARD}`);
 
 	if (isUserDetailsLoading || therapistLatestAvailabilityLoading) {
 		<Loader />;
@@ -32,14 +41,27 @@ export const Dashboard = () => {
 	return (
 		<>
 			<Box>
-				{userDetails?.availability?.length > 0 && (
+				{!emptyAvailability ? (
 					<CalendarSection
 						locale={dateLocale}
 						today={today}
 						dates={therapistLatestAvailabilityDates}
 						dayClick={handleDayClick}
-						isLoading={therapistLatestAvailabilityLoading}
 					/>
+				) : (
+					<Skeleton
+						onClick={createAvailabilityLink}
+						text={t(
+							'components.dashboard.availability-card.first-availability'
+						)}
+					>
+						<CalendarSection
+							locale={dateLocale}
+							today={today}
+							dates={[]}
+							dayClick={handleDayClick}
+						/>
+					</Skeleton>
 				)}
 			</Box>
 			<Modal open={isDateClicked} onClose={() => setIsDateClicked(false)}>

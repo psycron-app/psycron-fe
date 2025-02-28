@@ -8,7 +8,13 @@ export const AvailabilityDuration = () => {
 	const { register } = useFormContext();
 
 	return (
-		<Box display='flex' justifyContent='center' flexDirection='column' px={6}>
+		<Box
+			display='flex'
+			justifyContent='center'
+			flexDirection='column'
+			alignItems='center'
+			px={6}
+		>
 			<Box
 				width={'100%'}
 				display='flex'
@@ -22,7 +28,7 @@ export const AvailabilityDuration = () => {
 				/>
 				<Text pl={3}>min</Text>
 			</Box>
-			<Text variant='caption' pt={5}>
+			<Text fontSize='0.9rem' pt={5}>
 				{t('page.availability.wizard.duration.note')}
 			</Text>
 		</Box>

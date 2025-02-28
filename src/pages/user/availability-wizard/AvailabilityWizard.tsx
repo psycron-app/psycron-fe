@@ -6,6 +6,7 @@ import { Wizard } from '@psycron/components/wizard/Wizard';
 import { WizardItem } from '@psycron/components/wizard/wizard-item/WizardItem';
 import i18n from '@psycron/i18n';
 import { DASHBOARD } from '@psycron/pages/urls';
+import { useQueryClient } from '@tanstack/react-query';
 
 import { AvailabilityDays } from './components/days/AvailabilityDays';
 import { AvailabilityDuration } from './components/duration/AvailabilityDuration';
@@ -19,6 +20,8 @@ import {
 export const AvailabilityWizard = () => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+
+	const queryClient = useQueryClient();
 
 	const methods = useForm();
 
@@ -68,7 +71,10 @@ export const AvailabilityWizard = () => {
 		},
 	];
 
-	const handleComplete = () => {
+	const handleComplete = async () => {
+		await queryClient.invalidateQueries({
+			queryKey: ['therapistAvailability'],
+		});
 		navigate(`/${i18n.language}/${DASHBOARD}`);
 	};
 

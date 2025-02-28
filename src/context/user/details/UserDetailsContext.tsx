@@ -105,9 +105,9 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		isSuccess: therapistLatestAvailabilitySuccess,
 		refetch: refetchTherapistAvailability,
 	} = useQuery({
-		queryKey: ['therapistAvailability'],
+		queryKey: ['therapistAvailability', userDetails?._id],
 		queryFn: () => getTherapistLatestAvailability(userDetails._id),
-		enabled: !!userId && !!userDetails?._id,
+		enabled: !!userDetails?._id,
 		retry: false,
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 10,
@@ -153,7 +153,9 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		[therapistLatestAvailability]
 	);
 
-	const emptyAvailability = therapistLatestAvailabilityDates?.length < 1;
+	const emptyAvailability =
+		!therapistLatestAvailabilityDates ||
+		therapistLatestAvailabilityDates.length === 0;
 
 	const latestSessionId =
 		userDetails?.availability?.[userDetails?.availability?.length - 1];

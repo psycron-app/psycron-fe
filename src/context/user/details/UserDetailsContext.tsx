@@ -107,7 +107,7 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 	} = useQuery({
 		queryKey: ['therapistAvailability', userDetails?._id],
 		queryFn: () => getTherapistLatestAvailability(userDetails._id),
-		enabled: !!userDetails?._id,
+		enabled: !!userDetails?._id && !!userDetails.availability?.length,
 		retry: false,
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 10,

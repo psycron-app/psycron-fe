@@ -39,7 +39,6 @@ export const AgendaSlot = ({
 		if (!disableTooltip) setIsTooltipOpen(true);
 	};
 
-	// 🔥 Fechar tooltip quando sair do hover
 	const handleMouseLeave = () => {
 		setIsTooltipOpen(false);
 	};

@@ -6,14 +6,18 @@ import { spacing } from '@psycron/theme/spacing/spacing.theme';
 import type { StyledGridSlotsProps } from './AgendaSlot.types';
 import { getBackgroundColor, getBorderColor, getSVGColor } from './utils';
 
+const shouldForwardProp = (prop: string) =>
+	![
+		'isBeforeToday',
+		'isFirstSlot',
+		'isLastSlot',
+		'isSelectedDay',
+		'isTherapist',
+		'slotStatus',
+	].includes(prop);
+
 export const StyledGridSlots = styled(Grid, {
-	shouldForwardProp: (props) =>
-		props !== 'status' &&
-		props !== 'isBeforeToday' &&
-		props !== 'isTherapist' &&
-		props !== 'isSelectedDay' &&
-		props !== 'isFirstSlot' &&
-		props !== 'isLastSlot',
+	shouldForwardProp,
 })<StyledGridSlotsProps>`
 	height: 3.125rem;
 	width: 3.125rem;

@@ -18,7 +18,7 @@ import {
 import type { IAgendaAppointmentDetails } from './AgendaAppointmentDetails.types';
 
 export const AgendaAppointmentDetails = ({
-	selectedSlotId,
+	selectedEditingSlot,
 	handleEditAppointment,
 }: IAgendaAppointmentDetails) => {
 	const { t } = useTranslation();
@@ -32,7 +32,8 @@ export const AgendaAppointmentDetails = ({
 		isAppointmentDetailsBySlotIdLoading,
 		isUserDetailsLoading,
 		userDetails,
-	} = useUserDetails('', selectedSlotId);
+	} = useUserDetails('', selectedEditingSlot.slotId);
+	console.log('🚀 ~ appointmentDetailsBySlotId:', appointmentDetailsBySlotId);
 
 	const { patientDetails, isPatientDetailsLoading, updatePatientIsLoading } =
 		usePatient(appointmentDetailsBySlotId?.appointment?.patient?._id);
@@ -154,7 +155,10 @@ export const AgendaAppointmentDetails = ({
 									<Tooltip title={t('globals.edit')} arrow placement='right'>
 										<StyledNextSessionText
 											onClick={() =>
-												handleEditAppointment(session.slots[0]._id)
+												handleEditAppointment(
+													selectedEditingSlot.availabilityDayId,
+													selectedEditingSlot.slotId
+												)
 											}
 										>
 											{` ${formatDate(session.date, locale)} ${t('globals.at')} ${session.slots[0].startTime} h`}

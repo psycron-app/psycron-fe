@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Box, List, ListItemText } from '@mui/material';
 import { Agenda } from '@psycron/components/agenda/Agenda';
+import { AgendaNew } from '@psycron/components/agenda/AgendaNew';
 import {
 	CalendarOff,
 	CalendarRange,
@@ -92,14 +93,19 @@ export const AppointmentPage = () => {
 						</StyledProceedContainer>
 					</>
 				) : (
-					<Box display='flex' flexDirection='column' pt={10}>
+					<Box display='flex' flexDirection='column'>
 						<Box>
-							<Agenda
+							{/* <Agenda
 								selectedDay={currentDay}
 								availability={therapistLatestAvailability}
 								isLoading={therapistLatestAvailabilityLoading}
 								isBig
 								isTherapist
+							/> */}
+
+							<AgendaNew
+								availability={therapistLatestAvailability}
+								daySelectedFromCalendar={currentDay}
 							/>
 						</Box>
 					</Box>

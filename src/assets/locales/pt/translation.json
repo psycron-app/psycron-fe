@@ -419,6 +419,10 @@
 		"cancel-appointment": {
 			"title": "Cancelamento de Consulta(s)",
 			"sub-title": "Por favor selecione a(s) consulta(s) que você quer cancelar"
+		},
+			"edit-appointment": {
+			"title": "Altere a Consulta",
+			"sub-title": "Por favor selecione a data que deseja alterar"
 		}
 	}
 }

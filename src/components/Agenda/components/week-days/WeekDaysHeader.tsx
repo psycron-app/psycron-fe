@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Text } from '@psycron/components/text/Text';
 import {
@@ -8,8 +9,8 @@ import { format } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
 import {
+	MonthSubTitle,
 	StyledDayName,
-	THEmpty,
 	THWeekDays,
 	WeekDaysHeaderGrid,
 	WeekDayWrapper,
@@ -17,6 +18,8 @@ import {
 import type { IWeekDaysHeader } from './WeekDaysHeader.types';
 
 export const WeekDaysHeader = ({ isSimple, selectedDay }: IWeekDaysHeader) => {
+	const { t } = useTranslation();
+
 	const { locale } = useParams<{ locale: string }>();
 	const dateLocale = locale.includes('en') ? enGB : ptBR;
 
@@ -36,9 +39,14 @@ export const WeekDaysHeader = ({ isSimple, selectedDay }: IWeekDaysHeader) => {
 
 	return (
 		<WeekDaysHeaderGrid container spacing={2} columns={8}>
-			<THEmpty item xs={1}>
-				<Text>{currentMonth.toUpperCase()}</Text>
-			</THEmpty>
+			<THWeekDays item xs={1}>
+				<WeekDayWrapper>
+					<StyledDayName>{currentMonth.toUpperCase()}</StyledDayName>
+					<MonthSubTitle>
+						<Text variant='caption'>{t('globals.starts').toUpperCase()}</Text>
+					</MonthSubTitle>
+				</WeekDayWrapper>
+			</THWeekDays>
 			{daysOfWeek.map((day, index) => (
 				<THWeekDays key={`header-${index}`} item xs={1}>
 					<WeekDayWrapper>

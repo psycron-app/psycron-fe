@@ -1,17 +1,15 @@
 import type { IAvailabilityDate } from '@psycron/api/user/index.types';
 
-export const filterDayHoursByAvailability = (
+export const filteredHoursFromRange = (
 	dayHours: string[],
-	availabilityDates?: IAvailabilityDate[]
-) => {
+	availabilityDateObjct: IAvailabilityDate
+): string[] => {
 	const availableTimes: string[] = [];
 
-	availabilityDates?.forEach((dateObj) => {
-		dateObj.slots?.forEach((slot) => {
-			if (slot.status === 'AVAILABLE') {
-				availableTimes.push(slot.startTime);
-			}
-		});
+	availabilityDateObjct.slots?.forEach((slot) => {
+		if (slot.status === 'AVAILABLE') {
+			availableTimes.push(slot.startTime);
+		}
 	});
 
 	const filteredDayHours = dayHours.filter((hour) =>
@@ -19,6 +17,41 @@ export const filterDayHoursByAvailability = (
 	);
 
 	return filteredDayHours;
+};
+
+export const filteredAvailabilityBasedOnRange = (
+	dayHours: string[],
+	availabilityDates?: IAvailabilityDate[]
+): {
+	filteredAvailabilityItem: IAvailabilityDate[];
+	filteredHoursRange: string[];
+} => {
+	if (!availabilityDates)
+		return { filteredHoursRange: [], filteredAvailabilityItem: [] };
+
+	// Filtramos apenas os dias que possuem slots dentro do range de `dayHours`
+	const filteredAvailabilityItem = availabilityDates
+		.map((availabilityDate) => {
+			const filteredSlots = availabilityDate.slots.filter((slot) =>
+				dayHours.includes(slot.startTime)
+			);
+
+			return filteredSlots.length > 0
+				? { ...availabilityDate, slots: filteredSlots }
+				: null;
+		})
+		.filter(Boolean) as IAvailabilityDate[]; // Remove os `null`
+
+	// Criamos um conjunto único de horários para evitar repetições
+	const filteredHoursRange = Array.from(
+		new Set(
+			filteredAvailabilityItem.flatMap((availabilityDate) =>
+				availabilityDate.slots.map((slot) => slot.startTime)
+			)
+		)
+	).sort(); // Ordena os horários para manter a estrutura correta
+
+	return { filteredHoursRange, filteredAvailabilityItem };
 };
 
 export const getSlotStatus = (

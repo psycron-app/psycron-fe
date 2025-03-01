@@ -1,46 +1,36 @@
+import type { ISlotStatus } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 import { palette } from '@psycron/theme/palette/palette.theme';
 
-import type { StyledAgendaStatusProps } from './AgendaSlot.types';
-
-export const getBackgroundColor = (status: StyledAgendaStatusProps) => {
+export const getBackgroundColor = (status: ISlotStatus) => {
 	switch (status) {
-		case 'available':
+		case 'AVAILABLE':
 			return palette.success.light;
-		case 'booked':
+		case 'BOOKED':
 			return palette.error.light;
-		case 'clicked':
-			return palette.secondary.light;
-		case 'unavailable':
+		case 'BLOCKED':
 			return palette.gray['01'];
 		default:
 			return palette.background.default;
 	}
 };
 
-export const getBorderColor = (status: StyledAgendaStatusProps) => {
+export const getBorderColor = (status: ISlotStatus) => {
 	switch (status) {
-		case 'available':
+		case 'AVAILABLE':
 			return palette.success.main;
-		case 'booked':
+		case 'BOOKED':
 			return palette.error.main;
-		case 'clicked':
-			return palette.secondary.main;
 		default:
 			return 'transparent';
 	}
 };
 
-export const getSVGColor = (status: StyledAgendaStatusProps) => {
+export const getSVGColor = (status: ISlotStatus) => {
 	switch (status) {
-		case 'available':
+		case 'AVAILABLE':
 			return palette.success.dark;
-		case 'booked':
+		case 'BOOKED':
 			return palette.error.main;
-		case 'selected':
-			return palette.info.main;
-		case 'clicked':
-			return palette.secondary.main;
-
 		default:
 			return 'inherit';
 	}

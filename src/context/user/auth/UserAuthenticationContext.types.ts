@@ -112,8 +112,16 @@ export interface ISlot {
 	endTime: string;
 	note?: string;
 	startTime: string;
-	status: 'AVAILABLE' | 'BLOCKED' | 'BOOKED' | 'ONHOLD' | 'CANCELLED';
+	status: ISlotStatus;
 }
+
+export type ISlotStatus =
+	| 'AVAILABLE'
+	| 'BLOCKED'
+	| 'BOOKED'
+	| 'ONHOLD'
+	| 'CANCELLED'
+	| 'EMPTY';
 
 export interface ISessionDate {
 	_id: string;

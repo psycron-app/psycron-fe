@@ -419,6 +419,10 @@
 		"cancel-appointment": {
 			"title": "Cancel Appointment(s)",
 			"sub-title": "Please select the appointment(s) you want to cancel"
+		},
+		"edit-appointment": {
+			"title": "Edit Appointment",
+			"sub-title": "Please select the new date slot"
 		}
 	}
 }

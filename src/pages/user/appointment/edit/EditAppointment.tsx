@@ -1,10 +1,13 @@
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Agenda } from '@psycron/components/agenda/Agenda';
-import { Text } from '@psycron/components/text/Text';
 import { useDashboardLogic } from '@psycron/hooks/useDashboardLogic';
+import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
 
 export const EditAppointment = () => {
+	const { t } = useTranslation();
+
 	const { therapistLatestAvailability, therapistLatestAvailabilityLoading } =
 		useDashboardLogic();
 
@@ -12,18 +15,22 @@ export const EditAppointment = () => {
 	const selectedDate = searchParams.get('date');
 
 	return (
-		<Box>
+		<PageLayout
+			title={t('page.edit-appointment.title')}
+			subTitle={t('page.edit-appointment.sub-title')}
+			isLoading={therapistLatestAvailabilityLoading}
+		>
 			<Box>
-				<Text>Edit Appointment Page</Text>
+				<Box></Box>
+				<Agenda
+					isLoading={therapistLatestAvailabilityLoading}
+					selectedDay={new Date(selectedDate)}
+					availability={therapistLatestAvailability}
+					isBig
+					isTherapist
+					isEditingMode
+				/>
 			</Box>
-			<Agenda
-				isLoading={therapistLatestAvailabilityLoading}
-				selectedDay={new Date(selectedDate)}
-				availability={therapistLatestAvailability}
-				isBig
-				isTherapist
-				isEditingMode
-			/>
-		</Box>
+		</PageLayout>
 	);
 };

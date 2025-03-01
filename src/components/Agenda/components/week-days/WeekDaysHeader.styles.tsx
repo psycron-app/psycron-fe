@@ -11,14 +11,6 @@ export const WeekDaysHeaderGrid = styled(Grid)`
 	top: 0;
 `;
 
-export const THEmpty = styled(Grid)`
-	padding: ${spacing.xs} ${spacing.small};
-	border-top-left-radius: 1rem;
-
-	width: auto;
-	background-color: ${palette.background.default};
-`;
-
 export const WeekDayWrapper = styled(Box)`
 	width: 100%;
 	height: 100%;
@@ -43,4 +35,10 @@ export const THWeekDays = styled(Grid)`
 export const StyledDayName = styled(Text)`
 	text-transform: uppercase;
 	font-weight: 700;
+`;
+
+export const MonthSubTitle = styled(Box)`
+	padding: ${spacing.space};
+	border: 2px solid ${palette.primary.main};
+	border-radius: ${spacing.mediumSmall};
 `;

@@ -20,3 +20,8 @@ export interface IAgendaClick {
 	slotStatus: ISlot['status'];
 	status: StyledAgendaStatusProps;
 }
+
+export interface IAgendaEditing extends IAgendaClick {
+	availabilityDayId: string;
+	slotId: string;
+}

@@ -9,7 +9,7 @@ export const PageLayoutWrapper = styled(Box)`
 `;
 
 export const PageTitleWrapper = styled(Box)`
-	margin-bottom: ${spacing.small};
+	padding-bottom: ${spacing.largeXl};
 `;
 
 export const PageTitle = styled(Text)`

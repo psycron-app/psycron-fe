@@ -1,8 +1,13 @@
 import type { MouseEventHandler } from 'react';
-import type { ISlot } from '@psycron/context/user/auth/UserAuthenticationContext.types';
+import type {
+	ISlot,
+	ISlotStatus,
+} from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
 export interface IAgendaSlotProps {
-	hoveredHour: string;
+	isHighlightedColumn: boolean;
+	isHighlightedRow: boolean;
+	isLastInColumn?: boolean;
 	isLastInRow?: boolean;
 	isSlotDetailsOpen?: boolean;
 	isTherapistView: boolean;
@@ -11,3 +16,11 @@ export interface IAgendaSlotProps {
 	onMouseLeave?: MouseEventHandler<HTMLDivElement>;
 	slot?: ISlot;
 }
+
+export type IAgendaSlotStyledProps = {
+	isHighlightedColumn?: boolean;
+	isHighlightedRow?: boolean;
+	isLastInColumn: boolean;
+	isLastInRow: boolean;
+	status?: ISlotStatus;
+};

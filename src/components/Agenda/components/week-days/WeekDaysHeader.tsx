@@ -17,7 +17,13 @@ import {
 } from './WeekDaysHeader.styles';
 import type { IWeekDaysHeader } from './WeekDaysHeader.types';
 
-export const WeekDaysHeader = ({ isSimple, selectedDay }: IWeekDaysHeader) => {
+export const WeekDaysHeader = ({
+	isSimple,
+	selectedDay,
+	onColumnHover,
+	onColumnClick,
+	hoveredColumnIndex,
+}: IWeekDaysHeader) => {
 	const { t } = useTranslation();
 
 	const { locale } = useParams<{ locale: string }>();
@@ -48,7 +54,14 @@ export const WeekDaysHeader = ({ isSimple, selectedDay }: IWeekDaysHeader) => {
 				</WeekDayWrapper>
 			</THWeekDays>
 			{daysOfWeek.map((day, index) => (
-				<THWeekDays key={`header-${index}`} item xs={1}>
+				<THWeekDays
+					key={`header-${index}`}
+					item
+					xs={1}
+					onMouseEnter={() => onColumnHover(index)}
+					onClick={() => onColumnClick(index)}
+					isHighlightedColumn={hoveredColumnIndex === index}
+				>
 					<WeekDayWrapper>
 						<StyledDayName>{weekDayName(day)}</StyledDayName>
 						{!isSimple ? <Text>{format(day, 'd')}</Text> : null}

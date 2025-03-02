@@ -8,22 +8,20 @@ import {
 import { Text } from '@psycron/components/text/Text';
 import type { ISlotStatus } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
-import {
-	RowHighlight,
-	SlotWrapper,
-	StyledSlotHoverable,
-} from './AgendaSlotNew.styles';
+import { SlotWrapper, StyledSlotHoverable } from './AgendaSlotNew.styles';
 import type { IAgendaSlotProps } from './AgendaSlotNew.types';
 
 export const AgendaSlotNew = ({
 	slot,
 	isTherapistView,
-	hoveredHour,
 	isSlotDetailsOpen,
 	isLastInRow,
 	onClick,
 	onMouseEnter,
 	onMouseLeave,
+	isHighlightedColumn,
+	isHighlightedRow,
+	isLastInColumn,
 }: IAgendaSlotProps) => {
 	const { t } = useTranslation();
 
@@ -57,23 +55,22 @@ export const AgendaSlotNew = ({
 				? 'empty'
 				: 'not available';
 
-	const isHighlighted = slot?.startTime === hoveredHour;
-
 	return (
 		<SlotWrapper
-			isHighlighted={isHighlighted}
+			isHighlightedRow={isHighlightedRow}
+			isHighlightedColumn={isHighlightedColumn}
 			isLastInRow={isLastInRow}
+			isLastInColumn={isLastInColumn}
 			onClick={onClick}
 			onMouseEnter={onMouseEnter}
 			onMouseLeave={onMouseLeave}
 		>
-			{!isHighlighted ? (
-				<RowHighlight isHighlighted={isHighlighted} isLastInRow={isLastInRow} />
-			) : null}
 			<StyledSlotHoverable
 				title={translatedStatus(slot?.status, true)}
-				isHighlighted={isHighlighted}
+				isHighlightedRow={isHighlightedRow}
+				isHighlightedColumn={isHighlightedColumn}
 				isLastInRow={isLastInRow}
+				isLastInColumn={isLastInColumn}
 				status={slot?.status}
 			>
 				<Text variant='caption' display='flex' alignItems='center'>

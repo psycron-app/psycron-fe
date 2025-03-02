@@ -1,4 +1,4 @@
-import { Box, Grid, styled } from '@mui/material';
+import { Box, css, Grid, styled } from '@mui/material';
 import { Text } from '@psycron/components/text/Text';
 import { palette } from '@psycron/theme/palette/palette.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
@@ -20,17 +20,31 @@ export const WeekDayWrapper = styled(Box)`
 	flex-direction: column;
 `;
 
-export const THWeekDays = styled(Grid)`
+export const THWeekDays = styled(Grid, {
+	shouldForwardProp: (props) => props !== 'isHighlightedColumn',
+})<{ isHighlightedColumn?: boolean }>`
 	background-color: ${palette.background.default};
 	padding: ${spacing.xs} ${spacing.small};
 	border-top: 0;
 
 	text-align: center;
 
-	&:last-child {
-		border-top-right-radius: 1rem;
-	}
+	${({ isHighlightedColumn }) =>
+		isHighlightedColumn
+			? css`
+					border-radius: 0;
+					border-left: 4px solid ${palette.secondary.main};
+					border-right: 4px solid ${palette.secondary.main};
+					border-top-left-radius: 10px;
+					border-top-right-radius: 10px;
+					border-top: 4px solid ${palette.secondary.main};
+				`
+			: ''}
 `;
+
+// border-bottom-right-radius: ${isLastInColumn ? spacing.mediumSmall : '0'};
+// 			border-bottom-left-radius: ${isLastInColumn ? spacing.mediumSmall : '0'};
+// 			border-bottom: ${isLastInColumn ? `4px solid ${palette.secondary.main}` : 'none'};
 
 export const StyledDayName = styled(Text)`
 	text-transform: uppercase;

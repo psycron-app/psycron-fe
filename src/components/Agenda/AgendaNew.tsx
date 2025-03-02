@@ -28,8 +28,11 @@ export const AgendaNew = ({
 	);
 
 	// HOVER HOUR SLOT 1st COLUMN ITEM
-	const isHoveringRow = useRef(false);
+	const isHoveringTable = useRef(false);
 	const [hoveredRowHour, setHoveredRowHour] = useState<string | null>(null);
+	const [hoveredColumnIndex, setHoveredColumnIndex] = useState<number | null>(
+		null
+	);
 
 	if (!availability || !availability.latestAvailability) {
 		return <Loader />;
@@ -55,7 +58,6 @@ export const AgendaNew = ({
 		const nextWeekStart = addDays(dayFromCalendar, 7);
 		setDayFromCalendar(nextWeekStart);
 	};
-
 	const goToPreviousWeek = () => {
 		const previousWeekStart = daySelectedFromCalendar
 			? subDays(dayFromCalendar, 7)
@@ -63,13 +65,11 @@ export const AgendaNew = ({
 
 		if (daySelectedFromCalendar) setDayFromCalendar(previousWeekStart);
 	};
-
 	const hasPreviousDates = () => {
 		return availabilityDates.some(
 			(date) => new Date(date.date) < dayFromCalendar
 		);
 	};
-
 	const hasNextDates = () => {
 		return availabilityDates.some(
 			(date) => new Date(date.date) >= addDays(dayFromCalendar, 7)
@@ -81,26 +81,37 @@ export const AgendaNew = ({
 		if (hoveredRowHour !== hour) {
 			setHoveredRowHour(hour);
 		}
-		isHoveringRow.current = true;
+		isHoveringTable.current = true;
+	};
+	const handleColumnHoverClick = (columnIndex: number) => {
+		if (hoveredColumnIndex !== columnIndex) {
+			setHoveredColumnIndex(columnIndex);
+		}
+		isHoveringTable.current = true;
 	};
 
-	const handleSlotMouseEnter = (hour: string) => {
+	const handleSlotMouseEnterLeave = (hour: string, columnIndex: number) => {
 		if (hoveredRowHour !== hour) {
 			setHoveredRowHour(null);
 		}
-
-		isHoveringRow.current = false;
-	};
-
-	const handleSlotMouseLeave = (hour: string) => {
-		if (hoveredRowHour !== hour) {
-			setHoveredRowHour(null);
+		if (hoveredColumnIndex !== columnIndex) {
+			setHoveredColumnIndex(null);
 		}
-		isHoveringRow.current = false;
+		isHoveringTable.current = true;
 	};
 
 	const handleMouseLeaveTable = () => {
-		isHoveringRow.current = false;
+		isHoveringTable.current = false;
+		setHoveredRowHour(null);
+		setHoveredColumnIndex(null);
+	};
+
+	const isHighlightedRow = (hour: string) => hoveredRowHour === hour;
+	const isHighlightedColumn = (columnIndex: number) =>
+		hoveredColumnIndex === columnIndex;
+
+	const isLastInColumn = (rowIndex: number, totalRows: number) => {
+		return rowIndex === totalRows - 1;
 	};
 
 	return (
@@ -111,7 +122,12 @@ export const AgendaNew = ({
 			height={'100%'}
 			onMouseLeave={handleMouseLeaveTable}
 		>
-			<WeekDaysHeader selectedDay={dayFromCalendar} />
+			<WeekDaysHeader
+				selectedDay={dayFromCalendar}
+				hoveredColumnIndex={hoveredColumnIndex}
+				onColumnHover={handleColumnHoverClick}
+				onColumnClick={handleColumnHoverClick}
+			/>
 			<Grid container columns={8} mt={5}>
 				{/* HOURS COLUMN STARTS*/}
 				<Grid item xs={1}>
@@ -120,6 +136,7 @@ export const AgendaNew = ({
 							key={index}
 							onClick={() => handleHourHoverClick(hour)}
 							onMouseEnter={() => handleHourHoverClick(hour)}
+							isHighlighted={hoveredRowHour === hour}
 						>
 							<Text variant='caption'>{hour}</Text>
 						</HourSlotWrapper>
@@ -142,16 +159,24 @@ export const AgendaNew = ({
 									_id: slot?._id,
 								};
 
+								const totalRows = filteredHoursRange.length;
+
 								return (
 									<AgendaSlotNew
 										key={hourIndex}
 										isSlotDetailsOpen={false}
 										isTherapistView={true}
 										slot={slot ?? dummySlot}
-										hoveredHour={hoveredRowHour}
 										isLastInRow={isLastInRow}
-										onMouseEnter={() => handleSlotMouseEnter(hour)}
-										onMouseLeave={() => handleSlotMouseLeave(hour)}
+										isLastInColumn={isLastInColumn(hourIndex, totalRows)}
+										isHighlightedRow={isHighlightedRow(hour)}
+										isHighlightedColumn={isHighlightedColumn(columnIndex)}
+										onMouseEnter={() =>
+											handleSlotMouseEnterLeave(hour, columnIndex)
+										}
+										onMouseLeave={() =>
+											handleSlotMouseEnterLeave(hour, columnIndex)
+										}
 									/>
 								);
 							})}

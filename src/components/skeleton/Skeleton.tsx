@@ -1,6 +1,7 @@
 import { Text } from '@psycron/components/text/Text';
 
 import {
+	SkeletonBox,
 	StyledSkeleton,
 	StyledSkeletonWrapper,
 	TextWrapper,
@@ -14,11 +15,13 @@ export const Skeleton = ({ text, children, onClick }: ISkeleton) => {
 			hasOnClick={onClick ? true : false}
 		>
 			<TextWrapper>
-				<Text fontWeight={600} width='50%'>
+				<Text fontWeight={600} width={'50%'}>
 					{text}
 				</Text>
 			</TextWrapper>
-			<StyledSkeleton>{children}</StyledSkeleton>
+			<SkeletonBox>
+				<StyledSkeleton>{children}</StyledSkeleton>
+			</SkeletonBox>
 		</StyledSkeletonWrapper>
 	);
 };

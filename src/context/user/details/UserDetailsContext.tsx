@@ -1,4 +1,4 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getTherapistLatestAvailability, getUserById } from '@psycron/api/user';
 import {
@@ -75,7 +75,11 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 	);
 };
 
-export const useUserDetails = (passedUserId?: string, slotId?: string) => {
+export const useUserDetails = (
+	passedUserId?: string,
+	availabilityDayId?: string,
+	slotId?: string
+) => {
 	const queryClient = useQueryClient();
 	const context = useContext(UserDetailsContext);
 	if (!context) {
@@ -99,6 +103,19 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		gcTime: 1000 * 60 * 10,
 	});
 
+	const latestSessionId = userDetails?.availability?.length
+		? userDetails.availability[userDetails.availability.length - 1]
+		: null;
+
+	const { data: sessionData, isLoading: sessionDataIsLoading } = useQuery({
+		queryKey: ['availabilitySession', latestSessionId],
+		queryFn: async () => {
+			if (!latestSessionId) return null;
+			return getAvailabilitySession(latestSessionId as Partial<IAvailability>);
+		},
+		enabled: !!latestSessionId,
+	});
+
 	const {
 		data: therapistLatestAvailability,
 		isLoading: therapistLatestAvailabilityLoading,
@@ -106,7 +123,10 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		refetch: refetchTherapistAvailability,
 	} = useQuery({
 		queryKey: ['therapistAvailability', userDetails?._id],
-		queryFn: () => getTherapistLatestAvailability(userDetails._id),
+		queryFn: async () => {
+			if (!userDetails?._id) return null;
+			return getTherapistLatestAvailability(userDetails._id);
+		},
 		enabled: !!userDetails?._id && !!userDetails.availability?.length,
 		retry: false,
 		staleTime: 1000 * 60 * 5,
@@ -120,7 +140,8 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		isSuccess: isAppointmentDetailsBySlotIdSuccess,
 	} = useQuery({
 		queryKey: ['getAppointmentDetailsBySlotId', slotId],
-		queryFn: () => getAppointmentDetailsBySlotId(userDetails._id, slotId),
+		queryFn: () =>
+			getAppointmentDetailsBySlotId(userDetails._id, availabilityDayId, slotId),
 		enabled: !!userDetails?._id && !!slotId,
 		retry: false,
 	});
@@ -149,24 +170,9 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 	const isUserDetailsContextLoading =
 		therapistLatestAvailabilityLoading || isUserDetailsLoading;
 
-	const therapistLatestAvailabilityDates = useMemo(
-		() => therapistLatestAvailability?.latestAvailability?.availabilityDates,
-		[therapistLatestAvailability]
-	);
-
 	const emptyAvailability =
-		!therapistLatestAvailabilityDates ||
-		therapistLatestAvailabilityDates.length === 0;
-
-	const latestSessionId =
-		userDetails?.availability?.[userDetails?.availability?.length - 1];
-
-	const { data: sessionData, isLoading: sessionDataIsLoading } = useQuery({
-		queryKey: ['availabilitySession', latestSessionId],
-		queryFn: () =>
-			getAvailabilitySession(latestSessionId as Partial<IAvailability>),
-		enabled: !!latestSessionId,
-	});
+		!therapistLatestAvailability?.latestAvailability?.availabilityDates
+			?.length || therapistLatestAvailability?.totalPages === 0;
 
 	return {
 		...context,
@@ -176,7 +182,6 @@ export const useUserDetails = (passedUserId?: string, slotId?: string) => {
 		therapistLatestAvailability,
 		therapistLatestAvailabilityLoading,
 		therapistLatestAvailabilitySuccess,
-		therapistLatestAvailabilityDates,
 		emptyAvailability,
 		prefetchTherapistAvailability,
 		isUserDetailsContextLoading,

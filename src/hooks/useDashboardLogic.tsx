@@ -11,7 +11,6 @@ export const useDashboardLogic = () => {
 		therapistLatestAvailability,
 		therapistLatestAvailabilityLoading,
 		userDetails,
-		therapistLatestAvailabilityDates,
 		emptyAvailability,
 	} = useUserDetails();
 
@@ -37,7 +36,6 @@ export const useDashboardLogic = () => {
 		selectedDay,
 		setIsDateClicked,
 		handleDayClick,
-		therapistLatestAvailabilityDates,
 		emptyAvailability,
 	};
 };

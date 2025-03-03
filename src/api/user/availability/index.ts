@@ -72,10 +72,11 @@ export const bookAppointment = async (
 
 export const getAppointmentDetailsBySlotId = async (
 	therapistId: string,
+	availabilityDayId: string,
 	slotId: string
 ): Promise<AppointmentDetailsBySlotIdResponse> => {
 	const response = await apiClient.get(
-		`/users/${therapistId}/availability/${slotId}`
+		`/users/${therapistId}/availability/${availabilityDayId}/${slotId}`
 	);
 	return response.data;
 };

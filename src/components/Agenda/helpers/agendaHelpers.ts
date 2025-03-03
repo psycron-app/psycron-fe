@@ -84,3 +84,12 @@ export const isSelectedDay = (selectedDay?: Date, day?: Date) => {
 		selectedDay.getFullYear() === day.getFullYear()
 	);
 };
+
+export const getAvailableSlotsForDay = (dateObj: IAvailabilityDate) => {
+	return dateObj.slots.map((slot) => ({
+		startTime: slot.startTime,
+		endTime: slot.endTime,
+		status: slot.status,
+		_id: slot._id,
+	}));
+};

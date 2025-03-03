@@ -78,8 +78,10 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 	});
 
 	const completeAvailabilitySessionMutation = useMutation({
-		mutationFn: (data: ICompleteSessionAvailabilityData) =>
-			completeSessionAvailability(data.sessionId, data),
+		mutationFn: (data: {
+			data: ICompleteSessionAvailabilityData;
+			sessionId: string;
+		}) => completeSessionAvailability(data.sessionId, data.data),
 		onSuccess: () => {
 			showAlert({
 				message: t('page.availability.wizard.complete'),
@@ -163,9 +165,11 @@ export const Wizard = ({ steps, onComplete }: IWizardProps) => {
 
 		await completeAvailabilitySessionMutation.mutateAsync({
 			sessionId,
-			selectedSlots: selectedSlots,
-			recurrencePattern: recurrencePattern,
-			timezone: timeZone,
+			data: {
+				selectedSlots: selectedSlots,
+				recurrencePattern: recurrencePattern,
+				timezone: timeZone,
+			},
 		});
 
 		setIsModalOpen(false);

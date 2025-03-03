@@ -1,4 +1,4 @@
-import { Box, Skeleton, styled } from '@mui/material';
+import { Box, Paper, Skeleton, styled } from '@mui/material';
 import { palette } from '@psycron/theme/palette/palette.theme';
 import { shadowMain } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
@@ -6,13 +6,11 @@ import { spacing } from '@psycron/theme/spacing/spacing.theme';
 export const StyledSkeletonWrapper = styled(Box, {
 	shouldForwardProp: (props) => props !== 'hasOnClick',
 })<{ hasOnClick: boolean }>`
-	border: 2px ${palette.gray['02']} dashed;
-	width: fit-content;
+	padding: ${spacing.medium};
+
 	position: relative;
 
 	border-radius: ${spacing.mediumLarge};
-	padding: 0 ${spacing.mediumLarge};
-	height: fit-content;
 
 	animation: skeletonPulse 2s ease-in-out infinite;
 
@@ -36,13 +34,7 @@ export const StyledSkeletonWrapper = styled(Box, {
 	}
 `;
 
-export const TextWrapper = styled(Box)`
-	position: absolute;
-	top: 50%;
-	right: 0;
-	width: 100%;
-	z-index: 100;
-
+export const SkeletonBox = styled(Paper)`
 	display: flex;
 	justify-content: center;
 `;
@@ -50,4 +42,17 @@ export const TextWrapper = styled(Box)`
 export const StyledSkeleton = styled(Skeleton)`
 	border-radius: ${spacing.mediumLarge};
 	background-color: ${palette.gray['02']};
+	width: 80%;
+`;
+
+export const TextWrapper = styled(Box)`
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 100;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
 `;

@@ -34,7 +34,7 @@ export interface IWeekdays {
 	slots: string[];
 }
 
-export type IWeekdaysNames =
+export type IDayName =
 	| 'Monday'
 	| 'Tuesday'
 	| 'Wednesday'
@@ -43,33 +43,14 @@ export type IWeekdaysNames =
 	| 'Saturday'
 	| 'Sunday';
 
-export interface ICompleteSessionAvailabilityData {
-	recurrencePattern: string;
-	selectedSlots: string[];
-	sessionId: string;
-	timezone: string;
-}
-
-export interface ICompleteSessionAvailabilityResponse {
-	availability: {
-		_id: string;
-		availabilityDates: Array<{
-			date: string;
-			slots: Array<{
-				endTime: string;
-				note?: string;
-				startTime: string;
-				status: ISlot['status'];
-			}>;
-		}>;
-		consultationDuration: number;
-		createAvailabilitySession: string;
-		createdAt: string;
-		therapistId: string;
-		updatedAt: string;
-	};
-	status: string;
-}
+export type IWeekdaysNames =
+	| 'Monday'
+	| 'Tuesday'
+	| 'Wednesday'
+	| 'Thursday'
+	| 'Friday'
+	| 'Saturday'
+	| 'Sunday';
 
 export interface Appointment {
 	availabilityId: string;
@@ -89,4 +70,48 @@ export interface AppointmentDetailsBySlotIdResponse {
 		startTime: string;
 		status: ISlot['status'];
 	};
+}
+
+export interface ISlotSelection {
+	dayName: IDayName;
+	slots: string[];
+}
+
+export type RecurrencePattern = 'WEEKLY' | 'MONTHLY';
+
+export interface ICompleteSessionAvailabilityData {
+	recurrencePattern: RecurrencePattern;
+	selectedSlots: ISlotSelection[];
+	timezone: string;
+}
+
+export enum StatusEnum {
+	AVAILABLE = 'AVAILABLE',
+	BLOCKED = 'BLOCKED',
+	BOOKED = 'BOOKED',
+	CANCELLED = 'CANCELLED',
+	ONHOLD = 'ONHOLD',
+}
+
+export interface IAvailabilityDate {
+	date: string;
+	slots: Array<{
+		endTime: string;
+		note?: string;
+		startTime: string;
+		status: StatusEnum;
+	}>;
+}
+
+export interface ICompleteSessionAvailabilityResponse {
+	availability: {
+		_id: string;
+		availabilityDates: IAvailabilityDate[];
+		consultationDuration: number;
+		createAvailabilitySession: string;
+		createdAt: string;
+		therapistId: string;
+		updatedAt: string;
+	};
+	status: string;
 }

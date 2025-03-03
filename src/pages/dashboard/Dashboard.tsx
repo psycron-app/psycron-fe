@@ -1,24 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Box, Modal } from '@mui/material';
-import { Agenda } from '@psycron/components/agenda/Agenda';
+import { Box, Grid, Modal } from '@mui/material';
+import { AgendaNew } from '@psycron/components/agenda/AgendaNew';
 import { ShareButton } from '@psycron/components/button/share/ShareButton';
-import { Loader } from '@psycron/components/loader/Loader';
-import { Skeleton } from '@psycron/components/skeleton/Skeleton';
+import { Calendar } from '@psycron/components/calendar/Calendar';
 import { useDashboardLogic } from '@psycron/hooks/useDashboardLogic';
 
 import { AVAILABILITYWIZARD } from '../urls';
 
-import { CalendarSection } from './components/calendar-section/CalendarSection';
 import { StyledPaperModal } from './Dashboard.styled';
 
 export const Dashboard = () => {
 	const { t } = useTranslation();
 
 	const navigate = useNavigate();
-
 	const {
-		isUserDetailsLoading,
 		therapistLatestAvailability,
 		therapistLatestAvailabilityLoading,
 		userDetails,
@@ -28,49 +24,50 @@ export const Dashboard = () => {
 		selectedDay,
 		setIsDateClicked,
 		handleDayClick,
-		therapistLatestAvailabilityDates,
 		emptyAvailability,
 	} = useDashboardLogic();
 
 	const createAvailabilityLink = () => navigate(`../${AVAILABILITYWIZARD}`);
 
-	if (isUserDetailsLoading || therapistLatestAvailabilityLoading) {
-		<Loader />;
-	}
+	const availableDatesArray =
+		therapistLatestAvailability?.latestAvailability?.dates ?? [];
 
 	return (
 		<>
-			<Box>
-				{!emptyAvailability ? (
-					<CalendarSection
-						locale={dateLocale}
+			<Grid container style={{ height: '100%' }}>
+				<Grid size={10}>
+					<Calendar
+						isLoading={therapistLatestAvailabilityLoading}
+						skeletonProps={{
+							onClick: createAvailabilityLink,
+							text:
+								!therapistLatestAvailabilityLoading &&
+								therapistLatestAvailability &&
+								emptyAvailability
+									? t(
+											'components.dashboard.availability-card.first-availability'
+										)
+									: '',
+						}}
+						dateLocale={dateLocale}
 						today={today}
-						dates={therapistLatestAvailabilityDates}
-						dayClick={handleDayClick}
+						availabilityDates={availableDatesArray}
+						handleDayClick={handleDayClick}
 					/>
-				) : (
-					<Skeleton
-						onClick={createAvailabilityLink}
-						text={t(
-							'components.dashboard.availability-card.first-availability'
-						)}
-					>
-						<CalendarSection
-							locale={dateLocale}
-							today={today}
-							dates={[]}
-							dayClick={handleDayClick}
-						/>
-					</Skeleton>
-				)}
-			</Box>
+				</Grid>
+			</Grid>
 			<Modal open={isDateClicked} onClose={() => setIsDateClicked(false)}>
 				<StyledPaperModal>
-					<Agenda
+					{/* <Agenda
 						selectedDay={selectedDay}
 						availability={therapistLatestAvailability}
 						isLoading={therapistLatestAvailabilityLoading}
 						isTherapist
+					/> */}
+					<AgendaNew
+						availability={therapistLatestAvailability}
+						daySelectedFromCalendar={selectedDay}
+						mode={'view'}
 					/>
 					<Box display='flex' justifyContent='flex-end' pt={2}>
 						<ShareButton

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { IconButton } from '@mui/material';
-import type { IAvailabilityDate } from '@psycron/api/user/index.types';
+import type { IDateInfo } from '@psycron/api/user/index.types';
+import { withSkeletonLoading } from '@psycron/hoc/withSkeletonLoading';
 import { getWeekDays, isCurrentDay } from '@psycron/utils/variables';
 import {
 	addMonths,
@@ -28,50 +29,39 @@ import {
 } from './Calendar.styles';
 import type { ICalendarProps } from './Calendar.types';
 
-export const Calendar = ({
+const CalendarComponent = ({
 	handleDayClick,
 	dateLocale,
 	today,
 	isBig,
 	availabilityDates,
 }: ICalendarProps) => {
-	const [currMonth, setCurrMonth] = useState<Date>(() => today);
+	const [currentDisplayedMonth, setCurrentDisplayedMonth] = useState<Date>(
+		() => today
+	);
 
 	const daysOfWeek = getWeekDays(today, dateLocale);
 
-	const startOfCurrentMonth = startOfMonth(currMonth);
-	const endOfCurrentMonth = endOfMonth(currMonth);
-
-	const startOfCalendar = startOfWeek(startOfCurrentMonth, {
+	const startOfCurrentMonth = startOfMonth(currentDisplayedMonth);
+	const endOfCurrentMonth = endOfMonth(currentDisplayedMonth);
+	const startOfCalendarGrid = startOfWeek(startOfCurrentMonth, {
 		locale: dateLocale,
 	});
-	const endOfCalendar = endOfWeek(endOfCurrentMonth, { locale: dateLocale });
+	const endOfCalendarGrid = endOfWeek(endOfCurrentMonth, {
+		locale: dateLocale,
+	});
 
-	const daysInCalendar = eachDayOfInterval({
-		start: startOfCalendar,
-		end: addMonths(endOfCalendar, 1),
-	}).slice(0, 42);
+	const calendarDaysGrid = eachDayOfInterval({
+		start: startOfCalendarGrid,
+		end: endOfCalendarGrid,
+	});
 
-	const handlePreviousMonth = () => {
-		setCurrMonth((prev) => subMonths(prev, 1));
-	};
+	const availableScheduleDates: IDateInfo[] = Array.isArray(availabilityDates)
+		? availabilityDates
+		: (Object.values(availabilityDates ?? {}).flat() as IDateInfo[]);
 
-	const handleNextMonth = () => {
-		setCurrMonth((prev) => addMonths(prev, 1));
-	};
-
-	const isCurrentMonth = (day: Date) => {
-		return (
-			day.getMonth() === currMonth.getMonth() &&
-			day.getFullYear() === currMonth.getFullYear()
-		);
-	};
-
-	const isAvailableDate = (
-		day: Date,
-		availabilityDates?: IAvailabilityDate[]
-	) => {
-		return availabilityDates?.some((availability) => {
+	const isDayAvailableInSchedule = (day: Date) => {
+		return availableScheduleDates.some((availability) => {
 			const availableDate = new Date(availability.date);
 			return (
 				availableDate.getDate() === day.getDate() &&
@@ -81,22 +71,28 @@ export const Calendar = ({
 		});
 	};
 
-	const isDateAvailable = (day: Date) => {
-		return isAvailableDate(day, availabilityDates);
-	};
+	const goToPreviousMonthInCalendar = () =>
+		setCurrentDisplayedMonth((prev) => subMonths(prev, 1));
+
+	const goToNextMonthInCalendar = () =>
+		setCurrentDisplayedMonth((prev) => addMonths(prev, 1));
+
+	const isDayInDisplayedMonth = (day: Date) =>
+		day.getMonth() === currentDisplayedMonth.getMonth() &&
+		day.getFullYear() === currentDisplayedMonth.getFullYear();
 
 	return (
 		<StyledCalendarWrapper isBig={isBig}>
 			<StyledPaper>
 				<StyledTitle isBig={isBig}>
 					<Text variant='body2' isFirstUpper>
-						{format(currMonth, 'MMMM yyyy', { locale: dateLocale })}
+						{format(currentDisplayedMonth, 'MMMM yyyy', { locale: dateLocale })}
 					</Text>
 					<StyledChevronWrapper>
-						<IconButton onClick={handlePreviousMonth}>
+						<IconButton onClick={goToPreviousMonthInCalendar}>
 							<ChevronLeft />
 						</IconButton>
-						<IconButton onClick={handleNextMonth}>
+						<IconButton onClick={goToNextMonthInCalendar}>
 							<ChevronRight />
 						</IconButton>
 					</StyledChevronWrapper>
@@ -110,12 +106,12 @@ export const Calendar = ({
 					))}
 				</StyledWeekDays>
 				<DaysWrapper isBig={isBig}>
-					{daysInCalendar.map((day, index) => {
-						const currentMonth = isCurrentMonth(day);
+					{calendarDaysGrid.map((day, index) => {
+						const currentMonth = isDayInDisplayedMonth(day);
 
 						const currentDay = isCurrentDay(day);
 
-						const isAvailable = isDateAvailable(day);
+						const isAvailable = isDayAvailableInSchedule(day);
 
 						return (
 							<StyledCalendarNumberWrapper
@@ -144,3 +140,5 @@ export const Calendar = ({
 		</StyledCalendarWrapper>
 	);
 };
+
+export const Calendar = withSkeletonLoading(CalendarComponent);

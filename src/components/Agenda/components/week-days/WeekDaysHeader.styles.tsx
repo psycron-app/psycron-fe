@@ -30,21 +30,16 @@ export const THWeekDays = styled(Grid, {
 	text-align: center;
 
 	${({ isHighlightedColumn }) =>
-		isHighlightedColumn
-			? css`
-					border-radius: 0;
-					border-left: 4px solid ${palette.secondary.main};
-					border-right: 4px solid ${palette.secondary.main};
-					border-top-left-radius: 10px;
-					border-top-right-radius: 10px;
-					border-top: 4px solid ${palette.secondary.main};
-				`
-			: ''}
+		isHighlightedColumn &&
+		css`
+			border-radius: 0;
+			border-left: 4px solid ${palette.secondary.main};
+			border-right: 4px solid ${palette.secondary.main};
+			border-top-left-radius: ${spacing.mediumSmall};
+			border-top-right-radius: ${spacing.mediumSmall};
+			border-top: 4px solid ${palette.secondary.main};
+		`}
 `;
-
-// border-bottom-right-radius: ${isLastInColumn ? spacing.mediumSmall : '0'};
-// 			border-bottom-left-radius: ${isLastInColumn ? spacing.mediumSmall : '0'};
-// 			border-bottom: ${isLastInColumn ? `4px solid ${palette.secondary.main}` : 'none'};
 
 export const StyledDayName = styled(Text)`
 	text-transform: uppercase;

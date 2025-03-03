@@ -1,6 +1,6 @@
-import type { IAgendaEditing } from '../../Agenda.types';
+import type { ISelectedSlot } from '../../AgendaNew.types';
 
 export interface IAgendaAppointmentDetails {
 	handleEditAppointment: (oldSessionSlotId: string, slotId: string) => void;
-	selectedEditingSlot: IAgendaEditing;
+	selectedSlot: ISelectedSlot;
 }

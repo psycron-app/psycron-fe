@@ -18,9 +18,10 @@ import {
 import type { IAgendaAppointmentDetails } from './AgendaAppointmentDetails.types';
 
 export const AgendaAppointmentDetails = ({
-	selectedEditingSlot,
+	selectedSlot,
 	handleEditAppointment,
 }: IAgendaAppointmentDetails) => {
+	console.log('🚀 ~ selectedSlot:', selectedSlot);
 	const { t } = useTranslation();
 
 	const { locale } = useParams<{
@@ -32,7 +33,7 @@ export const AgendaAppointmentDetails = ({
 		isAppointmentDetailsBySlotIdLoading,
 		isUserDetailsLoading,
 		userDetails,
-	} = useUserDetails('', selectedEditingSlot.slotId);
+	} = useUserDetails('', selectedSlot.availabilityDayId, selectedSlot.slot._id);
 	console.log('🚀 ~ appointmentDetailsBySlotId:', appointmentDetailsBySlotId);
 
 	const { patientDetails, isPatientDetailsLoading, updatePatientIsLoading } =
@@ -156,8 +157,8 @@ export const AgendaAppointmentDetails = ({
 										<StyledNextSessionText
 											onClick={() =>
 												handleEditAppointment(
-													selectedEditingSlot.availabilityDayId,
-													selectedEditingSlot.slotId
+													selectedSlot.availabilityDayId,
+													selectedSlot.slot._id
 												)
 											}
 										>

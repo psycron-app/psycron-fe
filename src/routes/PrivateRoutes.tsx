@@ -26,7 +26,10 @@ const privateRoutes = [
 	{ path: EDITUSERBYSESSION, element: <EditUser /> },
 	{ path: CHANGEPASSWORD, element: <EditPassword /> },
 	{ path: APPOINTMENTS, element: <AppointmentPage /> },
-	{ path: `${APPOINTMENTS}/:oldSessionSlotId`, element: <EditAppointment /> },
+	{
+		path: `${APPOINTMENTS}/edit/:oldSessionSlotId`,
+		element: <EditAppointment />,
+	},
 	{ path: AVAILABILITYWIZARD, element: <AvailabilityWizard /> },
 	{ path: AVAILABILITY, element: <SetAvailabilityPage /> },
 	{ path: `${APPOINTMENTS}/cancel/:patientId`, element: <CancelAppointment /> },

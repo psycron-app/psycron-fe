@@ -24,42 +24,33 @@ export const SlotWrapper = styled(Box, {
 	position: relative;
 
 	background-color: ${palette.background.default};
-	transition: border 0.1s ease-out;
 
 	${({ isHighlightedRow, isLastInRow }) =>
-		isHighlightedRow
-			? css`
-					z-index: ${zIndexHover};
-					border-right: ${isLastInRow
-						? `2px solid ${palette.info.main}`
-						: 'none'};
-					border-top-right-radius: ${isLastInRow ? spacing.mediumSmall : '0'};
-					border-bottom-right-radius: ${isLastInRow
-						? spacing.mediumSmall
-						: '0'};
-					border-top: 4px solid ${palette.info.main};
-					border-bottom: 4px solid ${palette.info.main};
-				`
-			: ''}
+		isHighlightedRow &&
+		css`
+			z-index: ${zIndexHover};
+			border-right: ${isLastInRow
+				? `${spacing.space} solid ${palette.info.main}`
+				: 'none'};
+			border-top-right-radius: ${isLastInRow ? spacing.mediumSmall : '0'};
+			border-bottom-right-radius: ${isLastInRow ? spacing.mediumSmall : '0'};
+			border-top: ${spacing.space} solid ${palette.info.main};
+			border-bottom: ${spacing.space} solid ${palette.info.main};
+		`}
 
 	${({ isHighlightedColumn, isLastInColumn }) =>
-		isHighlightedColumn
-			? css`
-					border-radius: 0;
-					border-left: 4px solid ${palette.secondary.main};
-					border-right: 4px solid ${palette.secondary.main};
-					border-bottom-right-radius: ${isLastInColumn
-						? spacing.mediumSmall
-						: '0'};
-					border-bottom-left-radius: ${isLastInColumn
-						? spacing.mediumSmall
-						: '0'};
-					border-bottom: ${isLastInColumn
-						? `4px solid ${palette.secondary.main}`
-						: 'none'};
-					border-top: none;
-				`
-			: ''}
+		isHighlightedColumn &&
+		css`
+			border-radius: 0;
+			border-left: ${spacing.space} solid ${palette.secondary.main};
+			border-right: ${spacing.space} solid ${palette.secondary.main};
+			border-bottom-right-radius: ${isLastInColumn ? spacing.mediumSmall : '0'};
+			border-bottom-left-radius: ${isLastInColumn ? spacing.mediumSmall : '0'};
+			border-bottom: ${isLastInColumn
+				? `${spacing.space}  solid ${palette.secondary.main}`
+				: 'none'};
+			border-top: none;
+		`}
 `;
 
 export const StyledSlotHoverable = styled(Tooltip, {
@@ -74,12 +65,12 @@ export const StyledSlotHoverable = styled(Tooltip, {
 })<IAgendaSlotStyledProps>`
 	width: 100%;
 	height: 100%;
-	padding: 4px 8px;
+	padding: ${spacing.space} ${spacing.small};
 
 	.MuiButtonBase-root {
 		width: 100%;
-		padding: 4px 8px;
-		border-radius: 10px;
+		padding: ${spacing.space} ${spacing.small};
+		border-radius: ${spacing.extraSmall};
 		background-color: ${({ status }) => getBackgroundColor(status)};
 
 		box-shadow: ${({ isHighlightedRow, isHighlightedColumn, status }) =>

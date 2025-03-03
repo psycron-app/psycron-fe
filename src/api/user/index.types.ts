@@ -39,9 +39,16 @@ export interface IAvailabilityResponse {
 		consultationDuration: number;
 		createAvailabilitySession: string;
 		createdAt: string;
+		dates: IDateInfo[];
 		therapistId: string;
 		updatedAt: string;
 	};
+	totalPages: number;
+}
+
+export interface IDateInfo {
+	date: Date;
+	dateId?: string;
 }
 
 export interface IAvailabilityDate {

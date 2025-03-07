@@ -3,7 +3,7 @@ import type {
 	ISlotStatus,
 } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
-import type { IAgendaViewMode } from '../../AgendaNew.types';
+import type { IAgendaViewMode } from '../../Agenda.types';
 
 export interface IAgendaTableBodyProps {
 	filteredHoursRange: string[];

@@ -1,4 +1,4 @@
-import type { IAgendaViewMode } from '../../AgendaNew.types';
+import type { IAgendaViewMode } from '../../Agenda.types';
 
 export interface IAgendaPaginationProps {
 	disableNext?: boolean;

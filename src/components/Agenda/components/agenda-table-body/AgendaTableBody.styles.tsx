@@ -6,17 +6,14 @@ import { shadowMain } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 import { zIndexHover, zIndexTableHead } from '@psycron/theme/zIndex';
 
-import {
-	getBackgroundColor,
-	getBorderColor,
-	getSVGColor,
-} from '../agenda-slot/utils';
-
 import type { IAgendaTableBodyStyledProps } from './AgendaTableBody.type';
+import { getBackgroundColor, getBorderColor, getSVGColor } from './utils';
 
 export const AgendaTableBodyWrapper = styled(TableBody, {
 	shouldForwardProp: (props) => props !== 'isLoading',
-})<{ isLoading: boolean }>``;
+})<{ isLoading: boolean }>`
+	background-color: transparent;
+`;
 
 export const AgendaBodyRow = styled(TableRow)`
 	:hover {
@@ -24,12 +21,16 @@ export const AgendaBodyRow = styled(TableRow)`
 	}
 `;
 
-export const AgendaCellBody = styled(TableCell)`
+export const AgendaCellBody = styled(TableCell, {
+	shouldForwardProp: (props) => props !== 'isLoading',
+})<{ isLoading: boolean }>`
 	padding: ${spacing.space} ${spacing.xs};
 	height: 50px;
 	align-items: center;
 	justify-content: center;
 	position: relative;
+	background-color: ${({ isLoading }) =>
+		isLoading ? `${palette.info.light} !important` : 'inherit'};
 
 	&:hover {
 		background-color: inherit !important;
@@ -59,8 +60,6 @@ export const StyledSlotHoverable = styled(Tooltip, {
 	width: 100%;
 	height: 100%;
 	padding: ${spacing.space} ${spacing.xs};
-	background-color: ${({ isLoading }) =>
-		isLoading && `${palette.info.light} !important`};
 
 	.MuiButtonBase-root {
 		width: 100%;

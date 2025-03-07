@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Modal } from '@mui/material';
-import { AgendaNew } from '@psycron/components/agenda/AgendaNew';
+import { Agenda } from '@psycron/components/agenda/Agenda';
 // import { AgendaTable } from '@psycron/components/agenda/AgendaTable';
 import { ShareButton } from '@psycron/components/button/share/ShareButton';
 import { Calendar } from '@psycron/components/calendar/Calendar';
@@ -20,6 +20,7 @@ export const Dashboard = () => {
 		userDetails,
 		dateLocale,
 		today,
+		isDateClicked,
 		selectedDay,
 		setIsDateClicked,
 		handleDayClick,
@@ -56,9 +57,9 @@ export const Dashboard = () => {
 					/>
 				</Grid>
 			</Grid>
-			<Modal open={true} onClose={() => setIsDateClicked(false)}>
+			<Modal open={isDateClicked} onClose={() => setIsDateClicked(false)}>
 				<StyledPaperModal>
-					<AgendaNew
+					<Agenda
 						availabilityData={availabilityData}
 						daySelectedFromCalendar={selectedDay}
 						mode='edit'

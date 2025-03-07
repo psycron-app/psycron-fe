@@ -53,7 +53,7 @@ export const AgendaTableBody = ({
 			<AgendaTableBodyWrapper isLoading={isLoading}>
 				{filteredHoursRange.map((hour, rowIndex) => (
 					<AgendaBodyRow key={rowIndex}>
-						<StickyCell align='center'>
+						<StickyCell align='center' isLoading={false}>
 							<Text fontSize={'0.8rem'}>{hour}</Text>
 						</StickyCell>
 
@@ -63,7 +63,7 @@ export const AgendaTableBody = ({
 							});
 
 							return (
-								<AgendaCellBody key={availabilityDayId}>
+								<AgendaCellBody key={availabilityDayId} isLoading={isLoading}>
 									<StyledSlotHoverable
 										title={translatedStatus(slot?.status)}
 										isHighlightedColumn={false}

@@ -50,7 +50,7 @@ export const WeekDaysHeader = ({
 					isHighlightedColumn={hoveredColumnIndex === index}
 				>
 					<WeekDayWrapper>
-						<StyledDayName>{weekDayName(day)}</StyledDayName>
+						<StyledDayName>{weekDayName(new Date(day))}</StyledDayName>
 						{!isSimple ? <Text>{format(day, 'd')}</Text> : null}
 					</WeekDayWrapper>
 				</THWeekDays>

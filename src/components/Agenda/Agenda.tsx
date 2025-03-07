@@ -1,522 +1,330 @@
-import { Fragment, useCallback, useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
-import { Box, Grid } from '@mui/material';
-import { Loader } from '@psycron/components/loader/Loader';
+import { useNavigate } from 'react-router-dom';
+import { Paper, Table, TableContainer } from '@mui/material';
 import { Modal } from '@psycron/components/modal/Modal';
-import { Text } from '@psycron/components/text/Text';
-import { useAppointmentActions } from '@psycron/context/appointment/appointment-actions/AppointmentActionsContext';
-import { usePatient } from '@psycron/context/patient/PatientContext';
-import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { APPOINTMENTS } from '@psycron/pages/urls';
+import { generateTimeSlots, generateWeekDays } from '@psycron/utils/variables';
 import {
-	formatDate,
-	formatDateTimeToLocale,
-	generateTimeSlots,
-	generateWeekDaysFromSelected,
-	isBeforeToday,
-} from '@psycron/utils/variables';
-import { addDays, subDays } from 'date-fns';
+	addDays,
+	format,
+	isAfter,
+	isEqual,
+	startOfWeek,
+	subDays,
+} from 'date-fns';
 
 import { AgendaAppointmentDetails } from './components/agenda-appointment-details/AgendaAppointmentDetails';
 import { AgendaPagination } from './components/agenda-pagination/AgendaPagination';
-import { AgendaSlot } from './components/agenda-slot/AgendaSlot';
-import type { StyledAgendaStatusProps } from './components/agenda-slot/AgendaSlot.types';
-import { ConfirmationModal } from './components/confirmation-modal/ConfirmationModal';
-import { WeekDaysHeader } from './components/week-days/WeekDaysHeader';
-import {
-	filterDayHoursByAvailability,
-	filteredAvailabilityBasedOnRange,
-	getSlotStatus,
-	isSelectedDay,
-} from './helpers/agendaHelpers';
-import { StyledGridHours, StyledHoursWrapper } from './Agenda.styles';
-import type { IAgenda, IAgendaClick, IAgendaEditing } from './Agenda.types';
+import { AgendaTableBody } from './components/agenda-table-body/AgendaTableBody';
+import { AgendaTableHead } from './components/agenda-table-head/AgendaTableHead';
+import { filteredAvailabilityBasedOnRange } from './helpers/agendaHelpers';
+import type { IAgendaProps, ISelectedSlot } from './Agenda.types';
 
 export const Agenda = ({
-	selectedDay,
-	availability,
-	isLoading,
-	isFirstAppointment,
-	isTherapist,
-	isEditingMode = false,
-}: IAgenda) => {
-	console.log('🚀 ~ isEditingMode:', isEditingMode);
-	const { t } = useTranslation();
-
+	availabilityData,
+	daySelectedFromCalendar,
+	mode,
+}: IAgendaProps) => {
 	const {
-		userId,
-		locale,
-		oldSessionSlotId: selectedSlotIdFromURL,
-	} = useParams<{
-		locale: string;
-		oldSessionSlotId: string;
-		userId: string;
-	}>();
+		availabilityDataIsLoading,
+		goToNextWeek,
+		goToPreviousWeek,
+		lastAvailableDate,
+	} = useAvailability();
 
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
-	const { editAppointmentMttn, isEditAppointmentLoading } =
-		useAppointmentActions();
+	const selectedDayOrToday = daySelectedFromCalendar || new Date();
 
-	const [currentWeekStart, setCurrentWeekStart] = useState<Date>(selectedDay);
+	const [selectedSlotDetails, setSelectedSlotDetails] =
+		useState<ISelectedSlot | null>(null);
 
-	// Patient click state:
+	const [weekDays, setWeekDays] = useState<string[]>(
+		generateWeekDays(selectedDayOrToday)
+	);
 
-	const [isPatientClick, setIsPatientClick] = useState<boolean>(false);
+	// HILIGHTED DAY SELECTED FROM CALENDAR
+	const [dayFromCalendar, setDayFromCalendar] =
+		useState<Date>(selectedDayOrToday);
 
-	// Therapist Reading Details state:
+	useEffect(() => {
+		setWeekDays(generateWeekDays(dayFromCalendar));
+	}, [dayFromCalendar]);
+
+	// READING DETAILS STATE
 	const [openReadDetailsModal, setOpenReadDetailsModal] =
 		useState<boolean>(false);
 
-	const [isClicked, setIsClicked] = useState<boolean>(false);
-	const [clickedSlot, setClickedSlot] = useState<string | null>(null);
-	const [selectedSlot, setSelectedSlot] = useState<Date | null>(null);
-
-	const [proceed, setProceed] = useState<boolean>(false);
-
-	// isTherapist click states
-	const [isTherapistClick, setIsTherapistClick] = useState<boolean>(false);
-
-	const [slotToValidString, setSlotToValidString] = useState<string>('');
-
-	// isEditingMode
-	const [selectedEditingSlot, setSelectedEditingSlot] =
-		useState<IAgendaEditing | null>(null);
-
-	const [selectedEditingDay, setSelectedEditingDay] = useState<string | null>(
-		null
-	);
-	const [selectedEditingHour, setSelectedEditingHour] = useState<string | null>(
+	// HOVER HOUR SLOT 1st COLUMN ITEM
+	const isHoveringTable = useRef(false);
+	const [hoveredRowHour, setHoveredRowHour] = useState<string | null>(null);
+	const [hoveredColumnIndex, setHoveredColumnIndex] = useState<number | null>(
 		null
 	);
 
-	const [isConfirmingEdit, setIsConfirmingEdit] = useState<boolean>(false);
-
-	const {
-		isUserDetailsLoading,
-		userDetails,
-		appointmentDetailsBySlotId,
-		therapistId,
-	} = useUserDetails('', selectedSlotIdFromURL);
-
-	const patientIdFromAppointment =
-		appointmentDetailsBySlotId?.appointment.patient?._id;
-
-	const { bookAppointmentFromLinkMttnIsLoading, latestPatientId } = usePatient(
-		patientIdFromAppointment
+	const dayHoursGeneratedByApptDuration = generateTimeSlots(
+		availabilityData?.latestAvailability?.consultationDuration
 	);
 
-	// useEffect(() => {
-	// 	if (selectedEditingSlot !== null && selectedEditingSlot.day) {
-	// 		setSelectedEditingDay(formatDate(selectedEditingSlot?.day, locale));
-	// 		setSelectedEditingHour(selectedEditingSlot.hour);
-	// 	}
-	// }, [locale, selectedEditingSlot]);
-
-	useEffect(() => {
-		if (isClicked && clickedSlot) {
-			const formattedClickedSlot = formatDateTimeToLocale(clickedSlot, locale);
-			return setSlotToValidString(formattedClickedSlot);
-		}
-	}, [clickedSlot, isClicked, locale]);
-
-	const dayHours = generateTimeSlots(
-		availability?.latestAvailability?.consultationDuration
+	const { filteredHoursRange } = filteredAvailabilityBasedOnRange(
+		dayHoursGeneratedByApptDuration,
+		availabilityData?.latestAvailability?.availabilityDates
 	);
 
-	const weekDays = generateWeekDaysFromSelected(currentWeekStart);
-
-	const goToNextWeek = () => {
-		const nextWeekStart = addDays(currentWeekStart, 7);
-		setCurrentWeekStart(nextWeekStart);
-	};
-
-	const hasPreviousDates = () => {
-		return availability?.latestAvailability?.availabilityDates?.some(
-			(date) => new Date(date.date) < currentWeekStart
-		);
-	};
-
-	const hasNextDates = () => {
-		return availability?.latestAvailability?.availabilityDates?.some(
-			(date) => new Date(date.date) >= addDays(currentWeekStart, 7)
-		);
-	};
-
-	const previousWeekStart = selectedDay
-		? subDays(currentWeekStart, 7)
-		: undefined;
-
-	const goToPreviousWeek = () => {
-		if (selectedDay) setCurrentWeekStart(previousWeekStart);
-	};
-
-	const filteredDayHours = filteredAvailabilityBasedOnRange(
-		dayHours,
-		availability?.latestAvailability?.availabilityDates
+	const weekStart = useMemo(
+		() => startOfWeek(dayFromCalendar, { weekStartsOn: 0 }),
+		[dayFromCalendar]
 	);
-	console.log('🚀 ~ filteredDayHours:', filteredDayHours);
 
-	useEffect(() => {
-		console.log('🔥 selectedEditingSlot atualizado:', selectedEditingSlot);
-	}, [selectedEditingSlot]);
-
-	const handleClick = (props: IAgendaClick, isEditingMode: boolean) => {
-		const { slotStatus, beforeToday, status, hour, day } = props;
-
-		if (beforeToday || status !== 'available') return;
-
-		const foundAvailabilityDate =
-			availability?.latestAvailability?.availabilityDates.find(
-				(availabilityDate) =>
-					new Date(availabilityDate.date).toDateString() === day.toDateString()
-			);
-
-		console.log(
-			'🚀 ~ handleClick ~ foundAvailabilityDate:',
-			foundAvailabilityDate
+	const hasPreviousDates = useMemo(() => {
+		return availabilityData?.latestAvailability?.availabilityDates?.some(
+			({ date }) => new Date(date) < weekStart
 		);
-		if (!foundAvailabilityDate) return;
+	}, [weekStart, availabilityData]);
 
-		const foundSlot = foundAvailabilityDate.slots.find(
-			(slot) => slot.startTime === hour
+	const hasNextDates = useMemo(() => {
+		return availabilityData?.latestAvailability?.availabilityDates?.some(
+			({ date }) => new Date(date) >= addDays(weekStart, 7)
 		);
-		console.log('🚀 ~ handleClick ~ foundSlot:', foundSlot);
+	}, [weekStart, availabilityData]);
 
-		if (!foundSlot) return;
-		console.log('00');
+	const filteredAvailabilityPerWeek = useMemo(() => {
+		return availabilityData?.latestAvailability?.availabilityDates?.filter(
+			({ date }) => {
+				const formattedDate = new Date(date);
+				return (
+					formattedDate >= weekStart && formattedDate < addDays(weekStart, 7)
+				);
+			}
+		);
+	}, [weekStart, availabilityData]);
 
-		// if (isEditingMode) {
-		console.log('🚀 ~ handleClick ~ isEditingMode:', isEditingMode);
-		setSelectedEditingSlot({
-			day,
-			hour,
-			slotStatus,
-			status,
-			beforeToday,
-			availabilityDayId: foundAvailabilityDate._id,
-			slotId: foundSlot._id,
+	const fullWeekAvailability = useMemo(() => {
+		return weekDays.map((weekDay, index) => {
+			const weekDate = addDays(weekStart, index);
+			const formattedWeekDate = format(weekDate, 'yyyy-MM-dd');
+
+			const existingDay = filteredAvailabilityPerWeek?.find(({ date }) => {
+				const formattedAvailableDate = date.split('T')[0];
+				return formattedAvailableDate === formattedWeekDate;
+			});
+
+			return {
+				weekDay,
+				date: weekDate.toISOString(),
+				_id: existingDay?._id ?? `empty-${weekDate.getTime()}-${index}`,
+				slots: existingDay?.slots ?? [],
+			};
 		});
-		console.log('>>>>>', selectedEditingSlot);
+	}, [weekDays, weekStart, filteredAvailabilityPerWeek]);
 
-		console.log('🚀  ~ selectedEditingSlot:', selectedEditingSlot);
-		// setIsConfirmingEdit(true);
+	const [isTableLoading, setIsTableLoading] = useState(true);
 
-		// 	return;
-		// }
-		console.log('01');
+	useEffect(() => {
+		if (!availabilityDataIsLoading && fullWeekAvailability.length > 0) {
+			setTimeout(() => {
+				setIsTableLoading(false);
+			}, 500);
+		} else {
+			setIsTableLoading(true);
+		}
+	}, [availabilityDataIsLoading, fullWeekAvailability]);
 
-		// if (isTherapist) {
-		// 	console.log('02');
-		// 	console.log('🚀 ~ handleClick ~ foundSlot._id:', foundSlot._id);
-		// 	setSelectedSlotId(foundSlot._id);
-		// 	setIsTherapistClick(true);
-		// } else if (!beforeToday && slotStatus === 'AVAILABLE' && selectedDay) {
-		// 	console.log('04');
-		// 	setClickedSlot(`${foundAvailabilityDate._id}-${foundSlot._id}`);
-		// 	setIsClicked(true);
-		// 	setSelectedSlot(new Date(day.setHours(Number(hour.split(':')[0]))));
-		// }
-		console.log('05');
+	useEffect(() => {
+		const lastLoadedDate = fullWeekAvailability.slice(-1)[0]?.date;
+
+		const isLastLoadedWeek =
+			isAfter(new Date(lastLoadedDate), new Date(lastAvailableDate)) ||
+			(isEqual(new Date(lastLoadedDate), new Date(lastAvailableDate)) &&
+				hasNextDates);
+
+		if (isLastLoadedWeek && !availabilityDataIsLoading) {
+			goToNextWeek();
+		}
+	}, [
+		fullWeekAvailability,
+		hasNextDates,
+		availabilityDataIsLoading,
+		goToNextWeek,
+		lastAvailableDate,
+	]);
+
+	useEffect(() => {
+		const isFirstLoadedWeek =
+			fullWeekAvailability.every((day) => day.slots.length === 0) &&
+			hasPreviousDates;
+
+		if (isFirstLoadedWeek && !availabilityDataIsLoading) {
+			goToPreviousWeek();
+		}
+	}, [
+		fullWeekAvailability,
+		availabilityDataIsLoading,
+		hasPreviousDates,
+		goToPreviousWeek,
+	]);
+
+	const handleNextWeek = () => {
+		setDayFromCalendar((prev) => addDays(prev, 7));
+	};
+	const handlePreviousWeek = () => {
+		setDayFromCalendar((prev) => subDays(prev, 7));
 	};
 
-	const handleGeneralClick = (
-		selectedDayId: string,
-		selectedSlotId: string,
-		isEditSlotMode: boolean,
-		isReadDetailsMode: boolean
-	) => {
-		const foundSelectedDay =
-			availability?.latestAvailability?.availabilityDates.find(
-				(date) => date._id === selectedDayId
-			);
+	// HANDLE HOVER HOUR
+	// const handleHourHoverClick = (hour: string) => {
+	// 	if (hoveredRowHour !== hour) {
+	// 		setHoveredRowHour(hour);
+	// 	}
+	// 	isHoveringTable.current = true;
+	// };
+	// const handleColumnHoverClick = (columnIndex: number) => {
+	// 	if (hoveredColumnIndex !== columnIndex) {
+	// 		setHoveredColumnIndex(columnIndex);
+	// 	}
+	// 	isHoveringTable.current = true;
+	// };
 
-		console.log('🚀 ~ handleClick ~ foundSelectedDay:', foundSelectedDay);
-		if (!foundSelectedDay) return;
+	// const handleSlotMouseEnterLeave = (hour: string, columnIndex: number) => {
+	// 	if (hoveredRowHour !== hour) {
+	// 		setHoveredRowHour(null);
+	// 	}
+	// 	if (hoveredColumnIndex !== columnIndex) {
+	// 		setHoveredColumnIndex(null);
+	// 	}
+	// 	isHoveringTable.current = true;
+	// };
 
-		const foundSelectedSlot = foundSelectedDay.slots.find(
-			(slot) => slot._id === selectedSlotId
-		);
-		console.log('🚀 ~ foundSelectedSlot:', foundSelectedSlot);
+	// const handleMouseLeaveTable = () => {
+	// 	isHoveringTable.current = false;
+	// 	setHoveredRowHour(null);
+	// 	setHoveredColumnIndex(null);
+	// };
 
-		if (!foundSelectedSlot) return;
+	// const isHighlightedRow = (hour: string) => hoveredRowHour === hour;
+	// const isHighlightedColumn = (columnIndex: number) =>
+	// 	hoveredColumnIndex === columnIndex;
 
-		if (isReadDetailsMode) {
-			setOpenReadDetailsModal(true);
-		}
-		if (isEditSlotMode) {
-			console.log('00');
-		}
-	};
+	// const isLastInColumn = (rowIndex: number, totalRows: number) => {
+	// 	return rowIndex === totalRows - 1;
+	// };
 
-	const handleCancel = useCallback(() => {
-		setIsClicked(false);
-		setClickedSlot(null);
-		setProceed(false);
-	}, []);
+	// GENERAL CLICK SLOT
+	// const handleGeneralClickSlot = (
+	// 	selectedSlotDetails: ISelectedSlot,
+	// 	mode: IAgendaViewMode
+	// ) => {
+	// 	if (!selectedSlotDetails.availabilityDayId) return;
 
-	const handleIsTherapistClickCancel = useCallback(() => {
-		setIsTherapistClick(false);
-		setClickedSlot(null);
-	}, []);
+	// 	const { availabilityDayId, slot } = selectedSlotDetails;
 
+	// 	setSelectedSlotDetails({
+	// 		availabilityDayId,
+	// 		slot,
+	// 	});
+
+	// 	switch (mode) {
+	// 		case 'view':
+	// 			setOpenReadDetailsModal(true);
+	// 			break;
+
+	// 		case 'edit':
+	// 			// Navegar para a tela de edição
+	// 			break;
+
+	// 		case 'cancel':
+	// 			break;
+
+	// 		case 'book':
+	// 			// Implementação do fluxo de booking
+	// 			break;
+
+	// 		default:
+	// 			console.error('Ação desconhecida:', mode);
+	// 	}
+	// };
+
+	// HANDLE EDIT APPOINTMENT
 	const handleEditAppointment = (availabilityDayId: string, slotId: string) => {
-		if (!availabilityDayId || !slotId || !availability) return;
+		if (!availabilityDayId || !slotId || !availabilityData) return;
 
-		const foundDate = availability.latestAvailability.availabilityDates.find(
-			(dateObj) => dateObj._id === availabilityDayId
-		);
+		const foundDate =
+			availabilityData?.latestAvailability?.availabilityDates?.find(
+				(dateObj) => dateObj._id === availabilityDayId
+			);
 
 		if (!foundDate) return;
 
 		const formattedDate = new Date(foundDate.date).toISOString().split('T')[0];
 
 		navigate(
-			`../${APPOINTMENTS}/${availabilityDayId}?slot=${slotId}&date=${formattedDate}`
+			`../${APPOINTMENTS}/edit/${availabilityDayId}?slot=${slotId}&date=${formattedDate}`
 		);
 	};
 
-	const handleSaveEditAppointment = (
-		selectedEditingSlot: IAgendaClick,
-		selectedSlotIdFromURL: string
-	) => {
-		if (
-			!selectedEditingSlot ||
-			!therapistId ||
-			!latestPatientId ||
-			!selectedSlotIdFromURL
-		) {
-			return;
-		}
-
-		const foundSelectedDay =
-			availability.latestAvailability.availabilityDates.find(
-				(date) =>
-					new Date(date.date).toDateString() ===
-					selectedEditingSlot.day.toDateString()
-			);
-
-		const foundSlot = foundSelectedDay.slots.find(
-			(slot) => slot.startTime === selectedEditingSlot.hour
-		);
-
-		const formattedEditAppointmentData = {
-			newData: {
-				newDate: selectedEditingSlot.day,
-				newSessionSlotId: foundSlot._id,
-			},
-			oldSessionSlotId: selectedSlotIdFromURL,
-			therapistId: userDetails._id,
-			patientId: patientIdFromAppointment,
-		};
-
-		editAppointmentMttn(formattedEditAppointmentData);
-		setIsConfirmingEdit(false);
-	};
-
-	const handleDeleteAppointment = (patientId: string) => {
-		navigate(`../${APPOINTMENTS}/cancel/${patientId}`);
-	};
-
-	const selectedDaysSet = new Set(
-		weekDays
-			.filter((day) => isSelectedDay(selectedDay, day))
-			.map((day) => day.toDateString())
-	);
-
-	if (isLoading || isUserDetailsLoading || isEditAppointmentLoading) {
-		return <Loader />;
-	}
+	// HANDLE NAVIGATE TO DELETE APPOINTMENT
+	// const handleDeleteAppointment = (patientId: string) => {
+	// 	navigate(`../${APPOINTMENTS}/cancel/${patientId}`);
+	// };
 
 	return (
 		<>
-			<Grid container width='100%' overflow={'auto'} height={'100%'}>
-				<WeekDaysHeader selectedDay={currentWeekStart} />
-				<Grid container columns={8} mt={5}>
-					{filteredDayHours.map((hour, hourIndex) => {
-						console.log('🚀 ~ {filteredDayHours.map ~ hour:', hour);
-						return (
-							<Fragment key={`hour-slot-${hourIndex}`}>
-								<StyledGridHours item xs={1} columns={1}>
-									{/* <StyledHoursWrapper>
-									<Text variant='caption'>{hour}</Text>
-								</StyledHoursWrapper> */}
-								</StyledGridHours>
-								{/* {weekDays.map((day, index) => {
-								const slotStatus = getSlotStatus(
-									day,
-									hour,
-									availability.latestAvailability.availabilityDates
-								);
+			<TableContainer component={Paper} style={{ width: '100%', height: 500 }}>
+				<Table stickyHeader>
+					<AgendaTableHead
+						daySelectedFromCalendar={dayFromCalendar}
+						fullWeekAvailability={fullWeekAvailability}
+					/>
+					<AgendaTableBody
+						filteredHoursRange={filteredHoursRange}
+						fullWeekAvailability={fullWeekAvailability}
+						isLoading={isTableLoading}
+						mode={'view'}
+					/>
+				</Table>
+			</TableContainer>
+			{/* SLOTS COLUMNS ENDS */}
 
-								let status: StyledAgendaStatusProps;
-
-								switch (slotStatus) {
-									case 'AVAILABLE':
-										status = 'available';
-										break;
-									case 'BOOKED':
-										status = 'booked';
-										break;
-									case 'BLOCKED':
-									case 'ONHOLD':
-									case 'CANCELLED':
-										status = 'unavailable';
-										break;
-									default:
-										status = 'default';
-								}
-								const beforeToday = isBeforeToday(day);
-								const slotKey = `${day.toDateString()}_${hour}`;
-
-								if (beforeToday && isFirstAppointment) {
-									status = 'beforeToday';
-								} else if (clickedSlot === slotKey) {
-									status = 'clicked';
-								}
-
-								const isSelected = selectedDaysSet.has(day.toDateString());
-								const isFirstSlot = hourIndex === 0;
-								const isLastSlot = hourIndex === filteredDayHours.length - 1;
-
-								return (
-									<AgendaSlot
-										key={`day-slot-${index}`}
-										day={day}
-										hour={hour}
-										slotStatus={slotStatus}
-										status={status}
-										clickedSlot={clickedSlot}
-										beforeToday={beforeToday}
-										isTherapist={isTherapist}
-										isSelectedDay={isSelected}
-										isFirstSlot={isFirstSlot}
-										isLastSlot={isLastSlot}
-										handleSlotClick={() =>
-											handleClick(
-												{
-													day,
-													hour,
-													status,
-													beforeToday,
-													slotStatus,
-												},
-												isEditingMode
-											)
-										}
-									/>
-								);
-								})} */}
-							</Fragment>
-						);
-					})}
-				</Grid>
-			</Grid>
+			{/* PAGINATION STARTS */}
 			<AgendaPagination
-				onGoToNextWeek={goToNextWeek}
-				onGoToPreviousWeek={goToPreviousWeek}
-				onGoToToday={() => setCurrentWeekStart(selectedDay)}
+				onGoToNextWeek={handleNextWeek}
+				onGoToPreviousWeek={handlePreviousWeek}
+				onGoToToday={() => setDayFromCalendar(selectedDayOrToday)}
 				onGoToMonthView={() => console.log('Open month view')}
-				disablePrevious={!hasPreviousDates()}
-				disableNext={!hasNextDates()}
-				isTherapist={isTherapist}
+				disablePrevious={!hasPreviousDates}
+				disableNext={!hasNextDates}
+				mode={mode}
 			/>
-			{/* patient click */}
-			<Modal
-				openModal={isClicked}
-				cardActionsProps={{
-					actionName: t('components.link.navigate.next'),
-					onClick: () => setProceed(true),
-					hasSecondAction: true,
-					secondActionName: t('components.link.navigate.back'),
-					secondAction: handleCancel,
-				}}
-				isLoading={bookAppointmentFromLinkMttnIsLoading}
-			>
-				{bookAppointmentFromLinkMttnIsLoading ? (
-					<Loader />
-				) : (
-					<>
-						<Box border='1px solid red'>
-							<Text pb={5}>
-								{t('components.agenda.modal', {
-									appointment: slotToValidString,
-								})}
-							</Text>
-						</Box>
-						<ConfirmationModal
-							openConfirmationModal={proceed}
-							handleCancelConfirmation={handleCancel}
-							selectedSlot={selectedSlot}
-							therapistId={userId}
-							availabilityId={availability?.latestAvailability?._id}
-						/>
-					</>
-				)}
-			</Modal>
-			{/*  READING DETAILS MODAL*/}
+			{/* PAGINATION ENDS */}
+			{/* READING DETAILS MODAL STARTS */}
 			<Modal
 				openModal={openReadDetailsModal}
 				title={t('components.agenda.appointment-details.title')}
-				onClose={handleIsTherapistClickCancel}
+				onClose={() => setOpenReadDetailsModal(false)}
 				cardActionsProps={{
 					actionName: t(
 						'components.agenda.appointment-details.edit-patient-appointment'
 					),
 					onClick: () => {
 						handleEditAppointment(
-							selectedEditingSlot.availabilityDayId,
-							selectedEditingSlot.slotId
+							selectedSlotDetails.availabilityDayId,
+							selectedSlotDetails.slot._id
 						);
 					},
 					hasSecondAction: true,
 					secondActionName: t('components.agenda.cancel-appointment.title'),
-					secondAction: () => handleDeleteAppointment(latestPatientId),
+					// secondAction: () => handleDeleteAppointment(latestPatientId),
 				}}
 			>
 				<AgendaAppointmentDetails
-					selectedEditingSlot={selectedEditingSlot}
+					selectedSlot={selectedSlotDetails}
 					handleEditAppointment={handleEditAppointment}
 				/>
 			</Modal>
-
-			<Modal
-				openModal={isConfirmingEdit}
-				onClose={() => setIsConfirmingEdit(false)}
-				title={t(
-					'components.agenda.appointment-details.edit-patient-appointment'
-				)}
-				cardActionsProps={{
-					actionName: 'Confirm',
-					onClick: () =>
-						handleSaveEditAppointment(
-							selectedEditingSlot,
-							selectedSlotIdFromURL
-						),
-					hasSecondAction: true,
-					secondActionName: t('components.link.navigate.back'),
-					secondAction: () => setIsConfirmingEdit(false),
-				}}
-			>
-				{selectedEditingSlot && (
-					<Box>
-						<Text>{t('components.agenda.edit-appointment.confirmation')}</Text>
-						<Box display='flex' py={1}>
-							<Text fontWeight={600} pr={1}>
-								{t('globals.date')}:
-							</Text>
-							<Text>{selectedEditingDay}</Text>
-						</Box>
-						<Box display='flex' py={1}>
-							<Text fontWeight={600} pr={1}>
-								{t('globals.starts')}:
-							</Text>
-							<Text>{selectedEditingHour}</Text>
-						</Box>
-					</Box>
-				)}
-			</Modal>
+			{/* READING DETAILS MODAL ENDS */}
 		</>
 	);
 };

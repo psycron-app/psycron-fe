@@ -49,8 +49,6 @@ export const AvailabilityProvider = ({
 			placeholderData: (prev) => prev,
 			staleTime: 1000 * 60 * 5,
 		});
-
-	// 🔹 Agora `availabilityData` mantém todas as semanas carregadas sem sobrescrever as anteriores
 	const availabilityData: IAvailabilityResponse | undefined =
 		data?.pages?.reduce<IAvailabilityResponse | undefined>((acc, page) => {
 			if (!acc) return page;
@@ -65,36 +63,24 @@ export const AvailabilityProvider = ({
 				},
 			};
 		}, undefined);
-
-	// 🔹 `latestPage` continua sendo a última página carregada corretamente
 	const latestPage = data?.pages?.[data.pages.length - 1];
-
-	// 🔹 Verificamos se os dados estão vazios corretamente
 	const isAvailabilityEmpty =
 		!latestPage?.latestAvailability?.availabilityDates?.length ||
 		latestPage?.totalPages === 0;
-
-	// 🔹 Corrigimos `lastAvailableDate` garantindo que sempre tenha um valor válido
 	const lastAvailableDate =
 		latestPage?.latestAvailability?.availabilityDates?.slice(-1)[0]?.date ?? '';
-
-	// 🔹 Corrigimos a navegação entre semanas
 	const goToPreviousWeek = async () => {
-		console.log('⬅️ Fetching previous page...');
 		await fetchPreviousPage();
-		console.log('✅ Previous page loaded');
 	};
 
 	const goToNextWeek = async () => {
-		console.log('➡️ Fetching next page...');
 		await fetchNextPage();
-		console.log('✅ Next page loaded');
 	};
 
 	return (
 		<AvailabilityContext.Provider
 			value={{
-				availabilityData, // ✅ Mantemos a estrutura `IAvailabilityResponse`
+				availabilityData,
 				availabilityDataIsLoading: isLoading,
 				hasNextPage: !!hasNextPage,
 				hasPreviousPage: data?.pages?.length > 1,

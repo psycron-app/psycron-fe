@@ -34,7 +34,7 @@ const CalendarComponent = ({
 	dateLocale,
 	today,
 	isBig,
-	availabilityDates,
+	availabilityData,
 }: ICalendarProps) => {
 	const [currentDisplayedMonth, setCurrentDisplayedMonth] = useState<Date>(
 		() => today
@@ -56,9 +56,9 @@ const CalendarComponent = ({
 		end: endOfCalendarGrid,
 	});
 
-	const availableScheduleDates: IDateInfo[] = Array.isArray(availabilityDates)
-		? availabilityDates
-		: (Object.values(availabilityDates ?? {}).flat() as IDateInfo[]);
+	const availableScheduleDates: IDateInfo[] = Array.isArray(availabilityData)
+		? availabilityData
+		: (Object.values(availabilityData ?? {}).flat() as IDateInfo[]);
 
 	const isDayAvailableInSchedule = (day: Date) => {
 		return availableScheduleDates.some((availability) => {

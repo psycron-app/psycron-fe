@@ -6,13 +6,7 @@ import { enGB, ptBR } from 'date-fns/locale';
 
 export const useDashboardLogic = () => {
 	const { locale } = useParams<{ locale: string }>();
-	const {
-		isUserDetailsLoading,
-		therapistLatestAvailability,
-		therapistLatestAvailabilityLoading,
-		userDetails,
-		emptyAvailability,
-	} = useUserDetails();
+	const { userDetails } = useUserDetails();
 
 	const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
 	const [selectedDay, setSelectedDay] = useState<Date | null>(null);
@@ -26,9 +20,6 @@ export const useDashboardLogic = () => {
 	}, []);
 
 	return {
-		isUserDetailsLoading,
-		therapistLatestAvailability,
-		therapistLatestAvailabilityLoading,
 		userDetails,
 		dateLocale,
 		today,
@@ -36,6 +27,5 @@ export const useDashboardLogic = () => {
 		selectedDay,
 		setIsDateClicked,
 		handleDayClick,
-		emptyAvailability,
 	};
 };

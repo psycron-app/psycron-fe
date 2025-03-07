@@ -1,7 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { Box, List, ListItemText } from '@mui/material';
-// import { Agenda } from '@psycron/components/agenda/Agenda';
-import { AgendaNew } from '@psycron/components/agenda/AgendaNew';
 import {
 	CalendarOff,
 	CalendarRange,
@@ -10,8 +8,8 @@ import {
 } from '@psycron/components/icons';
 import { NavigateLink } from '@psycron/components/link/navigate/NavigateLink';
 import { Text } from '@psycron/components/text/Text';
+import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
-import { useDashboardLogic } from '@psycron/hooks/useDashboardLogic';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
 import { AVAILABILITYWIZARD } from '@psycron/pages/urls';
 import { startOfToday } from 'date-fns';
@@ -27,13 +25,10 @@ import {
 export const AppointmentPage = () => {
 	const { t } = useTranslation();
 
-	const {
-		therapistLatestAvailabilityLoading,
-		emptyAvailability,
-		isUserDetailsLoading,
-	} = useUserDetails();
+	const { isUserDetailsLoading } = useUserDetails();
 
-	const { therapistLatestAvailability } = useDashboardLogic();
+	const { isAvailabilityEmpty, availabilityDataIsLoading, availabilityData } =
+		useAvailability();
 
 	const availabilityGuideItems = [
 		{
@@ -63,10 +58,10 @@ export const AppointmentPage = () => {
 	return (
 		<PageLayout
 			title={t('globals.appointments')}
-			isLoading={therapistLatestAvailabilityLoading || isUserDetailsLoading}
+			isLoading={availabilityDataIsLoading || isUserDetailsLoading}
 		>
 			<Box height={'100%'} position={'relative'}>
-				{emptyAvailability ? (
+				{isAvailabilityEmpty ? (
 					<>
 						<Box>
 							<Text textAlign={'left'}>
@@ -103,11 +98,11 @@ export const AppointmentPage = () => {
 								isTherapist
 							/> */}
 
-							<AgendaNew
+							{/* <AgendaNew
 								availability={therapistLatestAvailability}
 								daySelectedFromCalendar={currentDay}
 								mode='view'
-							/>
+							/> */}
 						</Box>
 					</Box>
 				)}

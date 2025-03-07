@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getTherapistLatestAvailability, getUserById } from '@psycron/api/user';
+import { getUserById } from '@psycron/api/user';
 import {
 	getAppointmentDetailsBySlotId,
 	getAvailabilitySession,
@@ -8,7 +8,7 @@ import {
 import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import { EDITUSERPATH } from '@psycron/pages/urls';
 import { THERAPIST_ID } from '@psycron/utils/tokens';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import { useAuth } from '../auth/UserAuthenticationContext';
 import type {
@@ -80,7 +80,6 @@ export const useUserDetails = (
 	availabilityDayId?: string,
 	slotId?: string
 ) => {
-	const queryClient = useQueryClient();
 	const context = useContext(UserDetailsContext);
 	if (!context) {
 		throw new Error('useUserDetails must be used within a UserDetailsProvider');
@@ -117,24 +116,6 @@ export const useUserDetails = (
 	});
 
 	const {
-		data: therapistLatestAvailability,
-		isLoading: therapistLatestAvailabilityLoading,
-		isSuccess: therapistLatestAvailabilitySuccess,
-		refetch: refetchTherapistAvailability,
-	} = useQuery({
-		queryKey: ['therapistAvailability', userDetails?._id],
-		queryFn: async () => {
-			if (!userDetails?._id) return null;
-			return getTherapistLatestAvailability(userDetails._id);
-		},
-		enabled: !!userDetails?._id && !!userDetails.availability?.length,
-		retry: false,
-		staleTime: 1000 * 60 * 5,
-		gcTime: 1000 * 60 * 10,
-		refetchInterval: 10000,
-	});
-
-	const {
 		data: appointmentDetailsBySlotId,
 		isLoading: isAppointmentDetailsBySlotIdLoading,
 		isSuccess: isAppointmentDetailsBySlotIdSuccess,
@@ -153,43 +134,15 @@ export const useUserDetails = (
 		'local'
 	);
 
-	const prefetchTherapistAvailability = async () => {
-		try {
-			if (userDetails?._id) {
-				await queryClient.prefetchQuery({
-					queryKey: ['therapistAvailability'],
-					queryFn: () => getTherapistLatestAvailability(userDetails._id),
-				});
-			}
-		} catch (error) {
-			// eslint-disable-next-line no-console
-			console.error('Failed to prefetch therapist availability:', error);
-		}
-	};
-
-	const isUserDetailsContextLoading =
-		therapistLatestAvailabilityLoading || isUserDetailsLoading;
-
-	const emptyAvailability =
-		!therapistLatestAvailability?.latestAvailability?.availabilityDates
-			?.length || therapistLatestAvailability?.totalPages === 0;
-
 	return {
 		...context,
 		userDetails,
-		isUserDetailsLoading,
+		isUserDetailsLoading: isUserDetailsLoading,
 		isUserDetailsSucces,
-		therapistLatestAvailability,
-		therapistLatestAvailabilityLoading,
-		therapistLatestAvailabilitySuccess,
-		emptyAvailability,
-		prefetchTherapistAvailability,
-		isUserDetailsContextLoading,
 		therapistId,
 		appointmentDetailsBySlotId,
 		isAppointmentDetailsBySlotIdLoading,
 		isAppointmentDetailsBySlotIdSuccess,
-		refetchTherapistAvailability,
 		sessionData,
 		sessionDataIsLoading,
 		latestSessionId,

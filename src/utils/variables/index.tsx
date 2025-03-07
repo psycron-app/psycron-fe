@@ -133,12 +133,13 @@ export const generateTimeSlots = (duration: number) => {
 	return slots;
 };
 
-export const generateWeekDays = (): Date[] => {
-	const start = startOfWeek(new Date());
-
-	const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(start, i));
-
-	return weekDays;
+export const generateWeekDays = (startDate: Date) => {
+	const startOfWeekMonday = startOfWeek(startDate, {
+		weekStartsOn: 0,
+	});
+	return Array.from({ length: 7 }, (_, i) =>
+		format(addDays(startOfWeekMonday, i), 'yyyy-MM-dd')
+	);
 };
 
 export const generateWeekDaysFromSelected = (referenceDate: Date): Date[] => {

@@ -12,6 +12,7 @@ export const HourSlotWrapper = styled(Box, {
 	align-items: center;
 	justify-content: center;
 	z-index: 101;
+	width: 100%;
 
 	border-top: ${({ isHighlighted }) =>
 		isHighlighted

@@ -1,45 +1,63 @@
-import { useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { Grid } from '@mui/material';
-import { Loader } from '@psycron/components/loader/Loader';
+import { Paper, Table, TableContainer } from '@mui/material';
 import { Modal } from '@psycron/components/modal/Modal';
-import { Text } from '@psycron/components/text/Text';
-import type { ISlot } from '@psycron/context/user/auth/UserAuthenticationContext.types';
+import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { APPOINTMENTS } from '@psycron/pages/urls';
-import { generateTimeSlots } from '@psycron/utils/variables';
-import { addDays, subDays } from 'date-fns';
+import { generateTimeSlots, generateWeekDays } from '@psycron/utils/variables';
+import {
+	addDays,
+	format,
+	isAfter,
+	isEqual,
+	startOfWeek,
+	subDays,
+} from 'date-fns';
 
 import { AgendaAppointmentDetails } from './components/agenda-appointment-details/AgendaAppointmentDetails';
 import { AgendaPagination } from './components/agenda-pagination/AgendaPagination';
-import { AgendaSlotNew } from './components/agenda-slot/AgendaSlotNew';
-import { WeekDaysHeader } from './components/week-days/WeekDaysHeader';
-import {
-	filteredAvailabilityBasedOnRange,
-	getAvailableSlotsForDay,
-} from './helpers/agendaHelpers';
-import { HourSlotWrapper } from './AgendaNew.styles';
-import type {
-	IAgendaPropsNew,
-	IAgendaViewMode,
-	ISelectedSlot,
-} from './AgendaNew.types';
+import { AgendaTableBody } from './components/agenda-table-body/AgendaTableBody';
+import { AgendaTableHead } from './components/agenda-table-head/AgendaTableHead';
+import { filteredAvailabilityBasedOnRange } from './helpers/agendaHelpers';
+import type { IAgendaPropsNew, ISelectedSlot } from './AgendaNew.types';
 
 export const AgendaNew = ({
-	availability,
+	availabilityData,
 	daySelectedFromCalendar,
-	mode,
+	mode = 'view',
 }: IAgendaPropsNew) => {
+	const {
+		availabilityDataIsLoading,
+		goToNextWeek,
+		goToPreviousWeek,
+		lastAvailableDate,
+	} = useAvailability();
+	console.log(
+		':::::::::::::::LOADING:::::::::::::::',
+		availabilityDataIsLoading
+	);
+
 	const { t } = useTranslation();
 	const navigate = useNavigate();
+
+	const selectedDayOrToday = daySelectedFromCalendar || new Date();
 
 	const [selectedSlotDetails, setSelectedSlotDetails] =
 		useState<ISelectedSlot | null>(null);
 
-	// HILIGHTED DAY SELECTED FROM CALENDAR
-	const [dayFromCalendar, setDayFromCalendar] = useState<Date>(
-		daySelectedFromCalendar
+	const [weekDays, setWeekDays] = useState<string[]>(
+		generateWeekDays(selectedDayOrToday)
 	);
+
+	// HILIGHTED DAY SELECTED FROM CALENDAR
+	const [dayFromCalendar, setDayFromCalendar] =
+		useState<Date>(selectedDayOrToday);
+
+	useEffect(() => {
+		setWeekDays(generateWeekDays(dayFromCalendar));
+	}, [dayFromCalendar]);
+
 	// READING DETAILS STATE
 	const [openReadDetailsModal, setOpenReadDetailsModal] =
 		useState<boolean>(false);
@@ -51,176 +69,187 @@ export const AgendaNew = ({
 		null
 	);
 
-	if (!availability || !availability.latestAvailability) {
-		return <Loader />;
-	}
+	const dayHoursGeneratedByApptDuration = generateTimeSlots(
+		availabilityData?.latestAvailability?.consultationDuration
+	);
 
-	const {
-		latestAvailability: { consultationDuration, availabilityDates },
-	} = availability;
+	const { filteredHoursRange } = filteredAvailabilityBasedOnRange(
+		dayHoursGeneratedByApptDuration,
+		availabilityData?.latestAvailability?.availabilityDates
+	);
 
-	const dayHoursGeneratedByApptDuration =
-		generateTimeSlots(consultationDuration);
+	const weekStart = useMemo(
+		() => startOfWeek(dayFromCalendar, { weekStartsOn: 0 }),
+		[dayFromCalendar]
+	);
 
-	const { filteredHoursRange, filteredAvailabilityItem } =
-		filteredAvailabilityBasedOnRange(
-			dayHoursGeneratedByApptDuration,
-			availabilityDates
+	const hasPreviousDates = useMemo(() => {
+		return availabilityData?.latestAvailability?.availabilityDates?.some(
+			({ date }) => new Date(date) < weekStart
 		);
+	}, [weekStart, availabilityData]);
 
-	const filteredAvailabilityPerWeek = filteredAvailabilityItem
-		.filter((dateObj) => {
-			const date = new Date(dateObj.date);
-			return date >= dayFromCalendar && date < addDays(dayFromCalendar, 7);
-		})
-		.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+	const hasNextDates = useMemo(() => {
+		return availabilityData?.latestAvailability?.availabilityDates?.some(
+			({ date }) => new Date(date) >= addDays(weekStart, 7)
+		);
+	}, [weekStart, availabilityData]);
 
-	const visibleAvailabilityPerWeek = filteredAvailabilityPerWeek.map(
-		(dateObj) => ({
-			date: dateObj.date,
-			_id: dateObj._id,
-			slots: getAvailableSlotsForDay(dateObj),
-		})
-	);
+	const filteredAvailabilityPerWeek = useMemo(() => {
+		return availabilityData?.latestAvailability?.availabilityDates?.filter(
+			({ date }) => {
+				const formattedDate = new Date(date);
+				return (
+					formattedDate >= weekStart && formattedDate < addDays(weekStart, 7)
+				);
+			}
+		);
+	}, [weekStart, availabilityData]);
 
-	const allWeekDays = [
-		'Sunday',
-		'Monday',
-		'Tuesday',
-		'Wednesday',
-		'Thursday',
-		'Friday',
-		'Saturday',
-	];
+	const fullWeekAvailability = useMemo(() => {
+		return weekDays.map((weekDay, index) => {
+			const weekDate = addDays(weekStart, index);
+			const formattedWeekDate = format(weekDate, 'yyyy-MM-dd');
 
-	// Criamos um mapa com os dias disponíveis
-	const availableDaysMap = new Map(
-		visibleAvailabilityPerWeek.map((day) => [
-			new Date(day.date).toDateString(),
-			day,
-		])
-	);
+			const existingDay = filteredAvailabilityPerWeek?.find(({ date }) => {
+				const formattedAvailableDate = date.split('T')[0];
+				return formattedAvailableDate === formattedWeekDate;
+			});
 
-	// Garantimos que todos os dias da semana aparecem
-	const fullWeekAvailability = allWeekDays.map((weekDay, index) => {
-		const weekDate = addDays(dayFromCalendar, index);
-		const dayKey = weekDate.toDateString();
-		const existingDay = availableDaysMap.get(dayKey);
+			return {
+				weekDay,
+				date: weekDate.toISOString(),
+				_id: existingDay?._id ?? `empty-${weekDate.getTime()}-${index}`,
+				slots: existingDay?.slots ?? [],
+			};
+		});
+	}, [weekDays, weekStart, filteredAvailabilityPerWeek]);
 
-		return {
-			weekDay,
-			date: weekDate,
-			_id: existingDay?._id ?? `empty-${weekDate.getTime()}`,
-			slots: existingDay?.slots ?? [],
-		};
-	});
+	useEffect(() => {
+		const lastLoadedDate = fullWeekAvailability.slice(-1)[0]?.date;
+
+		const isLastLoadedWeek =
+			isAfter(new Date(lastLoadedDate), new Date(lastAvailableDate)) ||
+			(isEqual(new Date(lastLoadedDate), new Date(lastAvailableDate)) &&
+				hasNextDates);
+
+		if (isLastLoadedWeek && !availabilityDataIsLoading) {
+			console.log('📥 Automatically fetching next page...');
+			goToNextWeek();
+		}
+	}, [
+		fullWeekAvailability,
+		hasNextDates,
+		availabilityDataIsLoading,
+		goToNextWeek,
+		lastAvailableDate,
+	]);
+
+	useEffect(() => {
+		const isFirstLoadedWeek =
+			fullWeekAvailability.every((day) => day.slots.length === 0) &&
+			hasPreviousDates;
+
+		if (isFirstLoadedWeek && !availabilityDataIsLoading) {
+			console.log('📤 Automatically fetching previous page...');
+			goToPreviousWeek();
+		}
+	}, [
+		fullWeekAvailability,
+		availabilityDataIsLoading,
+		hasPreviousDates,
+		goToPreviousWeek,
+	]);
 
 	// HANDLE PAGINATION ACTIONS
-	const goToNextWeek = () => {
-		const nextWeekStart = addDays(dayFromCalendar, 7);
-		setDayFromCalendar(nextWeekStart);
+	const handleNextWeek = () => {
+		setDayFromCalendar((prev) => addDays(prev, 7));
 	};
-	const goToPreviousWeek = () => {
-		const previousWeekStart = daySelectedFromCalendar
-			? subDays(dayFromCalendar, 7)
-			: undefined;
-
-		if (daySelectedFromCalendar) setDayFromCalendar(previousWeekStart);
-	};
-	const hasPreviousDates = () => {
-		return availabilityDates.some(
-			(date) => new Date(date.date) < dayFromCalendar
-		);
-	};
-	const hasNextDates = () => {
-		return availabilityDates.some(
-			(date) => new Date(date.date) >= addDays(dayFromCalendar, 7)
-		);
+	const handlePreviousWeek = () => {
+		setDayFromCalendar((prev) => subDays(prev, 7));
 	};
 
 	// HANDLE HOVER HOUR
-	const handleHourHoverClick = (hour: string) => {
-		if (hoveredRowHour !== hour) {
-			setHoveredRowHour(hour);
-		}
-		isHoveringTable.current = true;
-	};
-	const handleColumnHoverClick = (columnIndex: number) => {
-		if (hoveredColumnIndex !== columnIndex) {
-			setHoveredColumnIndex(columnIndex);
-		}
-		isHoveringTable.current = true;
-	};
+	// const handleHourHoverClick = (hour: string) => {
+	// 	if (hoveredRowHour !== hour) {
+	// 		setHoveredRowHour(hour);
+	// 	}
+	// 	isHoveringTable.current = true;
+	// };
+	// const handleColumnHoverClick = (columnIndex: number) => {
+	// 	if (hoveredColumnIndex !== columnIndex) {
+	// 		setHoveredColumnIndex(columnIndex);
+	// 	}
+	// 	isHoveringTable.current = true;
+	// };
 
-	const handleSlotMouseEnterLeave = (hour: string, columnIndex: number) => {
-		if (hoveredRowHour !== hour) {
-			setHoveredRowHour(null);
-		}
-		if (hoveredColumnIndex !== columnIndex) {
-			setHoveredColumnIndex(null);
-		}
-		isHoveringTable.current = true;
-	};
+	// const handleSlotMouseEnterLeave = (hour: string, columnIndex: number) => {
+	// 	if (hoveredRowHour !== hour) {
+	// 		setHoveredRowHour(null);
+	// 	}
+	// 	if (hoveredColumnIndex !== columnIndex) {
+	// 		setHoveredColumnIndex(null);
+	// 	}
+	// 	isHoveringTable.current = true;
+	// };
 
-	const handleMouseLeaveTable = () => {
-		isHoveringTable.current = false;
-		setHoveredRowHour(null);
-		setHoveredColumnIndex(null);
-	};
+	// const handleMouseLeaveTable = () => {
+	// 	isHoveringTable.current = false;
+	// 	setHoveredRowHour(null);
+	// 	setHoveredColumnIndex(null);
+	// };
 
-	const isHighlightedRow = (hour: string) => hoveredRowHour === hour;
-	const isHighlightedColumn = (columnIndex: number) =>
-		hoveredColumnIndex === columnIndex;
+	// const isHighlightedRow = (hour: string) => hoveredRowHour === hour;
+	// const isHighlightedColumn = (columnIndex: number) =>
+	// 	hoveredColumnIndex === columnIndex;
 
-	const isLastInColumn = (rowIndex: number, totalRows: number) => {
-		return rowIndex === totalRows - 1;
-	};
+	// const isLastInColumn = (rowIndex: number, totalRows: number) => {
+	// 	return rowIndex === totalRows - 1;
+	// };
 
 	// GENERAL CLICK SLOT
-	const handleGeneralClickSlot = (
-		selectedSlotDetails: ISelectedSlot,
-		mode: IAgendaViewMode
-	) => {
-		console.log('00:', selectedSlotDetails.availabilityDayId);
-		console.log('01:', selectedSlotDetails.slot);
+	// const handleGeneralClickSlot = (
+	// 	selectedSlotDetails: ISelectedSlot,
+	// 	mode: IAgendaViewMode
+	// ) => {
+	// 	if (!selectedSlotDetails.availabilityDayId) return;
 
-		if (!selectedSlotDetails.availabilityDayId) return;
+	// 	const { availabilityDayId, slot } = selectedSlotDetails;
 
-		const { availabilityDayId, slot } = selectedSlotDetails;
+	// 	setSelectedSlotDetails({
+	// 		availabilityDayId,
+	// 		slot,
+	// 	});
 
-		setSelectedSlotDetails({
-			availabilityDayId,
-			slot,
-		});
+	// 	switch (mode) {
+	// 		case 'view':
+	// 			setOpenReadDetailsModal(true);
+	// 			break;
 
-		switch (mode) {
-			case 'view':
-				setOpenReadDetailsModal(true);
-				break;
+	// 		case 'edit':
+	// 			// Navegar para a tela de edição
+	// 			break;
 
-			case 'edit':
-				// Navegar para a tela de edição
-				break;
+	// 		case 'cancel':
+	// 			break;
 
-			case 'cancel':
-				break;
+	// 		case 'book':
+	// 			// Implementação do fluxo de booking
+	// 			break;
 
-			case 'book':
-				// Implementação do fluxo de booking
-				break;
-
-			default:
-				console.error('Ação desconhecida:', mode);
-		}
-	};
+	// 		default:
+	// 			console.error('Ação desconhecida:', mode);
+	// 	}
+	// };
 
 	// HANDLE EDIT APPOINTMENT
 	const handleEditAppointment = (availabilityDayId: string, slotId: string) => {
-		if (!availabilityDayId || !slotId || !availability) return;
+		if (!availabilityDayId || !slotId || !availabilityData) return;
 
-		const foundDate = availability.latestAvailability.availabilityDates.find(
-			(dateObj) => dateObj._id === availabilityDayId
-		);
+		const foundDate =
+			availabilityData?.latestAvailability?.availabilityDates?.find(
+				(dateObj) => dateObj._id === availabilityDayId
+			);
 
 		if (!foundDate) return;
 
@@ -238,94 +267,34 @@ export const AgendaNew = ({
 
 	return (
 		<>
-			<Grid
-				container
-				width='100%'
-				overflow={'auto'}
-				height={'100%'}
-				onMouseLeave={handleMouseLeaveTable}
-			>
-				<WeekDaysHeader
-					selectedDay={dayFromCalendar}
-					hoveredColumnIndex={hoveredColumnIndex}
-					onColumnHover={handleColumnHoverClick}
-					onColumnClick={handleColumnHoverClick}
-				/>
-				<Grid container columns={8} mt={5}>
-					{/* HOURS COLUMN STARTS*/}
-					<Grid item xs={1}>
-						{filteredHoursRange.map((hour, index) => (
-							<HourSlotWrapper
-								key={index}
-								onClick={() => handleHourHoverClick(hour)}
-								onMouseEnter={() => handleHourHoverClick(hour)}
-								isHighlighted={hoveredRowHour === hour}
-							>
-								<Text variant='caption'>{hour}</Text>
-							</HourSlotWrapper>
-						))}
-					</Grid>
-					{/* HOURS COLUMN ENDS*/}
+			<TableContainer component={Paper} style={{ width: '100%', height: 500 }}>
+				<Table stickyHeader>
+					<AgendaTableHead
+						daySelectedFromCalendar={dayFromCalendar}
+						fullWeekAvailability={fullWeekAvailability}
+					/>
+					<AgendaTableBody
+						filteredHoursRange={filteredHoursRange}
+						fullWeekAvailability={fullWeekAvailability}
+						isLoading={availabilityDataIsLoading}
+						mode={'view'}
+					/>
+				</Table>
+			</TableContainer>
+			{/* SLOTS COLUMNS ENDS */}
 
-					{/* SLOTS COLUMNS STARTS */}
-					{fullWeekAvailability.map(
-						({ _id: availabilityDayId, slots }, columnIndex, array) => (
-							<Grid item xs={1} key={availabilityDayId}>
-								{filteredHoursRange.map((hour, hourIndex) => {
-									const slot = slots.find((slot) => slot.startTime === hour);
-									const isLastInRow = columnIndex === array.length - 1;
-
-									const dummySlot: ISlot = {
-										startTime: hour,
-										status: 'EMPTY',
-										endTime: slot?.endTime,
-										_id: slot?._id,
-									};
-
-									const totalRows = filteredHoursRange.length;
-
-									return (
-										<AgendaSlotNew
-											key={hourIndex}
-											isSlotDetailsOpen={false}
-											isTherapistView={true}
-											slot={slot ?? dummySlot}
-											isLastInRow={isLastInRow}
-											isLastInColumn={isLastInColumn(hourIndex, totalRows)}
-											isHighlightedRow={isHighlightedRow(hour)}
-											isHighlightedColumn={isHighlightedColumn(columnIndex)}
-											onMouseEnter={() =>
-												handleSlotMouseEnterLeave(hour, columnIndex)
-											}
-											onMouseLeave={() =>
-												handleSlotMouseEnterLeave(hour, columnIndex)
-											}
-											onClick={() =>
-												handleGeneralClickSlot(
-													{ slot, availabilityDayId },
-													mode
-												)
-											}
-										/>
-									);
-								})}
-							</Grid>
-						)
-					)}
-					{/* SLOTS COLUMNS ENDS */}
-				</Grid>
-				{/* PAGINATION STARTS */}
-				<AgendaPagination
-					onGoToNextWeek={goToNextWeek}
-					onGoToPreviousWeek={goToPreviousWeek}
-					onGoToToday={() => setDayFromCalendar(daySelectedFromCalendar)}
-					onGoToMonthView={() => console.log('Open month view')}
-					disablePrevious={!hasPreviousDates()}
-					disableNext={!hasNextDates()}
-					isTherapist={true}
-				/>
-				{/* PAGINATION ENDS */}
-			</Grid>
+			{/* PAGINATION STARTS */}
+			<AgendaPagination
+				onGoToNextWeek={handleNextWeek}
+				onGoToPreviousWeek={handlePreviousWeek}
+				onGoToToday={() => setDayFromCalendar(selectedDayOrToday)}
+				onGoToMonthView={() => console.log('Open month view')}
+				disablePrevious={!hasPreviousDates}
+				disableNext={!hasNextDates}
+				mode={mode}
+			/>
+			{/* PAGINATION ENDS */}
+			{/* </Grid> */}
 			{/* READING DETAILS MODAL STARTS */}
 			<Modal
 				openModal={openReadDetailsModal}

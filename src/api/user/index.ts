@@ -37,9 +37,13 @@ export const changePassword = async ({ data, userId }: IChangePass) => {
 	return response.data;
 };
 
-export const getTherapistLatestAvailability = async (therapistId: string) => {
+export const getTherapistLatestAvailability = async (
+	therapistId: string,
+	page: number
+) => {
 	const response = await apiClient.get<IAvailabilityResponse>(
-		`/users/availability/${therapistId}?latest=true`
+		`/users/availability/${therapistId}?latest=true`,
+		{ params: { page } }
 	);
 
 	return response.data;

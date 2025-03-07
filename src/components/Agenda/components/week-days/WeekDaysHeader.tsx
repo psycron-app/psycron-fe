@@ -1,15 +1,10 @@
-import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Text } from '@psycron/components/text/Text';
-import {
-	generateWeekDays,
-	generateWeekDaysFromSelected,
-} from '@psycron/utils/variables';
+import { generateWeekDays } from '@psycron/utils/variables';
 import { format } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
 import {
-	MonthSubTitle,
 	StyledDayName,
 	THWeekDays,
 	WeekDaysHeaderGrid,
@@ -24,14 +19,10 @@ export const WeekDaysHeader = ({
 	onColumnClick,
 	hoveredColumnIndex,
 }: IWeekDaysHeader) => {
-	const { t } = useTranslation();
-
 	const { locale } = useParams<{ locale: string }>();
 	const dateLocale = locale.includes('en') ? enGB : ptBR;
 
-	const daysOfWeek = selectedDay
-		? generateWeekDaysFromSelected(selectedDay)
-		: generateWeekDays();
+	const daysOfWeek = generateWeekDays(selectedDay);
 
 	const weekDayName = (dayName: Date) => {
 		return locale.includes('en')
@@ -44,20 +35,16 @@ export const WeekDaysHeader = ({
 	});
 
 	return (
-		<WeekDaysHeaderGrid container spacing={2} columns={8}>
-			<THWeekDays item xs={1}>
+		<WeekDaysHeaderGrid container columns={12}>
+			<THWeekDays size={1.5}>
 				<WeekDayWrapper>
 					<StyledDayName>{currentMonth.toUpperCase()}</StyledDayName>
-					<MonthSubTitle>
-						<Text variant='caption'>{t('globals.starts').toUpperCase()}</Text>
-					</MonthSubTitle>
 				</WeekDayWrapper>
 			</THWeekDays>
 			{daysOfWeek.map((day, index) => (
 				<THWeekDays
 					key={`header-${index}`}
-					item
-					xs={1}
+					fontSize={1.5}
 					onMouseEnter={() => onColumnHover(index)}
 					onClick={() => onColumnClick(index)}
 					isHighlightedColumn={hoveredColumnIndex === index}

@@ -2,8 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Grid, Modal } from '@mui/material';
 import { AgendaNew } from '@psycron/components/agenda/AgendaNew';
+// import { AgendaTable } from '@psycron/components/agenda/AgendaTable';
 import { ShareButton } from '@psycron/components/button/share/ShareButton';
 import { Calendar } from '@psycron/components/calendar/Calendar';
+import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { useDashboardLogic } from '@psycron/hooks/useDashboardLogic';
 
 import { AVAILABILITYWIZARD } from '../urls';
@@ -15,35 +17,33 @@ export const Dashboard = () => {
 
 	const navigate = useNavigate();
 	const {
-		therapistLatestAvailability,
-		therapistLatestAvailabilityLoading,
 		userDetails,
 		dateLocale,
 		today,
-		isDateClicked,
 		selectedDay,
 		setIsDateClicked,
 		handleDayClick,
-		emptyAvailability,
 	} = useDashboardLogic();
+
+	const { availabilityData, availabilityDataIsLoading, isAvailabilityEmpty } =
+		useAvailability();
 
 	const createAvailabilityLink = () => navigate(`../${AVAILABILITYWIZARD}`);
 
-	const availableDatesArray =
-		therapistLatestAvailability?.latestAvailability?.dates ?? [];
+	const availableData = availabilityData?.latestAvailability?.dates ?? [];
 
 	return (
 		<>
 			<Grid container style={{ height: '100%' }}>
 				<Grid size={10}>
 					<Calendar
-						isLoading={therapistLatestAvailabilityLoading}
+						isLoading={availabilityDataIsLoading}
 						skeletonProps={{
 							onClick: createAvailabilityLink,
 							text:
-								!therapistLatestAvailabilityLoading &&
-								therapistLatestAvailability &&
-								emptyAvailability
+								!availabilityDataIsLoading &&
+								availabilityData &&
+								isAvailabilityEmpty
 									? t(
 											'components.dashboard.availability-card.first-availability'
 										)
@@ -51,23 +51,17 @@ export const Dashboard = () => {
 						}}
 						dateLocale={dateLocale}
 						today={today}
-						availabilityDates={availableDatesArray}
+						availabilityData={availableData}
 						handleDayClick={handleDayClick}
 					/>
 				</Grid>
 			</Grid>
-			<Modal open={isDateClicked} onClose={() => setIsDateClicked(false)}>
+			<Modal open={true} onClose={() => setIsDateClicked(false)}>
 				<StyledPaperModal>
-					{/* <Agenda
-						selectedDay={selectedDay}
-						availability={therapistLatestAvailability}
-						isLoading={therapistLatestAvailabilityLoading}
-						isTherapist
-					/> */}
 					<AgendaNew
-						availability={therapistLatestAvailability}
+						availabilityData={availabilityData}
 						daySelectedFromCalendar={selectedDay}
-						mode={'view'}
+						mode='edit'
 					/>
 					<Box display='flex' justifyContent='flex-end' pt={2}>
 						<ShareButton

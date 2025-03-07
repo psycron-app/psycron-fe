@@ -2,7 +2,7 @@ import type { IAvailabilityResponse } from '@psycron/api/user/index.types';
 import type { ISlot } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
 export interface IAgendaPropsNew {
-	availability: IAvailabilityResponse;
+	availabilityData: IAvailabilityResponse;
 	daySelectedFromCalendar: Date;
 	mode: IAgendaViewMode;
 }

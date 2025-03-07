@@ -6,16 +6,16 @@ import { spacing } from '@psycron/theme/spacing/spacing.theme';
 export const WeekDaysHeaderGrid = styled(Grid)`
 	margin-top: 0;
 	margin-left: 0;
-	height: 3.125rem;
 	position: sticky;
 	top: 0;
+	flex-wrap: nowrap;
 `;
 
 export const WeekDayWrapper = styled(Box)`
 	width: 100%;
 	height: 100%;
 	display: flex;
-	justify-content: center;
+	justify-content: flex-start;
 	align-items: center;
 	flex-direction: column;
 `;
@@ -26,6 +26,8 @@ export const THWeekDays = styled(Grid, {
 	background-color: ${palette.background.default};
 	padding: ${spacing.xs} ${spacing.small};
 	border-top: 0;
+
+	width: 100%;
 
 	text-align: center;
 

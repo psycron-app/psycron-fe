@@ -18,6 +18,7 @@ export const SlotWrapper = styled(Box, {
 		].includes(prop as string),
 })<IAgendaSlotStyledProps>`
 	height: 50px;
+	width: 100;
 	display: flex;
 	align-items: center;
 	justify-content: center;

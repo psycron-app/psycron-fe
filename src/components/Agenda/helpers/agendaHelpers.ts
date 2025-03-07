@@ -29,7 +29,6 @@ export const filteredAvailabilityBasedOnRange = (
 	if (!availabilityDates)
 		return { filteredHoursRange: [], filteredAvailabilityItem: [] };
 
-	// Filtramos apenas os dias que possuem slots dentro do range de `dayHours`
 	const filteredAvailabilityItem = availabilityDates
 		.map((availabilityDate) => {
 			const filteredSlots = availabilityDate.slots.filter((slot) =>
@@ -40,16 +39,15 @@ export const filteredAvailabilityBasedOnRange = (
 				? { ...availabilityDate, slots: filteredSlots }
 				: null;
 		})
-		.filter(Boolean) as IAvailabilityDate[]; // Remove os `null`
+		.filter(Boolean) as IAvailabilityDate[];
 
-	// Criamos um conjunto único de horários para evitar repetições
 	const filteredHoursRange = Array.from(
 		new Set(
 			filteredAvailabilityItem.flatMap((availabilityDate) =>
 				availabilityDate.slots.map((slot) => slot.startTime)
 			)
 		)
-	).sort(); // Ordena os horários para manter a estrutura correta
+	).sort();
 
 	return { filteredHoursRange, filteredAvailabilityItem };
 };

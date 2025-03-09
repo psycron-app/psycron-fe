@@ -51,7 +51,7 @@ export const Navbar = () => {
 
 	const { toggleUserDetails, userDetails } = useUserDetails();
 
-	const { isAvailabilityEmpty } = useAvailability();
+	const { isAvailabilityDatesEmpty } = useAvailability();
 
 	const { pathname } = useLocation();
 
@@ -59,14 +59,14 @@ export const Navbar = () => {
 
 	useEffect(() => {
 		if (
-			isAvailabilityEmpty &&
+			isAvailabilityDatesEmpty &&
 			!(pathname.includes('appointments') || pathname.includes('availability'))
 		) {
 			setIsAppointmentTipOpen(true);
 		} else {
 			setIsAppointmentTipOpen(false);
 		}
-	}, [isAvailabilityEmpty, pathname]);
+	}, [isAvailabilityDatesEmpty, pathname]);
 
 	const handleMenuClick = (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -100,7 +100,7 @@ export const Navbar = () => {
 			disabled: true,
 		},
 		{
-			name: isAvailabilityEmpty
+			name: isAvailabilityDatesEmpty
 				? t('globals.appointments-manager')
 				: t('globals.appointments'),
 			icon: <Calendar />,

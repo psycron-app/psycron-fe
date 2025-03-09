@@ -5,6 +5,7 @@ import apiClient from '../axios-instance';
 import type {
 	IAvailabilityResponse,
 	IChangePass,
+	IDateInfo,
 	IEditUser,
 	IResponse,
 	IUserByIdResponse,
@@ -44,6 +45,23 @@ export const getTherapistLatestAvailability = async (
 	const response = await apiClient.get<IAvailabilityResponse>(
 		`/users/availability/${therapistId}?latest=true`,
 		{ params: { page } }
+	);
+
+	return response.data;
+};
+
+export const getAvailabilityByDay = async (
+	therapistId: string,
+	params: IDateInfo
+) => {
+	const response = await apiClient.get<IAvailabilityResponse>(
+		`/users/availability/${therapistId}/by-day`,
+		{
+			params: {
+				day: params.date,
+				dayId: params.dateId,
+			},
+		}
 	);
 
 	return response.data;

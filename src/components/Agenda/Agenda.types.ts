@@ -1,10 +1,10 @@
-import type { IAvailabilityResponse } from '@psycron/api/user/index.types';
+import type { IDateInfo } from '@psycron/api/user/index.types';
 import type { ISlot } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
 export interface IAgendaProps {
-	availabilityData: IAvailabilityResponse;
-	daySelectedFromCalendar: Date;
+	daySelectedFromCalendar: IDateInfo;
 	mode: IAgendaViewMode;
+	therapistId: string;
 }
 
 export type IAgendaViewMode = 'view' | 'edit' | 'cancel' | 'book';

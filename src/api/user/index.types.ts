@@ -53,6 +53,6 @@ export interface IDateInfo {
 
 export interface IAvailabilityDate {
 	_id: string;
-	date: string;
+	date: Date;
 	slots: ISlot[];
 }

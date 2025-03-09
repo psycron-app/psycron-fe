@@ -1,13 +1,17 @@
 import { createContext, useContext } from 'react';
-import { getTherapistLatestAvailability } from '@psycron/api/user';
-import type { IAvailabilityResponse } from '@psycron/api/user/index.types';
+import {
+	getAvailabilityByDay,
+	getTherapistLatestAvailability,
+} from '@psycron/api/user';
+import type { IDateInfo } from '@psycron/api/user/index.types';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import type {
 	AvailabilityContextType,
 	AvailabilityProviderProps,
 } from './AvailabilityContext.types';
+import { mergeAvailabilityData } from './helpers';
 
 const AvailabilityContext = createContext<AvailabilityContextType | undefined>(
 	undefined
@@ -19,75 +23,23 @@ export const AvailabilityProvider = ({
 	const { userDetails } = useUserDetails();
 	const therapistId = userDetails?._id;
 
-	const { data, isLoading, fetchNextPage, fetchPreviousPage, hasNextPage } =
-		useInfiniteQuery({
-			queryKey: ['therapistAvailability', therapistId],
-			queryFn: async ({ pageParam = 1 }) =>
-				getTherapistLatestAvailability(therapistId, pageParam),
-			enabled: !!therapistId,
-			initialPageParam: 1,
-			getNextPageParam: (lastPage, allPages) => {
-				const nextPage = allPages.length + 1;
-				return nextPage <= lastPage.totalPages ? nextPage : undefined;
-			},
-			getPreviousPageParam: (_firstPage, allPages) => {
-				return allPages.length > 1 ? allPages.length - 1 : undefined;
-			},
-			select: (data) => {
-				// 🔹 Mantemos todas as páginas carregadas corretamente
-				return {
-					pages: data.pages.map((page) => ({
-						...page,
-						latestAvailability: {
-							...page.latestAvailability,
-							availabilityDates:
-								page.latestAvailability?.availabilityDates ?? [],
-						},
-					})),
-				};
-			},
-			placeholderData: (prev) => prev,
-			staleTime: 1000 * 60 * 5,
-		});
-	const availabilityData: IAvailabilityResponse | undefined =
-		data?.pages?.reduce<IAvailabilityResponse | undefined>((acc, page) => {
-			if (!acc) return page;
-			return {
-				...acc,
-				latestAvailability: {
-					...acc.latestAvailability,
-					availabilityDates: [
-						...(acc.latestAvailability?.availabilityDates ?? []),
-						...page.latestAvailability.availabilityDates,
-					],
-				},
-			};
-		}, undefined);
-	const latestPage = data?.pages?.[data.pages.length - 1];
-	const isAvailabilityEmpty =
-		!latestPage?.latestAvailability?.availabilityDates?.length ||
-		latestPage?.totalPages === 0;
-	const lastAvailableDate =
-		latestPage?.latestAvailability?.availabilityDates?.slice(-1)[0]?.date ?? '';
-	const goToPreviousWeek = async () => {
-		await fetchPreviousPage();
-	};
+	const { data, isLoading } = useQuery({
+		queryKey: ['therapistAvailability', therapistId],
+		queryFn: async ({ pageParam = 1 }) =>
+			getTherapistLatestAvailability(therapistId, Number(pageParam)),
+		enabled: !!therapistId,
+		staleTime: 1000 * 60 * 5,
+	});
 
-	const goToNextWeek = async () => {
-		await fetchNextPage();
-	};
+	const isAvailabilityDatesEmpty =
+		!data?.latestAvailability?.dates?.length || data?.totalPages === 0;
 
 	return (
 		<AvailabilityContext.Provider
 			value={{
-				availabilityData,
+				availabilityData: data,
 				availabilityDataIsLoading: isLoading,
-				hasNextPage: !!hasNextPage,
-				hasPreviousPage: data?.pages?.length > 1,
-				isAvailabilityEmpty,
-				goToPreviousWeek,
-				goToNextWeek,
-				lastAvailableDate,
+				isAvailabilityDatesEmpty,
 			}}
 		>
 			{children}
@@ -95,12 +47,83 @@ export const AvailabilityProvider = ({
 	);
 };
 
-export const useAvailability = () => {
+export const useAvailability = (
+	therapistId?: string,
+	daySelectedFromCalendar?: IDateInfo
+) => {
 	const context = useContext(AvailabilityContext);
 	if (!context) {
 		throw new Error(
 			'useAvailability must be used within an AvailabilityProvider'
 		);
 	}
-	return context;
+
+	const {
+		data: dataFromSelectedDay,
+		isLoading: isDataFromSelectedDayLoading,
+		fetchNextPage,
+		fetchPreviousPage,
+		hasNextPage,
+	} = useInfiniteQuery({
+		queryKey: [
+			'availabilityByDay',
+			therapistId,
+			daySelectedFromCalendar?.date,
+			daySelectedFromCalendar?.dateId,
+		],
+		queryFn: async () =>
+			getAvailabilityByDay(therapistId, {
+				date: daySelectedFromCalendar?.date,
+				dateId: daySelectedFromCalendar?.dateId,
+			}),
+		enabled: !!therapistId && !!daySelectedFromCalendar?.dateId,
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, allPages) => {
+			const nextPage = allPages.length + 1;
+			return nextPage <= lastPage.totalPages ? nextPage : undefined;
+		},
+		select: (data) => {
+			return {
+				pages: data.pages.map((page) => ({
+					latestAvailability: {
+						...page.latestAvailability,
+						availabilityDates: page.latestAvailability?.availabilityDates ?? [],
+						dates: page.latestAvailability?.dates ?? [],
+					},
+					totalPages: page.totalPages,
+				})),
+			};
+		},
+
+		placeholderData: (prev) => prev,
+		staleTime: 1000 * 60 * 5,
+	});
+	console.log('CONTEXT: dataFromSelectedDay:', dataFromSelectedDay);
+
+	const latestPage =
+		dataFromSelectedDay?.pages?.[dataFromSelectedDay.pages.length - 1];
+
+	const lastAvailableDate =
+		latestPage?.latestAvailability?.availabilityDates?.slice(-1)[0]?.date ?? '';
+
+	const goToPreviousWeek = async () => {
+		console.log('HERE > PREVIOUS WEEK');
+		await fetchPreviousPage();
+	};
+
+	const goToNextWeek = async () => {
+		console.log('HERE > NEXT WEEK');
+		await fetchNextPage();
+	};
+
+	return {
+		...context,
+		dataFromSelectedDay: mergeAvailabilityData(dataFromSelectedDay),
+		isDataFromSelectedDayLoading,
+		hasNextPage: !!hasNextPage,
+		hasPreviousPage: dataFromSelectedDay?.pages?.length > 1,
+		goToPreviousWeek,
+		goToNextWeek,
+		lastAvailableDate,
+	};
 };

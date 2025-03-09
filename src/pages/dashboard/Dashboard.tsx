@@ -1,12 +1,17 @@
+import { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Box, Grid, Modal } from '@mui/material';
+import type { IDateInfo } from '@psycron/api/user/index.types';
 import { Agenda } from '@psycron/components/agenda/Agenda';
 // import { AgendaTable } from '@psycron/components/agenda/AgendaTable';
 import { ShareButton } from '@psycron/components/button/share/ShareButton';
 import { Calendar } from '@psycron/components/calendar/Calendar';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
-import { useDashboardLogic } from '@psycron/hooks/useDashboardLogic';
+import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { startOfToday } from 'date-fns';
+import { enGB, ptBR } from 'date-fns/locale';
 
 import { AVAILABILITYWIZARD } from '../urls';
 
@@ -14,24 +19,36 @@ import { StyledPaperModal } from './Dashboard.styled';
 
 export const Dashboard = () => {
 	const { t } = useTranslation();
+	const { locale } = useParams<{ locale: string }>();
+
+	const { userDetails } = useUserDetails();
+
+	const dateLocale = locale.includes('en') ? enGB : ptBR;
+	const today = startOfToday();
+
+	const [selectedDay, setSelectedDay] = useState<IDateInfo | null>(null);
 
 	const navigate = useNavigate();
-	const {
-		userDetails,
-		dateLocale,
-		today,
-		isDateClicked,
-		selectedDay,
-		setIsDateClicked,
-		handleDayClick,
-	} = useDashboardLogic();
 
-	const { availabilityData, availabilityDataIsLoading, isAvailabilityEmpty } =
-		useAvailability();
+	const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
+
+	const {
+		availabilityData,
+		availabilityDataIsLoading,
+		isAvailabilityDatesEmpty,
+	} = useAvailability();
+
+	const handleDayClick = useCallback(
+		(day: IDateInfo) => {
+			setIsDateClicked(true);
+			setSelectedDay(day);
+		},
+		[setIsDateClicked]
+	);
 
 	const createAvailabilityLink = () => navigate(`../${AVAILABILITYWIZARD}`);
 
-	const availableData = availabilityData?.latestAvailability?.dates ?? [];
+	const availableDatesArray = availabilityData?.latestAvailability?.dates ?? [];
 
 	return (
 		<>
@@ -44,7 +61,7 @@ export const Dashboard = () => {
 							text:
 								!availabilityDataIsLoading &&
 								availabilityData &&
-								isAvailabilityEmpty
+								isAvailabilityDatesEmpty
 									? t(
 											'components.dashboard.availability-card.first-availability'
 										)
@@ -52,17 +69,21 @@ export const Dashboard = () => {
 						}}
 						dateLocale={dateLocale}
 						today={today}
-						availabilityData={availableData}
-						handleDayClick={handleDayClick}
+						availabilityData={availableDatesArray}
+						handleDayClick={(dayInfo) => {
+							if (dayInfo && dayInfo.date) {
+								handleDayClick(dayInfo);
+							}
+						}}
 					/>
 				</Grid>
 			</Grid>
 			<Modal open={isDateClicked} onClose={() => setIsDateClicked(false)}>
 				<StyledPaperModal>
 					<Agenda
-						availabilityData={availabilityData}
 						daySelectedFromCalendar={selectedDay}
-						mode='edit'
+						mode='view'
+						therapistId={userDetails?._id}
 					/>
 					<Box display='flex' justifyContent='flex-end' pt={2}>
 						<ShareButton

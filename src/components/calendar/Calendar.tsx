@@ -108,18 +108,27 @@ const CalendarComponent = ({
 				<DaysWrapper isBig={isBig}>
 					{calendarDaysGrid.map((day, index) => {
 						const currentMonth = isDayInDisplayedMonth(day);
-
 						const currentDay = isCurrentDay(day);
-
 						const isAvailable = isDayAvailableInSchedule(day);
+
+						const availability = availableScheduleDates.find(
+							(availability) =>
+								new Date(availability.date).toDateString() ===
+								day.toDateString()
+						);
 
 						return (
 							<StyledCalendarNumberWrapper
 								key={`${day}-${index}`}
 								isCurrentMonth={currentMonth}
 								isBig={isBig}
-								isDisabled={false}
-								onClick={() => handleDayClick(day)}
+								isDisabled={!isAvailable}
+								onClick={() => {
+									return handleDayClick({
+										date: day,
+										dateId: availability.dateId,
+									});
+								}}
 							>
 								<StyledCalendarNumber
 									variant='body2'
@@ -127,7 +136,7 @@ const CalendarComponent = ({
 									isCurrentMonth={currentMonth}
 									isSelected={false}
 									isBig={isBig}
-									isDisabled={false}
+									isDisabled={!isAvailable}
 									isAvailable={isAvailable}
 								>
 									{format(day, 'd')}

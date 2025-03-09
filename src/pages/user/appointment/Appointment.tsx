@@ -12,7 +12,6 @@ import { useAvailability } from '@psycron/context/appointment/availability/Avail
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
 import { AVAILABILITYWIZARD } from '@psycron/pages/urls';
-import { startOfToday } from 'date-fns';
 
 import {
 	ListItemTitleWrapper,
@@ -27,7 +26,7 @@ export const AppointmentPage = () => {
 
 	const { isUserDetailsLoading } = useUserDetails();
 
-	const { isAvailabilityEmpty, availabilityDataIsLoading, availabilityData } =
+	const { isAvailabilityDatesEmpty, availabilityDataIsLoading } =
 		useAvailability();
 
 	const availabilityGuideItems = [
@@ -53,15 +52,13 @@ export const AppointmentPage = () => {
 		},
 	];
 
-	const currentDay = startOfToday();
-
 	return (
 		<PageLayout
 			title={t('globals.appointments')}
 			isLoading={availabilityDataIsLoading || isUserDetailsLoading}
 		>
 			<Box height={'100%'} position={'relative'}>
-				{isAvailabilityEmpty ? (
+				{isAvailabilityDatesEmpty ? (
 					<>
 						<Box>
 							<Text textAlign={'left'}>

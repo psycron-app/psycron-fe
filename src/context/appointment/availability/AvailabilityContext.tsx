@@ -98,7 +98,6 @@ export const useAvailability = (
 		placeholderData: (prev) => prev,
 		staleTime: 1000 * 60 * 5,
 	});
-	console.log('CONTEXT: dataFromSelectedDay:', dataFromSelectedDay);
 
 	const latestPage =
 		dataFromSelectedDay?.pages?.[dataFromSelectedDay.pages.length - 1];
@@ -107,12 +106,10 @@ export const useAvailability = (
 		latestPage?.latestAvailability?.availabilityDates?.slice(-1)[0]?.date ?? '';
 
 	const goToPreviousWeek = async () => {
-		console.log('HERE > PREVIOUS WEEK');
 		await fetchPreviousPage();
 	};
 
 	const goToNextWeek = async () => {
-		console.log('HERE > NEXT WEEK');
 		await fetchNextPage();
 	};
 

@@ -1,45 +1,59 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useInView } from 'react-intersection-observer';
 import { useNavigate } from 'react-router-dom';
 import { Paper, Table, TableContainer } from '@mui/material';
 import { Modal } from '@psycron/components/modal/Modal';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { APPOINTMENTS } from '@psycron/pages/urls';
 import { generateTimeSlots, generateWeekDays } from '@psycron/utils/variables';
-import {
-	addDays,
-	format,
-	isAfter,
-	isEqual,
-	startOfWeek,
-	subDays,
-} from 'date-fns';
+import { addDays, format, startOfWeek, subDays } from 'date-fns';
 
+import { AgendaAppointmentDetails } from './components/agenda-appointment-details/AgendaAppointmentDetails';
 import { AgendaPagination } from './components/agenda-pagination/AgendaPagination';
 import { AgendaTableBody } from './components/agenda-table-body/AgendaTableBody';
 import { AgendaTableHead } from './components/agenda-table-head/AgendaTableHead';
 import { filteredAvailabilityBasedOnRange } from './helpers/agendaHelpers';
-import type { IAgendaProps } from './Agenda.types';
+import type {
+	IAgendaProps,
+	IAgendaViewMode,
+	ISelectedSlot,
+} from './Agenda.types';
 
-export const Agenda = ({
-	daySelectedFromCalendar,
-	mode,
-	therapistId,
-}: IAgendaProps) => {
+export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
+	const [selectedSlot, setSelectedSlot] = useState<ISelectedSlot | null>(null);
+
+	const { ref: loadMoreRef, inView: loadMoreInView } = useInView();
+
+	const { ref: loadPreviousRef, inView: loadPreviousInView } = useInView();
+
 	const {
-		dataFromSelectedDay,
+		firstDate,
+		lastDate,
+		dataFromSelectedDayRes,
 		isDataFromSelectedDayLoading,
-		goToNextWeek,
-		goToPreviousWeek,
-		lastAvailableDate,
-	} = useAvailability(therapistId, daySelectedFromCalendar);
+		appointmentDetailsBySlotId,
+		consultationDuration,
+		fetchNextPage,
+		fetchPreviousPage,
+		isFetchingNextPage,
+		isFetchingPreviousPage,
+	} = useAvailability(daySelectedFromCalendar, selectedSlot?.slot?._id);
 
-	const dataFromAvailability = dataFromSelectedDay;
+	const { availabilityDates } = useMemo(() => {
+		const pages = dataFromSelectedDayRes?.pages ?? [];
 
-	const selectedDayOrToday = daySelectedFromCalendar ?? daySelectedFromCalendar;
+		const flatDates = pages.flatMap((page) => page.availabilityDates);
+
+		return {
+			availabilityDates: flatDates ?? [],
+		};
+	}, [dataFromSelectedDayRes]);
+
+	const selectedDayOrToday = daySelectedFromCalendar;
 	const [dayFromCalendar, setDayFromCalendar] = useState<Date>(
 		selectedDayOrToday?.date
 	);
@@ -52,16 +66,16 @@ export const Agenda = ({
 	}, [dayFromCalendar]);
 
 	// READING DETAILS STATE
+
 	const [openReadDetailsModal, setOpenReadDetailsModal] =
 		useState<boolean>(false);
 
-	const dayHoursGeneratedByApptDuration = generateTimeSlots(
-		dataFromAvailability?.latestAvailability?.consultationDuration
-	);
+	const dayHoursGeneratedByApptDuration =
+		generateTimeSlots(consultationDuration);
 
 	const { filteredHoursRange } = filteredAvailabilityBasedOnRange(
 		dayHoursGeneratedByApptDuration,
-		dataFromAvailability?.latestAvailability?.availabilityDates
+		availabilityDates
 	);
 
 	const weekStart = useMemo(
@@ -69,35 +83,12 @@ export const Agenda = ({
 		[dayFromCalendar]
 	);
 
-	const hasPreviousDates = useMemo(() => {
-		return dataFromSelectedDay?.latestAvailability?.availabilityDates?.some(
-			({ date }) => new Date(date) < weekStart
-		);
-	}, [dataFromSelectedDay?.latestAvailability?.availabilityDates, weekStart]);
-
-	const hasNextDates = useMemo(() => {
-		return dataFromSelectedDay?.latestAvailability?.availabilityDates?.some(
-			({ date }) => new Date(date) >= addDays(weekStart, 7)
-		);
-	}, [dataFromSelectedDay?.latestAvailability?.availabilityDates, weekStart]);
-
-	const filteredAvailabilityPerWeek = useMemo(() => {
-		return dataFromAvailability?.latestAvailability?.availabilityDates?.filter(
-			({ date }) => {
-				const formattedDate = new Date(date);
-				return (
-					formattedDate >= weekStart && formattedDate < addDays(weekStart, 7)
-				);
-			}
-		);
-	}, [weekStart, dataFromAvailability]);
-
 	const fullWeekAvailability = useMemo(() => {
 		return weekDays.map((weekDay, index) => {
 			const weekDate = addDays(weekStart, index);
 			const formattedWeekDate = format(weekDate, 'yyyy-MM-dd');
 
-			const existingDay = filteredAvailabilityPerWeek?.find(({ date }) => {
+			const existingDay = availabilityDates?.find(({ date }) => {
 				const formattedAvailableDate = format(date, 'yyyy-MM-dd');
 				return formattedAvailableDate === formattedWeekDate;
 			});
@@ -105,13 +96,31 @@ export const Agenda = ({
 			return {
 				weekDay,
 				date: weekDate.toISOString(),
-				_id: existingDay?._id ?? `empty-${weekDate.getTime()}-${index}`,
+				_id: existingDay?._id ?? null,
 				slots: existingDay?.slots ?? [],
 			};
 		});
-	}, [weekDays, weekStart, filteredAvailabilityPerWeek]);
+	}, [availabilityDates, weekDays, weekStart]);
 
-	const [isTableLoading, setIsTableLoading] = useState(true);
+	useEffect(() => {
+		if (loadMoreInView) {
+			fetchNextPage();
+		}
+	}, [loadMoreInView, fetchNextPage]);
+
+	useEffect(() => {
+		if (loadPreviousInView) {
+			fetchPreviousPage();
+		}
+	}, [loadPreviousInView, fetchPreviousPage]);
+
+	useEffect(() => {
+		if (loadMoreInView) {
+			fetchNextPage();
+		}
+	}, [loadMoreInView, fetchNextPage]);
+
+	const [isTableLoading, setIsTableLoading] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (!isDataFromSelectedDayLoading && fullWeekAvailability.length > 0) {
@@ -123,84 +132,47 @@ export const Agenda = ({
 		}
 	}, [isDataFromSelectedDayLoading, fullWeekAvailability]);
 
-	useEffect(() => {
-		const lastLoadedDate = fullWeekAvailability.slice(-1)[0]?.date;
-
-		const isLastLoadedWeek =
-			isAfter(new Date(lastLoadedDate), new Date(lastAvailableDate)) ||
-			(isEqual(new Date(lastLoadedDate), new Date(lastAvailableDate)) &&
-				hasNextDates);
-
-		if (isLastLoadedWeek && !isDataFromSelectedDayLoading) {
-			goToNextWeek();
-		}
-	}, [
-		fullWeekAvailability,
-		hasNextDates,
-		isDataFromSelectedDayLoading,
-		goToNextWeek,
-		lastAvailableDate,
-	]);
-
-	const handleNextWeek = () => {
-		setDayFromCalendar((prev) => addDays(prev, 7));
-	};
-	const handlePreviousWeek = () => {
-		setDayFromCalendar((prev) => subDays(prev, 7));
-		goToPreviousWeek();
-	};
-
 	// GENERAL CLICK SLOT
-	// const handleGeneralClickSlot = (
-	// 	selectedSlotDetails: ISelectedSlot,
-	// 	mode: IAgendaViewMode
-	// ) => {
-	// 	if (!selectedSlotDetails.availabilityDayId) return;
+	const handleGeneralClickSlot = (
+		selectedSlotDetails: ISelectedSlot,
+		mode: IAgendaViewMode
+	) => {
+		if (!selectedSlotDetails.availabilityDayId) return;
 
-	// 	const { availabilityDayId, slot } = selectedSlotDetails;
+		setSelectedSlot(selectedSlotDetails);
 
-	// 	setSelectedSlotDetails({
-	// 		availabilityDayId,
-	// 		slot,
-	// 	});
+		switch (mode) {
+			case 'view':
+				setOpenReadDetailsModal(true);
+				break;
 
-	// 	switch (mode) {
-	// 		case 'view':
-	// 			setOpenReadDetailsModal(true);
-	// 			break;
+			case 'edit':
+				// Navegar para a tela de edição
+				break;
 
-	// 		case 'edit':
-	// 			// Navegar para a tela de edição
-	// 			break;
+			case 'cancel':
+				break;
 
-	// 		case 'cancel':
-	// 			break;
+			case 'book':
+				// Implementação do fluxo de booking
+				break;
 
-	// 		case 'book':
-	// 			// Implementação do fluxo de booking
-	// 			break;
-
-	// 		default:
-	// 			console.error('Ação desconhecida:', mode);
-	// 	}
-	// };
+			default:
+		}
+	};
 
 	// HANDLE EDIT APPOINTMENT
 	const handleEditAppointment = (availabilityDayId: string, slotId: string) => {
-		if (!availabilityDayId || !slotId) return;
-
-		const foundDate =
-			dataFromSelectedDay?.latestAvailability?.availabilityDates?.find(
-				(dateObj) => dateObj._id === availabilityDayId
-			);
-
-		if (!foundDate) return;
-
-		const formattedDate = new Date(foundDate.date).toISOString().split('T')[0];
-
-		navigate(
-			`../${APPOINTMENTS}/edit/${availabilityDayId}?slot=${slotId}&date=${formattedDate}`
-		);
+		// if (!availabilityDayId || !slotId) return;
+		// const foundDate =
+		// 	dataFromSelectedDay?.latestAvailability?.availabilityDates?.find(
+		// 		(dateObj) => dateObj._id === availabilityDayId
+		// 	);
+		// if (!foundDate) return;
+		// const formattedDate = new Date(foundDate.date).toISOString().split('T')[0];
+		// navigate(
+		// 	`../${APPOINTMENTS}/edit/${availabilityDayId}?slot=${slotId}&date=${formattedDate}`
+		// );
 	};
 
 	// HANDLE NAVIGATE TO DELETE APPOINTMENT
@@ -208,18 +180,39 @@ export const Agenda = ({
 	// 	navigate(`../${APPOINTMENTS}/cancel/${patientId}`);
 	// };
 
+	// PAGINATION
+	const foundItemFromTheWeek = (dateId: string) => {
+		return fullWeekAvailability?.find((date) => date._id === dateId);
+	};
+
+	const handleNextWeek = () => {
+		setDayFromCalendar((prev) => addDays(prev, 7));
+	};
+	const handlePreviousWeek = () => {
+		setDayFromCalendar((prev) => subDays(prev, 7));
+	};
+
+	const firstItemAvailable = availabilityDates?.at(0)?._id;
+	const lastItemAvailable = availabilityDates?.at(-1)?._id;
+
 	return (
 		<>
 			<TableContainer component={Paper} style={{ width: '100%', height: 500 }}>
 				<Table stickyHeader>
 					<AgendaTableHead
-						daySelectedFromCalendar={dayFromCalendar}
 						fullWeekAvailability={fullWeekAvailability}
+						nextCursor={lastItemAvailable}
+						previousCursor={firstItemAvailable}
+						previousRef={loadPreviousRef}
+						ref={loadMoreRef}
 					/>
 					<AgendaTableBody
 						filteredHoursRange={filteredHoursRange}
 						fullWeekAvailability={fullWeekAvailability}
-						isLoading={isTableLoading}
+						isLoading={
+							isTableLoading || isFetchingNextPage || isFetchingPreviousPage
+						}
+						onClick={handleGeneralClickSlot}
 						mode={'view'}
 					/>
 				</Table>
@@ -229,16 +222,16 @@ export const Agenda = ({
 			{/* PAGINATION STARTS */}
 			<AgendaPagination
 				onGoToNextWeek={() => handleNextWeek()}
-				onGoToPreviousWeek={handlePreviousWeek}
+				onGoToPreviousWeek={() => handlePreviousWeek()}
 				onGoToToday={() => setDayFromCalendar(selectedDayOrToday.date)}
 				onGoToMonthView={() => console.log('Open month view')}
-				disablePrevious={!hasPreviousDates}
-				disableNext={!hasNextDates}
+				disableNext={!!foundItemFromTheWeek(lastDate?.dateId)}
+				disablePrevious={!!foundItemFromTheWeek(firstDate?.dateId)}
 				mode={mode}
 			/>
 			{/* PAGINATION ENDS */}
 			{/* READING DETAILS MODAL STARTS */}
-			{/* <Modal
+			<Modal
 				openModal={openReadDetailsModal}
 				title={t('components.agenda.appointment-details.title')}
 				onClose={() => setOpenReadDetailsModal(false)}
@@ -247,10 +240,10 @@ export const Agenda = ({
 						'components.agenda.appointment-details.edit-patient-appointment'
 					),
 					onClick: () => {
-						handleEditAppointment(
-							selectedSlotDetails.availabilityDayId,
-							selectedSlotDetails.slot._id
-						);
+						// handleEditAppointment(
+						// 	selectedSlotDetails.availabilityDayId,
+						// 	selectedSlotDetails.slot._id
+						// );
 					},
 					hasSecondAction: true,
 					secondActionName: t('components.agenda.cancel-appointment.title'),
@@ -258,10 +251,10 @@ export const Agenda = ({
 				}}
 			>
 				<AgendaAppointmentDetails
-					selectedSlot={selectedSlotDetails}
+					appointmentDetails={appointmentDetailsBySlotId}
 					handleEditAppointment={handleEditAppointment}
 				/>
-			</Modal> */}
+			</Modal>
 			{/* READING DETAILS MODAL ENDS */}
 		</>
 	);

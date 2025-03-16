@@ -1,15 +1,17 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { Box, Grid, Modal } from '@mui/material';
 import type { IDateInfo } from '@psycron/api/user/index.types';
 import { Agenda } from '@psycron/components/agenda/Agenda';
+// import { Agenda } from '@psycron/components/agenda/Agenda';
 // import { AgendaTable } from '@psycron/components/agenda/AgendaTable';
 import { ShareButton } from '@psycron/components/button/share/ShareButton';
 import { Calendar } from '@psycron/components/calendar/Calendar';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 import { startOfToday } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
@@ -48,12 +50,20 @@ export const Dashboard = () => {
 
 	const createAvailabilityLink = () => navigate(`../${AVAILABILITYWIZARD}`);
 
-	const availableDatesArray = availabilityData?.latestAvailability?.dates ?? [];
+	const availableDatesArray = useMemo(() => {
+		return availabilityData?.dates ?? [];
+	}, [availabilityData?.dates]);
 
 	return (
 		<>
-			<Grid container style={{ height: '100%' }}>
-				<Grid size={10}>
+			<Grid
+				container
+				columns={12}
+				height='100%'
+				p={spacing.medium}
+				columnSpacing={spacing.medium}
+			>
+				<Grid size={{ md: 4, xs: 12, sm: 5, lg: 3 }} height={300}>
 					<Calendar
 						isLoading={availabilityDataIsLoading}
 						skeletonProps={{
@@ -80,11 +90,7 @@ export const Dashboard = () => {
 			</Grid>
 			<Modal open={isDateClicked} onClose={() => setIsDateClicked(false)}>
 				<StyledPaperModal>
-					<Agenda
-						daySelectedFromCalendar={selectedDay}
-						mode='view'
-						therapistId={userDetails?._id}
-					/>
+					<Agenda daySelectedFromCalendar={selectedDay} mode='view' />
 					<Box display='flex' justifyContent='flex-end' pt={2}>
 						<ShareButton
 							titleKey={t(

@@ -93,7 +93,7 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 	);
 };
 
-export const usePatient = (patientId?: string) => {
+export const usePatient = (patientId?: string | null) => {
 	const context = useContext(PatientContext);
 	if (!context) {
 		throw new Error('usePatient must be used within an PatientProvider');

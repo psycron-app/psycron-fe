@@ -20,7 +20,9 @@ export const Content = styled(Box)`
 	padding-top: ${spacing.medium};
 	padding: 0;
 
-	overflow-y: scroll;
+	padding-left: 0;
+
+	overflow-y: hidden;
 	overflow-x: hidden;
 
 	z-index: 50;

@@ -4,7 +4,6 @@ import type { ISlot } from '@psycron/context/user/auth/UserAuthenticationContext
 export interface IAgendaProps {
 	daySelectedFromCalendar: IDateInfo;
 	mode: IAgendaViewMode;
-	therapistId: string;
 }
 
 export type IAgendaViewMode = 'view' | 'edit' | 'cancel' | 'book';

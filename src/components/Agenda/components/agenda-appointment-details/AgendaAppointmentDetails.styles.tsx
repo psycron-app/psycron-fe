@@ -14,10 +14,12 @@ export const StyledWrapper = styled(Box)`
 	}
 `;
 
-export const StyledPatientDetails = styled(Box)`
+export const StyledPatientDetails = styled(Box, {
+	shouldForwardProp: (props) => props !== 'hasPatient',
+})<{ hasPatient?: boolean }>`
 	width: 100%;
 	${isBiggerThanTabletMedia} {
-		width: 60%;
+		width: ${({ hasPatient }) => (hasPatient ? '60%' : '100%')};
 	}
 `;
 

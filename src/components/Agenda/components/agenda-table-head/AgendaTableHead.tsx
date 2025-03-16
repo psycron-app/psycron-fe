@@ -1,16 +1,16 @@
+import { forwardRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { TableCell, TableHead, TableRow } from '@mui/material';
 import { Text } from '@psycron/components/text/Text';
-import { format, startOfWeek } from 'date-fns';
+import { format } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
 import { StickyCell } from './AgendaTableHead.styles';
 import type { IAgendaTableHeadProps } from './AgendaTableHead.types';
-
-export const AgendaTableHead = ({
-	daySelectedFromCalendar,
-	fullWeekAvailability,
-}: IAgendaTableHeadProps) => {
+export const AgendaTableHead = forwardRef<
+	HTMLTableSectionElement,
+	IAgendaTableHeadProps
+>(({ nextCursor, fullWeekAvailability, previousCursor, previousRef }, ref) => {
 	const { locale } = useParams<{ locale: string }>();
 
 	const dateLocale = locale.includes('en') ? enGB : ptBR;
@@ -21,11 +21,7 @@ export const AgendaTableHead = ({
 			: format(dayName, 'EE', { locale: dateLocale }).slice(0, 3);
 	};
 
-	const startOfWeekDate = startOfWeek(daySelectedFromCalendar, {
-		weekStartsOn: 1,
-	});
-
-	const currentMonth = format(startOfWeekDate || new Date(), 'MMM', {
+	const currentMonth = format(fullWeekAvailability.at(0)?.date, 'MMM', {
 		locale: dateLocale,
 	});
 
@@ -38,15 +34,41 @@ export const AgendaTableHead = ({
 					</Text>
 					<Text visibility='hidden'>hour</Text>
 				</StickyCell>
-				{fullWeekAvailability.map(({ weekDay }) => {
-					return (
-						<TableCell key={weekDay} align='center'>
-							<Text fontWeight={600}>{weekDayName(weekDay).toUpperCase()}</Text>
-							<Text>{format(weekDay, 'd')}</Text>
-						</TableCell>
-					);
-				})}
+				{fullWeekAvailability.map(
+					({ weekDay, _id: availabilityDayId, date }, index) => {
+						const lastDay = new Date(date);
+
+						const isNextCursorInView = availabilityDayId === nextCursor;
+
+						const isPreviousCursorInView = availabilityDayId === previousCursor;
+
+						const uniqueKey = availabilityDayId
+							? availabilityDayId
+							: `temp-key-${index}`;
+
+						return (
+							<TableCell
+								key={uniqueKey}
+								align='center'
+								ref={
+									isNextCursorInView
+										? ref
+										: isPreviousCursorInView
+											? previousRef
+											: null
+								}
+							>
+								<Text fontWeight={600}>
+									{weekDayName(weekDay).toUpperCase()}
+								</Text>
+								<Text>{format(lastDay, 'd')}</Text>
+							</TableCell>
+						);
+					}
+				)}
 			</TableRow>
 		</TableHead>
 	);
-};
+});
+
+AgendaTableHead.displayName = 'AgendaTableHead';

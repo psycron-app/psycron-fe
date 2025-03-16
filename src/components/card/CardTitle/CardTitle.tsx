@@ -27,11 +27,11 @@ export const CardTitle = ({
 		<CardTitleWrapper hasTitle={title?.length > 0}>
 			<Grid
 				container
-				columns={12}
 				justifyContent='space-between'
 				alignItems='center'
+				width='100%'
 			>
-				<Grid item xs={hasFirstChip ? 8 : 12}>
+				<Grid size={hasFirstChip ? 8 : 12} width='100%'>
 					<TitleWrapper>
 						<Text
 							variant='h5'
@@ -59,7 +59,7 @@ export const CardTitle = ({
 					</TitleWrapper>
 				</Grid>
 				{hasFirstChip ? (
-					<Grid item xs={4} display='flex' justifyContent='flex-end'>
+					<Grid size={4} display='flex' justifyContent='flex-end'>
 						{firstChipName ? (
 							typeof firstChipName === 'string' ||
 							typeof firstChipName === 'number' ? (

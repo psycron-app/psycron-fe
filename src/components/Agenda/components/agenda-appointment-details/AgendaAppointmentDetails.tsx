@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box, Tooltip } from '@mui/material';
@@ -18,70 +19,50 @@ import {
 import type { IAgendaAppointmentDetails } from './AgendaAppointmentDetails.types';
 
 export const AgendaAppointmentDetails = ({
-	selectedSlot,
+	appointmentDetails,
 	handleEditAppointment,
 }: IAgendaAppointmentDetails) => {
-	console.log('🚀 ~ selectedSlot:', selectedSlot);
+	console.log('🚀 ~ appointmentDetails:', appointmentDetails);
 	const { t } = useTranslation();
+	const { userDetails } = useUserDetails();
+	const [patientId, setPatientId] = useState<string | null>();
+	const { patientDetails } = usePatient(patientId);
 
 	const { locale } = useParams<{
 		locale: string;
 	}>();
 
-	const {
-		appointmentDetailsBySlotId,
-		isAppointmentDetailsBySlotIdLoading,
-		isUserDetailsLoading,
-		userDetails,
-	} = useUserDetails('', selectedSlot.availabilityDayId, selectedSlot.slot._id);
-	console.log('🚀 ~ appointmentDetailsBySlotId:', appointmentDetailsBySlotId);
+	useEffect(() => {
+		if (appointmentDetails?.appointment?.patient?._id) {
+			setPatientId(appointmentDetails.appointment.patient._id);
+		} else {
+			setPatientId(null);
+		}
+	}, [appointmentDetails]);
 
-	const { patientDetails, isPatientDetailsLoading, updatePatientIsLoading } =
-		usePatient(appointmentDetailsBySlotId?.appointment?.patient?._id);
-
-	if (
-		isAppointmentDetailsBySlotIdLoading ||
-		!appointmentDetailsBySlotId?.appointment ||
-		isUserDetailsLoading ||
-		isPatientDetailsLoading ||
-		updatePatientIsLoading
-	) {
+	if (!appointmentDetails?.appointment) {
 		return <Loader />;
 	}
+
+	const { appointment } = appointmentDetails;
 
 	const { firstName: therapistFirstName, lastName: therapistLastName } =
 		userDetails;
 
 	const therapistName = `${therapistFirstName} ${therapistLastName}`;
 
-	const {
-		patient: {
-			firstName,
-			lastName,
-			contacts: { whatsapp, phone, email },
-		},
-		date,
-		startTime,
-		endTime,
-	} = appointmentDetailsBySlotId.appointment;
+	const { date, startTime, endTime, patient } = appointment;
+	console.log('🚀 ~ date:', date);
 
-	const patientName = `${firstName} ${lastName}`;
+	const patientFirstName = patientDetails?.firstName || '';
+	const patientLastName = patientDetails?.lastName || '';
+	const contacts = patientDetails?.contacts || null;
+
+	const patientName = patient && `${patientFirstName} ${patientLastName}`;
+
+	const { whatsapp, phone, email } = contacts || {};
+
 	const formattedClickedSlot = formatDate(date, locale);
-
-	const { sessionDates } = patientDetails;
-
-	const latestSessionDate = sessionDates?.slice(-1)[0];
-
-	const sortedSessions = latestSessionDate?.sessions.sort(
-		(a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-	);
-
-	const today = new Date();
-
-	const futureSessions = sortedSessions?.filter(
-		(session) =>
-			new Date(session.date).setHours(0, 0, 0, 0) > today.setHours(0, 0, 0, 0)
-	);
 
 	const wppText = t('components.agenda.appointment-details.whatsapp-subject', {
 		therapistName,
@@ -89,50 +70,58 @@ export const AgendaAppointmentDetails = ({
 
 	return (
 		<StyledWrapper>
-			<StyledPatientDetails>
+			<StyledPatientDetails hasPatient={!!patient}>
 				<Box>
-					<Box display='flex'>
-						<Text fontWeight={600} pr={1}>
-							{t('globals.patient')}:
-						</Text>
-						<Text>{patientName}</Text>
+					<Box display='flex' justifyContent='center'>
+						{patient ? (
+							<>
+								<Text fontWeight={600} pr={1}>
+									{t('globals.patient')}:
+								</Text>
+								<Text>{patientName}</Text>
+							</>
+						) : (
+							<Text fontWeight={600} pb={4}>
+								{'SLOT IS STILL AVAILABLE'}
+							</Text>
+						)}
 					</Box>
-					<Box px={1} py={2}>
-						<Text fontWeight={600}>{t('globals.whatsapp')}:</Text>
-						<ContactLink
-							type='whatsapp'
-							value={whatsapp}
-							message={wppText}
-							tooltip={t('globals.notification.whatsapp')}
-						/>
+					{patientDetails?.contacts ? (
+						<Box px={1} py={2}>
+							<Text fontWeight={600}>{t('globals.whatsapp')}:</Text>
+							<ContactLink
+								type='whatsapp'
+								value={whatsapp}
+								message={wppText}
+								tooltip={t('globals.notification.whatsapp')}
+							/>
 
-						<Text fontWeight={600}>{t('globals.phone')}:</Text>
-						<ContactLink
-							type='phone'
-							value={phone}
-							tooltip={t('globals.notification.phone')}
-						/>
-						<Text fontWeight={600}>{t('globals.email')}:</Text>
-						<ContactLink
-							type='email'
-							value={email}
-							message={t(
-								'components.agenda.appointment-details.mailto-subject',
-								{
-									therapistName,
-								}
-							)}
-							tooltip={t('globals.notification.email')}
-						/>
-					</Box>
+							<Text fontWeight={600}>{t('globals.phone')}:</Text>
+							<ContactLink
+								type='phone'
+								value={phone}
+								tooltip={t('globals.notification.phone')}
+							/>
+							<Text fontWeight={600}>{t('globals.email')}:</Text>
+							<ContactLink
+								type='email'
+								value={email}
+								message={t(
+									'components.agenda.appointment-details.mailto-subject',
+									{
+										therapistName,
+									}
+								)}
+								tooltip={t('globals.notification.email')}
+							/>
+						</Box>
+					) : null}
 				</Box>
 				<Box display='flex'>
 					<Text pr={1} fontWeight={600}>
 						{t('globals.date')}:
 					</Text>
-					<Text isFirstUpper fontWeight={600}>
-						{formattedClickedSlot}
-					</Text>
+					<Text isFirstUpper>{formattedClickedSlot}</Text>
 				</Box>
 				<Text fontWeight={600}>
 					{t('globals.starts')}: {startTime}
@@ -141,12 +130,13 @@ export const AgendaAppointmentDetails = ({
 					{t('globals.ends')}: {endTime}
 				</Text>
 			</StyledPatientDetails>
-			<StyledSessionDatesList>
-				<StyledSessionDatesTitle>
-					{t('components.agenda.appointment-details.next-sessions')}:
-				</StyledSessionDatesTitle>
-				<Box>
-					{sortedSessions && sortedSessions.length > 0 ? (
+			{patient ? (
+				<StyledSessionDatesList>
+					<StyledSessionDatesTitle>
+						{t('components.agenda.appointment-details.next-sessions')}:
+					</StyledSessionDatesTitle>
+					<Box>
+						{/* {sortedSessions && sortedSessions.length > 0 ? (
 						<Box>
 							{futureSessions.map((session) => (
 								<Box key={session._id} py={2} display='flex'>
@@ -168,9 +158,10 @@ export const AgendaAppointmentDetails = ({
 								</Box>
 							))}
 						</Box>
-					) : null}
-				</Box>
-			</StyledSessionDatesList>
+					) : null} */}
+					</Box>
+				</StyledSessionDatesList>
+			) : null}
 		</StyledWrapper>
 	);
 };

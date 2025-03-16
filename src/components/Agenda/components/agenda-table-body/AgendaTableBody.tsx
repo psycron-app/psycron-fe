@@ -22,6 +22,7 @@ export const AgendaTableBody = ({
 	fullWeekAvailability,
 	mode,
 	isLoading,
+	onClick,
 }: IAgendaTableBodyProps) => {
 	const { t } = useTranslation();
 
@@ -51,33 +52,53 @@ export const AgendaTableBody = ({
 	return (
 		<>
 			<AgendaTableBodyWrapper isLoading={isLoading}>
-				{filteredHoursRange.map((hour, rowIndex) => (
-					<AgendaBodyRow key={rowIndex}>
-						<StickyCell align='center' isLoading={false}>
-							<Text fontSize={'0.8rem'}>{hour}</Text>
-						</StickyCell>
+				{filteredHoursRange.map((hour, rowIndex) => {
+					return (
+						<AgendaBodyRow key={rowIndex}>
+							<StickyCell align='center' isLoading={false}>
+								<Text fontSize={'0.8rem'}>{hour}</Text>
+							</StickyCell>
 
-						{fullWeekAvailability.map(({ _id: availabilityDayId, slots }) => {
-							const slot = slots.find((slot: { startTime: string }) => {
-								return slot.startTime === hour;
-							});
+							{fullWeekAvailability.map(
+								({ _id: availabilityDayId, slots }, index) => {
+									const slot = slots.find((slot: { startTime: string }) => {
+										return slot.startTime === hour;
+									});
 
-							return (
-								<AgendaCellBody key={availabilityDayId} isLoading={isLoading}>
-									<StyledSlotHoverable
-										title={translatedStatus(slot?.status)}
-										isHighlightedColumn={false}
-										status={slot?.status}
-									>
-										<Text variant='caption' display='flex' alignItems='center'>
-											{getStatusIcon(slot?.status, false)}
-										</Text>
-									</StyledSlotHoverable>
-								</AgendaCellBody>
-							);
-						})}
-					</AgendaBodyRow>
-				))}
+									const selectedSlotDetails = {
+										availabilityDayId,
+										slot,
+									};
+
+									const uniqueKey = availabilityDayId
+										? availabilityDayId
+										: `temp-key-${index}`;
+									return (
+										<AgendaCellBody
+											key={uniqueKey}
+											isLoading={isLoading}
+											onClick={() => onClick(selectedSlotDetails, mode)}
+										>
+											<StyledSlotHoverable
+												title={translatedStatus(slot?.status)}
+												isHighlightedColumn={false}
+												status={slot?.status}
+											>
+												<Text
+													variant='caption'
+													display='flex'
+													alignItems='center'
+												>
+													{getStatusIcon(slot?.status, false)}
+												</Text>
+											</StyledSlotHoverable>
+										</AgendaCellBody>
+									);
+								}
+							)}
+						</AgendaBodyRow>
+					);
+				})}
 			</AgendaTableBodyWrapper>
 		</>
 	);

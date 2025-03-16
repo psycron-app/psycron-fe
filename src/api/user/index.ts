@@ -3,10 +3,11 @@ import type { ITherapist } from '@psycron/context/user/auth/UserAuthenticationCo
 import apiClient from '../axios-instance';
 
 import type {
+	DateInfoParams,
 	IAvailabilityResponse,
 	IChangePass,
-	IDateInfo,
 	IEditUser,
+	IPaginatedAvailability,
 	IResponse,
 	IUserByIdResponse,
 } from './index.types';
@@ -38,28 +39,24 @@ export const changePassword = async ({ data, userId }: IChangePass) => {
 	return response.data;
 };
 
-export const getTherapistLatestAvailability = async (
-	therapistId: string,
-	page: number
-) => {
+export const getTherapistLatestAvailability = async (therapistId: string) => {
 	const response = await apiClient.get<IAvailabilityResponse>(
-		`/users/availability/${therapistId}?latest=true`,
-		{ params: { page } }
+		`/users/${therapistId}/availability?latest=true`
 	);
 
 	return response.data;
 };
 
-export const getAvailabilityByDay = async (
+export const getAvailabilityByDayId = async (
 	therapistId: string,
-	params: IDateInfo
+	params: DateInfoParams
 ) => {
-	const response = await apiClient.get<IAvailabilityResponse>(
-		`/users/availability/${therapistId}/by-day`,
+	const response = await apiClient.get<IPaginatedAvailability>(
+		`/users/${therapistId}/availability/by-day`,
 		{
 			params: {
-				day: params.date,
 				dayId: params.dateId,
+				cursor: params.cursor,
 			},
 		}
 	);

@@ -1,10 +1,7 @@
 import { createContext, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserById } from '@psycron/api/user';
-import {
-	getAppointmentDetailsBySlotId,
-	getAvailabilitySession,
-} from '@psycron/api/user/availability';
+import { getAvailabilitySession } from '@psycron/api/user/availability';
 import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import { EDITUSERPATH } from '@psycron/pages/urls';
 import { THERAPIST_ID } from '@psycron/utils/tokens';
@@ -75,11 +72,7 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 	);
 };
 
-export const useUserDetails = (
-	passedUserId?: string,
-	availabilityDayId?: string,
-	slotId?: string
-) => {
+export const useUserDetails = (passedUserId?: string) => {
 	const context = useContext(UserDetailsContext);
 	if (!context) {
 		throw new Error('useUserDetails must be used within a UserDetailsProvider');
@@ -115,18 +108,6 @@ export const useUserDetails = (
 		enabled: !!latestSessionId,
 	});
 
-	const {
-		data: appointmentDetailsBySlotId,
-		isLoading: isAppointmentDetailsBySlotIdLoading,
-		isSuccess: isAppointmentDetailsBySlotIdSuccess,
-	} = useQuery({
-		queryKey: ['getAppointmentDetailsBySlotId', slotId],
-		queryFn: () =>
-			getAppointmentDetailsBySlotId(userDetails._id, availabilityDayId, slotId),
-		enabled: !!userDetails?._id && !!slotId,
-		retry: false,
-	});
-
 	const therapistId = useSecureStorage(
 		THERAPIST_ID,
 		userDetails?._id,
@@ -140,9 +121,6 @@ export const useUserDetails = (
 		isUserDetailsLoading: isUserDetailsLoading,
 		isUserDetailsSucces,
 		therapistId,
-		appointmentDetailsBySlotId,
-		isAppointmentDetailsBySlotIdLoading,
-		isAppointmentDetailsBySlotIdSuccess,
 		sessionData,
 		sessionDataIsLoading,
 		latestSessionId,

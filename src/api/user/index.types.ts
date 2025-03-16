@@ -33,16 +33,10 @@ export interface ITherapistById {
 }
 
 export interface IAvailabilityResponse {
-	latestAvailability: {
-		_id: string;
-		availabilityDates: IAvailabilityDate[];
-		consultationDuration: number;
-		createAvailabilitySession: string;
-		createdAt: string;
-		dates: IDateInfo[];
-		therapistId: string;
-		updatedAt: string;
-	};
+	dates: IAvailabilityDate[];
+	firstDate: IDateInfo | null;
+	isEmpty: boolean;
+	lastDate: IDateInfo | null;
 	totalPages: number;
 }
 
@@ -51,8 +45,28 @@ export interface IDateInfo {
 	dateId?: string;
 }
 
+export interface DateInfoParams {
+	cursor?: string;
+	dateId: string;
+}
+
 export interface IAvailabilityDate {
 	_id: string;
 	date: Date;
 	slots: ISlot[];
+}
+
+export interface IPaginatedAvailability {
+	availabilityDates: IAvailabilityDate[];
+	conflicts?: [];
+	consultationDuration?: number;
+	pagination: {
+		hasNextPage: boolean;
+		hasPrevPage: boolean;
+		nextCursor: string | null;
+		previousCursor: string | null;
+		totalItems: number;
+	};
+	therapistId: string;
+	timezone?: string;
 }

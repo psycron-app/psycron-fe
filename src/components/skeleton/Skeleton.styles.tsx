@@ -6,13 +6,9 @@ import { spacing } from '@psycron/theme/spacing/spacing.theme';
 export const StyledSkeletonWrapper = styled(Box, {
 	shouldForwardProp: (props) => props !== 'hasOnClick',
 })<{ hasOnClick: boolean }>`
-	padding: ${spacing.medium};
-
-	position: relative;
-
-	border-radius: ${spacing.mediumLarge};
-
 	animation: skeletonPulse 2s ease-in-out infinite;
+	position: relative;
+	height: 100%;
 
 	@keyframes skeletonPulse {
 		0% {
@@ -27,16 +23,21 @@ export const StyledSkeletonWrapper = styled(Box, {
 	}
 
 	cursor: ${({ hasOnClick }) => (hasOnClick ? 'pointer' : 'default')};
-
-	:hover {
-		box-shadow: ${shadowMain};
-		color: ${palette.primary.action.hover};
-	}
 `;
 
 export const SkeletonBox = styled(Paper)`
 	display: flex;
 	justify-content: center;
+	height: 100%;
+
+	:hover {
+		box-shadow: ${shadowMain};
+		color: ${palette.primary.action.hover};
+	}
+
+	.MuiPaper-root {
+		padding: 0 !important;
+	}
 `;
 
 export const StyledSkeleton = styled(Skeleton)`

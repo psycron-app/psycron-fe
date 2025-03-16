@@ -66,14 +66,13 @@ export const StyledCalendarWrapper = styled(Box, {
 	shouldForwardProp: (props) => props !== 'isBig',
 })<{ isBig: boolean }>`
 	width: 100%;
-	padding: ${spacing.medium};
 
 	${isBiggerThanTabletMedia} {
-		width: ${({ isBig }) => (isBig ? '100%' : '18.75rem')};
+		width: 100%;
 	}
 
 	${isBiggerThanMediumMedia} {
-		height: auto;
+		height: 100%;
 	}
 `;
 

@@ -8,9 +8,6 @@ interface WithSkeletonProps {
 	skeletonProps?: ISkeleton;
 }
 
-/**
- * HOC que exibe um Skeleton enquanto o conteúdo carrega
- */
 export function withSkeletonLoading<T extends object>(
 	WrappedComponent: ComponentType<T>
 ) {

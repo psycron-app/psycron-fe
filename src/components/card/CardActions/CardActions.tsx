@@ -15,28 +15,28 @@ export const CardActions = ({
 	type,
 }: CardActionsProps) => {
 	return (
-		<Grid container columns={12} justifyContent='flex-end'>
+		<Grid container columns={12}>
 			<Grid
 				container
-				justifyContent='flex-end'
-				marginBottom={2}
+				marginBottom={hasTertiary ? 2 : 0}
 				columnSpacing={3}
+				size={{ xs: 12 }}
 			>
 				{hasSecondAction ? (
-					<Grid item>
+					<Grid size={{ xs: 6 }} display='flex' justifyContent='flex-start'>
 						<Button onClick={secondAction} secondary>
 							{secondActionName}
 						</Button>
 					</Grid>
 				) : null}
-				<Grid item>
+				<Grid size={{ xs: 6 }} display='flex' justifyContent='flex-end'>
 					<Button onClick={onClick} type={type}>
 						{actionName}
 					</Button>
 				</Grid>
 			</Grid>
 			{hasTertiary ? (
-				<Grid item>
+				<Grid size={{ xs: 12 }}>
 					<Box display='flex' flexDirection='row' justifyContent='flex-end'>
 						<Button onClick={tertiaryAction} tertiary>
 							{tertiaryActionName}

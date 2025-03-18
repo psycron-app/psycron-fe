@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { IconButton } from '@mui/material';
 import {
 	ChevronLeft,
 	ChevronRight,
@@ -35,19 +36,12 @@ export const AgendaPagination = ({
 					</Tooltip>
 				</IcontTodayWrapper>
 				<StyledPgButtonWrapper>
-					<Tooltip
-						disabled={disablePrevious}
-						title={t('components.agenda.previous-week')}
-						onClick={!disablePrevious ? onGoToPreviousWeek : undefined}
-					>
+					<IconButton onClick={onGoToPreviousWeek} disabled={disablePrevious}>
 						<ChevronLeft />
-					</Tooltip>
-					<Tooltip
-						title={t('components.agenda.next-week')}
-						onClick={!disableNext ? onGoToNextWeek : undefined}
-					>
+					</IconButton>
+					<IconButton onClick={onGoToNextWeek} disabled={disableNext}>
 						<ChevronRight />
-					</Tooltip>
+					</IconButton>
 				</StyledPgButtonWrapper>
 				<IcontMonthWrapper>
 					{mode === 'edit' && (

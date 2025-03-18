@@ -42,7 +42,7 @@ export const SkeletonBox = styled(Paper)`
 
 export const StyledSkeleton = styled(Skeleton)`
 	border-radius: ${spacing.mediumLarge};
-	background-color: ${palette.gray['02']};
+	background-color: ${palette.info.light};
 	width: 80%;
 `;
 

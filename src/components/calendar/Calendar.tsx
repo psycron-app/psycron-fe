@@ -60,6 +60,10 @@ const CalendarComponent = ({
 		? availabilityData
 		: (Object.values(availabilityData ?? {}).flat() as IDateInfo[]);
 
+	const firstDateIntheCalendar = availableScheduleDates?.at(0)?.date;
+
+	const lastDateInTheCalendar = availableScheduleDates?.at(-1)?.date;
+
 	const isDayAvailableInSchedule = (day: Date) => {
 		return availableScheduleDates.some((availability) => {
 			const availableDate = new Date(availability.date);
@@ -81,6 +85,14 @@ const CalendarComponent = ({
 		day.getMonth() === currentDisplayedMonth.getMonth() &&
 		day.getFullYear() === currentDisplayedMonth.getFullYear();
 
+	const disablePreviousMonth = !availableScheduleDates.some(
+		({ date }) => new Date(date) < new Date(firstDateIntheCalendar)
+	);
+
+	const disableNextMonth = !availableScheduleDates.some(
+		({ date }) => new Date(date) > new Date(lastDateInTheCalendar)
+	);
+
 	return (
 		<StyledCalendarWrapper isBig={isBig}>
 			<StyledPaper>
@@ -89,10 +101,16 @@ const CalendarComponent = ({
 						{format(currentDisplayedMonth, 'MMMM yyyy', { locale: dateLocale })}
 					</Text>
 					<StyledChevronWrapper>
-						<IconButton onClick={goToPreviousMonthInCalendar}>
+						<IconButton
+							onClick={goToPreviousMonthInCalendar}
+							disabled={disablePreviousMonth}
+						>
 							<ChevronLeft />
 						</IconButton>
-						<IconButton onClick={goToNextMonthInCalendar}>
+						<IconButton
+							onClick={goToNextMonthInCalendar}
+							disabled={disableNextMonth}
+						>
 							<ChevronRight />
 						</IconButton>
 					</StyledChevronWrapper>

@@ -7,8 +7,6 @@ import {
 	differenceInHours,
 	differenceInMinutes,
 	format,
-	parseISO,
-	setHours,
 	startOfDay,
 	startOfToday,
 	startOfWeek,
@@ -40,15 +38,6 @@ export const formatDateTime = (
 };
 
 export const formatDate = (date: Date, locale: string): string => {
-	const selectedLocale = locales[locale] || enUS;
-	return format(date, 'EEEE, dd/MM/yy', { locale: selectedLocale });
-};
-
-export const formatDateFromISO = (
-	dateString: string,
-	locale: string
-): string => {
-	const date = parseISO(dateString);
 	const selectedLocale = locales[locale] || enUS;
 	return format(date, 'EEEE, dd/MM/yy', { locale: selectedLocale });
 };
@@ -114,13 +103,6 @@ export const scrollToSection = (id: string) => {
 	}
 };
 
-export const generateDayHours = () => {
-	const hours = Array.from({ length: 24 }).map((_, index) => {
-		return format(setHours(startOfDay(new Date()), index), 'HH:mm');
-	});
-	return hours;
-};
-
 export const generateTimeSlots = (duration: number) => {
 	const slots = [];
 	let currentTime = startOfDay(new Date());
@@ -140,14 +122,6 @@ export const generateWeekDays = (startDate: Date) => {
 	return Array.from({ length: 7 }, (_, i) =>
 		format(addDays(startOfWeekMonday, i), 'yyyy-MM-dd')
 	);
-};
-
-export const generateWeekDaysFromSelected = (referenceDate: Date): Date[] => {
-	const start = startOfWeek(referenceDate);
-
-	const weekDays = Array.from({ length: 7 }).map((_, i) => addDays(start, i));
-
-	return weekDays;
 };
 
 export const getWeekDays = (today: Date, dateLocale: Locale) => {
@@ -179,45 +153,6 @@ export const formatTimeToTimeZone = (
 	return TZFormat(zonedDate, is12HourFormat ? 'hh:mm a' : 'HH:mm', {
 		timeZone,
 	});
-};
-
-export const formatDateTimeToLocale = (
-	dateTimeStr: string,
-	locale: string
-): string => {
-	const [datePart, timePart] = dateTimeStr.split('_');
-
-	const date = new Date(`${datePart} ${timePart}`);
-
-	if (isNaN(date.getTime())) {
-		throw new Error('Data inválida');
-	}
-
-	const formattedTime = new Intl.DateTimeFormat(locale, {
-		hour: 'numeric',
-		minute: 'numeric',
-		hour12: true,
-	}).format(date);
-
-	if (locale === 'en') {
-		return `${date.toDateString()} at ${formattedTime}`;
-	}
-
-	if (locale === 'pt') {
-		const dayOfWeek = new Intl.DateTimeFormat('pt', { weekday: 'long' }).format(
-			date
-		);
-		const formattedDate = `${dayOfWeek} (${date.toLocaleDateString('pt', {
-			day: '2-digit',
-			month: '2-digit',
-		})})`;
-		return `${formattedDate} às ${formattedTime}`;
-	}
-
-	return new Intl.DateTimeFormat(locale, {
-		dateStyle: 'full',
-		timeStyle: 'short',
-	}).format(date);
 };
 
 export const formatSessionDateToLocale = (
@@ -256,16 +191,6 @@ export const formatSessionDateToLocale = (
 		timeStyle: 'short',
 	}).format(date);
 };
-
-export const isBeforeToday = (date: Date): boolean => {
-	const today = new Date();
-
-	today.setHours(0, 0, 0, 0);
-	date.setHours(0, 0, 0, 0);
-
-	return date < today;
-};
-
 export const isCurrentDay = (day: Date) => {
 	const today = startOfToday();
 

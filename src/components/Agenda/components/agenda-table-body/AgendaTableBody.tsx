@@ -14,6 +14,7 @@ import {
 	AgendaTableBodyWrapper,
 	StickyCell,
 	StyledSlotHoverable,
+	StyledTableSkeleton,
 } from './AgendaTableBody.styles';
 import type { IAgendaTableBodyProps } from './AgendaTableBody.type';
 
@@ -21,8 +22,12 @@ export const AgendaTableBody = ({
 	filteredHoursRange,
 	fullWeekAvailability,
 	mode,
-	isLoading,
 	onClick,
+	isLoading,
+	nextCursor,
+	previousCursor,
+	isFetchingNextPage,
+	isFetchingPreviousPage,
 }: IAgendaTableBodyProps) => {
 	const { t } = useTranslation();
 
@@ -49,56 +54,123 @@ export const AgendaTableBody = ({
 				? 'empty'
 				: 'not available';
 
+	const skeletonRows = 8;
+	const skeletonCols = 7;
+
+	const nextCursorIndex = fullWeekAvailability.findIndex(
+		({ _id }) => _id === nextCursor
+	);
+	const previousCursorIndex = fullWeekAvailability.findIndex(
+		({ _id }) => _id === previousCursor
+	);
+
+	const nextColumnsToLoad =
+		nextCursorIndex >= 0 ? fullWeekAvailability.slice(nextCursorIndex + 1) : [];
+
+	const previousColumnsToLoad =
+		previousCursorIndex > 0
+			? fullWeekAvailability.slice(0, previousCursorIndex)
+			: [];
+
 	return (
 		<>
-			<AgendaTableBodyWrapper isLoading={isLoading}>
-				{filteredHoursRange.map((hour, rowIndex) => {
-					return (
-						<AgendaBodyRow key={rowIndex}>
-							<StickyCell align='center' isLoading={false}>
-								<Text fontSize={'0.8rem'}>{hour}</Text>
-							</StickyCell>
+			<AgendaTableBodyWrapper>
+				{isLoading
+					? Array.from({ length: skeletonRows }).map((_, rowIndex) => {
+							const delay = `${rowIndex * 100}ms`;
 
-							{fullWeekAvailability.map(
-								({ _id: availabilityDayId, slots }, index) => {
-									const slot = slots.find((slot: { startTime: string }) => {
-										return slot.startTime === hour;
-									});
+							return (
+								<AgendaBodyRow key={`skeleton-row-${rowIndex}`}>
+									<StickyCell align='center'>
+										<StyledTableSkeleton style={{ animationDelay: delay }} />
+									</StickyCell>
 
-									const selectedSlotDetails = {
-										availabilityDayId,
-										slot,
-									};
-
-									const uniqueKey = availabilityDayId
-										? availabilityDayId
-										: `temp-key-${index}`;
-									return (
-										<AgendaCellBody
-											key={uniqueKey}
-											isLoading={isLoading}
-											onClick={() => onClick(selectedSlotDetails, mode)}
-										>
-											<StyledSlotHoverable
-												title={translatedStatus(slot?.status)}
-												isHighlightedColumn={false}
-												status={slot?.status}
-											>
-												<Text
-													variant='caption'
-													display='flex'
-													alignItems='center'
-												>
-													{getStatusIcon(slot?.status, false)}
-												</Text>
-											</StyledSlotHoverable>
+									{Array.from({ length: skeletonCols }).map((_, colIndex) => (
+										<AgendaCellBody key={`skeleton-cell-${colIndex}`}>
+											<StyledTableSkeleton style={{ animationDelay: delay }} />
 										</AgendaCellBody>
-									);
-								}
-							)}
-						</AgendaBodyRow>
-					);
-				})}
+									))}
+								</AgendaBodyRow>
+							);
+						})
+					: filteredHoursRange?.map((hour, rowIndex) => {
+							return (
+								<AgendaBodyRow key={rowIndex}>
+									<StickyCell align='center'>
+										<Text fontSize={'0.8rem'}>{hour}</Text>
+									</StickyCell>
+
+									{fullWeekAvailability?.map(
+										(
+											{
+												_id: availabilityDayId,
+												slots,
+												weekDay: weekDayFromAvailability,
+											},
+											index
+										) => {
+											const delay = `${rowIndex * 100}ms`;
+
+											const slot = slots?.find(
+												(slot: { startTime: string }) => {
+													return slot.startTime === hour;
+												}
+											);
+
+											const selectedSlotDetails = {
+												availabilityDayId,
+												slot,
+											};
+
+											const uniqueKey =
+												availabilityDayId || `temp-key-${index}`;
+
+											const isNextColumnFetching =
+												isFetchingNextPage &&
+												nextColumnsToLoad?.some(
+													({ weekDay }) => weekDay === weekDayFromAvailability
+												);
+
+											const isPreviousColumnFetching =
+												isFetchingPreviousPage &&
+												previousColumnsToLoad.some(
+													({ weekDay }) => weekDay === weekDayFromAvailability
+												);
+
+											const isColumnFetching =
+												isNextColumnFetching || isPreviousColumnFetching;
+
+											return (
+												<AgendaCellBody
+													key={uniqueKey}
+													onClick={() => onClick(selectedSlotDetails, mode)}
+												>
+													{isColumnFetching ? (
+														<StyledTableSkeleton
+															style={{ animationDelay: delay }}
+														/>
+													) : (
+														<StyledSlotHoverable
+															title={translatedStatus(slot?.status)}
+															isHighlightedColumn={false}
+															status={slot?.status}
+														>
+															<Text
+																variant='caption'
+																display='flex'
+																alignItems='center'
+															>
+																{getStatusIcon(slot?.status, false)}
+															</Text>
+														</StyledSlotHoverable>
+													)}
+												</AgendaCellBody>
+											);
+										}
+									)}
+								</AgendaBodyRow>
+							);
+						})}
 			</AgendaTableBodyWrapper>
 		</>
 	);

@@ -13,9 +13,13 @@ export interface IAgendaTableBodyProps {
 		slots: ISlot[];
 		weekDay: string;
 	}[];
+	isFetchingNextPage: boolean;
+	isFetchingPreviousPage: boolean;
 	isLoading: boolean;
 	mode: IAgendaViewMode;
+	nextCursor: string | undefined;
 	onClick: (selectedSlotDetails: ISelectedSlot, mode: IAgendaViewMode) => void;
+	previousCursor: string | undefined;
 }
 
 export type IAgendaTableBodyStyledProps = {

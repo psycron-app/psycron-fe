@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { TableCell, TableHead, TableRow } from '@mui/material';
 import { Text } from '@psycron/components/text/Text';
@@ -7,10 +6,10 @@ import { enGB, ptBR } from 'date-fns/locale';
 
 import { StickyCell } from './AgendaTableHead.styles';
 import type { IAgendaTableHeadProps } from './AgendaTableHead.types';
-export const AgendaTableHead = forwardRef<
-	HTMLTableSectionElement,
-	IAgendaTableHeadProps
->(({ nextCursor, fullWeekAvailability, previousCursor, previousRef }, ref) => {
+
+export const AgendaTableHead = ({
+	fullWeekAvailability,
+}: IAgendaTableHeadProps) => {
 	const { locale } = useParams<{ locale: string }>();
 
 	const dateLocale = locale.includes('en') ? enGB : ptBR;
@@ -36,32 +35,18 @@ export const AgendaTableHead = forwardRef<
 				</StickyCell>
 				{fullWeekAvailability.map(
 					({ weekDay, _id: availabilityDayId, date }, index) => {
-						const lastDay = new Date(date);
-
-						const isNextCursorInView = availabilityDayId === nextCursor;
-
-						const isPreviousCursorInView = availabilityDayId === previousCursor;
+						const displayDay = format(date, 'd');
 
 						const uniqueKey = availabilityDayId
 							? availabilityDayId
 							: `temp-key-${index}`;
 
 						return (
-							<TableCell
-								key={uniqueKey}
-								align='center'
-								ref={
-									isNextCursorInView
-										? ref
-										: isPreviousCursorInView
-											? previousRef
-											: null
-								}
-							>
+							<TableCell key={uniqueKey} align='center'>
 								<Text fontWeight={600}>
 									{weekDayName(weekDay).toUpperCase()}
 								</Text>
-								<Text>{format(lastDay, 'd')}</Text>
+								<Text>{displayDay}</Text>
 							</TableCell>
 						);
 					}
@@ -69,6 +54,4 @@ export const AgendaTableHead = forwardRef<
 			</TableRow>
 		</TableHead>
 	);
-});
-
-AgendaTableHead.displayName = 'AgendaTableHead';
+};

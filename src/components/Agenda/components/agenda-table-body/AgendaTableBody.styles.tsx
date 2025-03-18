@@ -1,4 +1,10 @@
-import { styled, TableBody, TableCell, TableRow } from '@mui/material';
+import {
+	Skeleton,
+	styled,
+	TableBody,
+	TableCell,
+	TableRow,
+} from '@mui/material';
 import { Tooltip } from '@psycron/components/tooltip/Tooltip';
 import { isBiggerThanTabletMedia } from '@psycron/theme/media-queries/mediaQueries';
 import { palette } from '@psycron/theme/palette/palette.theme';
@@ -9,9 +15,7 @@ import { zIndexHover, zIndexTableHead } from '@psycron/theme/zIndex';
 import type { IAgendaTableBodyStyledProps } from './AgendaTableBody.type';
 import { getBackgroundColor, getBorderColor, getSVGColor } from './utils';
 
-export const AgendaTableBodyWrapper = styled(TableBody, {
-	shouldForwardProp: (props) => props !== 'isLoading',
-})<{ isLoading: boolean }>`
+export const AgendaTableBodyWrapper = styled(TableBody)`
 	background-color: transparent;
 `;
 
@@ -21,16 +25,12 @@ export const AgendaBodyRow = styled(TableRow)`
 	}
 `;
 
-export const AgendaCellBody = styled(TableCell, {
-	shouldForwardProp: (props) => props !== 'isLoading',
-})<{ isLoading: boolean }>`
+export const AgendaCellBody = styled(TableCell)`
 	padding: ${spacing.space} ${spacing.xs};
 	height: 50px;
 	align-items: center;
 	justify-content: center;
 	position: relative;
-	background-color: ${({ isLoading }) =>
-		isLoading ? `${palette.info.light} !important` : 'inherit'};
 
 	&:hover {
 		background-color: inherit !important;
@@ -82,4 +82,12 @@ export const StyledSlotHoverable = styled(Tooltip, {
 			}
 		}
 	}
+`;
+
+export const StyledTableSkeleton = styled(Skeleton)`
+	width: 100%;
+	height: 100%;
+	padding: ${spacing.space} ${spacing.xs};
+	background-color: ${palette.info.light};
+	border-radius: ${spacing.mediumSmall};
 `;

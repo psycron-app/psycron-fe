@@ -7,8 +7,4 @@ export interface IAgendaTableHeadProps {
 		slots: ISlot[];
 		weekDay: string;
 	}[];
-	nextCursor: string | undefined;
-	previousCursor: string | undefined;
-	previousRef: (node?: Element) => void;
-	ref: (node?: Element) => void;
 }

@@ -72,7 +72,8 @@
 			"5": "No-Show",
 			"6": "Closed appointment(s)",
 			"7": "Other"
-		}
+		},
+		"status": "Status"
 	},
 	"components": {
 		"form": {
@@ -238,7 +239,9 @@
 				"whatsapp-subject": "Hello, how is it going? I am sending this message regarding your appointment with me, {{therapistName}}",
 				"next-sessions": "Next appointments",
 				"edit-patient-details": "Edit Patient Details",
-				"edit-patient-appointment": "Edit appointment"
+				"edit-patient-appointment": "Edit appointment",
+				"edit-availability": "Edit availability",
+				"text-status": "This is slot is {{status}}"
 			},
 			"edit-appointment": {
 				"title": "Edit appointment",
@@ -367,7 +370,10 @@
 					"available": "Available",
 					"unavailable": "Unavailable",
 					"booked": "Booked",
-					"empty": "Empty"
+					"empty": "Empty",
+					"blocked": "Blocked",
+					"cancelled": "Cancelled",
+					"onhold": "On hold"  
 				},
 				"therapist-edit-modal": {
 					"title": "Edit your availability"

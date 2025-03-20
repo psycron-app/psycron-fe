@@ -10,5 +10,6 @@ export type IAgendaViewMode = 'view' | 'edit' | 'cancel' | 'book';
 
 export type ISelectedSlot = {
 	availabilityDayId: string;
+	date: string;
 	slot: ISlot;
 };

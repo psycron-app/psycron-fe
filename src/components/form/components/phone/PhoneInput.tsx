@@ -102,7 +102,7 @@ export const PhoneInput = <T extends FieldValues>({
 			alignItems='center'
 			columnSpacing={2}
 		>
-			<Grid item xs={1} pl={0}>
+			<Grid xs={1} pl={0}>
 				<CountryFlag>
 					{countryData.callingCode === null ? (
 						<Logo />
@@ -111,7 +111,7 @@ export const PhoneInput = <T extends FieldValues>({
 					)}
 				</CountryFlag>
 			</Grid>
-			<Grid item xs={4}>
+			<Grid xs={4}>
 				<Select
 					items={countries}
 					required={required}
@@ -125,7 +125,7 @@ export const PhoneInput = <T extends FieldValues>({
 					hidePrimaryValue
 				/>
 			</Grid>
-			<Grid item xs={6.5}>
+			<Grid xs={6.5}>
 				<PhoneNumberField
 					type='tel'
 					label={t('components.input.phone-input.phone-num-label', {
@@ -143,7 +143,7 @@ export const PhoneInput = <T extends FieldValues>({
 					disabled={disabled}
 				/>
 			</Grid>
-			<Grid item xs={0.5}>
+			<Grid xs={0.5}>
 				<Tooltip title={t('components.input.phone-input.phone-number-guide')}>
 					<Info color={palette.info.main} />
 				</Tooltip>

@@ -1,3 +1,4 @@
+import type { ICancelEditAppointmentResponse } from '@psycron/api/appointment/index.types';
 import apiClient from '@psycron/api/axios-instance';
 import type { IAvailability } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
@@ -8,6 +9,7 @@ import type {
 	IAvailabilityData,
 	ICompleteSessionAvailabilityData,
 	ICompleteSessionAvailabilityResponse,
+	IEditSlotStatus,
 	IInitiateAvailabilityResponse,
 	ISessionResponse,
 	IUpdateAvailabilitySession,
@@ -77,6 +79,19 @@ export const getAppointmentDetailsBySlotId = async (
 ): Promise<AppointmentDetailsBySlotIdResponse> => {
 	const response = await apiClient.get(
 		`/users/${therapistId}/availability/${availabilityDayId}/${slotId}`
+	);
+	return response.data;
+};
+
+export const editSlotStatus = async ({
+	availabilityDayId,
+	data,
+	slotId,
+	therapistId,
+}: IEditSlotStatus) => {
+	const response = await apiClient.post<ICancelEditAppointmentResponse>(
+		`/users/${therapistId}/availability/${availabilityDayId}/slot/${slotId}`,
+		data
 	);
 	return response.data;
 };

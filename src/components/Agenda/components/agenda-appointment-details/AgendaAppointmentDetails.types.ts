@@ -1,6 +1,23 @@
-import type { AppointmentDetailsBySlotIdResponse } from '@psycron/api/user/availability/index.types';
+import type {
+	UseFormGetValues,
+	UseFormRegister,
+	UseFormSetValue,
+} from 'react-hook-form';
+import type { ISlotStatus } from '@psycron/context/user/auth/UserAuthenticationContext.types';
+
+import type { ISelectedSlot } from '../../Agenda.types';
 
 export interface IAgendaAppointmentDetails {
-	appointmentDetails: AppointmentDetailsBySlotIdResponse;
-	handleEditAppointment: (oldSessionSlotId: string, slotId: string) => void;
+	appointmentDetails: ISelectedSlot;
+	getValues: UseFormGetValues<{
+		status: ISlotStatus;
+	}>;
+	handleEditAppointment: (selectedSlot: ISelectedSlot) => void;
+	isEditingStatus: boolean;
+	register: UseFormRegister<{
+		status: ISlotStatus;
+	}>;
+	setValue: UseFormSetValue<{
+		status: ISlotStatus;
+	}>;
 }

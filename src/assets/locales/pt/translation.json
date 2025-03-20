@@ -72,7 +72,8 @@
 			"5": "Não Comparecimento",
 			"6": "Consulta Encerrada",
 			"7": "Outro"
-		}
+		},
+		"status": "Disponibilidade"
 	},
 	"components": {
 		"form": {
@@ -238,7 +239,9 @@
 				"whatsapp-subject": "Olá, tudo bem? Estou enviando essa mensagem sobre sua consulta comigo, {{therapisName}}",
 				"next-sessions": "Próximas sessões",
 				"edit-patient-details": "Alterar detalhes do paciente",
-				"edit-patient-appointment": "Alterar sessão"
+				"edit-patient-appointment": "Alterar sessão",
+				"edit-availability": "Alterar disponibilidade",
+				"text-status": "Esse horário está {{status}}"
 			},
 			"edit-appointment": {
 				"title": "Editar consulta",
@@ -367,7 +370,10 @@
 					"available": "Disponível",
 					"unavailable": "Indisponível",
 					"booked": "Reservado",
-					"empty": "Vazio"
+					"empty": "Vazio",
+					"blocked": "Bloqueado",
+					"cancelled": "Cancelado",
+					"onhold": "Em espera"  
 				},
 				"therapist-edit-modal": {
 					"title": "Altere sua disponibilidade"

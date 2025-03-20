@@ -17,8 +17,8 @@ export const CardActions = ({
 	return (
 		<Grid container columns={12}>
 			<Grid
-				container
 				marginBottom={hasTertiary ? 2 : 0}
+				display='flex'
 				columnSpacing={3}
 				size={{ xs: 12 }}
 			>
@@ -29,7 +29,11 @@ export const CardActions = ({
 						</Button>
 					</Grid>
 				) : null}
-				<Grid size={{ xs: 6 }} display='flex' justifyContent='flex-end'>
+				<Grid
+					size={{ xs: hasSecondAction ? 6 : 12 }}
+					display='flex'
+					justifyContent='flex-end'
+				>
 					<Button onClick={onClick} type={type}>
 						{actionName}
 					</Button>

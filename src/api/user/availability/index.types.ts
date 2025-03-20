@@ -1,6 +1,7 @@
 import type {
 	IPatient,
 	ISlot,
+	ISlotStatus,
 } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
 export interface IInitiateAvailabilityResponse {
@@ -90,6 +91,7 @@ export enum StatusEnum {
 	BLOCKED = 'BLOCKED',
 	BOOKED = 'BOOKED',
 	CANCELLED = 'CANCELLED',
+	EMPTY = 'EMPTY',
 	ONHOLD = 'ONHOLD',
 }
 
@@ -114,4 +116,16 @@ export interface ICompleteSessionAvailabilityResponse {
 		updatedAt: string;
 	};
 	status: string;
+}
+
+export interface IEditSlotStatus {
+	availabilityDayId: string;
+	data: IEditSlotStatusData;
+	slotId: string | null;
+	therapistId: string;
+}
+
+export interface IEditSlotStatusData {
+	newStatus: ISlotStatus;
+	startTime: string;
 }

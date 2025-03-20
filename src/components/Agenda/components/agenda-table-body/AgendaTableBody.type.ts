@@ -6,6 +6,7 @@ import type {
 import type { IAgendaViewMode, ISelectedSlot } from '../../Agenda.types';
 
 export interface IAgendaTableBodyProps {
+	consultationDuration: number;
 	filteredHoursRange: string[];
 	fullWeekAvailability: {
 		_id: string;

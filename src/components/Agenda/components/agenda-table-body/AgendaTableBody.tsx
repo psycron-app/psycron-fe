@@ -6,7 +6,11 @@ import {
 	UnAvailable,
 } from '@psycron/components/icons';
 import { Text } from '@psycron/components/text/Text';
-import type { ISlotStatus } from '@psycron/context/user/auth/UserAuthenticationContext.types';
+import type {
+	ISlot,
+	ISlotStatus,
+} from '@psycron/context/user/auth/UserAuthenticationContext.types';
+import { format } from 'date-fns';
 
 import {
 	AgendaBodyRow,
@@ -28,6 +32,7 @@ export const AgendaTableBody = ({
 	previousCursor,
 	isFetchingNextPage,
 	isFetchingPreviousPage,
+	consultationDuration,
 }: IAgendaTableBodyProps) => {
 	const { t } = useTranslation();
 
@@ -72,6 +77,29 @@ export const AgendaTableBody = ({
 			? fullWeekAvailability.slice(0, previousCursorIndex)
 			: [];
 
+	const calculateEndTime = (
+		startTime: string,
+		consultationDuration: number
+	): string => {
+		const [hours, minutes] = startTime.split(':').map(Number);
+
+		const startDate = new Date();
+		startDate.setHours(hours, minutes, 0, 0);
+
+		const endDate = new Date(
+			startDate.getTime() + consultationDuration * 60000
+		);
+
+		return format(endDate, 'HH:mm');
+	};
+
+	const getEmptySlot = (hour: string, consultationDuration: number): ISlot => ({
+		startTime: hour,
+		endTime: calculateEndTime(hour, consultationDuration),
+		status: 'EMPTY',
+		_id: null,
+	});
+
 	return (
 		<>
 			<AgendaTableBodyWrapper>
@@ -106,6 +134,7 @@ export const AgendaTableBody = ({
 												_id: availabilityDayId,
 												slots,
 												weekDay: weekDayFromAvailability,
+												date,
 											},
 											index
 										) => {
@@ -117,9 +146,13 @@ export const AgendaTableBody = ({
 												}
 											);
 
+											const foundSlot =
+												slot ?? getEmptySlot(hour, consultationDuration);
+
 											const selectedSlotDetails = {
 												availabilityDayId,
-												slot,
+												date,
+												slot: foundSlot,
 											};
 
 											const uniqueKey =

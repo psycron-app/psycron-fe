@@ -1,11 +1,26 @@
 import { createContext, useMemo } from 'react';
 import { useContext } from 'react';
+import type { CustomError } from '@psycron/api/error';
 import { getTherapistLatestAvailability } from '@psycron/api/user';
 import { getAvailabilityByDayId } from '@psycron/api/user';
-import { getAppointmentDetailsBySlotId } from '@psycron/api/user/availability';
-import type { IDateInfo } from '@psycron/api/user/index.types';
+import {
+	editSlotStatus,
+	getAppointmentDetailsBySlotId,
+} from '@psycron/api/user/availability';
+import type { IEditSlotStatus } from '@psycron/api/user/availability/index.types';
+import type {
+	IDateInfo,
+	IPaginatedAvailability,
+} from '@psycron/api/user/index.types';
+import type { ISelectedSlot } from '@psycron/components/agenda/Agenda.types';
+import { useAlert } from '@psycron/context/alert/AlertContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import {
+	useInfiniteQuery,
+	useMutation,
+	useQuery,
+	useQueryClient,
+} from '@tanstack/react-query';
 
 import type {
 	AvailabilityContextType,
@@ -55,7 +70,7 @@ export const AvailabilityProvider = ({
 
 export const useAvailability = (
 	initialDaySelected?: IDateInfo,
-	slotId?: string
+	slot?: ISelectedSlot
 ) => {
 	const context = useContext(AvailabilityContext);
 	if (!context) {
@@ -63,6 +78,9 @@ export const useAvailability = (
 			'useAvailability must be used within an AvailabilityProvider'
 		);
 	}
+
+	const queryClient = useQueryClient();
+	const { showAlert } = useAlert();
 
 	const { therapistId } = useUserDetails();
 
@@ -103,19 +121,68 @@ export const useAvailability = (
 
 	const consultationDuration = firstPage?.consultationDuration;
 
-	const availabilityDayId = initialDaySelected?.dateId ?? null;
+	const availabilityDayId = slot?.availabilityDayId || null;
+
+	const slotId = slot?.slot?._id || null;
 
 	const {
 		data: appointmentDetailsBySlotId,
 		isLoading: isAppointmentDetailsBySlotIdLoading,
 	} = useQuery({
-		queryKey: ['getAppointmentDetailsBySlotId', availabilityDayId],
+		queryKey: ['getAppointmentDetailsBySlotId', slotId],
 		queryFn: () =>
 			getAppointmentDetailsBySlotId(therapistId, availabilityDayId, slotId),
 		enabled: !!therapistId && !!slotId,
 		retry: false,
 		staleTime: 1000 * 60 * 5,
 	});
+
+	const editSlotStatusMutation = useMutation({
+		mutationFn: editSlotStatus,
+		onSuccess: (data, variables) => {
+			showAlert({
+				message: data.message,
+				severity: 'success',
+			});
+
+			queryClient.setQueryData<IPaginatedAvailability>(
+				['availabilityByDay'],
+				(oldData) => {
+					if (!oldData) return oldData;
+
+					return {
+						...oldData,
+						availabilityDates: oldData.availabilityDates.map((date) =>
+							date._id === variables.availabilityDayId
+								? {
+										...date,
+										slots: date.slots.map((slot) =>
+											slot._id === variables.slotId
+												? { ...slot, status: variables.data.newStatus }
+												: slot
+										),
+									}
+								: date
+						),
+						pagination: oldData.pagination,
+						therapistId: oldData.therapistId,
+						timezone: oldData.timezone,
+					};
+				}
+			);
+			queryClient.invalidateQueries({ queryKey: ['availabilityByDay'] });
+		},
+		onError: (error: CustomError) => {
+			showAlert({
+				message: error.message,
+				severity: 'error',
+			});
+		},
+	});
+
+	const editSlotStatusMttn = (data: IEditSlotStatus) => {
+		editSlotStatusMutation.mutate(data);
+	};
 
 	return {
 		...context,
@@ -132,5 +199,6 @@ export const useAvailability = (
 		isAppointmentDetailsBySlotIdLoading,
 		isFetchingNextPage,
 		isFetchingPreviousPage,
+		editSlotStatusMttn,
 	};
 };

@@ -1,16 +1,21 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Box, Tooltip } from '@mui/material';
+import type { SelectChangeEvent } from '@mui/material';
+import { Box } from '@mui/material';
 import { ContactLink } from '@psycron/components/link/contact/ContactLink';
 import { Loader } from '@psycron/components/loader/Loader';
+import { Select } from '@psycron/components/select/Select';
 import { Text } from '@psycron/components/text/Text';
+import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { usePatient } from '@psycron/context/patient/PatientContext';
+import type { ISlotStatus } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { useTranslatedStatus } from '@psycron/hooks/useTranslatedStatus';
 import { formatDate } from '@psycron/utils/variables';
 
 import {
-	StyledNextSessionText,
+	// StyledNextSessionText,
 	StyledPatientDetails,
 	StyledSessionDatesList,
 	StyledSessionDatesTitle,
@@ -21,38 +26,62 @@ import type { IAgendaAppointmentDetails } from './AgendaAppointmentDetails.types
 export const AgendaAppointmentDetails = ({
 	appointmentDetails,
 	handleEditAppointment,
+	isEditingStatus,
+	register,
+	getValues,
+	setValue,
 }: IAgendaAppointmentDetails) => {
-	console.log('🚀 ~ appointmentDetails:', appointmentDetails);
 	const { t } = useTranslation();
-	const { userDetails } = useUserDetails();
-	const [patientId, setPatientId] = useState<string | null>();
-	const { patientDetails } = usePatient(patientId);
-
 	const { locale } = useParams<{
 		locale: string;
 	}>();
 
-	useEffect(() => {
-		if (appointmentDetails?.appointment?.patient?._id) {
-			setPatientId(appointmentDetails.appointment.patient._id);
-		} else {
-			setPatientId(null);
-		}
-	}, [appointmentDetails]);
+	const { userDetails } = useUserDetails();
 
-	if (!appointmentDetails?.appointment) {
+	const statusOptions = useTranslatedStatus([
+		'ONHOLD',
+		'BLOCKED',
+		'BOOKED',
+		'CANCELLED',
+	]);
+
+	const translatedStatusValue =
+		statusOptions.find(
+			(option) => option.name === appointmentDetails?.slot?.status
+		)?.value ?? '';
+
+	const [selectedStatus, setSelectedStatus] = useState<string>(
+		getValues('status') || translatedStatusValue
+	);
+
+	const handleStatusChange = (event: SelectChangeEvent<string>) => {
+		const newStatus = event.target.value as ISlotStatus;
+		setSelectedStatus(newStatus);
+		setValue('status', newStatus);
+	};
+	const { appointmentDetailsBySlotId, isAppointmentDetailsBySlotIdLoading } =
+		useAvailability(undefined, appointmentDetails);
+
+	const patientId =
+		appointmentDetailsBySlotId?.appointment?.patient?._id ?? null;
+
+	const { patientDetails } = usePatient(patientId);
+
+	if (isAppointmentDetailsBySlotIdLoading) {
 		return <Loader />;
 	}
-
-	const { appointment } = appointmentDetails;
 
 	const { firstName: therapistFirstName, lastName: therapistLastName } =
 		userDetails;
 
 	const therapistName = `${therapistFirstName} ${therapistLastName}`;
 
-	const { date, startTime, endTime, patient } = appointment;
-	console.log('🚀 ~ date:', date);
+	const {
+		slot: { startTime, endTime, status },
+		date,
+	} = appointmentDetails;
+
+	const patient = appointmentDetailsBySlotId?.appointment?.patient;
 
 	const patientFirstName = patientDetails?.firstName || '';
 	const patientLastName = patientDetails?.lastName || '';
@@ -62,11 +91,36 @@ export const AgendaAppointmentDetails = ({
 
 	const { whatsapp, phone, email } = contacts || {};
 
-	const formattedClickedSlot = formatDate(date, locale);
+	const formattedClickedSlot = formatDate(new Date(date), locale);
 
 	const wppText = t('components.agenda.appointment-details.whatsapp-subject', {
 		therapistName,
 	});
+
+	const displayTextFromStatus = (status: ISlotStatus) => {
+		const text = {
+			AVAILABLE: t('components.agenda.appointment-details.text-status', {
+				status: t('page.availability.agenda.status.available'),
+			}),
+			BOOKED: t('components.agenda.appointment-details.text-status', {
+				status: '',
+			}),
+			BLOCKED: t('components.agenda.appointment-details.text-status', {
+				status: '',
+			}),
+			ONHOLD: t('components.agenda.appointment-details.text-status', {
+				status: '',
+			}),
+			CANCELLED: t('components.agenda.appointment-details.text-status', {
+				status: '',
+			}),
+			EMPTY: t('components.agenda.appointment-details.text-status', {
+				status: t('page.availability.agenda.status.empty'),
+			}),
+		};
+
+		return text[status];
+	};
 
 	return (
 		<StyledWrapper>
@@ -81,9 +135,11 @@ export const AgendaAppointmentDetails = ({
 								<Text>{patientName}</Text>
 							</>
 						) : (
-							<Text fontWeight={600} pb={4}>
-								{'SLOT IS STILL AVAILABLE'}
-							</Text>
+							!isEditingStatus && (
+								<Text fontWeight={600} pb={4}>
+									{displayTextFromStatus(status)}
+								</Text>
+							)
 						)}
 					</Box>
 					{patientDetails?.contacts ? (
@@ -129,6 +185,21 @@ export const AgendaAppointmentDetails = ({
 				<Text fontWeight={600}>
 					{t('globals.ends')}: {endTime}
 				</Text>
+				{isEditingStatus ? (
+					<Box pt={2}>
+						<Select
+							items={statusOptions}
+							required
+							selectLabel={t('globals.status')}
+							{...register('status')}
+							subtitle
+							value={selectedStatus}
+							onChangeSelect={handleStatusChange}
+							fullWidth
+							hidePrimaryValue
+						/>
+					</Box>
+				) : null}
 			</StyledPatientDetails>
 			{patient ? (
 				<StyledSessionDatesList>

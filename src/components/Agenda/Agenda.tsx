@@ -1,10 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Paper, Table, TableContainer } from '@mui/material';
 import { Modal } from '@psycron/components/modal/Modal';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import type { ISlot } from '@psycron/context/user/auth/UserAuthenticationContext.types';
+import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { useTranslatedStatus } from '@psycron/hooks/useTranslatedStatus';
 import { APPOINTMENTS } from '@psycron/pages/urls';
 import { generateWeekDays } from '@psycron/utils/variables';
 import { addDays, format, startOfWeek, subDays } from 'date-fns';
@@ -23,24 +26,36 @@ export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
+	const { therapistId } = useUserDetails();
+
+	const statusOptions = useTranslatedStatus();
+
 	const [dayFromCalendar, setDayFromCalendar] = useState<Date>(
 		daySelectedFromCalendar?.date
 	);
 	const [selectedSlot, setSelectedSlot] = useState<ISelectedSlot | null>(null);
+
 	const [openReadDetailsModal, setOpenReadDetailsModal] =
 		useState<boolean>(false);
+
+	const [isEditStatus, setIsEditStatus] = useState<boolean>(false);
+
+	const { register, getValues, setValue } = useForm({
+		defaultValues: { status: selectedSlot?.slot?.status },
+	});
 
 	const {
 		firstDate,
 		lastDate,
 		dataFromSelectedDayRes,
 		isDataFromSelectedDayLoading,
-		appointmentDetailsBySlotId,
 		fetchNextPage,
 		fetchPreviousPage,
 		isFetchingNextPage,
 		isFetchingPreviousPage,
-	} = useAvailability(daySelectedFromCalendar, selectedSlot?.slot?._id);
+		consultationDuration,
+		editSlotStatusMttn,
+	} = useAvailability(daySelectedFromCalendar, undefined);
 
 	const { weekStart, weekDays } = useMemo(() => {
 		const weekStart = startOfWeek(dayFromCalendar, { weekStartsOn: 0 });
@@ -118,6 +133,10 @@ export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 		}
 	}, [fetchPreviousPage, isFirstItemWithinWeek]);
 
+	const validStatus = ['AVAILABLE', 'EMPTY'].includes(
+		selectedSlot?.slot?.status
+	);
+
 	// GENERAL CLICK SLOT
 	const handleGeneralClickSlot = (
 		selectedSlotDetails: ISelectedSlot,
@@ -125,11 +144,9 @@ export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 	) => {
 		if (!selectedSlotDetails.availabilityDayId) return;
 
-		setSelectedSlot(selectedSlotDetails);
-
 		switch (mode) {
 			case 'view':
-				setOpenReadDetailsModal(true);
+				handleViewSlotDetails(selectedSlotDetails);
 				break;
 
 			case 'edit':
@@ -147,8 +164,54 @@ export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 		}
 	};
 
+	// HANDLE VIEW APPOINTMENT DETAILS
+	const handleViewSlotDetails = (selectedSlotDetails: ISelectedSlot) => {
+		setOpenReadDetailsModal(true);
+		setSelectedSlot(selectedSlotDetails);
+	};
+
+	const handleCloseViewDetails = () => {
+		setOpenReadDetailsModal(false);
+		setIsEditStatus(false);
+	};
+
+	// HANDLE EDIT SLOT STATUS
+	const handleEditSlotStatus = (
+		selectedSlot: ISelectedSlot,
+		isEditStatus: boolean
+	) => {
+		const {
+			availabilityDayId,
+			slot: { _id: slotId, startTime },
+		} = selectedSlot;
+
+		if (!isEditStatus) {
+			setIsEditStatus(true);
+		} else {
+			const newStatus = getValues('status');
+
+			const foundStatusVal = statusOptions.find(
+				({ value }) => value === newStatus
+			)?.name;
+
+			const editSlotStatusData = {
+				therapistId,
+				availabilityDayId,
+				slotId,
+				data: {
+					newStatus: foundStatusVal,
+					startTime,
+				},
+			};
+
+			editSlotStatusMttn(editSlotStatusData);
+			setIsEditStatus(false);
+			setOpenReadDetailsModal(false);
+		}
+	};
+
 	// HANDLE EDIT APPOINTMENT
-	const handleEditAppointment = (availabilityDayId: string, slotId: string) => {
+	const handleEditAppointment = (selectedSlot: ISelectedSlot) => {
 		// if (!availabilityDayId || !slotId) return;
 		// const foundDate =
 		// 	dataFromSelectedDay?.latestAvailability?.availabilityDates?.find(
@@ -195,6 +258,7 @@ export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 						isLoading={isLoadingState}
 						isFetchingNextPage={isFetchingNextPage}
 						isFetchingPreviousPage={isFetchingPreviousPage}
+						consultationDuration={consultationDuration}
 						mode={'view'}
 					/>
 				</Table>
@@ -222,25 +286,40 @@ export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 			<Modal
 				openModal={openReadDetailsModal}
 				title={t('components.agenda.appointment-details.title')}
-				onClose={() => setOpenReadDetailsModal(false)}
+				onClose={handleCloseViewDetails}
 				cardActionsProps={{
-					actionName: t(
-						'components.agenda.appointment-details.edit-patient-appointment'
-					),
+					actionName: validStatus
+						? t('components.agenda.appointment-details.edit-availability')
+						: t(
+								'components.agenda.appointment-details.edit-patient-appointment'
+							),
 					onClick: () => {
-						// handleEditAppointment(
-						// 	selectedSlotDetails.availabilityDayId,
-						// 	selectedSlotDetails.slot._id
-						// );
+						if (validStatus) {
+							handleEditSlotStatus(selectedSlot, isEditStatus);
+						} else {
+							handleEditAppointment(selectedSlot);
+						}
 					},
-					hasSecondAction: true,
-					secondActionName: t('components.agenda.cancel-appointment.title'),
-					// secondAction: () => handleDeleteAppointment(latestPatientId),
+					hasSecondAction: isEditStatus || (!validStatus && !isEditStatus),
+					secondActionName: isEditStatus
+						? t('components.link.navigate.back')
+						: t('components.agenda.cancel-appointment.title'),
+					secondAction: () => {
+						if (isEditStatus) {
+							setIsEditStatus(false);
+						} else {
+							// handleDeleteAppointment(latestPatientId);
+						}
+					},
 				}}
 			>
 				<AgendaAppointmentDetails
-					appointmentDetails={appointmentDetailsBySlotId}
+					appointmentDetails={selectedSlot}
 					handleEditAppointment={handleEditAppointment}
+					isEditingStatus={isEditStatus}
+					register={register}
+					getValues={getValues}
+					setValue={setValue}
 				/>
 			</Modal>
 			{/* READING DETAILS MODAL ENDS */}

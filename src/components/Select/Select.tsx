@@ -66,7 +66,7 @@ export const Select = forwardRef<
 							{!hidePrimaryValue ? <Text variant='caption'>{name}</Text> : null}
 
 							{subtitle ? (
-								<Text variant='caption' pl={2}>
+								<Text variant='caption' fontSize={'0.9rem'} pl={2}>
 									{value}
 								</Text>
 							) : null}

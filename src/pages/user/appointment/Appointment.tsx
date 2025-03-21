@@ -1,5 +1,8 @@
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, List, ListItemText } from '@mui/material';
+import type { IDateInfo } from '@psycron/api/user/index.types';
+import { Agenda } from '@psycron/components/agenda/Agenda';
 import {
 	CalendarOff,
 	CalendarRange,
@@ -12,6 +15,7 @@ import { useAvailability } from '@psycron/context/appointment/availability/Avail
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
 import { AVAILABILITYWIZARD } from '@psycron/pages/urls';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import {
 	ListItemTitleWrapper,
@@ -26,8 +30,56 @@ export const AppointmentPage = () => {
 
 	const { isUserDetailsLoading } = useUserDetails();
 
-	const { isAvailabilityDatesEmpty, availabilityDataIsLoading } =
-		useAvailability();
+	const {
+		availabilityData,
+		isAvailabilityDatesEmpty,
+		availabilityDataIsLoading,
+	} = useAvailability();
+
+	const currentDay = useMemo(() => {
+		if (!availabilityData?.dates?.length) return null;
+
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+
+		const normalizedDates = availabilityData.dates.map((d) => ({
+			...d,
+			dateObj: new Date(d.date),
+		}));
+
+		const todayMatch = normalizedDates.find((d) => {
+			const date = new Date(d.date);
+			date.setHours(0, 0, 0, 0);
+			return date.getTime() === today.getTime();
+		});
+
+		if (todayMatch) {
+			return {
+				date: todayMatch.date,
+				dateId: (todayMatch as IDateInfo).dateId || todayMatch._id,
+			};
+		}
+
+		const sortedByProximity = [...normalizedDates].sort((a, b) => {
+			return new Date(a.date).getTime() - new Date(b.date).getTime();
+		});
+
+		const futureDay = sortedByProximity.find((d) => d.dateObj > today);
+		const pastDay = [...sortedByProximity]
+			.reverse()
+			.find((d) => d.dateObj < today);
+
+		const fallbackDay = futureDay || pastDay;
+
+		if (fallbackDay) {
+			return {
+				date: fallbackDay.date,
+				dateId: (todayMatch as IDateInfo).dateId || todayMatch._id,
+			};
+		}
+
+		return null;
+	}, [availabilityData?.dates]);
 
 	const availabilityGuideItems = [
 		{
@@ -85,21 +137,9 @@ export const AppointmentPage = () => {
 						</StyledProceedContainer>
 					</>
 				) : (
-					<Box display='flex' flexDirection='column'>
+					<Box display='flex' flexDirection='column' px={spacing.mediumSmall}>
 						<Box>
-							{/* <Agenda
-								selectedDay={currentDay}
-								availability={therapistLatestAvailability}
-								isLoading={therapistLatestAvailabilityLoading}
-								isBig
-								isTherapist
-							/> */}
-
-							{/* <AgendaNew
-								availability={therapistLatestAvailability}
-								daySelectedFromCalendar={currentDay}
-								mode='view'
-							/> */}
+							<Agenda daySelectedFromCalendar={currentDay} mode='view' />
 						</Box>
 					</Box>
 				)}

@@ -25,7 +25,7 @@ import type { IAgendaAppointmentDetails } from './AgendaAppointmentDetails.types
 
 export const AgendaAppointmentDetails = ({
 	appointmentDetails,
-	handleEditAppointment,
+	// handleEditAppointment,
 	isEditingStatus,
 	register,
 	getValues,

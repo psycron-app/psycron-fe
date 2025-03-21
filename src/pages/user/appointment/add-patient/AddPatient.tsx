@@ -9,6 +9,7 @@ import { usePatient } from '@psycron/context/patient/PatientContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { getFormattedContacts } from '@psycron/hooks/useFormattedContacts';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
+import { APPOINTMENTS } from '@psycron/pages/urls';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import type { ICreatePatientForm } from './AddPatient.types';
@@ -53,6 +54,8 @@ export const AddPatient = () => {
 		<PageLayout
 			title={t('page.add-patient.title')}
 			subTitle={t('page.add-patient.sub-title')}
+			backButton
+			backTo={APPOINTMENTS}
 			isLoading={false}
 		>
 			<FormProvider {...methods}>

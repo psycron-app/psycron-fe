@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import { NavigateLink } from '@psycron/components/link/navigate/NavigateLink';
 import { Loader } from '@psycron/components/loader/Loader';
 import { Text } from '@psycron/components/text/Text';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
@@ -17,6 +18,8 @@ export const PageLayout = ({
 	children,
 	isLoading,
 	subTitle,
+	backButton,
+	backTo,
 }: IPageLayout) => {
 	return (
 		<PageLayoutWrapper>
@@ -28,6 +31,7 @@ export const PageLayout = ({
 							<Text fontSize='1rem'>{subTitle}</Text>
 						</Box>
 					) : null}
+					{backButton ? <NavigateLink isBack to={backTo} /> : null}
 				</PageTitleWrapper>
 			) : null}
 			{isLoading ? (

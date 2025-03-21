@@ -373,7 +373,7 @@
 					"empty": "Empty",
 					"blocked": "Blocked",
 					"cancelled": "Cancelled",
-					"onhold": "On hold"  
+					"onhold": "On hold"
 				},
 				"therapist-edit-modal": {
 					"title": "Edit your availability"
@@ -429,6 +429,10 @@
 		"edit-appointment": {
 			"title": "Edit Appointment",
 			"sub-title": "Please select the new date slot"
+		},
+		"add-patient": {
+			"title": "Add a New Patient",
+			"sub-title": "Fill out the form below with the patient’s details"
 		}
 	}
 }

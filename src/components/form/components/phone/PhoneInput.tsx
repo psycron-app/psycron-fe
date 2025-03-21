@@ -1,29 +1,34 @@
 import { useEffect, useState } from 'react';
-import type { FieldValues, Path, PathValue } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Grid, type SelectChangeEvent } from '@mui/material';
 import countryList from '@psycron/assets/countries/countries.json';
-import { Info, Logo } from '@psycron/components/icons';
+import { Logo } from '@psycron/components/icons';
 import { Select } from '@psycron/components/select/Select';
-import { Tooltip } from '@psycron/components/tooltip/Tooltip';
+import { Text } from '@psycron/components/text/Text';
 import { useUserGeolocation } from '@psycron/context/geolocation/CountryContext';
 import type { CountryDataSimple } from '@psycron/context/geolocation/CountryContext.types';
+import useViewport from '@psycron/hooks/useViewport';
 import { palette } from '@psycron/theme/palette/palette.theme';
 
 import { CountryFlag, PhoneNumberField } from './PhoneInput.styles';
 import type { PhoneInputProps } from './PhoneInput.types';
 
-export const PhoneInput = <T extends FieldValues>({
-	register,
+export const PhoneInput = ({
 	registerName,
-	errors,
 	defaultValue,
-	setValue,
 	disabled,
 	required,
-}: PhoneInputProps<T>) => {
+}: PhoneInputProps) => {
 	const { t } = useTranslation();
 	const { countryData } = useUserGeolocation();
+	const {
+		setValue,
+		register,
+		formState: { errors },
+	} = useFormContext();
+
+	const { isMobile } = useViewport();
 
 	const [selectedCountry, setSelectedCountry] = useState<
 		CountryDataSimple & { name?: string }
@@ -55,11 +60,8 @@ export const PhoneInput = <T extends FieldValues>({
 
 			if (phoneNumber !== number) {
 				setPhoneNumber(number);
-				setValue(registerName as Path<T>, number as PathValue<T, Path<T>>);
-				setValue(
-					'countryCode' as Path<T>,
-					countryCode as PathValue<T, Path<T>>
-				);
+				setValue(registerName, number);
+				setValue('countryCode', countryCode);
 			}
 		}
 	}, [
@@ -74,12 +76,12 @@ export const PhoneInput = <T extends FieldValues>({
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
 		setPhoneNumber(newValue);
-		setValue(registerName as Path<T>, newValue as PathValue<T, Path<T>>);
+		setValue(registerName, newValue);
 	};
 
 	const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
 		const newValue = e.target.value;
-		setValue(registerName as Path<T>, newValue as PathValue<T, Path<T>>);
+		setValue(registerName, newValue);
 	};
 
 	const handlePhoneChange = (e: SelectChangeEvent<string>) => {
@@ -89,7 +91,7 @@ export const PhoneInput = <T extends FieldValues>({
 			callingCode: e.target.value,
 			countryEmoji: newCountry?.flag,
 		});
-		setValue('countryCode' as Path<T>, e.target.value as PathValue<T, Path<T>>);
+		setValue('countryCode', e.target.value);
 	};
 
 	const inputRegisterName = t(`globals.${registerName}`);
@@ -100,9 +102,10 @@ export const PhoneInput = <T extends FieldValues>({
 			columns={12}
 			direction='row'
 			alignItems='center'
+			justifyContent='center'
 			columnSpacing={2}
 		>
-			<Grid xs={1} pl={0}>
+			<Grid size={isMobile ? 0.5 : 1} pl={0}>
 				<CountryFlag>
 					{countryData.callingCode === null ? (
 						<Logo />
@@ -111,12 +114,12 @@ export const PhoneInput = <T extends FieldValues>({
 					)}
 				</CountryFlag>
 			</Grid>
-			<Grid xs={4}>
+			<Grid size={isMobile ? 4 : 2}>
 				<Select
 					items={countries}
 					required={required}
 					selectLabel={t('components.input.phone-input.select-label')}
-					{...register('countryCode' as Path<T>)}
+					{...register('countryCode')}
 					subtitle
 					value={selectedCountry.callingCode ?? ''}
 					fullWidth
@@ -125,7 +128,7 @@ export const PhoneInput = <T extends FieldValues>({
 					hidePrimaryValue
 				/>
 			</Grid>
-			<Grid xs={6.5}>
+			<Grid size={isMobile ? 7.5 : 9}>
 				<PhoneNumberField
 					type='tel'
 					label={t('components.input.phone-input.phone-num-label', {
@@ -134,20 +137,18 @@ export const PhoneInput = <T extends FieldValues>({
 					required={required}
 					fullWidth
 					value={phoneNumber}
-					{...register(registerName as Path<T>)}
+					{...register(registerName)}
 					autoComplete='tel'
 					error={!!errors?.[registerName]}
 					helperText={errors?.[registerName]?.message as string}
 					onChange={handleInputChange}
-					onBlur={handleBlur} // 🔥 Captura o autofill
+					onBlur={handleBlur}
 					disabled={disabled}
 				/>
 			</Grid>
-			<Grid xs={0.5}>
-				<Tooltip title={t('components.input.phone-input.phone-number-guide')}>
-					<Info color={palette.info.main} />
-				</Tooltip>
-			</Grid>
+			<Text variant='caption' color={palette.error.main}>
+				{t('components.input.phone-input.phone-number-guide')}
+			</Text>
 		</Grid>
 	);
 };

@@ -5,6 +5,8 @@ import apiClient from '../axios-instance';
 import type {
 	IBookAppointment,
 	IBookAppointmentResponse,
+	ICreatePatient,
+	ICreatePatientResponse,
 	IEditPatientDetailsById,
 	IEditPatientDetailsByIdResponse,
 	IPatientByIdResponse,
@@ -38,6 +40,21 @@ export const updatePatientDetailsById = async ({
 		`/patient/${patientId}`,
 		patient
 	);
+
+	return response.data;
+};
+
+export const createPatientFromSlot = async ({
+	therapistId,
+	availabilityDayId,
+	slotId,
+	patient,
+}: ICreatePatient): Promise<ICreatePatientResponse> => {
+	const url = slotId
+		? `/patient/${therapistId}/create/${availabilityDayId}/${slotId}`
+		: `/patient/${therapistId}/create/${availabilityDayId}`;
+
+	const response = await apiClient.post<ICreatePatientResponse>(url, patient);
 
 	return response.data;
 };

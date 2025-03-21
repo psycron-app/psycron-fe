@@ -1,6 +1,7 @@
 // import { BlankPage } from '@psycron/pages/blank/BlankPage';
 import { Dashboard } from '@psycron/pages/dashboard/Dashboard';
 import {
+	ADDPATIENT,
 	APPOINTMENTS,
 	AVAILABILITY,
 	AVAILABILITYWIZARD,
@@ -9,6 +10,7 @@ import {
 	EDITUSER,
 	EDITUSERBYSESSION,
 } from '@psycron/pages/urls';
+import { AddPatient } from '@psycron/pages/user/appointment/add-patient/AddPatient';
 import { AppointmentPage } from '@psycron/pages/user/appointment/Appointment';
 import { CancelAppointment } from '@psycron/pages/user/appointment/cancel/CancelAppointment';
 import { EditAppointment } from '@psycron/pages/user/appointment/edit/EditAppointment';
@@ -33,6 +35,7 @@ const privateRoutes = [
 	{ path: AVAILABILITYWIZARD, element: <AvailabilityWizard /> },
 	{ path: AVAILABILITY, element: <SetAvailabilityPage /> },
 	{ path: `${APPOINTMENTS}/cancel/:patientId`, element: <CancelAppointment /> },
+	{ path: ADDPATIENT, element: <AddPatient /> },
 	// { path: 'blank', element: <BlankPage /> },
 ];
 

@@ -373,7 +373,7 @@
 					"empty": "Vazio",
 					"blocked": "Bloqueado",
 					"cancelled": "Cancelado",
-					"onhold": "Em espera"  
+					"onhold": "Em espera"
 				},
 				"therapist-edit-modal": {
 					"title": "Altere sua disponibilidade"
@@ -426,9 +426,13 @@
 			"title": "Cancelamento de Consulta(s)",
 			"sub-title": "Por favor selecione a(s) consulta(s) que você quer cancelar"
 		},
-			"edit-appointment": {
+		"edit-appointment": {
 			"title": "Altere a Consulta",
 			"sub-title": "Por favor selecione a data que deseja alterar"
+		},
+		"add-patient": {
+			"title": "Adicione um Novo Paciente",
+			"sub-title": "Preencha o formulário abaixo com os detalhes da pessoa"
 		}
 	}
 }

@@ -5,10 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { Paper, Table, TableContainer } from '@mui/material';
 import { Modal } from '@psycron/components/modal/Modal';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
-import type { ISlot } from '@psycron/context/user/auth/UserAuthenticationContext.types';
+import type {
+	ISlot,
+	ISlotStatus,
+} from '@psycron/context/user/auth/UserAuthenticationContext.types';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { useTranslatedStatus } from '@psycron/hooks/useTranslatedStatus';
-import { APPOINTMENTS } from '@psycron/pages/urls';
+import { ADDPATIENT, APPOINTMENTS } from '@psycron/pages/urls';
 import { generateWeekDays } from '@psycron/utils/variables';
 import { addDays, format, startOfWeek, subDays } from 'date-fns';
 
@@ -133,9 +136,15 @@ export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 		}
 	}, [fetchPreviousPage, isFirstItemWithinWeek]);
 
-	const validStatus = ['AVAILABLE', 'EMPTY'].includes(
-		selectedSlot?.slot?.status
-	);
+	const isValidStatus = (validStatuses: ISlotStatus[]) => {
+		const status = selectedSlot?.slot?.status;
+
+		return status ? validStatuses.includes(status) : false;
+	};
+
+	const validStatusEdit = isValidStatus(['AVAILABLE', 'EMPTY']);
+
+	const isStatusAvailable = isValidStatus(['AVAILABLE']);
 
 	// GENERAL CLICK SLOT
 	const handleGeneralClickSlot = (
@@ -208,6 +217,21 @@ export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 			setIsEditStatus(false);
 			setOpenReadDetailsModal(false);
 		}
+	};
+
+	// HANDLE ADD PATIENT
+	const handleAddPatientFromAvailability = (selectedSlot: ISelectedSlot) => {
+		const {
+			availabilityDayId,
+			slot: { _id },
+		} = selectedSlot;
+
+		const queryParams = new URLSearchParams();
+
+		queryParams.append('availabilityDayId', availabilityDayId);
+		queryParams.append('slotId', _id);
+
+		navigate(`../${ADDPATIENT}?${queryParams.toString()}`);
 	};
 
 	// HANDLE EDIT APPOINTMENT
@@ -288,26 +312,34 @@ export const Agenda = ({ daySelectedFromCalendar, mode }: IAgendaProps) => {
 				title={t('components.agenda.appointment-details.title')}
 				onClose={handleCloseViewDetails}
 				cardActionsProps={{
-					actionName: validStatus
+					actionName: validStatusEdit
 						? t('components.agenda.appointment-details.edit-availability')
 						: t(
 								'components.agenda.appointment-details.edit-patient-appointment'
 							),
 					onClick: () => {
-						if (validStatus) {
+						if (validStatusEdit) {
 							handleEditSlotStatus(selectedSlot, isEditStatus);
 						} else {
 							handleEditAppointment(selectedSlot);
 						}
 					},
-					hasSecondAction: isEditStatus || (!validStatus && !isEditStatus),
+					hasSecondAction:
+						isEditStatus ||
+						(!validStatusEdit && !isEditStatus) ||
+						isStatusAvailable,
 					secondActionName: isEditStatus
 						? t('components.link.navigate.back')
-						: t('components.agenda.cancel-appointment.title'),
+						: isStatusAvailable && !isEditStatus
+							? t('components.form.add-patient.name')
+							: t('components.agenda.cancel-appointment.title'),
 					secondAction: () => {
 						if (isEditStatus) {
 							setIsEditStatus(false);
+						} else if (isStatusAvailable && !isEditStatus) {
+							handleAddPatientFromAvailability(selectedSlot);
 						} else {
+							console.log('NAAAAAAAA');
 							// handleDeleteAppointment(latestPatientId);
 						}
 					},

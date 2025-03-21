@@ -12,6 +12,7 @@ import type {
 const DEFAULT_COUNTRY_DATA_SIMPLE: CountryDataSimple = {
 	countryEmoji: './psycron-icon.svg',
 	callingCode: null,
+	countryCode2: null,
 };
 
 export const UserGeoLocationContext = createContext<UserGeoLocationContextType>(

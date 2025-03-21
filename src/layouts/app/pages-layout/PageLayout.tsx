@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { Loader } from '@psycron/components/loader/Loader';
 import { Text } from '@psycron/components/text/Text';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import {
 	PageChildrenWrapper,
@@ -23,8 +24,8 @@ export const PageLayout = ({
 				<PageTitleWrapper>
 					<PageTitle>{title}</PageTitle>
 					{subTitle ? (
-						<Box>
-							<Text fontSize='1.2rem'>{subTitle}</Text>
+						<Box pt={spacing.mediumSmall}>
+							<Text fontSize='1rem'>{subTitle}</Text>
 						</Box>
 					) : null}
 				</PageTitleWrapper>

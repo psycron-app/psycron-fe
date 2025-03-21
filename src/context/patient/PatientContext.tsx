@@ -3,16 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import type { CustomError } from '@psycron/api/error';
 import {
 	bookAppointmentFromLink,
+	createPatientFromSlot,
 	getPatientById,
 	updatePatientDetailsById,
 } from '@psycron/api/patient';
 import type {
 	IBookAppointment,
+	ICreatePatient,
 	IEditPatientDetailsById,
 } from '@psycron/api/patient/index.types';
 import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import i18n from '@psycron/i18n';
-import { APPOINTMENTCONFIRMATION } from '@psycron/pages/urls';
+import { APPOINTMENTCONFIRMATION, DASHBOARD } from '@psycron/pages/urls';
 import { LATESTPATIENT_ID } from '@psycron/utils/tokens';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -78,6 +80,26 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 	const updatePatientDetails = (data: IEditPatientDetailsById) =>
 		updatePatientMutation.mutate(data);
 
+	const createPatientMutation = useMutation({
+		mutationFn: createPatientFromSlot,
+		onSuccess: (data) => {
+			navigate(`/${i18n.language}/${DASHBOARD}`);
+			showAlert({
+				message: data.message,
+				severity: 'success',
+			});
+		},
+		onError: (error: CustomError) => {
+			showAlert({
+				message: error.message,
+				severity: 'error',
+			});
+		},
+	});
+
+	const createPatientMttn = (data: ICreatePatient) =>
+		createPatientMutation.mutate(data);
+
 	return (
 		<PatientContext.Provider
 			value={{
@@ -86,6 +108,8 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 					bookAppointmentFromLinkMutation.isPending,
 				updatePatientDetails,
 				updatePatientIsLoading: updatePatientMutation.isPending,
+				createPatientMttn,
+				createPatientIsLoading: createPatientMutation.isPending,
 			}}
 		>
 			{children}

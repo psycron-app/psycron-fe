@@ -1,45 +1,43 @@
 import { useEffect, useState } from 'react';
-import type { FieldValues, Path } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { TextFieldProps } from '@mui/material';
 import { Box, TextField } from '@mui/material';
 import { Switch } from '@psycron/components/switch/components/item/Switch';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import { PhoneInput } from '../phone/PhoneInput';
 
 import type { ContactsFormProps } from './ContactsForm.types';
 
-export const ContactsForm = <T extends FieldValues>({
-	errors,
-	getPhoneValue,
-	setPhoneValue,
-	register,
+export const ContactsForm = ({
 	defaultValues,
 	disabled,
-	setValue,
 	required,
-}: ContactsFormProps<T> & TextFieldProps) => {
+}: ContactsFormProps & TextFieldProps) => {
 	const { t } = useTranslation();
 
-	const [hasWhatsApp, setHasWhatsApp] = useState<boolean>(false);
+	const {
+		register,
+		getValues,
+		setValue,
+		formState: { errors },
+	} = useFormContext();
 
-	const [isPhoneWpp, setIsPhoneWpp] = useState<boolean>(true);
+	const [hasWhatsApp, setHasWhatsApp] = useState<boolean>(false);
+	const [isPhoneWpp, setIsPhoneWpp] = useState<boolean>(false);
 
 	useEffect(() => {
-		const phoneValue = getPhoneValue('phone' as Path<T>);
-		if (isPhoneWpp) {
-			setPhoneValue('whatsapp' as Path<T>, phoneValue);
-		} else {
-			setPhoneValue(
-				'whatsapp' as Path<T>,
-				getPhoneValue('whatsapp' as Path<T>)
-			);
-		}
-	}, [getPhoneValue, isPhoneWpp, setPhoneValue]);
+		setValue('hasWhatsApp', hasWhatsApp);
+	}, [hasWhatsApp, setValue]);
+
+	useEffect(() => {
+		setValue('isPhoneWpp', isPhoneWpp);
+	}, [isPhoneWpp, setValue]);
 
 	return (
-		<Box>
-			<Box pb={1}>
+		<Box display='flex' flexDirection='column' width='100%'>
+			<Box pb={spacing.mediumSmall}>
 				<TextField
 					label={t('globals.email')}
 					fullWidth
@@ -48,7 +46,7 @@ export const ContactsForm = <T extends FieldValues>({
 					placeholder={
 						!defaultValues?.email && t('components.input.text.email')
 					}
-					{...register('email' as Path<T>)}
+					{...register('email')}
 					autoComplete='email'
 					error={!!errors?.email}
 					helperText={errors?.email?.message as string}
@@ -58,17 +56,14 @@ export const ContactsForm = <T extends FieldValues>({
 			</Box>
 			<Box>
 				<PhoneInput
-					errors={errors}
-					register={register}
 					registerName='phone'
-					defaultValue={getPhoneValue('phone' as Path<T>)}
+					defaultValue={getValues('phone')}
 					disabled={disabled}
-					setValue={setValue}
 					required={required}
 				/>
 			</Box>
 			<Box>
-				<Box display='flex'>
+				<Box display='flex' pl={spacing.small}>
 					<Switch
 						onChange={() => setHasWhatsApp((prev) => !prev)}
 						value={!hasWhatsApp}
@@ -80,7 +75,7 @@ export const ContactsForm = <T extends FieldValues>({
 					/>
 				</Box>
 				{hasWhatsApp ? (
-					<Box display='flex'>
+					<Box display='flex' pl={spacing.small}>
 						<Switch
 							onChange={() => setIsPhoneWpp((prev) => !prev)}
 							value={isPhoneWpp}
@@ -89,15 +84,12 @@ export const ContactsForm = <T extends FieldValues>({
 						/>
 					</Box>
 				) : null}
-				<input type='hidden' {...register('whatsapp' as Path<T>)} />
+				<input type='hidden' {...register('isPhoneWpp')} />
 				{hasWhatsApp && !isPhoneWpp && (
 					<Box>
 						<PhoneInput
-							errors={errors}
-							register={register}
 							registerName='whatsapp'
-							defaultValue={getPhoneValue('whatsapp' as Path<T>)}
-							setValue={setValue}
+							defaultValue={getValues('whatsapp')}
 							required={required}
 						/>
 					</Box>

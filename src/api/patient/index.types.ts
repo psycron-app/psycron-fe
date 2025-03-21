@@ -1,5 +1,6 @@
 import type {
 	IBookSessionWithLink,
+	IContactInfo,
 	IPatient,
 } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
@@ -37,4 +38,23 @@ export interface IEditPatientDetailsByIdResponse {
 	message: string;
 	patient: PatientFormData;
 	status: string;
+}
+
+export interface PatientPartial {
+	contacts: IContactInfo;
+	firstName: string;
+	lastName: string;
+}
+
+export interface ICreatePatient {
+	availabilityDayId: string;
+	patient: PatientPartial;
+	slotId: string;
+	therapistId: string;
+}
+
+export interface ICreatePatientResponse {
+	message: string;
+	patient: IPatient;
+	status: 'success' | 'error';
 }

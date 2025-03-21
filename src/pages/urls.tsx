@@ -42,3 +42,5 @@ export const BOOKAPPOINTMENT = `${USERID}/book-appointment/:first?`;
 export const APPOINTMENTCONFIRMATIONPATH = `${PATIENTID}/${APPOINTMENTCONFIRMATION}`;
 export const RESCHEDULEAPPOINTMENT = `${DOMAIN}/${APPOINTMENTID}/edit-appointment`;
 export const PATIENTAPPOINTMENTSLIST = `${PATIENTID}/${APPOINTMENTS}`;
+
+export const ADDPATIENT = 'patient/create';

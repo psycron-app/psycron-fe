@@ -15,23 +15,22 @@ export const EditAppointment = () => {
 	const selectedDate = searchParams.get('date');
 
 	return (
-		<></>
-		// <PageLayout
-		// 	title={t('page.edit-appointment.title')}
-		// 	subTitle={t('page.edit-appointment.sub-title')}
-		// 	isLoading={therapistLatestAvailabilityLoading}
-		// >
-		// 	<Box>
-		// 		<Box></Box>
-		// 		<Agenda
-		// 			isLoading={therapistLatestAvailabilityLoading}
-		// 			selectedDay={new Date(selectedDate)}
-		// 			availability={therapistLatestAvailability}
-		// 			isBig
-		// 			isTherapist
-		// 			isEditingMode
-		// 		/>
-		// 	</Box>
-		// </PageLayout>
+		<PageLayout
+			title={t('page.edit-appointment.title')}
+			subTitle={t('page.edit-appointment.sub-title')}
+			isLoading={false}
+		>
+			<Box>
+				<Box></Box>
+				{/* <Agenda
+					isLoading={therapistLatestAvailabilityLoading}
+					selectedDay={new Date(selectedDate)}
+					availability={therapistLatestAvailability}
+					isBig
+					isTherapist
+					isEditingMode
+				/> */}
+			</Box>
+		</PageLayout>
 	);
 };

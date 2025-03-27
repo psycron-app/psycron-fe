@@ -10,6 +10,7 @@ const switchStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 	return {
 		switchBase: {
 			color: error.main,
+			fontSize: '0.5rem',
 			'&:hover': {
 				backgroundColor: error.main,
 				color: error.action.hover,

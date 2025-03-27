@@ -1,14 +1,18 @@
 /* eslint-disable indent */
 import type { ReactElement } from 'react';
 import React from 'react';
-import { Box, Grid, IconButton } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { Button } from '@psycron/components/button/Button';
 import { Close } from '@psycron/components/icons';
 import { Text } from '@psycron/components/text/Text';
 import { Tooltip } from '@psycron/components/tooltip/Tooltip';
 import { palette } from '@psycron/theme/palette/palette.theme';
 
-import { CardTitleWrapper, TitleWrapper } from './CardTitle.styles';
+import {
+	CardTitleWrapper,
+	CloseButtonWrapper,
+	TitleWrapper,
+} from './CardTitle.styles';
 import type { CardTitleProps } from './CardTitle.types';
 
 export const CardTitle = ({
@@ -52,9 +56,9 @@ export const CardTitle = ({
 							</Text>
 						) : null}
 						{onClose && (
-							<IconButton onClick={onClose}>
+							<CloseButtonWrapper onClick={onClose}>
 								<Close />
-							</IconButton>
+							</CloseButtonWrapper>
 						)}
 					</TitleWrapper>
 				</Grid>

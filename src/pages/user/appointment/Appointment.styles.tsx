@@ -47,3 +47,13 @@ export const StyledProceedContainer = styled(Box)`
 		padding-bottom: ${spacing.mediumLarge};
 	}
 `;
+
+export const CalendarWrapper = styled(Box)`
+	display: flex;
+	flex-direction: column;
+	padding: 0;
+
+	${isBiggerThanTabletMedia} {
+		padding: 0 ${spacing.mediumSmall};
+	}
+`;

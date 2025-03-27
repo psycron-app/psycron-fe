@@ -1,7 +1,26 @@
 import { Box, styled } from '@mui/material';
+import { Text } from '@psycron/components/text/Text';
 import { isBiggerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueries';
 import { palette } from '@psycron/theme/palette/palette.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
+
+export const BookingAppointmentTitleWrapper = styled(Box)`
+	padding: ${spacing.small};
+
+	${isBiggerThanMediumMedia} {
+		padding-bottom: ${spacing.mediumSmall};
+	}
+`;
+
+export const BookingAppointmentTitle = styled(Text)`
+	font-size: 1.2rem;
+	font-weight: 600;
+
+	${isBiggerThanMediumMedia} {
+		font-size: 1.5rem;
+		font-weight: 700;
+	}
+`;
 
 export const StyledBookAppointmentPgWrapper = styled(Box)`
 	display: flex;
@@ -10,7 +29,7 @@ export const StyledBookAppointmentPgWrapper = styled(Box)`
 `;
 
 export const StyledBookingAgendaWrapper = styled(Box)`
-	padding: ${spacing.largeXl};
+	padding: ${spacing.small};
 
 	display: flex;
 	flex-direction: column;
@@ -20,6 +39,7 @@ export const StyledBookingAgendaWrapper = styled(Box)`
 	border-radius: ${spacing.mediumLarge};
 
 	${isBiggerThanMediumMedia} {
-		width: 70%;
+		width: 90%;
+		padding: ${spacing.medium};
 	}
 `;

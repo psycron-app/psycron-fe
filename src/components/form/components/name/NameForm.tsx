@@ -2,9 +2,12 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { TextFieldProps } from '@mui/material';
 import { Box, TextField } from '@mui/material';
-import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
-import { NameFormWrapper, StyledNameInput } from './NameForm.styles';
+import {
+	LastNameInputWrapper,
+	NameFormWrapper,
+	StyledNameInput,
+} from './NameForm.styles';
 import type { NameFormProps } from './NameForm.types';
 
 export const NameForm = ({
@@ -39,7 +42,7 @@ export const NameForm = ({
 					disabled={disabled}
 				/>
 			</Box>
-			<Box width={'100%'} pb={spacing.mediumSmall}>
+			<LastNameInputWrapper>
 				<TextField
 					label={t('components.form.signup.lastName')}
 					fullWidth
@@ -54,7 +57,7 @@ export const NameForm = ({
 					required={required}
 					disabled={disabled}
 				/>
-			</Box>
+			</LastNameInputWrapper>
 		</NameFormWrapper>
 	);
 };

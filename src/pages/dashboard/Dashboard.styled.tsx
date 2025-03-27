@@ -16,5 +16,8 @@ export const StyledPaperModal = styled(Paper)`
 
 	${isMobileMedia} {
 		width: 100%;
+		padding: ${spacing.xs};
+		border-radius: 0;
+		height: 100%;
 	}
 `;

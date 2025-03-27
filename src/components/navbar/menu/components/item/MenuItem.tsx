@@ -14,7 +14,7 @@ export const MenuItem = ({
 	return (
 		<>
 			{isFullList ? (
-				<MobileMenuItem p={isFooterIcon ? 1 : 4}>
+				<MobileMenuItem p={isFooterIcon ? 1 : 4} disabled={disabled}>
 					<Box>{icon}</Box>
 					<Box px={isFooterIcon ? 1 : 3}>
 						<Typography variant='subtitle1' textTransform='capitalize'>
@@ -29,7 +29,6 @@ export const MenuItem = ({
 					disabled={disabled}
 					isFooterIcon={isFooterIcon}
 					open={open}
-					PopperProps={{ style: { zIndex: 100 } }}
 				>
 					{icon}
 				</StyledMenuItem>

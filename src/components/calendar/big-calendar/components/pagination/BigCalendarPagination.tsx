@@ -13,10 +13,10 @@ import {
 	IcontTodayWrapper,
 	StyledAgendaPagination,
 	StyledPgButtonWrapper,
-} from './AgendaPagination.styles';
-import type { IAgendaPaginationProps } from './AgendaPagination.types';
+} from './BigCalendarPagination.styles';
+import type { IBigCalendarPagination } from './BigCalendarPagination.types';
 
-export const AgendaPagination = ({
+export const BigCalendarPagination = ({
 	onGoToNextWeek,
 	onGoToPreviousWeek,
 	onGoToToday,
@@ -24,7 +24,7 @@ export const AgendaPagination = ({
 	disablePrevious,
 	disableNext,
 	mode,
-}: IAgendaPaginationProps) => {
+}: IBigCalendarPagination) => {
 	const { t } = useTranslation();
 
 	return (

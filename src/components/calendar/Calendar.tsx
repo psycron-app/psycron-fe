@@ -9,6 +9,7 @@ import {
 	endOfMonth,
 	endOfWeek,
 	format,
+	isSameDay,
 	startOfMonth,
 	startOfWeek,
 	subMonths,
@@ -35,6 +36,8 @@ const CalendarComponent = ({
 	today,
 	isBig,
 	availabilityData,
+	firstDate,
+	lastDate,
 }: ICalendarProps) => {
 	const [currentDisplayedMonth, setCurrentDisplayedMonth] = useState<Date>(
 		() => today
@@ -60,10 +63,6 @@ const CalendarComponent = ({
 		? availabilityData
 		: (Object.values(availabilityData ?? {}).flat() as IDateInfo[]);
 
-	const firstDateIntheCalendar = availableScheduleDates?.at(0)?.date;
-
-	const lastDateInTheCalendar = availableScheduleDates?.at(-1)?.date;
-
 	const isDayAvailableInSchedule = (day: Date) => {
 		return availableScheduleDates.some((availability) => {
 			const availableDate = new Date(availability.date);
@@ -85,12 +84,12 @@ const CalendarComponent = ({
 		day.getMonth() === currentDisplayedMonth.getMonth() &&
 		day.getFullYear() === currentDisplayedMonth.getFullYear();
 
-	const disablePreviousMonth = !availableScheduleDates.some(
-		({ date }) => new Date(date) < new Date(firstDateIntheCalendar)
+	const disablePreviousMonth = calendarDaysGrid.some((day) =>
+		isSameDay(day, firstDate?.date)
 	);
 
-	const disableNextMonth = !availableScheduleDates.some(
-		({ date }) => new Date(date) > new Date(lastDateInTheCalendar)
+	const disableNextMonth = calendarDaysGrid.some((day) =>
+		isSameDay(day, lastDate?.date)
 	);
 
 	return (

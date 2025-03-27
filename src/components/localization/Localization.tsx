@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Select } from '@psycron/components/select/Select';
 import Cookies from 'js-cookie';
 
-import { Select } from '../select/Select';
-
 import { StyledSelectWrapper } from './Localization.styles';
+import type { ILocalization } from './Localization.types';
 
 export const LANGKEY = 'i18nextLng';
-
-interface ILocalization {
-	hasMargin?: boolean;
-}
 
 export const Localization = ({ hasMargin }: ILocalization) => {
 	const { i18n } = useTranslation();

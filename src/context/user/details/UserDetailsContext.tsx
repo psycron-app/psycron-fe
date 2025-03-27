@@ -77,7 +77,6 @@ export const useUserDetails = (passedUserId?: string) => {
 	if (!context) {
 		throw new Error('useUserDetails must be used within a UserDetailsProvider');
 	}
-
 	const { user } = context;
 
 	const userId = passedUserId || user?._id;

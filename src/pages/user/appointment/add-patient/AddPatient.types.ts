@@ -6,5 +6,6 @@ export interface ICreatePatientForm {
 	isPhoneWpp?: boolean;
 	lastName: string;
 	phone: string;
+	timeZone?: string;
 	whatsapp?: string;
 }

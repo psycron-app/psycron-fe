@@ -17,7 +17,16 @@ export const Tooltip = ({
 	);
 
 	return (
-		<MUITooltip arrow placement={placement} title={Title} open={open} {...rest}>
+		<MUITooltip
+			arrow
+			placement={placement}
+			title={Title}
+			open={open}
+			{...rest}
+			disableHoverListener={disabled}
+			disableFocusListener={disabled}
+			disableTouchListener={disabled}
+		>
 			<span
 				style={{
 					cursor: disabled ? 'not-allowed' : 'pointer',

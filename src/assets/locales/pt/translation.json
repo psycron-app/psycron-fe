@@ -59,6 +59,13 @@
 		"contacts": "Contatos",
 		"starts": "Começa às",
 		"ends": "Termina às",
+		"time-range": {
+			"time-from-to": "das {{start}} às {{end}}",
+			"time-range-date": "{{date}} das {{start}} às {{end}}",
+			"your-time": "Seu horário local",
+			"patient-time": "Horário do paciente",
+			"therapist-time": "Horário do terapeuta"
+		},
 		"notification": {
 			"email": "Enviar e-mail",
 			"phone": "Ligar",
@@ -237,7 +244,7 @@
 				"title": "Detalhes da sessão",
 				"mailto-subject": "🔔 Sobre sua consulta com {{therapistName}} 🔔",
 				"whatsapp-subject": "Olá, tudo bem? Estou enviando essa mensagem sobre sua consulta comigo, {{therapisName}}",
-				"next-sessions": "Próximas sessões",
+				"next-sessions": "Outras sessões",
 				"edit-patient-details": "Alterar detalhes do paciente",
 				"edit-patient-appointment": "Alterar sessão",
 				"edit-availability": "Alterar disponibilidade",
@@ -253,6 +260,9 @@
 				"global-reason": "Por favor, selecione um motivo geral:",
 				"confirmation": "Você tem certeza que deseja cancelar todas as consultas?",
 				"review": "Revise as datas que você selecionou"
+			},
+			"book-appointment": {
+				"title": "Agendando sua consulta"
 			}
 		}
 	},
@@ -420,7 +430,8 @@
 					"title": "Escolha seus horários",
 					"description": "De maneira visual e interativa, você poderá selecionar os horários em que estará disponível para consultas ao longo da semana. É um processo flexível: se suas preferências mudarem, você pode ajustar seus horários a qualquer momento."
 				}
-			}
+			},
+			"session-past": "Consulta passada"
 		},
 		"cancel-appointment": {
 			"title": "Cancelamento de Consulta(s)",

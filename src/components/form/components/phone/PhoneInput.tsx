@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Grid, type SelectChangeEvent } from '@mui/material';
+import { Box, Grid, type SelectChangeEvent } from '@mui/material';
 import countryList from '@psycron/assets/countries/countries.json';
 import { Logo } from '@psycron/components/icons';
 import { Select } from '@psycron/components/select/Select';
 import { Text } from '@psycron/components/text/Text';
 import { useUserGeolocation } from '@psycron/context/geolocation/CountryContext';
 import type { CountryDataSimple } from '@psycron/context/geolocation/CountryContext.types';
-import useViewport from '@psycron/hooks/useViewport';
 import { palette } from '@psycron/theme/palette/palette.theme';
 
 import { CountryFlag, PhoneNumberField } from './PhoneInput.styles';
@@ -27,8 +26,6 @@ export const PhoneInput = ({
 		register,
 		formState: { errors },
 	} = useFormContext();
-
-	const { isMobile } = useViewport();
 
 	const [selectedCountry, setSelectedCountry] = useState<
 		CountryDataSimple & { name?: string }
@@ -97,58 +94,62 @@ export const PhoneInput = ({
 	const inputRegisterName = t(`globals.${registerName}`);
 
 	return (
-		<Grid
-			container
-			columns={12}
-			direction='row'
-			alignItems='center'
-			justifyContent='center'
-			columnSpacing={2}
-		>
-			<Grid size={isMobile ? 0.5 : 1} pl={0}>
-				<CountryFlag>
-					{countryData.callingCode === null ? (
-						<Logo />
-					) : (
-						<span>{selectedCountry?.countryEmoji}</span>
-					)}
-				</CountryFlag>
+		<Box>
+			<Grid
+				container
+				columns={12}
+				direction='row'
+				alignItems='center'
+				justifyContent='center'
+				columnSpacing={2}
+			>
+				<Grid size={1} pl={0}>
+					<CountryFlag>
+						{countryData.callingCode === null ? (
+							<Logo />
+						) : (
+							<span>{selectedCountry?.countryEmoji}</span>
+						)}
+					</CountryFlag>
+				</Grid>
+				<Grid size={3}>
+					<Select
+						items={countries}
+						required={required}
+						selectLabel={t('components.input.phone-input.select-label')}
+						{...register('countryCode')}
+						subtitle
+						value={selectedCountry.callingCode ?? ''}
+						fullWidth
+						onChangeSelect={handlePhoneChange}
+						disabled={disabled}
+						hidePrimaryValue
+					/>
+				</Grid>
+				<Grid size={8}>
+					<PhoneNumberField
+						type='tel'
+						label={t('components.input.phone-input.phone-num-label', {
+							registerName: inputRegisterName,
+						})}
+						required={required}
+						fullWidth
+						value={phoneNumber}
+						{...register(registerName)}
+						autoComplete='tel'
+						error={!!errors?.[registerName]}
+						helperText={errors?.[registerName]?.message as string}
+						onChange={handleInputChange}
+						onBlur={handleBlur}
+						disabled={disabled}
+					/>
+				</Grid>
 			</Grid>
-			<Grid size={isMobile ? 4 : 2}>
-				<Select
-					items={countries}
-					required={required}
-					selectLabel={t('components.input.phone-input.select-label')}
-					{...register('countryCode')}
-					subtitle
-					value={selectedCountry.callingCode ?? ''}
-					fullWidth
-					onChangeSelect={handlePhoneChange}
-					disabled={disabled}
-					hidePrimaryValue
-				/>
-			</Grid>
-			<Grid size={isMobile ? 7.5 : 9}>
-				<PhoneNumberField
-					type='tel'
-					label={t('components.input.phone-input.phone-num-label', {
-						registerName: inputRegisterName,
-					})}
-					required={required}
-					fullWidth
-					value={phoneNumber}
-					{...register(registerName)}
-					autoComplete='tel'
-					error={!!errors?.[registerName]}
-					helperText={errors?.[registerName]?.message as string}
-					onChange={handleInputChange}
-					onBlur={handleBlur}
-					disabled={disabled}
-				/>
-			</Grid>
-			<Text variant='caption' color={palette.error.main}>
-				{t('components.input.phone-input.phone-number-guide')}
-			</Text>
-		</Grid>
+			<Box textAlign='center'>
+				<Text variant='caption' color={palette.error.main}>
+					{t('components.input.phone-input.phone-number-guide')}
+				</Text>
+			</Box>
+		</Box>
 	);
 };

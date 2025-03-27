@@ -23,7 +23,7 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 			fontSize: '1em',
 			fontWeight: '500',
 			color: textPrimary,
-			textTransform: 'capitalize',
+			textTransform: 'inherit',
 			height: '40px',
 		},
 		sizeLarge: {

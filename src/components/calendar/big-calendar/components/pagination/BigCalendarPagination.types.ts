@@ -1,9 +1,9 @@
-import type { IAgendaViewMode } from '../../Agenda.types';
+import type { IBigCalendarView } from '@psycron/components/calendar/big-calendar/BigCalendar.types';
 
-export interface IAgendaPaginationProps {
+export interface IBigCalendarPagination {
 	disableNext?: boolean;
 	disablePrevious?: boolean;
-	mode?: IAgendaViewMode;
+	mode?: IBigCalendarView;
 	onGoToMonthView: () => void;
 	onGoToNextWeek: () => void;
 	onGoToPreviousWeek: () => void;

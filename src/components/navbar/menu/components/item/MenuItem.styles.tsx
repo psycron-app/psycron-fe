@@ -45,6 +45,10 @@ export const StyledMenuItem = styled(Tooltip, {
 			disabled
 				? css`
 						color: ${palette.gray['02']};
+
+						&:hover {
+							cursor: 'not-allowed';
+						}
 					`
 				: css`
 						color: ${palette.text.primary};
@@ -62,7 +66,7 @@ export const MobileMenuItem = styled(Box, {
 	align-items: center;
 
 	&:hover {
-		cursor: pointer;
+		cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
 		color: ${palette.secondary.main};
 	}
 `;

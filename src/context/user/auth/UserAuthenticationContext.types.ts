@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { StatusEnum } from '@psycron/api/user/availability/index.types';
 import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
 import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
 
@@ -40,6 +41,7 @@ export interface ITherapist extends IBaseUser {
 	speciality?: string;
 	stripeCustomerID?: string;
 	subscriptions?: [];
+	timeZone?: string;
 }
 
 export interface IPatient extends IBaseUser {
@@ -47,11 +49,13 @@ export interface IPatient extends IBaseUser {
 	receivedNotifications?: INotification[];
 	role: 'PATIENT';
 	sessionDates: ISessionDatesGroup[];
+	timeZone?: string;
 }
 
 export interface ISessionDatesGroup {
 	_id?: string;
-	sessions: ISessionDate[];
+	date: string | Date;
+	slots: ISlot[];
 }
 
 export interface IContactInfo {
@@ -109,10 +113,14 @@ export interface ISessionAvailability {
 
 export interface ISlot {
 	_id: string;
+	canceledAt?: string | null;
+	customReason?: string | null;
 	endTime: string;
 	note?: string;
+	patientId?: string;
+	reasonCode?: string | null;
 	startTime: string;
-	status: ISlotStatus;
+	status: StatusEnum;
 }
 
 export type ISlotStatus =
@@ -126,14 +134,13 @@ export type ISlotStatus =
 export interface ISessionDate {
 	_id: string;
 	date: Date;
-	slot?: ISlot;
 	slots?: ISlot[];
 }
 
 export interface IBookSessionWithLink {
-	availabilityId: string;
+	availabilityDayId: string;
 	patient: Partial<IPatient>;
-	selectedSlot: Date;
 	shouldReplicate?: boolean;
+	slotId: string;
 	timeZone: string;
 }

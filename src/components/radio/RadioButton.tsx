@@ -1,19 +1,20 @@
-import type { FieldValues } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { FormControl, FormLabel, Radio, RadioGroup } from '@mui/material';
 
 import { StyledFormControlLabel } from './RadioButton.styles';
 import type { IRadioButtonGroup } from './RadioButton.types';
 
-export const RadioButtonGroup = <T extends FieldValues>({
+export const RadioButtonGroup = ({
 	defaultValue,
 	formLabel,
 	items,
 	row,
-	register,
 	required,
 	name,
 	...rest
-}: IRadioButtonGroup<T>) => {
+}: IRadioButtonGroup) => {
+	const { register } = useFormContext();
+
 	return (
 		<FormControl>
 			{formLabel && <FormLabel>{formLabel}</FormLabel>}

@@ -159,7 +159,7 @@ export const Navbar = () => {
 						<LogoColor />
 					</ColoredLogo>
 					<Box>
-						<Menu items={menuItems} isFooterIcon />
+						<Menu items={menuItems} />
 					</Box>
 					<NavbarFooterIcons>
 						<Menu items={footerItems} />

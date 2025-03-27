@@ -98,8 +98,13 @@ export enum StatusEnum {
 export interface IAvailabilityDate {
 	date: string;
 	slots: Array<{
+		_id: string;
+		canceledAt?: string | null;
+		customReason?: string | null;
 		endTime: string;
 		note?: string;
+		patientId?: string;
+		reasonCode?: string | null;
 		startTime: string;
 		status: StatusEnum;
 	}>;

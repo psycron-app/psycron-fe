@@ -29,6 +29,7 @@
 		"@tanstack/react-query-devtools": "^5.51.11",
 		"@types/three": "^0.166.0",
 		"axios": "^1.7.3",
+		"countries-and-timezones": "^3.7.2",
 		"crypto-js": "^4.2.0",
 		"date-fns": "^3.6.0",
 		"date-fns-tz": "^3.2.0",

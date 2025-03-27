@@ -1,15 +1,17 @@
 import type { IDateInfo } from '@psycron/api/user/index.types';
 import type { ISlot } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
-export interface IAgendaProps {
+export interface IBigCalendarProps {
 	daySelectedFromCalendar: IDateInfo;
-	mode: IAgendaViewMode;
+	mode: IBigCalendarView;
 }
 
-export type IAgendaViewMode = 'view' | 'edit' | 'cancel' | 'book';
+export type IBigCalendarView = 'view' | 'edit' | 'cancel' | 'book';
 
 export type ISelectedSlot = {
 	availabilityDayId: string;
-	date: string;
+	date: Date;
+	patientId?: string;
 	slot: ISlot;
+	therapistId?: string;
 };

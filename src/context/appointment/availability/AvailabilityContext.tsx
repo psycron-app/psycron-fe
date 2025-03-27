@@ -7,12 +7,15 @@ import {
 	editSlotStatus,
 	getAppointmentDetailsBySlotId,
 } from '@psycron/api/user/availability';
-import type { IEditSlotStatus } from '@psycron/api/user/availability/index.types';
+import type {
+	IEditSlotStatus,
+	StatusEnum,
+} from '@psycron/api/user/availability/index.types';
 import type {
 	IDateInfo,
 	IPaginatedAvailability,
 } from '@psycron/api/user/index.types';
-import type { ISelectedSlot } from '@psycron/components/agenda/Agenda.types';
+import type { ISelectedSlot } from '@psycron/components/calendar/big-calendar/BigCalendar.types';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import {
@@ -158,7 +161,10 @@ export const useAvailability = (
 										...date,
 										slots: date.slots.map((slot) =>
 											slot._id === variables.slotId
-												? { ...slot, status: variables.data.newStatus }
+												? {
+														...slot,
+														status: variables.data.newStatus as StatusEnum,
+													}
 												: slot
 										),
 									}

@@ -119,9 +119,8 @@ export const generateWeekDays = (startDate: Date) => {
 	const startOfWeekMonday = startOfWeek(startDate, {
 		weekStartsOn: 0,
 	});
-	return Array.from({ length: 7 }, (_, i) =>
-		format(addDays(startOfWeekMonday, i), 'yyyy-MM-dd')
-	);
+
+	return Array.from({ length: 7 }, (_, i) => addDays(startOfWeekMonday, i));
 };
 
 export const getWeekDays = (today: Date, dateLocale: Locale) => {

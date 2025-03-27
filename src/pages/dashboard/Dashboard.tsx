@@ -2,13 +2,12 @@ import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-import { Box, Grid, Modal } from '@mui/material';
+import { Box, Grid, IconButton, Modal } from '@mui/material';
 import type { IDateInfo } from '@psycron/api/user/index.types';
-import { Agenda } from '@psycron/components/agenda/Agenda';
-// import { Agenda } from '@psycron/components/agenda/Agenda';
-// import { AgendaTable } from '@psycron/components/agenda/AgendaTable';
 import { ShareButton } from '@psycron/components/button/share/ShareButton';
+import { BigCalendar } from '@psycron/components/calendar/big-calendar/BigCalendar';
 import { Calendar } from '@psycron/components/calendar/Calendar';
+import { Close } from '@psycron/components/icons';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
@@ -22,6 +21,7 @@ import { StyledPaperModal } from './Dashboard.styled';
 export const Dashboard = () => {
 	const { t } = useTranslation();
 	const { locale } = useParams<{ locale: string }>();
+	const navigate = useNavigate();
 
 	const { userDetails } = useUserDetails();
 
@@ -29,15 +29,14 @@ export const Dashboard = () => {
 	const today = startOfToday();
 
 	const [selectedDay, setSelectedDay] = useState<IDateInfo | null>(null);
-
-	const navigate = useNavigate();
-
 	const [isDateClicked, setIsDateClicked] = useState<boolean>(false);
 
 	const {
 		availabilityData,
 		availabilityDataIsLoading,
 		isAvailabilityDatesEmpty,
+		firstDate,
+		lastDate,
 	} = useAvailability();
 
 	const handleDayClick = useCallback(
@@ -80,6 +79,8 @@ export const Dashboard = () => {
 						dateLocale={dateLocale}
 						today={today}
 						availabilityData={availableDatesArray}
+						firstDate={firstDate}
+						lastDate={lastDate}
 						handleDayClick={(dayInfo) => {
 							if (dayInfo && dayInfo.date) {
 								handleDayClick(dayInfo);
@@ -90,8 +91,13 @@ export const Dashboard = () => {
 			</Grid>
 			<Modal open={isDateClicked} onClose={() => setIsDateClicked(false)}>
 				<StyledPaperModal>
-					<Agenda daySelectedFromCalendar={selectedDay} mode='view' />
-					<Box display='flex' justifyContent='flex-end' pt={2}>
+					<Box display='flex' justifyContent='flex-end'>
+						<IconButton onClick={() => setIsDateClicked(false)}>
+							<Close />
+						</IconButton>
+					</Box>
+					<BigCalendar daySelectedFromCalendar={selectedDay} mode='view' />
+					<Box display='flex' justifyContent='flex-end'>
 						<ShareButton
 							titleKey={t(
 								'components.share-button.share-infos.availability.title',

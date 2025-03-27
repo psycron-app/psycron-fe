@@ -13,11 +13,13 @@ export interface IBookAppointment {
 
 export interface IBookAppointmentResponse extends IResponse {
 	appointmentInfo: string;
+	message: string;
 	patient: IPatient;
+	status: string;
 }
 
 export interface IPatientByIdResponse {
-	user: IPatient;
+	patient: IPatient;
 }
 
 export interface PatientFormData {

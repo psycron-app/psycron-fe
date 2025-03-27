@@ -6,6 +6,9 @@ const modalStyles = (): Record<string, CSSObject> => {
 			backdropFilter: 'blur(2px)',
 			WebkitBackdropFilter: 'blur(2px)',
 			backgroundColor: 'rgba(255, 255, 255, 0.25)',
+			'& *:focus-visible': {
+				outline: 'none',
+			},
 		},
 	};
 };

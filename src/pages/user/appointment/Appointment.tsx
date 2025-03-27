@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Box, List, ListItemText } from '@mui/material';
 import type { IDateInfo } from '@psycron/api/user/index.types';
-import { Agenda } from '@psycron/components/agenda/Agenda';
+import { BigCalendar } from '@psycron/components/calendar/big-calendar/BigCalendar';
 import {
 	CalendarOff,
 	CalendarRange,
@@ -15,9 +15,9 @@ import { useAvailability } from '@psycron/context/appointment/availability/Avail
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
 import { AVAILABILITYWIZARD } from '@psycron/pages/urls';
-import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import {
+	CalendarWrapper,
 	ListItemTitleWrapper,
 	ListWrapper,
 	StyledListItem,
@@ -37,12 +37,12 @@ export const AppointmentPage = () => {
 	} = useAvailability();
 
 	const currentDay = useMemo(() => {
-		if (!availabilityData?.dates?.length) return null;
+		if (!availabilityData) return null;
 
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
 
-		const normalizedDates = availabilityData.dates.map((d) => ({
+		const normalizedDates = availabilityData?.dates?.map((d) => ({
 			...d,
 			dateObj: new Date(d.date),
 		}));
@@ -79,7 +79,7 @@ export const AppointmentPage = () => {
 		}
 
 		return null;
-	}, [availabilityData?.dates]);
+	}, [availabilityData]);
 
 	const availabilityGuideItems = [
 		{
@@ -104,11 +104,22 @@ export const AppointmentPage = () => {
 		},
 	];
 
+	const loadingState = useMemo(() => {
+		return (
+			isUserDetailsLoading ||
+			availabilityDataIsLoading ||
+			!availabilityData?.dates?.length ||
+			!currentDay
+		);
+	}, [
+		availabilityData?.dates?.length,
+		availabilityDataIsLoading,
+		currentDay,
+		isUserDetailsLoading,
+	]);
+
 	return (
-		<PageLayout
-			title={t('globals.appointments')}
-			isLoading={availabilityDataIsLoading || isUserDetailsLoading}
-		>
+		<PageLayout title={t('globals.appointments')} isLoading={loadingState}>
 			<Box height={'100%'} position={'relative'}>
 				{isAvailabilityDatesEmpty ? (
 					<>
@@ -137,11 +148,11 @@ export const AppointmentPage = () => {
 						</StyledProceedContainer>
 					</>
 				) : (
-					<Box display='flex' flexDirection='column' px={spacing.mediumSmall}>
+					<CalendarWrapper>
 						<Box>
-							<Agenda daySelectedFromCalendar={currentDay} mode='view' />
+							<BigCalendar daySelectedFromCalendar={currentDay} mode='view' />
 						</Box>
-					</Box>
+					</CalendarWrapper>
 				)}
 			</Box>
 		</PageLayout>

@@ -4,10 +4,12 @@ import { useTranslation } from 'react-i18next';
 import type { TextFieldProps } from '@mui/material';
 import { Box, TextField } from '@mui/material';
 import { Switch } from '@psycron/components/switch/components/item/Switch';
+import useViewport from '@psycron/hooks/useViewport';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import { PhoneInput } from '../phone/PhoneInput';
 
+import { InputWrapper } from './ContactsForm.styles';
 import type { ContactsFormProps } from './ContactsForm.types';
 
 export const ContactsForm = ({
@@ -16,6 +18,7 @@ export const ContactsForm = ({
 	required,
 }: ContactsFormProps & TextFieldProps) => {
 	const { t } = useTranslation();
+	const { isSmallerThanTablet } = useViewport();
 
 	const {
 		register,
@@ -37,7 +40,7 @@ export const ContactsForm = ({
 
 	return (
 		<Box display='flex' flexDirection='column' width='100%'>
-			<Box pb={spacing.mediumSmall}>
+			<InputWrapper>
 				<TextField
 					label={t('globals.email')}
 					fullWidth
@@ -53,7 +56,7 @@ export const ContactsForm = ({
 					required={required}
 					disabled={disabled}
 				/>
-			</Box>
+			</InputWrapper>
 			<Box>
 				<PhoneInput
 					registerName='phone'
@@ -65,6 +68,7 @@ export const ContactsForm = ({
 			<Box>
 				<Box display='flex' pl={spacing.small}>
 					<Switch
+						small={isSmallerThanTablet}
 						onChange={() => setHasWhatsApp((prev) => !prev)}
 						value={!hasWhatsApp}
 						defaultChecked={hasWhatsApp}
@@ -77,6 +81,7 @@ export const ContactsForm = ({
 				{hasWhatsApp ? (
 					<Box display='flex' pl={spacing.small}>
 						<Switch
+							small={isSmallerThanTablet}
 							onChange={() => setIsPhoneWpp((prev) => !prev)}
 							value={isPhoneWpp}
 							defaultChecked={isPhoneWpp}

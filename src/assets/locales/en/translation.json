@@ -57,8 +57,15 @@
 			"cancelled": "Cancelled"
 		},
 		"contacts": "Contacts",
-		"starts": "Starts at",
-		"ends": "Ends at",
+		"starts": "Starts",
+		"ends": "Ends",
+		"time-range": {
+			"time-from-to": "from {{start}} to {{end}}",
+			"time-range-date": "{{date}} from {{start}} to {{end}}",
+			"your-time": "Your local time",
+			"patient-time": "Patient's time",
+			"therapist-time": "Therapist's time"
+		},
 		"notification": {
 			"email": "Send email",
 			"phone": "Call patient",
@@ -237,7 +244,7 @@
 				"title": "Appointment Details",
 				"mailto-subject": "🔔 About your appointment with {{therapistName}} 🔔",
 				"whatsapp-subject": "Hello, how is it going? I am sending this message regarding your appointment with me, {{therapistName}}",
-				"next-sessions": "Next appointments",
+				"next-sessions": "Other appointments",
 				"edit-patient-details": "Edit Patient Details",
 				"edit-patient-appointment": "Edit appointment",
 				"edit-availability": "Edit availability",
@@ -253,6 +260,9 @@
 				"global-reason": "Please, select a global reason:",
 				"confirmation": "Are you sure you want to cancel all appointments?",
 				"review": "Review the dates you selected"
+			},
+			"book-appointment": {
+				"title": "Booking your appointment"
 			}
 		}
 	},
@@ -420,7 +430,8 @@
 					"title": "Choose your available times",
 					"description": "In a visual and interactive way, you can select the times you will be available for appointments throughout the week. It’s a flexible process: if your preferences change, you can adjust your schedule at any time."
 				}
-			}
+			},
+			"session-past": "Past session"
 		},
 		"cancel-appointment": {
 			"title": "Cancel Appointment(s)",

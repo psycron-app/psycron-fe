@@ -14,7 +14,7 @@ import type {
 } from '@psycron/api/patient/index.types';
 import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import i18n from '@psycron/i18n';
-import { APPOINTMENTCONFIRMATION, DASHBOARD } from '@psycron/pages/urls';
+import { APPOINTMENTCONFIRMATION, APPOINTMENTS } from '@psycron/pages/urls';
 import { LATESTPATIENT_ID } from '@psycron/utils/tokens';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
@@ -83,7 +83,7 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 	const createPatientMutation = useMutation({
 		mutationFn: createPatientFromSlot,
 		onSuccess: (data) => {
-			navigate(`/${i18n.language}/${DASHBOARD}`);
+			navigate(`/${i18n.language}/${APPOINTMENTS}`);
 			showAlert({
 				message: data.message,
 				severity: 'success',
@@ -117,7 +117,7 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 	);
 };
 
-export const usePatient = (patientId?: string | null) => {
+export const usePatient = (therapisId?: string, patientId?: string | null) => {
 	const context = useContext(PatientContext);
 	if (!context) {
 		throw new Error('usePatient must be used within an PatientProvider');
@@ -136,7 +136,7 @@ export const usePatient = (patientId?: string | null) => {
 		isSuccess: isPatientDetailsSucces,
 	} = useQuery<IPatient>({
 		queryKey: ['patientDetails', patientId],
-		queryFn: () => getPatientById(patientId),
+		queryFn: () => getPatientById(therapisId, patientId),
 		enabled: Boolean(patientId && patientId !== 'undefined'),
 		initialData: cachedPatient,
 	});

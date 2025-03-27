@@ -1,5 +1,9 @@
 import { Box, Modal, styled } from '@mui/material';
-import { isSmallerThanTabletMedia } from '@psycron/theme/media-queries/mediaQueries';
+import {
+	isSmallerThanMediumMedia,
+	isSmallerThanTabletMedia,
+	isTabletMedia,
+} from '@psycron/theme/media-queries/mediaQueries';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const StyledModal = styled(Modal)`
@@ -9,15 +13,25 @@ export const StyledModal = styled(Modal)`
 
 export const StyledContentWrapper = styled(Box)`
 	margin: 0;
-
 	position: absolute;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 50%;
-	height: auto;
+	max-height: 90vh;
+	overflow-y: auto;
+
+	${isTabletMedia} {
+		width: 75%;
+		padding: ${spacing.medium};
+	}
+
+	${isSmallerThanMediumMedia} {
+		width: 90%;
+	}
 
 	${isSmallerThanTabletMedia} {
 		width: 100%;
+		max-height: 100vh;
 	}
 `;

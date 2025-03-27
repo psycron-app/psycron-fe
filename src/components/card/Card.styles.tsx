@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Card as MUICard } from '@mui/material';
+import { isBiggerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueries';
 import { smallShadow } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
@@ -12,7 +13,13 @@ export const CardWrapper = styled(MUICard, {
 
 export const Content = styled(Box)`
 	min-height: 5rem;
-	padding: ${spacing.small};
 	text-align: left;
-	padding-top: ${spacing.medium};
+
+	padding-bottom: ${spacing.space};
+	padding-top: ${spacing.small};
+
+	${isBiggerThanMediumMedia} {
+		padding-bottom: ${spacing.small};
+		padding-top: ${spacing.medium};
+	}
 `;

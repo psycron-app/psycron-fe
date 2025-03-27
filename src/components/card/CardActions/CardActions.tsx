@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Button } from '@psycron/components/button/Button';
 
 import type { CardActionsProps } from './CardActions.types';
@@ -15,39 +15,44 @@ export const CardActions = ({
 	type,
 }: CardActionsProps) => {
 	return (
-		<Grid container columns={12}>
+		<Grid container columns={12} rowSpacing={3} display='flex'>
 			<Grid
+				container
+				columns={12}
 				marginBottom={hasTertiary ? 2 : 0}
+				rowSpacing={3}
+				columnSpacing={6}
 				display='flex'
-				columnSpacing={3}
-				size={{ xs: 12 }}
+				width='100%'
 			>
 				{hasSecondAction ? (
-					<Grid size={{ xs: 6 }} display='flex' justifyContent='flex-start'>
-						<Button onClick={secondAction} secondary>
+					<Grid
+						size={{ xs: 12, md: 6 }}
+						display='flex'
+						justifyContent='flex-start'
+					>
+						<Button onClick={secondAction} secondary fullWidth>
 							{secondActionName}
 						</Button>
 					</Grid>
 				) : null}
 				<Grid
-					size={{ xs: hasSecondAction ? 6 : 12 }}
+					size={{ xs: 12, md: hasSecondAction ? 6 : 12 }}
 					display='flex'
 					justifyContent='flex-end'
+					flexDirection='column'
+					rowGap={3}
 				>
-					<Button onClick={onClick} type={type}>
+					<Button onClick={onClick} type={type} fullWidth>
 						{actionName}
 					</Button>
-				</Grid>
-			</Grid>
-			{hasTertiary ? (
-				<Grid size={{ xs: 12 }}>
-					<Box display='flex' flexDirection='row' justifyContent='flex-end'>
-						<Button onClick={tertiaryAction} tertiary>
+					{hasTertiary ? (
+						<Button onClick={tertiaryAction} tertiary fullWidth>
 							{tertiaryActionName}
 						</Button>
-					</Box>
+					) : null}
 				</Grid>
-			) : null}
+			</Grid>
 		</Grid>
 	);
 };

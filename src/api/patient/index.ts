@@ -24,12 +24,15 @@ export const bookAppointmentFromLink = async ({
 	return response.data;
 };
 
-export const getPatientById = async (userId: string): Promise<IPatient> => {
+export const getPatientById = async (
+	therapistId: string,
+	patientId: string
+): Promise<IPatient> => {
 	const response = await apiClient.get<IPatientByIdResponse>(
-		`/users/${userId}`
+		`/patient/${therapistId}/patients/${patientId}`
 	);
 
-	return response.data.user;
+	return response.data.patient;
 };
 
 export const updatePatientDetailsById = async ({

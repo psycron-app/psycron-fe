@@ -30,3 +30,5 @@ export interface IBigCalendarBody {
 	previousCursor: string | undefined;
 	totalColumns: number;
 }
+
+export type SlotVisualType = 'BOOKED' | 'AVAILABLE' | 'DISABLED';

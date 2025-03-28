@@ -4,9 +4,8 @@ import { isBiggerThanTabletMedia } from '@psycron/theme/media-queries/mediaQueri
 import { palette } from '@psycron/theme/palette/palette.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
-import type { IBigCalendarView } from '../../BigCalendar.types';
-
-import { getBackgroundStyles, getBorderStyles } from './utils';
+import type { SlotVisualType } from './BigCalendarBody.types';
+import { getSlotStyles } from './utils';
 
 export const BigCalendarBodyWrapper = styled(Box)`
 	height: 30rem;
@@ -44,9 +43,8 @@ export const BigCalendarHour = styled(Text)`
 `;
 
 export const BigCalendarSlot = styled(Grid, {
-	shouldForwardProp: (props) =>
-		props !== 'status' && props !== 'isToday' && props !== 'mode',
-})<{ isToday: boolean; mode?: IBigCalendarView; status?: string }>`
+	shouldForwardProp: (props) => props !== 'isToday' && props !== 'slotType',
+})<{ isToday: boolean; slotType?: SlotVisualType }>`
 	flex: 1;
 	display: flex;
 	align-items: center;
@@ -56,8 +54,7 @@ export const BigCalendarSlot = styled(Grid, {
 	padding: ${spacing.xxs};
 	border-radius: ${spacing.xs};
 
-	${({ status, mode }) => getBackgroundStyles(status, mode)}
-	${({ isToday, status, mode }) => getBorderStyles(isToday, status, mode)}
+	${({ slotType, isToday }) => getSlotStyles(slotType, isToday)}
 `;
 
 export const StyledTableSkeleton = styled(Skeleton)`

@@ -1,5 +1,7 @@
+import type { Country } from 'react-phone-number-input';
+
 export type CountryDataFull = {
-	countryCode2?: string;
+	countryCode2?: Country;
 	countryCode3?: string;
 	countryEmoji?: string;
 	countryFlag?: string;
@@ -16,7 +18,7 @@ export type CountryDataFull = {
 
 export interface CountryDataSimple {
 	callingCode: string | null;
-	countryCode2?: string;
+	countryCode2?: Country;
 	countryEmoji?: string;
 }
 

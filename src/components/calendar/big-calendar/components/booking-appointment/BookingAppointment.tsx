@@ -12,7 +12,10 @@ import { usePatient } from '@psycron/context/patient/PatientContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { getFormattedContacts } from '@psycron/hooks/useFormattedContacts';
 import useViewport from '@psycron/hooks/useViewport';
-import type { ICreatePatientForm } from '@psycron/pages/user/appointment/add-patient/AddPatient.types';
+import {
+	type ICreatePatientForm,
+	RecurrencePattern,
+} from '@psycron/pages/user/appointment/add-patient/AddPatient.types';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 import { enGB, ptBR } from 'date-fns/locale';
 
@@ -44,8 +47,6 @@ export const BookingAppointment = forwardRef<
 		slot: { startTime, endTime, _id: slotId },
 	} = selectedSlot;
 
-	console.log('🚀 ~ selectedSlot:', selectedSlot);
-
 	const methods = useForm<ICreatePatientForm>();
 	const { handleSubmit } = methods;
 	const { userDetails } = useUserDetails(userId);
@@ -57,7 +58,7 @@ export const BookingAppointment = forwardRef<
 		Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 	const onSubmit = (formData: ICreatePatientForm) => {
-		const { email, firstName, lastName } = formData;
+		const { email, firstName, lastName, recurrencePattern } = formData;
 		const { fullPhone, fullWhatsapp } = getFormattedContacts(formData);
 
 		const appointmentData = {
@@ -76,6 +77,7 @@ export const BookingAppointment = forwardRef<
 				},
 				timeZone: patientTimeZoneFromBrowser,
 				shouldReplicate,
+				recurrencePattern: shouldReplicate && recurrencePattern,
 			},
 		};
 
@@ -98,8 +100,14 @@ export const BookingAppointment = forwardRef<
 	);
 
 	const recurrencePatternSelection = [
-		{ label: 'End of the Month', value: 'endMonth' },
-		{ label: 'End of the Year', value: 'endYear' },
+		{
+			label: t('page.book-appointment.recurrence-pattern.month'),
+			value: RecurrencePattern.UNTIL_END_OF_MONTH,
+		},
+		{
+			label: t('page.book-appointment.recurrence-pattern.year'),
+			value: RecurrencePattern.UNTIL_END_OF_YEAR,
+		},
 	];
 
 	return (
@@ -128,7 +136,7 @@ export const BookingAppointment = forwardRef<
 						<Box>
 							<RadioButtonGroup
 								items={recurrencePatternSelection}
-								name='replicatePattern'
+								name='recurrencePattern'
 							/>
 						</Box>
 					) : null}

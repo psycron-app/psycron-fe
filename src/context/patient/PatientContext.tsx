@@ -39,7 +39,7 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 		mutationFn: bookAppointmentFromLink,
 		onSuccess: (data) => {
 			navigate(
-				`/${i18n.language}/${data.patient._id}/${APPOINTMENTCONFIRMATION}`
+				`/${i18n.language}/${data.therapistId}/${data.patient._id}/${APPOINTMENTCONFIRMATION}`
 			);
 			showAlert({
 				message: data.message,

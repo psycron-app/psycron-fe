@@ -7,9 +7,14 @@ import { Switch } from '@psycron/components/switch/components/item/Switch';
 import useViewport from '@psycron/hooks/useViewport';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
-import { PhoneInput } from '../phone/PhoneInput';
+import { PhoneInputComponent } from '../phone/PhoneInput';
 
-import { InputWrapper } from './ContactsForm.styles';
+import {
+	EmailInputWrapper,
+	EmailPhoneWrapper,
+	PhoneWrapper,
+	WhatsappWrapper,
+} from './ContactsForm.styles';
 import type { ContactsFormProps } from './ContactsForm.types';
 
 export const ContactsForm = ({
@@ -22,7 +27,6 @@ export const ContactsForm = ({
 
 	const {
 		register,
-		getValues,
 		setValue,
 		formState: { errors },
 	} = useFormContext();
@@ -40,31 +44,28 @@ export const ContactsForm = ({
 
 	return (
 		<Box display='flex' flexDirection='column' width='100%'>
-			<InputWrapper>
-				<TextField
-					label={t('globals.email')}
-					fullWidth
-					id='email'
-					defaultValue={defaultValues?.email}
-					placeholder={
-						!defaultValues?.email && t('components.input.text.email')
-					}
-					{...register('email')}
-					autoComplete='email'
-					error={!!errors?.email}
-					helperText={errors?.email?.message as string}
-					required={required}
-					disabled={disabled}
-				/>
-			</InputWrapper>
-			<Box>
-				<PhoneInput
-					registerName='phone'
-					defaultValue={getValues('phone')}
-					disabled={disabled}
-					required={required}
-				/>
-			</Box>
+			<EmailPhoneWrapper>
+				<PhoneWrapper>
+					<PhoneInputComponent registerName='phone' required />
+				</PhoneWrapper>
+				<EmailInputWrapper>
+					<TextField
+						label={t('globals.email')}
+						fullWidth
+						id='email'
+						defaultValue={defaultValues?.email}
+						placeholder={
+							!defaultValues?.email && t('components.input.text.email')
+						}
+						{...register('email')}
+						autoComplete='email'
+						error={!!errors?.email}
+						helperText={errors?.email?.message as string}
+						required={required}
+						disabled={disabled}
+					/>
+				</EmailInputWrapper>
+			</EmailPhoneWrapper>
 			<Box>
 				<Box display='flex' pl={spacing.small}>
 					<Switch
@@ -91,13 +92,12 @@ export const ContactsForm = ({
 				) : null}
 				<input type='hidden' {...register('isPhoneWpp')} />
 				{hasWhatsApp && !isPhoneWpp && (
-					<Box>
-						<PhoneInput
+					<WhatsappWrapper>
+						<PhoneInputComponent
 							registerName='whatsapp'
-							defaultValue={getValues('whatsapp')}
-							required={required}
+							required={hasWhatsApp && !isPhoneWpp}
 						/>
-					</Box>
+					</WhatsappWrapper>
 				)}
 			</Box>
 		</Box>

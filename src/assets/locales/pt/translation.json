@@ -393,7 +393,11 @@
 		"book-appointment": {
 			"title": "Horários Disponíveis de {{therapisName}}",
 			"description": "Agende facilmente sua consulta. Veja os horários disponíveis e escolha o melhor momento para marcar sua sessão de forma rápida e prática.",
-			"confirmation-should-replicate": "Deseja usar esse dia como sua escolha padrão para futuras consultas?"
+			"confirmation-should-replicate": "Deseja usar esse dia como sua escolha padrão para futuras consultas?",
+			"recurrence-pattern": {
+				"month": "Toda semana até o fim do mês",
+				"year": "Toda semana até o fim do ano"
+			}
 		},
 		"booking-confirmation": {
 			"title": "Sua consulta com <strong>{{therapistName}}</strong> está confirmada 🎉",

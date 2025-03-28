@@ -16,6 +16,7 @@ export interface IBookAppointmentResponse extends IResponse {
 	message: string;
 	patient: IPatient;
 	status: string;
+	therapistId: string;
 }
 
 export interface IPatientByIdResponse {

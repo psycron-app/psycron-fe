@@ -17,14 +17,19 @@ import {
 } from './AppointmentConfirmation.styled';
 
 export const AppointmentConfirmation = () => {
-	const { patientId, locale } = useParams<{
-		locale: string;
-		patientId: string;
-	}>();
-
 	const { t } = useTranslation();
 
-	const { patientDetails, isPatientDetailsLoading } = usePatient(patientId);
+	const { patientId, locale, therapistId } = useParams<{
+		locale: string;
+		patientId: string;
+		therapistId: string;
+	}>();
+
+	const { patientDetails, isPatientDetailsLoading } = usePatient(
+		therapistId,
+		patientId
+	);
+	console.log('🚀 ~ AppointmentConfirmation ~ patientDetails:', patientDetails);
 
 	const { userDetails, isUserDetailsLoading } = useUserDetails(
 		String(patientDetails?.createdBy)
@@ -42,6 +47,7 @@ export const AppointmentConfirmation = () => {
 			patientDetails?.sessionDates.length - 1
 		];
 	}, [patientDetails]);
+	console.log('🚀 ~ latestSession ~ latestSession:', latestSession);
 
 	if (isPatientDetailsLoading || isUserDetailsLoading) {
 		return <Loader />;
@@ -49,10 +55,10 @@ export const AppointmentConfirmation = () => {
 
 	const { firstName, lastName } = userDetails;
 
-	const formattedSelectedSession = formatSessionDateToLocale(
-		latestSession.sessions[0].date.toLocaleString(),
-		locale
-	);
+	// const formattedSelectedSession = formatSessionDateToLocale(
+	// 	latestSession.sessions[0].date.toLocaleString(),
+	// 	locale
+	// );
 
 	return (
 		<ConfirmationPageWrapper>
@@ -78,7 +84,7 @@ export const AppointmentConfirmation = () => {
 					<Box display='flex' flexDirection='row' justifyContent='center'>
 						<Text>{t('globals.date-time')}</Text>
 						<Text pl={1} isFirstUpper>
-							{formattedSelectedSession}
+							{/* {formattedSelectedSession} */}
 						</Text>
 					</Box>
 					<Text variant='caption' pt={2}>
@@ -96,7 +102,7 @@ export const AppointmentConfirmation = () => {
 						components={{
 							strong: (
 								<Link to={`${patientDetails._id}/appointments`} replace>
-									{' '}
+									aa
 								</Link>
 							),
 						}}

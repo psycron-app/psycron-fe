@@ -393,7 +393,11 @@
 		"book-appointment": {
 			"title": "{{therapisName}}'s Open Appointments",
 			"description": "Quickly schedule your therapy session. Check available times and choose the best slot to book your appointment easily and conveniently.",
-			"confirmation-should-replicate": "Would you like to set this day as your default choice for future appointments?"
+			"confirmation-should-replicate": "Would you like to set this day as your default choice for future appointments?",
+			"recurrence-pattern": {
+				"month": "Weekly until month ends",
+				"year": "Weekly until year ends"
+			}
 		},
 		"booking-confirmation": {
 			"title": "Your Appointment with <strong>{{therapistName}} </strong> is confirmed 🎉",

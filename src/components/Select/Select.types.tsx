@@ -1,12 +1,19 @@
+import type { ReactNode } from 'react';
 import type { SelectChangeEvent } from '@mui/material';
 
 export interface SelectComponentProps {
+	customRenderItem?: (item: ISelectItem) => ReactNode;
 	hidePrimaryValue?: boolean;
-	items: { name: string; value: string | number }[];
-	onChangeSelect: (e: SelectChangeEvent<string>) => void;
+	items: ISelectItem[];
+	onChangeSelect: (e: SelectChangeEvent<string | number>) => void;
 	required?: boolean;
 	selectLabel?: string;
 	subtitle?: boolean;
 	value?: string;
 	width?: string;
+}
+
+export interface ISelectItem {
+	name: string;
+	value: string | number;
 }

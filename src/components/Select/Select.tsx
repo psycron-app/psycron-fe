@@ -1,5 +1,5 @@
 import { forwardRef } from 'react';
-import type { SelectChangeEvent, SelectProps } from '@mui/material';
+import type { SelectProps } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import { Text } from '@psycron/components/text/Text';
 import { ChevronDown } from 'lucide-react';
@@ -27,6 +27,7 @@ export const Select = forwardRef<
 			width,
 			name,
 			hidePrimaryValue,
+			customRenderItem,
 		},
 		ref
 	) => {
@@ -48,28 +49,32 @@ export const Select = forwardRef<
 					label={selectLabel}
 					aria-labelledby={labelId}
 					aria-label={selectLabel}
-					onChange={
-						onChangeSelect as (
-							event: SelectChangeEvent<string | number>
-						) => void
-					}
+					onChange={onChangeSelect}
 					IconComponent={ChevronDown}
 					fullWidth
 					inputRef={ref}
 				>
-					{items?.map(({ name, value }, index) => (
+					{items?.map((item, index) => (
 						<MenuItem
-							value={value}
+							value={item.value}
 							divider={index !== items.length - 1}
-							key={`item-${name}-${value}`}
+							key={`item-${item.value}-${index}`}
 						>
-							{!hidePrimaryValue ? <Text variant='caption'>{name}</Text> : null}
+							{customRenderItem ? (
+								customRenderItem(item)
+							) : (
+								<>
+									{!hidePrimaryValue && (
+										<Text variant='caption'>{item.name}</Text>
+									)}
 
-							{subtitle ? (
-								<Text variant='caption' fontSize={'0.9rem'} pl={2}>
-									{value}
-								</Text>
-							) : null}
+									{subtitle && (
+										<Text variant='caption' fontSize='0.9rem' pl={2}>
+											{item.value}
+										</Text>
+									)}
+								</>
+							)}
 						</MenuItem>
 					))}
 				</StyledMUISelect>

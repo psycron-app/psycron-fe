@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Modal } from '@psycron/components/modal/Modal';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
+import { usePatient } from '@psycron/context/patient/PatientContext';
 import type { ISlotStatus } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { useCalendarWeekData } from '@psycron/hooks/useCalendarData';
@@ -35,6 +36,8 @@ export const BigCalendar = ({
 	const bookingRef = useRef<IBookingAppointmentRef | null>(null);
 
 	const { therapistId } = useUserDetails();
+	const { bookAppointmentFromLinkMttnIsLoading } = usePatient();
+
 	const { isMobile } = useViewport();
 	const statusOptions = useTranslatedStatus();
 
@@ -320,6 +323,7 @@ export const BigCalendar = ({
 				</FormProvider>
 			</Modal>
 			<Modal
+				isLoading={bookAppointmentFromLinkMttnIsLoading}
 				openModal={openBookingModal}
 				title={t('components.agenda.book-appointment.title')}
 				onClose={() => setOpenBookingModal(false)}

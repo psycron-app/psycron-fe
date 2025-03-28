@@ -8,6 +8,7 @@ export const BASE_API_URL = 'https://api.psycron.app/api/v1/';
 export const USERID = ':userId';
 export const PATIENTID = ':patientId';
 export const APPOINTMENTID = ':appointmentId';
+export const THERAPISTID = ':therapistId';
 
 // PUBLIC
 // AUTH
@@ -27,7 +28,6 @@ export const EDITUSERPATH = 'edit';
 export const EDITUSER = `${EDITUSERPATH}/${USERID}`;
 export const EDITUSERBYSESSION = `${EDITUSER}/:session`;
 export const CHANGEPASSWORD = `${EDITUSER}/password`;
-
 export const PATIENTS = 'patients';
 export const PAYMENTS = 'payments';
 export const AVAILABILITYPATH = 'availability';
@@ -39,7 +39,7 @@ export const AVAILABILITY = `${AVAILABILITYPATH}/${USERID}`;
 export const AVAILABILITYWIZARD = `${AVAILABILITYPATH}/create`;
 export const AGENDA = 'agenda';
 export const BOOKAPPOINTMENT = `${USERID}/book-appointment/:first?`;
-export const APPOINTMENTCONFIRMATIONPATH = `${PATIENTID}/${APPOINTMENTCONFIRMATION}`;
+export const APPOINTMENTCONFIRMATIONPATH = `${THERAPISTID}/${PATIENTID}/${APPOINTMENTCONFIRMATION}`;
 export const RESCHEDULEAPPOINTMENT = `${DOMAIN}/${APPOINTMENTID}/edit-appointment`;
 export const PATIENTAPPOINTMENTSLIST = `${PATIENTID}/${APPOINTMENTS}`;
 

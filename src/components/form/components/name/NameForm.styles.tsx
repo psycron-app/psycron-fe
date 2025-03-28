@@ -1,32 +1,33 @@
-import { Box, styled, TextField } from '@mui/material';
+import { Box, styled } from '@mui/material';
 import { isBiggerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueries';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const NameFormWrapper = styled(Box)`
 	display: flex;
+	flex-direction: column;
 	width: 100%;
 
-	flex-direction: column;
-
-	padding-bottom: 0;
 	${isBiggerThanMediumMedia} {
-		padding-bottom: ${spacing.xs};
+		flex-direction: row;
 	}
 `;
 
-export const StyledNameInput = styled(TextField)`
-	padding-bottom: ${spacing.small};
+export const FirstNameInputWrapper = styled(Box)`
+	width: 100%;
+	padding-bottom: ${spacing.xs};
 
 	${isBiggerThanMediumMedia} {
-		padding-bottom: ${spacing.medium};
+		padding-right: ${spacing.small};
+		padding-bottom: ${spacing.small};
 	}
 `;
 
 export const LastNameInputWrapper = styled(Box)`
 	width: 100%;
-	padding-bottom: ${spacing.small};
+	padding-bottom: ${spacing.xs};
 
 	${isBiggerThanMediumMedia} {
-		padding-bottom: ${spacing.medium};
+		padding-left: ${spacing.small};
+		padding-bottom: ${spacing.small};
 	}
 `;

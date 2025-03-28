@@ -10,23 +10,20 @@ export const Card = ({
 	cardTitle,
 	cardTitleProps,
 	cardActionsProps,
-	isLoading,
 	onClose,
 }: CardProps) => {
 	return (
 		<CardWrapper>
-			{!isLoading && (
-				<CardContent>
-					{cardTitle || onClose ? (
-						<>
-							<CardTitle {...cardTitleProps} onClose={onClose} />
-							{cardTitle ? <Divider /> : null}
-						</>
-					) : null}
-					<Content>{children}</Content>
-					<CardActions {...cardActionsProps} type={cardActionsProps.type} />
-				</CardContent>
-			)}
+			<CardContent>
+				{cardTitle || onClose ? (
+					<>
+						<CardTitle {...cardTitleProps} onClose={onClose} />
+						{cardTitle ? <Divider /> : null}
+					</>
+				) : null}
+				<Content>{children}</Content>
+				<CardActions {...cardActionsProps} type={cardActionsProps.type} />
+			</CardContent>
 		</CardWrapper>
 	);
 };

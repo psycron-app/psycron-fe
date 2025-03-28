@@ -1,7 +1,7 @@
 import { StatusEnum } from '@psycron/api/user/availability/index.types';
 import type { ISlot } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
-import { format, isSameDay } from 'date-fns';
+import { format, isBefore, isSameDay, startOfDay } from 'date-fns';
 
 import { BookedSlot } from '../booked-slot/BookedSlot';
 
@@ -13,6 +13,7 @@ import {
 	StyledTableSkeleton,
 } from './BigCalendarBody.styles';
 import type { IBigCalendarBody } from './BigCalendarBody.types';
+import { getSlotVisualType } from './utils';
 
 export const BigCalendarBody = ({
 	totalColumns,
@@ -120,7 +121,11 @@ export const BigCalendarBody = ({
 								const foundSlot =
 									slot ?? getEmptySlot(hour, consultationDuration);
 
-								const status = slots.length > 0 ? slots[0].status : null;
+								const status = foundSlot?.status ?? null;
+								// console.log(
+								// 	'COMPONENT: day - status - mode',
+								// 	`day: ${day} - status:${status} - mode: ${mode}`
+								// );
 
 								const selectedSlotDetails = {
 									availabilityDayId: dateId,
@@ -137,13 +142,25 @@ export const BigCalendarBody = ({
 									day
 								);
 
+								const isPastDate = isBefore(startOfDay(day), startOfDay(today));
+								const avoidClick = isPastDate && mode === 'book';
+
+								const isTodayDate = isSameDay(day, today);
+								const slotType = getSlotVisualType(
+									status,
+									mode,
+									isPastDate,
+									isTodayDate
+								);
+
 								return (
 									<BigCalendarSlot
 										key={format(day, 'yyyy-MM-dd') + hour}
-										isToday={isSameDay(day, today)}
-										status={status}
-										onClick={() => onClick(selectedSlotDetails, mode)}
-										mode={mode}
+										isToday={isTodayDate}
+										slotType={slotType}
+										onClick={() =>
+											!avoidClick && onClick(selectedSlotDetails, mode)
+										}
 									>
 										{isLoading ? (
 											<StyledTableSkeleton style={{ animationDelay: delay }} />

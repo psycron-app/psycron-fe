@@ -1,5 +1,6 @@
-import { Button as MUIButton } from '@mui/material';
+import { Box, Button as MUIButton } from '@mui/material';
 
+import { BttnLoader, StyledBttnContentWrapper } from './Button.styles';
 import type { IButtonProps } from './Button.types';
 
 export const Button = ({
@@ -10,6 +11,7 @@ export const Button = ({
 	small,
 	fullWidth,
 	type,
+	loading,
 	...props
 }: IButtonProps) => {
 	const bttnColor = () => {
@@ -30,10 +32,16 @@ export const Button = ({
 			size={small ? 'small' : 'medium'}
 			type={type}
 			fullWidth={fullWidth}
+			disabled={loading}
 			onClick={onClick}
 			{...props}
 		>
-			{children}
+			<StyledBttnContentWrapper>
+				{loading && <BttnLoader size={25} color='secondary' thickness={5} />}
+				<Box component='span' sx={{ mx: 'auto' }}>
+					{children}
+				</Box>
+			</StyledBttnContentWrapper>
 		</MUIButton>
 	);
 };

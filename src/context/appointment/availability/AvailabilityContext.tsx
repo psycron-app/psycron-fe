@@ -6,6 +6,7 @@ import { getAvailabilityByDayId } from '@psycron/api/user';
 import {
 	editSlotStatus,
 	getAppointmentDetailsBySlotId,
+	getPublicSlotDetailsById,
 } from '@psycron/api/user/availability';
 import type {
 	IEditSlotStatus,
@@ -17,7 +18,7 @@ import type {
 } from '@psycron/api/user/index.types';
 import type { ISelectedSlot } from '@psycron/components/calendar/big-calendar/BigCalendar.types';
 import { useAlert } from '@psycron/context/alert/AlertContext';
-import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { useTherapistId } from '@psycron/hooks/useTherapistId';
 import {
 	useInfiniteQuery,
 	useMutation,
@@ -37,7 +38,7 @@ const AvailabilityContext = createContext<AvailabilityContextType | undefined>(
 export const AvailabilityProvider = ({
 	children,
 }: AvailabilityProviderProps) => {
-	const { therapistId } = useUserDetails();
+	const therapistId = useTherapistId();
 
 	const { data, isLoading } = useQuery({
 		queryKey: ['therapistAvailability', therapistId],
@@ -73,7 +74,8 @@ export const AvailabilityProvider = ({
 
 export const useAvailability = (
 	initialDaySelected?: IDateInfo,
-	slot?: ISelectedSlot
+	slot?: ISelectedSlot,
+	selectedSlotId?: string
 ) => {
 	const context = useContext(AvailabilityContext);
 	if (!context) {
@@ -85,7 +87,7 @@ export const useAvailability = (
 	const queryClient = useQueryClient();
 	const { showAlert } = useAlert();
 
-	const { therapistId } = useUserDetails();
+	const therapistId = useTherapistId();
 
 	const {
 		data: dataFromSelectedDayRes,
@@ -190,6 +192,15 @@ export const useAvailability = (
 		editSlotStatusMutation.mutate(data);
 	};
 
+	const { data: publicSlotDetails, isLoading: publicSlotDetailsIsLoading } =
+		useQuery({
+			queryKey: ['getPublicSlotDetailsById', selectedSlotId],
+			queryFn: () => getPublicSlotDetailsById(therapistId, selectedSlotId),
+			enabled: !!therapistId && !!selectedSlotId,
+			retry: false,
+			staleTime: 1000 * 60 * 5,
+		});
+
 	return {
 		...context,
 		dataFromSelectedDayRes,
@@ -206,5 +217,7 @@ export const useAvailability = (
 		isFetchingNextPage,
 		isFetchingPreviousPage,
 		editSlotStatusMttn,
+		publicSlotDetails,
+		publicSlotDetailsIsLoading,
 	};
 };

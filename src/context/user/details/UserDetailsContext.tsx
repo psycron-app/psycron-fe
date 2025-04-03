@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserById } from '@psycron/api/user';
 import { getAvailabilitySession } from '@psycron/api/user/availability';
@@ -79,7 +79,7 @@ export const useUserDetails = (passedUserId?: string) => {
 	}
 	const { user } = context;
 
-	const userId = passedUserId || user?._id;
+	const userId = passedUserId ?? user?._id;
 
 	const {
 		data: userDetails,
@@ -107,12 +107,16 @@ export const useUserDetails = (passedUserId?: string) => {
 		enabled: !!latestSessionId,
 	});
 
-	const therapistId = useSecureStorage(
+	const therapistIdFromStorage = useSecureStorage(
 		THERAPIST_ID,
 		userDetails?._id,
 		1440,
 		'local'
 	);
+
+	const therapistId: string = useMemo(() => {
+		return Object.is(user, null) ? userDetails?._id : therapistIdFromStorage;
+	}, [therapistIdFromStorage, user, userDetails?._id]);
 
 	return {
 		...context,

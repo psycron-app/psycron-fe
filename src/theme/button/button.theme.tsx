@@ -49,10 +49,11 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 				backgroundColor: primary.action.press,
 				boxShadow: shadowPress,
 			},
-			'&:disabled': {
+			'&.Mui-disabled': {
 				backgroundColor: primary.action.disabled,
 				color: textDisabled,
 				filter: shadowDisabled,
+				pointerEvents: 'none',
 			},
 		},
 		containedSecondary: {
@@ -65,10 +66,11 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 				backgroundColor: secondary.action.press,
 				boxShadow: shadowPress,
 			},
-			'&:disabled': {
+			'&.Mui-disabled': {
 				backgroundColor: secondary.action.disabled,
 				color: textDisabled,
 				filter: shadowDisabled,
+				pointerEvents: 'none',
 			},
 		},
 		outlinedPrimary: {
@@ -84,10 +86,11 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 				border: generateBorder(primary.action.press),
 				boxShadow: shadowPress,
 			},
-			'&:disabled': {
+			'&.Mui-disabled': {
 				border: generateBorder(primary.action.disabled),
 				color: textDisabled,
 				filter: shadowDisabled,
+				pointerEvents: 'none',
 			},
 		},
 		outlinedSecondary: {
@@ -103,10 +106,11 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 				border: generateBorder(secondary.action.press),
 				boxShadow: shadowPress,
 			},
-			'&:disabled': {
+			'&.Mui-disabled': {
 				border: generateBorder(secondary.action.disabled),
 				filter: shadowDisabled,
 				color: textDisabled,
+				pointerEvents: 'none',
 			},
 		},
 	};

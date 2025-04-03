@@ -18,11 +18,19 @@ export interface ICancelEditAppointmentResponse {
 }
 
 export interface IEditAppointment {
-	newData: {
-		newDate: Date;
-		newSessionSlotId: string;
-	};
-	oldSessionSlotId: string;
+	availabilityDayId: string;
+	newSlotId: string;
+	oldSlotId: string;
 	patientId: string;
+	therapistId: string;
+}
+export interface IPatientEditAppointmentResponse {
+	endTime: string;
+	message: string;
+	newDate: string;
+	newSlotId: string;
+	oldSlotId: string;
+	patientId: string;
+	startTime: string;
 	therapistId: string;
 }

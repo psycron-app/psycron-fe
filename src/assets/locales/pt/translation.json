@@ -396,8 +396,12 @@
 			"confirmation-should-replicate": "Deseja usar esse dia como sua escolha padrão para futuras consultas?",
 			"recurrence-pattern": {
 				"month": "Toda semana até o fim do mês",
-				"year": "Toda semana até o fim do ano"
-			}
+				"year": "Toda semana até o fim do ano",
+				"single": "Apenas esta consulta",
+				"all-future": "Todas as próximas consultas"
+			},
+			"confirm-edit": "Por favor, confirme que deseja alterar sua consulta de {{previousDate}} para:",
+			"edit-recurrence-title": "Você deseja alterar apenas esta consulta ou todas as próximas?"
 		},
 		"booking-confirmation": {
 			"title": "Sua consulta com <strong>{{therapistName}}</strong> está confirmada 🎉",

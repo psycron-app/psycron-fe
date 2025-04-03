@@ -1,5 +1,7 @@
 import { createContext, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { editAppointment } from '@psycron/api/appointment';
+import type { IEditAppointment } from '@psycron/api/appointment/index.types';
 import type { CustomError } from '@psycron/api/error';
 import {
 	bookAppointmentFromLink,
@@ -54,6 +56,9 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 		},
 	});
 
+	const bookAppointmentWithLink = (data: IBookAppointment) =>
+		bookAppointmentFromLinkMutation.mutate(data);
+
 	const updatePatientMutation = useMutation({
 		mutationFn: updatePatientDetailsById,
 		onSuccess: (data) => {
@@ -73,9 +78,6 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 			});
 		},
 	});
-
-	const bookAppointmentWithLink = (data: IBookAppointment) =>
-		bookAppointmentFromLinkMutation.mutate(data);
 
 	const updatePatientDetails = (data: IEditPatientDetailsById) =>
 		updatePatientMutation.mutate(data);
@@ -100,6 +102,28 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 	const createPatientMttn = (data: ICreatePatient) =>
 		createPatientMutation.mutate(data);
 
+	const patientEditAppointmentMutation = useMutation({
+		mutationFn: editAppointment,
+		onSuccess: (data) => {
+			navigate(
+				`/${i18n.language}/${data.therapistId}/${data.patientId}/${APPOINTMENTCONFIRMATION}`
+			);
+			showAlert({
+				message: data.message,
+				severity: 'success',
+			});
+		},
+		onError: (error: CustomError) => {
+			showAlert({
+				message: error.message,
+				severity: 'error',
+			});
+		},
+	});
+
+	const patientEditAppointment = (data: IEditAppointment) =>
+		patientEditAppointmentMutation.mutate(data);
+
 	return (
 		<PatientContext.Provider
 			value={{
@@ -110,6 +134,9 @@ export const PatientProvider = ({ children }: IPatientProviderProps) => {
 				updatePatientIsLoading: updatePatientMutation.isPending,
 				createPatientMttn,
 				createPatientIsLoading: createPatientMutation.isPending,
+				patientEditAppointment,
+				patientEditAppointmentIsLoading:
+					patientEditAppointmentMutation.isPending,
 			}}
 		>
 			{children}

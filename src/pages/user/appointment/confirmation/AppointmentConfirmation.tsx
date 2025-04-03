@@ -1,15 +1,23 @@
 import { useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
-import { Box, Paper } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
+import type { ISelectedSlot } from '@psycron/components/calendar/big-calendar/BigCalendar.types';
+import { getFormattedTimeLabels } from '@psycron/components/calendar/big-calendar/components/appointment-details/utils';
+import { Globe, MapPin } from '@psycron/components/icons';
 import { Link } from '@psycron/components/link/Link';
 import { Loader } from '@psycron/components/loader/Loader';
 import { Text } from '@psycron/components/text/Text';
 import { usePatient } from '@psycron/context/patient/PatientContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
-import { formatSessionDateToLocale } from '@psycron/utils/variables';
+import { PATIENTEDITAPPOINTMENT } from '@psycron/pages/urls';
+import { format } from 'date-fns';
+import { enGB, ptBR } from 'date-fns/locale';
 
 import {
+	AppointmentItem,
+	AppointmentItemWrapper,
+	AppointmentsInfoWrapper,
 	ConfirmationPageWrapper,
 	StrongText,
 	StyledSubTitle,
@@ -18,6 +26,7 @@ import {
 
 export const AppointmentConfirmation = () => {
 	const { t } = useTranslation();
+	const navigate = useNavigate();
 
 	const { patientId, locale, therapistId } = useParams<{
 		locale: string;
@@ -25,40 +34,77 @@ export const AppointmentConfirmation = () => {
 		therapistId: string;
 	}>();
 
+	const dateLocale = locale.includes('en') ? enGB : ptBR;
+
 	const { patientDetails, isPatientDetailsLoading } = usePatient(
 		therapistId,
 		patientId
 	);
-	console.log('🚀 ~ AppointmentConfirmation ~ patientDetails:', patientDetails);
 
 	const { userDetails, isUserDetailsLoading } = useUserDetails(
 		String(patientDetails?.createdBy)
 	);
 
-	const latestSession = useMemo(() => {
-		if (
-			!patientDetails?.sessionDates ||
-			patientDetails?.sessionDates.length === 0
-		) {
-			return;
-		}
+	const patientTimeZoneFromBrowser =
+		Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-		return patientDetails?.sessionDates[
-			patientDetails?.sessionDates.length - 1
-		];
-	}, [patientDetails]);
-	console.log('🚀 ~ latestSession ~ latestSession:', latestSession);
+	const formattedSessionDates = useMemo(() => {
+		return patientDetails?.sessionDates?.flatMap(
+			({ date, slots, _id: availabilityDayId }) =>
+				slots.map(({ startTime, endTime, status, _id }) => {
+					const { therapistLabel, patientLabel } = getFormattedTimeLabels(
+						new Date(date),
+						startTime,
+						endTime,
+						dateLocale,
+						userDetails?.timeZone,
+						patientTimeZoneFromBrowser,
+						t,
+						'patient'
+					);
 
-	if (isPatientDetailsLoading || isUserDetailsLoading) {
+					return {
+						date,
+						availabilityDayId,
+						slot: { _id, startTime, endTime, status },
+						patientId: patientId,
+						therapistLabel,
+						patientLabel,
+					};
+				})
+		);
+	}, [
+		patientDetails,
+		dateLocale,
+		userDetails?.timeZone,
+		patientTimeZoneFromBrowser,
+		t,
+		patientId,
+	]);
+
+	if (
+		isPatientDetailsLoading ||
+		isUserDetailsLoading ||
+		!patientDetails ||
+		!userDetails
+	) {
 		return <Loader />;
 	}
 
 	const { firstName, lastName } = userDetails;
 
-	// const formattedSelectedSession = formatSessionDateToLocale(
-	// 	latestSession.sessions[0].date.toLocaleString(),
-	// 	locale
-	// );
+	const handleEditAppointment = (selectedSlot: ISelectedSlot) => {
+		const {
+			date,
+			availabilityDayId,
+			slot: { _id: slotId },
+		} = selectedSlot;
+
+		const formattedDate = format(date, 'yyyy-MM-dd');
+		navigate(
+			`../${therapistId}/${PATIENTEDITAPPOINTMENT}/edit/${availabilityDayId}?slot=${slotId}&date=${formattedDate}`
+		);
+	};
 
 	return (
 		<ConfirmationPageWrapper>
@@ -74,24 +120,48 @@ export const AppointmentConfirmation = () => {
 					{t('page.booking-confirmation.subtitle')}
 				</StyledSubTitle>
 			</Box>
-			<Paper>
-				<Box
-					p={5}
-					display='flex'
-					flexDirection='column'
-					justifyContent='center'
-				>
-					<Box display='flex' flexDirection='row' justifyContent='center'>
-						<Text>{t('globals.date-time')}</Text>
-						<Text pl={1} isFirstUpper>
-							{/* {formattedSelectedSession} */}
-						</Text>
-					</Box>
-					<Text variant='caption' pt={2}>
-						{t('page.booking-confirmation.advise')}
-					</Text>
-				</Box>
-			</Paper>
+			<AppointmentsInfoWrapper>
+				{formattedSessionDates?.map(
+					(
+						{ patientLabel, therapistLabel, date, availabilityDayId, slot },
+						index
+					) => {
+						const selectedSlot: ISelectedSlot = {
+							date: new Date(date),
+							availabilityDayId,
+							slot,
+						};
+
+						return (
+							<AppointmentItemWrapper
+								key={index}
+								title={t('globals.edit')}
+								placement='right'
+								onClick={() => handleEditAppointment(selectedSlot)}
+							>
+								<Box>
+									<AppointmentItem pb={1}>
+										<MapPin />
+										<Text variant='body1' fontWeight='medium' pl={1}>
+											{patientLabel}
+										</Text>
+									</AppointmentItem>
+
+									<AppointmentItem>
+										<Globe />
+										<Text variant='body1' fontWeight='medium' pl={1}>
+											{therapistLabel}
+										</Text>
+									</AppointmentItem>
+								</Box>
+							</AppointmentItemWrapper>
+						);
+					}
+				)}
+				<Text variant='caption' pt={2}>
+					{t('page.booking-confirmation.advise')}
+				</Text>
+			</AppointmentsInfoWrapper>
 			<Box py={5}>
 				<Text variant='subtitle2'>
 					{t('page.booking-confirmation.reschedule')}

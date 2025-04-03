@@ -11,6 +11,7 @@ import type {
 	ICompleteSessionAvailabilityResponse,
 	IEditSlotStatus,
 	IInitiateAvailabilityResponse,
+	IPublicSlotDetailsResponse,
 	ISessionResponse,
 	IUpdateAvailabilitySession,
 } from './index.types';
@@ -93,5 +94,13 @@ export const editSlotStatus = async ({
 		`/users/${therapistId}/availability/${availabilityDayId}/slot/${slotId}`,
 		data
 	);
+	return response.data;
+};
+
+export const getPublicSlotDetailsById = async (
+	therapistId: string,
+	slotId: string
+): Promise<IPublicSlotDetailsResponse> => {
+	const response = await apiClient.get(`/users/${therapistId}/${slotId}`);
 	return response.data;
 };

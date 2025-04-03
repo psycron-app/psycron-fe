@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import type { IDateInfo } from '@psycron/api/user/index.types';
 import { BigCalendar } from '@psycron/components/calendar/big-calendar/BigCalendar';
 import { Loader } from '@psycron/components/loader/Loader';
+import { Text } from '@psycron/components/text/Text';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { SEOProvider } from '@psycron/context/seo/SEOContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { useAppointmentParams } from '@psycron/hooks/useAppointmentParams';
 import { DOMAIN } from '@psycron/pages/urls';
+import { format, parseISO } from 'date-fns';
 
 import {
 	BookingAppointmentTitle,
@@ -21,15 +23,22 @@ export const BookAppointment = () => {
 
 	const titleRef = useRef<HTMLDivElement | null>(null);
 
-	const { locale, userId } = useParams<{
-		first?: string;
-		locale: string;
-		userId: string;
-	}>();
+	const {
+		locale,
+		userId: therapistId,
+		selectedDate,
+		selectedSlotId,
+		mode,
+	} = useAppointmentParams();
 
-	const { availabilityData, availabilityDataIsLoading } = useAvailability();
+	const { userDetails, isUserDetailsLoading } = useUserDetails(therapistId);
 
-	const { userDetails, isUserDetailsLoading } = useUserDetails(userId);
+	const {
+		availabilityData,
+		availabilityDataIsLoading,
+		publicSlotDetails,
+		publicSlotDetailsIsLoading,
+	} = useAvailability(undefined, undefined, selectedSlotId);
 
 	useEffect(() => {
 		if (
@@ -79,14 +88,14 @@ export const BookAppointment = () => {
 		if (fallbackDay) {
 			return {
 				date: fallbackDay.date,
-				dateId: (todayMatch as IDateInfo).dateId || todayMatch._id,
+				dateId: (fallbackDay as IDateInfo)?.dateId || fallbackDay._id,
 			};
 		}
 
 		return null;
 	}, [availabilityData]);
 
-	const pageUrl = `${DOMAIN}/${locale}/${userId}/book-appointment`;
+	const pageUrl = `${DOMAIN}/${locale}/${therapistId}/book-appointment`;
 	const imageUrl = `${DOMAIN}/empty-appointments.png`;
 
 	const pageTitle = t('page.book-appointment.title', {
@@ -110,21 +119,30 @@ export const BookAppointment = () => {
 
 	if (
 		isUserDetailsLoading ||
+		!therapistId ||
 		availabilityDataIsLoading ||
+		publicSlotDetailsIsLoading ||
 		!availabilityData?.dates?.length ||
 		!currentDay
 	) {
 		return <Loader />;
 	}
+	const slotInfoText = () => {
+		if (mode !== 'edit' || !selectedDate || !selectedSlotId) return null;
+
+		const formattedDate = format(parseISO(selectedDate), 'EEEE, MMMM do');
+		return `You are editing your appointment on ${formattedDate} at ${publicSlotDetails?.startTime}.`;
+	};
 
 	return (
 		<SEOProvider seo={homepageSEO}>
 			<StyledBookAppointmentPgWrapper>
 				<BookingAppointmentTitleWrapper ref={titleRef}>
 					<BookingAppointmentTitle>{pageTitle}</BookingAppointmentTitle>
+					{mode === 'edit' ? <Text>{slotInfoText()}</Text> : null}
 				</BookingAppointmentTitleWrapper>
 				<StyledBookingAgendaWrapper>
-					<BigCalendar daySelectedFromCalendar={currentDay} mode='book' />
+					<BigCalendar daySelectedFromCalendar={currentDay} mode={mode} />
 				</StyledBookingAgendaWrapper>
 			</StyledBookAppointmentPgWrapper>
 		</SEOProvider>

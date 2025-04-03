@@ -122,10 +122,6 @@ export const BigCalendarBody = ({
 									slot ?? getEmptySlot(hour, consultationDuration);
 
 								const status = foundSlot?.status ?? null;
-								// console.log(
-								// 	'COMPONENT: day - status - mode',
-								// 	`day: ${day} - status:${status} - mode: ${mode}`
-								// );
 
 								const selectedSlotDetails = {
 									availabilityDayId: dateId,
@@ -143,7 +139,7 @@ export const BigCalendarBody = ({
 								);
 
 								const isPastDate = isBefore(startOfDay(day), startOfDay(today));
-								const avoidClick = isPastDate && mode === 'book';
+								const avoidClick = isPastDate && (mode === 'book' || 'edit');
 
 								const isTodayDate = isSameDay(day, today);
 								const slotType = getSlotVisualType(

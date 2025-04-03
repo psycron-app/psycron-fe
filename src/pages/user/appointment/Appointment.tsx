@@ -41,17 +41,21 @@ export const AppointmentPage = () => {
 
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
+		console.log('🚀 ~ currentDay ~ today:', today);
 
 		const normalizedDates = availabilityData?.dates?.map((d) => ({
 			...d,
 			dateObj: new Date(d.date),
 		}));
+		// console.log('🚀 ~ normalizedDates ~ normalizedDates:', normalizedDates);
 
 		const todayMatch = normalizedDates.find((d) => {
 			const date = new Date(d.date);
 			date.setHours(0, 0, 0, 0);
+			console.log('🚀 ~ todayMatch ~ date:', date);
 			return date.getTime() === today.getTime();
 		});
+		console.log('🚀 ~ todayMatch ~ todayMatch:', todayMatch);
 
 		if (todayMatch) {
 			return {
@@ -74,7 +78,7 @@ export const AppointmentPage = () => {
 		if (fallbackDay) {
 			return {
 				date: fallbackDay.date,
-				dateId: (todayMatch as IDateInfo).dateId || todayMatch._id,
+				dateId: (fallbackDay as IDateInfo)?.dateId || fallbackDay._id,
 			};
 		}
 

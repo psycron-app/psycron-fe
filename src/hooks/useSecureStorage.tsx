@@ -26,8 +26,12 @@ export const useSecureStorage = (
 
 	useEffect(() => {
 		const fetchKey = async () => {
-			const fetchedKey = await getEncryptionKey();
-			setEncryptionKey(fetchedKey);
+			try {
+				const fetchedKey = await getEncryptionKey();
+				setEncryptionKey(fetchedKey);
+			} catch (error) {
+				setEncryptionKey(null);
+			}
 		};
 
 		fetchKey();

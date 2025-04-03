@@ -12,7 +12,10 @@ export const getSlotVisualType = (
 	isPast?: boolean,
 	isToday?: boolean
 ): SlotVisualType => {
-	if (mode === 'book' && (isPast || (isToday && status === 'EMPTY'))) {
+	if (
+		(mode === 'book' || 'edit') &&
+		(isPast || (isToday && status === 'EMPTY'))
+	) {
 		return 'DISABLED';
 	}
 	if (status === 'BOOKED') return 'BOOKED';

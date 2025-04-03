@@ -1,15 +1,14 @@
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
 import viteCompression from 'vite-plugin-compression';
 
-// https://vitejs.dev/config/
 export default defineConfig({
 	plugins: [
-		react({ jsxImportSource: '@emotion/react' }),
-		viteCompression({
-			algorithm: 'gzip',
+		react({
+			jsxImportSource: '@emotion/react',
 		}),
+		viteCompression({ algorithm: 'gzip' }),
 	],
 	resolve: {
 		alias: {

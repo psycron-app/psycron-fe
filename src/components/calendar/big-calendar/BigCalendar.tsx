@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Modal } from '@psycron/components/modal/Modal';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { usePatient } from '@psycron/context/patient/PatientContext';
 import type { ISlotStatus } from '@psycron/context/user/auth/UserAuthenticationContext.types';
-import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { useAppointmentParams } from '@psycron/hooks/useAppointmentParams';
 import { useCalendarWeekData } from '@psycron/hooks/useCalendarData';
+import { useTherapistId } from '@psycron/hooks/useTherapistId';
 import { useTranslatedStatus } from '@psycron/hooks/useTranslatedStatus';
 import useViewport from '@psycron/hooks/useViewport';
 import { ADDPATIENT, APPOINTMENTS } from '@psycron/pages/urls';
@@ -32,11 +33,16 @@ export const BigCalendar = ({
 }: IBigCalendarProps) => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
-	const { locale } = useParams<{ locale: string }>();
+
+	const { locale } = useAppointmentParams();
+	const therapistId = useTherapistId();
+
 	const bookingRef = useRef<IBookingAppointmentRef | null>(null);
 
-	const { therapistId } = useUserDetails();
-	const { bookAppointmentFromLinkMttnIsLoading } = usePatient();
+	const {
+		bookAppointmentFromLinkMttnIsLoading,
+		patientEditAppointmentIsLoading,
+	} = usePatient();
 
 	const { isMobile } = useViewport();
 	const statusOptions = useTranslatedStatus();
@@ -56,11 +62,15 @@ export const BigCalendar = ({
 		defaultValues: { status: selectedSlot?.slot?.status },
 	});
 
-	const { getValues } = methods;
+	const { getValues, formState } = methods;
+	const { isValid } = formState;
 
 	const COLUMN_COUNT = 7;
 	const includeHourColumn = !isMobile;
 	const totalColumns = includeHourColumn ? COLUMN_COUNT + 1 : COLUMN_COUNT;
+
+	const today = new Date();
+	today.setHours(0, 0, 0, 0);
 
 	const {
 		firstDate,
@@ -73,7 +83,7 @@ export const BigCalendar = ({
 		isFetchingPreviousPage,
 		consultationDuration,
 		editSlotStatusMttn,
-	} = useAvailability(daySelectedFromCalendar, undefined);
+	} = useAvailability(daySelectedFromCalendar, undefined, undefined);
 
 	const pages = dataFromSelectedDayRes?.pages ?? [];
 
@@ -112,9 +122,16 @@ export const BigCalendar = ({
 		setDayFromCalendar((prev) => subDays(prev, 7));
 	};
 
-	const disablePrevious = daysOfWeek.some((day) =>
-		isSameDay(day, firstDate?.date)
-	);
+	const allDaysInPast = daysOfWeek.some((day) => {
+		const normalized = new Date(day);
+		normalized.setHours(0, 0, 0, 0);
+		return normalized.getTime() === today.getTime();
+	});
+
+	const disablePrevious =
+		mode === 'book' || mode === 'edit'
+			? allDaysInPast
+			: daysOfWeek.some((day) => isSameDay(day, firstDate?.date));
 
 	const disableNext = daysOfWeek.some((day) => isSameDay(day, lastDate?.date));
 
@@ -143,8 +160,8 @@ export const BigCalendar = ({
 		if (mode === 'book' && slotStatus !== 'AVAILABLE') {
 			return;
 		}
-		if (mode === 'book') {
-			handleBookAppointment(selectedSlotDetails);
+		if (mode === 'book' || mode === 'edit') {
+			handlePatientBookOrEditAppointment(selectedSlotDetails);
 			return;
 		}
 		if (mode === 'view') {
@@ -233,8 +250,8 @@ export const BigCalendar = ({
 		navigate(`../${APPOINTMENTS}/cancel/${patientId}`);
 	};
 
-	// HANDLE BOOK APOOINTMENT
-	const handleBookAppointment = (selectedSlot: ISelectedSlot) => {
+	// HANDLE BOOK OR EDIT APOOINTMENT
+	const handlePatientBookOrEditAppointment = (selectedSlot: ISelectedSlot) => {
 		setSelectedSlot({ ...selectedSlot, therapistId });
 		setOpenBookingModal(true);
 	};
@@ -325,11 +342,21 @@ export const BigCalendar = ({
 			<Modal
 				isLoading={bookAppointmentFromLinkMttnIsLoading}
 				openModal={openBookingModal}
-				title={t('components.agenda.book-appointment.title')}
+				title={
+					mode === 'book'
+						? t('components.agenda.book-appointment.title')
+						: t(
+								'components.agenda.appointment-details.edit-patient-appointment'
+							)
+				}
 				onClose={() => setOpenBookingModal(false)}
 				cardActionsProps={{
 					actionName: t('globals.proceed'),
 					onClick: () => bookingRef.current?.submitForm(),
+					disabled: !isValid,
+					loading:
+						patientEditAppointmentIsLoading ||
+						bookAppointmentFromLinkMttnIsLoading,
 				}}
 			>
 				<BookingAppointment ref={bookingRef} selectedSlot={selectedSlot} />

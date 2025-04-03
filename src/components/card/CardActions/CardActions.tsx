@@ -13,6 +13,7 @@ export const CardActions = ({
 	hasTertiary,
 	hasSecondAction,
 	type,
+	loading,
 }: CardActionsProps) => {
 	return (
 		<Grid container columns={12} rowSpacing={3} display='flex'>
@@ -43,7 +44,7 @@ export const CardActions = ({
 					flexDirection='column'
 					rowGap={3}
 				>
-					<Button onClick={onClick} type={type} fullWidth>
+					<Button onClick={onClick} type={type} fullWidth loading={loading}>
 						{actionName}
 					</Button>
 					{hasTertiary ? (

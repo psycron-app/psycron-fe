@@ -134,3 +134,11 @@ export interface IEditSlotStatusData {
 	newStatus: ISlotStatus;
 	startTime: string;
 }
+
+export interface IPublicSlotDetailsResponse {
+	availabilityDayId: string;
+	date: Date;
+	patientId?: string;
+	slotId: string;
+	startTime: string;
+}

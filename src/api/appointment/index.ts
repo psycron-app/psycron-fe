@@ -4,6 +4,7 @@ import type {
 	ICancelAppointment,
 	ICancelEditAppointmentResponse,
 	IEditAppointment,
+	IPatientEditAppointmentResponse,
 } from './index.types';
 
 export const cancelAppointment = async ({
@@ -20,13 +21,14 @@ export const cancelAppointment = async ({
 
 export const editAppointment = async ({
 	therapistId,
-	oldSessionSlotId,
-	newData,
+	oldSlotId,
+	newSlotId,
+	availabilityDayId,
 	patientId,
 }: IEditAppointment) => {
-	const response = await apiClient.post<ICancelEditAppointmentResponse>(
-		`/patient/${therapistId}/appointment/${oldSessionSlotId}/edit`,
-		{ ...newData, patientId }
+	const response = await apiClient.post<IPatientEditAppointmentResponse>(
+		`/patient/${therapistId}/appointment/${oldSlotId}/edit`,
+		{ newSlotId, availabilityDayId, patientId }
 	);
 
 	return response.data;

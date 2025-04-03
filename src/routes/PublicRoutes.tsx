@@ -9,6 +9,7 @@ import {
 	HOMEPAGE,
 	PASSRESET,
 	PATIENTAPPOINTMENTSLIST,
+	PATIENTEDITAPPOINTMENT,
 	REQPASSRESET,
 	SIGNIN,
 	SIGNUP,
@@ -28,6 +29,10 @@ const publicRoutes = [
 	{ path: BOOKAPPOINTMENT, element: <BookAppointment /> },
 	{ path: APPOINTMENTCONFIRMATIONPATH, element: <AppointmentConfirmation /> },
 	{ path: PATIENTAPPOINTMENTSLIST, element: <AppointmentsList /> },
+	{
+		path: `:userId/${PATIENTEDITAPPOINTMENT}/edit/:availabilityDayId`,
+		element: <BookAppointment />,
+	},
 ];
 
 export default publicRoutes;

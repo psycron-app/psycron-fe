@@ -12,7 +12,7 @@ export const BookingHourWrapper = styled(Box)`
 	padding-bottom: ${spacing.small};
 
 	${isBiggerThanMediumMedia} {
-		padding-bottom: ${spacing.mediumSmall};
+		padding-bottom: 0;
 	}
 `;
 
@@ -20,6 +20,7 @@ export const BookingHour = styled(Text)`
 	font-size: 0.9rem;
 	font-weight: 500;
 	text-align: center;
+	padding-bottom: ${spacing.small};
 
 	${isBiggerThanMediumMedia} {
 		font-size: 1rem;

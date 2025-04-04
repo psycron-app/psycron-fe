@@ -71,6 +71,7 @@
 			"phone": "Ligar",
 			"whatsapp": "Enviar WhatsApp"
 		},
+		"cancellation-title": "Por favor nos informe o motivo do cancelamento da sua consulta",
 		"cancellation-reason": {
 			"1": "Emergência (Questão Pessoal/Saúde)",
 			"2": "Conflito de Agenda",
@@ -80,6 +81,7 @@
 			"6": "Consulta Encerrada",
 			"7": "Outro"
 		},
+		"cancellation-other-title": "Por favor especifique o motivo",
 		"status": "Disponibilidade"
 	},
 	"components": {
@@ -401,7 +403,8 @@
 				"all-future": "Todas as próximas consultas"
 			},
 			"confirm-edit": "Por favor, confirme que deseja alterar sua consulta de {{previousDate}} para:",
-			"edit-recurrence-title": "Você deseja alterar apenas esta consulta ou todas as próximas?"
+			"edit-recurrence-title": "Você deseja alterar apenas esta consulta ou todas as próximas?",
+			"edit-appointment-title": "Você está alterando a sua consulta do dia {{formattedDate}} às {{startTime}}."
 		},
 		"booking-confirmation": {
 			"title": "Sua consulta com <strong>{{therapistName}}</strong> está confirmada 🎉",
@@ -411,7 +414,14 @@
 			"reschedule": "Você pode remarcar a sua consulta até 1 dia de antecedência.",
 			"cancel": "Para remarcar ou cancelar, por favor <strong>clique aqui</strong>",
 			"help": "Caso tenha alguma dúvida ou precise de ajuda, entre em contato conosco via ",
-			"thanks": "Estamos aqui para te apoiar. Aguardamos sua consulta!"
+			"thanks": "Estamos aqui para te apoiar. Aguardamos sua consulta!",
+			"cancel-or-edit": {
+				"title": "Deseja fazer alguma mudança?",
+				"sub": "Você pode reagendar ou cancelar esta sessão agora.",
+				"appointment-info": "Sua consulta no dia {{date}} às {{startTime}}"
+			},
+			"no-appointments-title": "Você ainda não tem nenhuma consulta marcada",
+			"no-appointments-link": "Clique aqui para agendar suas consultas"
 		},
 		"appointment-list": {
 			"date": "Data",

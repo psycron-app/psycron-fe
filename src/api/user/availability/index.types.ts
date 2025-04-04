@@ -104,7 +104,7 @@ export interface IAvailabilityDate {
 		endTime: string;
 		note?: string;
 		patientId?: string;
-		reasonCode?: string | null;
+		reasonCode?: CancellationReasonEnum | null;
 		startTime: string;
 		status: StatusEnum;
 	}>;
@@ -141,4 +141,33 @@ export interface IPublicSlotDetailsResponse {
 	patientId?: string;
 	slotId: string;
 	startTime: string;
+}
+
+export enum CancellationReasonEnum {
+	EMERGENCY = 1,
+	SCHEDULE_CONFLICT = 2,
+	FINANCIAL_ISSUES = 3,
+	MENTAL_HEALTH = 4,
+	NO_SHOW = 5,
+	OTHER = 6,
+}
+
+export interface CancelAppointmentPayload {
+	customReason?: string;
+	patientId: string;
+	reasonCode: CancellationReasonEnum;
+	slotId: string;
+	therapistId: string;
+	triggeredBy: 'PATIENT' | 'THERAPIST';
+}
+
+export interface CancelAppointmentResponse {
+	message: string;
+	slotId: string;
+}
+
+export interface CancelAppointmentFormData {
+	customReason?: string;
+	reasonCode: string;
+	triggeredBy: string;
 }

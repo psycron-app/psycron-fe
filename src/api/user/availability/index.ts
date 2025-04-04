@@ -6,6 +6,8 @@ import type {
 	Appointment,
 	AppointmentDetailsBySlotIdResponse,
 	BookAppointmentResponse,
+	CancelAppointmentPayload,
+	CancelAppointmentResponse,
 	IAvailabilityData,
 	ICompleteSessionAvailabilityData,
 	ICompleteSessionAvailabilityResponse,
@@ -102,5 +104,18 @@ export const getPublicSlotDetailsById = async (
 	slotId: string
 ): Promise<IPublicSlotDetailsResponse> => {
 	const response = await apiClient.get(`/users/${therapistId}/${slotId}`);
+	return response.data;
+};
+
+export const cancelAppointmentByPatient = async (
+	payload: CancelAppointmentPayload
+): Promise<CancelAppointmentResponse> => {
+	const { therapistId, slotId } = payload;
+
+	const response = await apiClient.post(
+		`/users/${therapistId}/cancel/${slotId}`,
+		payload
+	);
+
 	return response.data;
 };

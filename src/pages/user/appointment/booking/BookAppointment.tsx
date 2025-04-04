@@ -127,11 +127,16 @@ export const BookAppointment = () => {
 	) {
 		return <Loader />;
 	}
+
 	const slotInfoText = () => {
 		if (mode !== 'edit' || !selectedDate || !selectedSlotId) return null;
 
 		const formattedDate = format(parseISO(selectedDate), 'EEEE, MMMM do');
-		return `You are editing your appointment on ${formattedDate} at ${publicSlotDetails?.startTime}.`;
+
+		return t('page.book-appointment.edit-appointment-title', {
+			date: formattedDate,
+			startTime: publicSlotDetails?.startTime,
+		});
 	};
 
 	return (

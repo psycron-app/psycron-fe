@@ -4,11 +4,13 @@ import type { CustomError } from '@psycron/api/error';
 import { getTherapistLatestAvailability } from '@psycron/api/user';
 import { getAvailabilityByDayId } from '@psycron/api/user';
 import {
+	cancelAppointmentByPatient,
 	editSlotStatus,
 	getAppointmentDetailsBySlotId,
 	getPublicSlotDetailsById,
 } from '@psycron/api/user/availability';
 import type {
+	CancelAppointmentPayload,
 	IEditSlotStatus,
 	StatusEnum,
 } from '@psycron/api/user/availability/index.types';
@@ -75,7 +77,8 @@ export const AvailabilityProvider = ({
 export const useAvailability = (
 	initialDaySelected?: IDateInfo,
 	slot?: ISelectedSlot,
-	selectedSlotId?: string
+	selectedSlotId?: string,
+	patientId?: string
 ) => {
 	const context = useContext(AvailabilityContext);
 	if (!context) {
@@ -201,6 +204,30 @@ export const useAvailability = (
 			staleTime: 1000 * 60 * 5,
 		});
 
+	const cancelAppointmentMutation = useMutation({
+		mutationFn: cancelAppointmentByPatient,
+		onSuccess: (data) => {
+			showAlert({
+				message: data.message,
+				severity: 'success',
+			});
+			queryClient.invalidateQueries({ queryKey: ['availabilityByDay'] });
+			queryClient.invalidateQueries({
+				queryKey: ['patientDetails', patientId],
+			});
+		},
+		onError: (error: CustomError) => {
+			showAlert({
+				message: error.message,
+				severity: 'error',
+			});
+		},
+	});
+
+	const cancelAppointment = (payload: CancelAppointmentPayload) => {
+		cancelAppointmentMutation.mutate(payload);
+	};
+
 	return {
 		...context,
 		dataFromSelectedDayRes,
@@ -219,5 +246,8 @@ export const useAvailability = (
 		editSlotStatusMttn,
 		publicSlotDetails,
 		publicSlotDetailsIsLoading,
+		cancelAppointment,
+		cancelAppointmentIsLoading: cancelAppointmentMutation.isPending,
+		cancelAppointmentSuccess: cancelAppointmentMutation.isSuccess,
 	};
 };

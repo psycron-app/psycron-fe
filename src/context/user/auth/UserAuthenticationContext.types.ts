@@ -45,6 +45,7 @@ export interface ITherapist extends IBaseUser {
 }
 
 export interface IPatient extends IBaseUser {
+	cancelledAppointments?: ICancelledAppointment[];
 	createdBy?: ITherapist | string;
 	receivedNotifications?: INotification[];
 	role: 'PATIENT';
@@ -143,4 +144,15 @@ export interface IBookSessionWithLink {
 	shouldReplicate?: boolean;
 	slotId: string;
 	timeZone: string;
+}
+
+export interface ICancelledAppointment {
+	cancelledAt: Date;
+	customReason?: string;
+	date: Date;
+	endTime: string;
+	reasonCode?: number;
+	slotId: string;
+	startTime: string;
+	triggeredBy: 'PATIENT' | 'THERAPIST';
 }

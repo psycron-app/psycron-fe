@@ -2,11 +2,14 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import type { IBigCalendarView } from '@psycron/components/calendar/big-calendar/BigCalendar.types';
 
 export const useAppointmentParams = () => {
-	const { locale, userId, availabilityDayId } = useParams<{
-		availabilityDayId?: string;
-		locale: string;
-		userId?: string;
-	}>();
+	const { locale, userId, availabilityDayId, patientId, therapistId } =
+		useParams<{
+			availabilityDayId?: string;
+			locale: string;
+			patientId: string;
+			therapistId?: string;
+			userId?: string;
+		}>();
 
 	const [searchParams] = useSearchParams();
 
@@ -17,10 +20,11 @@ export const useAppointmentParams = () => {
 
 	return {
 		locale,
-		userId,
+		userId: userId ?? therapistId,
 		availabilityDayId,
 		selectedDate,
 		selectedSlotId,
 		mode,
+		patientId,
 	};
 };

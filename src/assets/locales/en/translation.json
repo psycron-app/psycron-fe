@@ -71,15 +71,16 @@
 			"phone": "Call patient",
 			"whatsapp": "Send WhatsApp message"
 		},
+		"cancellation-title": "Please choose the reason you are cancelling your appointment",
 		"cancellation-reason": {
 			"1": "Emergency (Personal/Health Issue)",
 			"2": "Schedule Conflict",
 			"3": "Financial Issues",
 			"4": "Mental Issues",
 			"5": "No-Show",
-			"6": "Closed appointment(s)",
-			"7": "Other"
+			"6": "Other"
 		},
+		"cancellation-other-title": "Please specify the reason",
 		"status": "Status"
 	},
 	"components": {
@@ -401,7 +402,8 @@
 				"all-future": "All future appointments"
 			},
 			"confirm-edit": "Please confirm that you want to change your appointment from {{previousDate}} to:",
-			"edit-recurrence-title": "Do you want to update only this appointment or all future appointments?"
+			"edit-recurrence-title": "Do you want to update only this appointment or all future appointments?",
+			"edit-appointment-title": "You are editing your appointment on {{formattedDate}} at {{startTime}}."
 		},
 		"booking-confirmation": {
 			"title": "Your Appointment with <strong>{{therapistName}} </strong> is confirmed 🎉",
@@ -411,7 +413,14 @@
 			"reschedule": "You can reschedule your appointment up to 1 day before the session.",
 			"cancel": "To reschedule or cancel , please <strong>click here</strong>",
 			"help": "If you have any questions or need assistance, feel free to contact us at",
-			"thanks": "Thank you! We’re here to support you. Looking forward to your session!"
+			"thanks": "Thank you! We’re here to support you. Looking forward to your session!",
+			"cancel-or-edit": {
+				"title": "Need to make changes?",
+				"sub": "You can either reschedule or cancel your appointment here.",
+				"appointment-info": "Your appointment on {{date}} at {{startTime}}"
+			},
+			"no-appointments-title": "You dont have any appointments yet",
+			"no-appointments-link": "Click here to start booking an appointment"
 		},
 		"appointment-list": {
 			"date": "Date",

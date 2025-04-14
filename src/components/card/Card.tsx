@@ -1,8 +1,10 @@
-import { Box, CardContent, Divider } from '@mui/material';
+import { CardContent, Divider } from '@mui/material';
+
+import { Loader } from '../loader/Loader';
 
 import { CardActions } from './CardActions/CardActions';
 import { CardTitle } from './CardTitle/CardTitle';
-import { CardWrapper } from './Card.styles';
+import { CardWrapper, Content } from './Card.styles';
 import type { CardProps } from './Card.types';
 
 export const Card = ({
@@ -10,19 +12,25 @@ export const Card = ({
 	cardTitle,
 	cardTitleProps,
 	cardActionsProps,
+	onClose,
+	isLoading,
 }: CardProps) => {
 	return (
 		<CardWrapper>
-			<CardContent>
-				{cardTitle ? (
-					<>
-						<CardTitle {...cardTitleProps} />
-						<Divider />
-					</>
-				) : null}
-				<Box>{children}</Box>
-				<CardActions {...cardActionsProps} />
-			</CardContent>
+			{isLoading ? (
+				<Loader />
+			) : (
+				<CardContent>
+					{cardTitle || onClose ? (
+						<>
+							<CardTitle {...cardTitleProps} onClose={onClose} />
+							{cardTitle ? <Divider /> : null}
+						</>
+					) : null}
+					<Content>{children}</Content>
+					<CardActions {...cardActionsProps} type={cardActionsProps.type} />
+				</CardContent>
+			)}
 		</CardWrapper>
 	);
 };

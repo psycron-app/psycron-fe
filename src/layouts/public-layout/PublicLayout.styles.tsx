@@ -1,13 +1,14 @@
 import { Box, styled } from '@mui/material';
 import { Text } from '@psycron/components/text/Text';
-import { isBiggerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueries';
+import { isMobileMedia } from '@psycron/theme/media-queries/mediaQueries';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const PublicLayoutWrapper = styled(Box)`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	justify-content: flex-start;
+
+	min-height: 100vh;
 `;
 
 export const PublicLayoutContent = styled(Box)`
@@ -15,13 +16,25 @@ export const PublicLayoutContent = styled(Box)`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	padding: 0;
+	z-index: 2;
+
+	flex: 1;
+	margin-bottom: var(--footer-height);
 `;
 
 export const FooterWrapper = styled(Box)`
+	padding: 0 ${spacing.large} ${spacing.small};
+	z-index: 1000;
+	height: var(--footer-height);
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
 	position: relative;
-	padding: 0 ${spacing.large} ${spacing.large};
-	z-index: 2;
+	width: 100%;
 `;
 
 export const FooterContent = styled(Box)`
@@ -32,10 +45,13 @@ export const FooterContent = styled(Box)`
 
 export const StyledFooterTex = styled(Text)`
 	display: flex;
-	flex-direction: column;
 	margin-bottom: ${spacing.small};
+	flex-direction: row;
+	width: 100%;
+	justify-content: center;
 
-	${isBiggerThanMediumMedia} {
-		flex-direction: row;
+	${isMobileMedia} {
+		flex-direction: column;
+		align-items: center;
 	}
 `;

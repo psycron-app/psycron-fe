@@ -1,12 +1,9 @@
-import type { SyntheticEvent } from 'react';
-import type { FieldValues, Path, UseFormRegister } from 'react-hook-form';
+import type { UseFormRegisterReturn } from 'react-hook-form';
 
-export interface ICheckboxProps<T extends FieldValues> {
-    labelKey: string;
-    onChange?:
-        | ((event: SyntheticEvent<Element, Event>, checked: boolean) => void)
-        | undefined;
-    register?: UseFormRegister<T>;
-    registerName?: Path<T>;
-    value?: unknown;
+export interface ICheckboxProps {
+	checked?: boolean;
+	labelKey: string;
+	onChange?: () => void;
+	register: UseFormRegisterReturn | null;
+	shouldBold?: boolean;
 }

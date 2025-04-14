@@ -6,9 +6,14 @@ import { TableCell } from '../table-cell/TableCell';
 import { StyledTableHeadGrid, TabledHeadRowItem } from './TableHead.styles';
 import type { ITableHeadProps } from './TableHead.types';
 
-export const TableHead = ({ headItems, onSort, onHover }: ITableHeadProps) => {
+export const TableHead = ({
+	headItems,
+	onSort,
+	onHover,
+	isSmall,
+}: ITableHeadProps) => {
 	return (
-		<Box mb={5}>
+		<Box mb={isSmall ? 0 : 5}>
 			<StyledTableHeadGrid container columns={headItems.length}>
 				{headItems.map(
 					({ icon, numeric, label, action, isPatients, id }, index) => (
@@ -19,6 +24,7 @@ export const TableHead = ({ headItems, onSort, onHover }: ITableHeadProps) => {
 							onClick={() => onSort?.(id)}
 							onMouseEnter={() => onHover?.(id)}
 							onMouseLeave={() => onHover?.(null)}
+							isSmall={isSmall}
 						>
 							<TableCell
 								icon={icon}

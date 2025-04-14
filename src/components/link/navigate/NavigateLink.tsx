@@ -8,10 +8,10 @@ import { Link } from '../Link';
 
 import type { INavigateLinkProps } from './NavigateLink.types';
 
-export const NavigateLink = ({ isBack, nextPage }: INavigateLinkProps) => {
+export const NavigateLink = ({ isBack, to, nextPage }: INavigateLinkProps) => {
 	const { t } = useTranslation();
 
-	const linkTarget = isBack ? 'go-back' : nextPage || HOMEPAGE;
+	const linkTarget = isBack ? (to ? to : 'go-back') : nextPage || HOMEPAGE;
 
 	return (
 		<Box display='flex' alignItems='center'>

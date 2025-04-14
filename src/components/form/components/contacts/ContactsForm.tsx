@@ -1,97 +1,105 @@
 import { useEffect, useState } from 'react';
-import type { FieldValues, Path } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { TextFieldProps } from '@mui/material';
-import { Grid } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { Switch } from '@psycron/components/switch/components/item/Switch';
+import useViewport from '@psycron/hooks/useViewport';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
-import { PhoneInput } from '../phone/PhoneInput';
-import { InputFields } from '../shared/styles';
+import { PhoneInputComponent } from '../phone/PhoneInput';
 
+import {
+	EmailInputWrapper,
+	EmailPhoneWrapper,
+	PhoneWrapper,
+	WhatsappWrapper,
+} from './ContactsForm.styles';
 import type { ContactsFormProps } from './ContactsForm.types';
 
-export const ContactsForm = <T extends FieldValues>({
-	errors,
-	getPhoneValue,
-	setPhoneValue,
-	register,
+export const ContactsForm = ({
 	defaultValues,
 	disabled,
-}: ContactsFormProps<T> & TextFieldProps) => {
+	required,
+}: ContactsFormProps & TextFieldProps) => {
 	const { t } = useTranslation();
+	const { isSmallerThanTablet } = useViewport();
+
+	const {
+		register,
+		setValue,
+		formState: { errors },
+	} = useFormContext();
 
 	const [hasWhatsApp, setHasWhatsApp] = useState<boolean>(false);
-	const [isPhoneWpp, setIsPhoneWpp] = useState<boolean>(true);
+	const [isPhoneWpp, setIsPhoneWpp] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (isPhoneWpp) {
-			const phoneValue = getPhoneValue('phone' as Path<T>);
-			setPhoneValue('whatsapp' as Path<T>, phoneValue);
-		}
-	}, [getPhoneValue, isPhoneWpp, setPhoneValue]);
+		setValue('hasWhatsApp', hasWhatsApp);
+	}, [hasWhatsApp, setValue]);
+
+	useEffect(() => {
+		setValue('isPhoneWpp', isPhoneWpp);
+	}, [isPhoneWpp, setValue]);
 
 	return (
-		<Grid container>
-			<Grid item xs={12}>
-				<InputFields
-					label={t('globals.email')}
-					fullWidth
-					id='email'
-					defaultValue={defaultValues?.defaultEmail}
-					{...register('email' as Path<T>)}
-					autoComplete='email'
-					error={!!errors?.email}
-					helperText={errors?.email?.message as string}
-					required
-					disabled={disabled}
-				/>
-			</Grid>
-			<Grid item xs={12}>
-				<PhoneInput
-					errors={errors}
-					register={register}
-					registerName='phone'
-					defaultValue={defaultValues?.defaultPhone}
-					disabled={disabled}
-				/>
-			</Grid>
-			<Grid container>
-				<Grid item xs={12} display='flex'>
+		<Box display='flex' flexDirection='column' width='100%'>
+			<EmailPhoneWrapper>
+				<PhoneWrapper>
+					<PhoneInputComponent registerName='phone' required />
+				</PhoneWrapper>
+				<EmailInputWrapper>
+					<TextField
+						label={t('globals.email')}
+						fullWidth
+						id='email'
+						defaultValue={defaultValues?.email}
+						placeholder={
+							!defaultValues?.email && t('components.input.text.email')
+						}
+						{...register('email')}
+						autoComplete='email'
+						error={!!errors?.email}
+						helperText={errors?.email?.message as string}
+						required={required}
+						disabled={disabled}
+					/>
+				</EmailInputWrapper>
+			</EmailPhoneWrapper>
+			<Box>
+				<Box display='flex' pl={spacing.small}>
 					<Switch
+						small={isSmallerThanTablet}
 						onChange={() => setHasWhatsApp((prev) => !prev)}
-						value={hasWhatsApp}
+						value={!hasWhatsApp}
+						defaultChecked={hasWhatsApp}
 						label={t('components.form.contacts-form.contact-via', {
 							method: 'Whatsapp',
 						})}
 						disabled={disabled}
 					/>
-				</Grid>
+				</Box>
 				{hasWhatsApp ? (
-					<Grid item xs={12} display='flex'>
+					<Box display='flex' pl={spacing.small}>
 						<Switch
+							small={isSmallerThanTablet}
 							onChange={() => setIsPhoneWpp((prev) => !prev)}
 							value={isPhoneWpp}
-							defaultChecked
-							label={t(
-								'components.form.contacts-form.contact-via-same',
-							)}
+							defaultChecked={isPhoneWpp}
+							label={t('components.form.contacts-form.contact-via-same')}
 						/>
-					</Grid>
+					</Box>
 				) : null}
-
-				{hasWhatsApp ? (
-					<Grid item xs={12}>
-						{!isPhoneWpp ? (
-							<PhoneInput
-								errors={errors}
-								register={register}
-								registerName='whatsapp'
-								defaultValue={defaultValues?.defaultWpp}
-							/>
-						) : null}
-					</Grid>
-				) : null}
-			</Grid>
-		</Grid>
+				<input type='hidden' {...register('isPhoneWpp')} />
+				{hasWhatsApp && !isPhoneWpp && (
+					<WhatsappWrapper>
+						<PhoneInputComponent
+							registerName='whatsapp'
+							required={hasWhatsApp && !isPhoneWpp}
+						/>
+					</WhatsappWrapper>
+				)}
+			</Box>
+		</Box>
 	);
 };

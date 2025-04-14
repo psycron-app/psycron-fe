@@ -1,6 +1,5 @@
-import type { RefObject } from 'react';
+import type { Ref } from 'react';
 import { forwardRef } from 'react';
-import type { FieldValues, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Checkbox as MUICheckbox } from '@mui/material';
 
@@ -8,26 +7,29 @@ import { StyledFormControlLabel } from './Checkbox.styles';
 import type { ICheckboxProps } from './Checkbox.types';
 
 export const Checkbox = forwardRef(
-  <T extends FieldValues>(
-		{ labelKey, register, registerName, onChange, value }: ICheckboxProps<T>,
-		ref:
-      | ((instance: HTMLButtonElement | null) => void)
-      | RefObject<HTMLButtonElement>
-      | null
-      | undefined
+	(
+		{ labelKey, register, checked, onChange, shouldBold }: ICheckboxProps,
+		ref: Ref<HTMLInputElement>
 	) => {
-  	const { t } = useTranslation();
+		const { t } = useTranslation();
 
-  	return (
-  		<StyledFormControlLabel
-  			control={<MUICheckbox ref={ref} />}
-  			label={t(labelKey)}
-  			onChange={onChange}
-  			value={value}
-  			{...(register ? register(registerName as Path<T>) : null)}
-  		/>
-  	);
-  }
+		const isControlled = checked !== undefined;
+
+		return (
+			<StyledFormControlLabel
+				shouldBold={shouldBold}
+				control={
+					<MUICheckbox
+						inputRef={ref}
+						{...(register ? register : {})}
+						checked={isControlled ? checked : undefined}
+						onChange={isControlled ? onChange : undefined}
+					/>
+				}
+				label={t(labelKey)}
+			/>
+		);
+	}
 );
 
 Checkbox.displayName = 'Checkbox';

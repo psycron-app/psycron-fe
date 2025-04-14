@@ -1,10 +1,19 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { Box, IconButton } from '@mui/material';
-import { useUserDetails } from '@psycron/context/user/UserDetailsContext';
+import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
+import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import useClickOutside from '@psycron/hooks/useClickoutside';
 import useViewport from '@psycron/hooks/useViewport';
-import { LOGOUT } from '@psycron/pages/urls';
+import {
+	APPOINTMENTS,
+	DASHBOARD,
+	EDITUSERPATH,
+	LOGOUT,
+	PATIENTS,
+	PAYMENTS,
+} from '@psycron/pages/urls';
 
 import {
 	Calendar,
@@ -18,6 +27,7 @@ import {
 	UserSettings,
 } from '../icons';
 import { LogoColor } from '../icons/brand/LogoColor';
+import { Localization } from '../localization/Localization';
 
 import { Menu } from './menu/Menu';
 import {
@@ -32,16 +42,36 @@ import {
 
 export const Navbar = () => {
 	const { t } = useTranslation();
-
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const { isMobile, isTablet } = useViewport();
-
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-	const { toggleUserDetails } = useUserDetails();
+
+	const [isAppointmentTipOpen, setIsAppointmentTipOpen] =
+		useState<boolean>(true);
+
+	const { toggleUserDetails, userDetails } = useUserDetails();
+
+	const { isAvailabilityDatesEmpty } = useAvailability();
+
+	const { pathname } = useLocation();
 
 	useClickOutside(dropdownRef, () => setIsMenuOpen(false));
 
-	const handleMenuClick = () => {
+	useEffect(() => {
+		if (
+			isAvailabilityDatesEmpty &&
+			!(pathname.includes('appointments') || pathname.includes('availability'))
+		) {
+			setIsAppointmentTipOpen(true);
+		} else {
+			setIsAppointmentTipOpen(false);
+		}
+	}, [isAvailabilityDatesEmpty, pathname]);
+
+	const handleMenuClick = (
+		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+	) => {
+		e.stopPropagation();
 		setIsMenuOpen((prevIsMenuOpen) => !prevIsMenuOpen);
 	};
 
@@ -49,28 +79,33 @@ export const Navbar = () => {
 		{
 			name: t('components.navbar.dashboard'),
 			icon: <DashboardIcon />,
-			path: '/dashboard',
+			path: DASHBOARD,
 		},
 		{
 			name: t('components.navbar.user-settings'),
 			icon: <UserSettings />,
-			path: '/user',
-			onClick: toggleUserDetails,
+			path: `${EDITUSERPATH}/${userDetails?._id}`,
+			onClick: () => toggleUserDetails(),
 		},
 		{
 			name: t('globals.patients'),
 			icon: <PatientList />,
-			path: '/patients',
+			path: PATIENTS,
+			disabled: true,
 		},
 		{
 			name: t('globals.billing-manager'),
 			icon: <Payment />,
-			path: '/payments',
+			path: PAYMENTS,
+			disabled: true,
 		},
 		{
-			name: t('globals.appointments-manager'),
+			name: isAvailabilityDatesEmpty
+				? t('globals.appointments-manager')
+				: t('globals.appointments'),
 			icon: <Calendar />,
-			path: '/appointments',
+			path: APPOINTMENTS,
+			open: isAppointmentTipOpen,
 		},
 	];
 
@@ -78,7 +113,7 @@ export const Navbar = () => {
 		{
 			name: t('globals.change-language'),
 			icon: <Language />,
-			path: '/change-language',
+			component: <Localization />,
 		},
 		{ name: t('globals.help'), icon: <Help />, path: '/help-center' },
 		{ name: t('globals.logout'), icon: <Logout />, path: LOGOUT },
@@ -93,12 +128,12 @@ export const Navbar = () => {
 							<LogoColor />
 						</ColoredLogo>
 						<MobileNavbarMenu>
-							<IconButton onClick={handleMenuClick}>
+							<IconButton onMouseDown={handleMenuClick}>
 								<MenuIcon />
 							</IconButton>
 						</MobileNavbarMenu>
 					</MobileNavbarWrapper>
-					{isMenuOpen ? (
+					{isMenuOpen && (
 						<FloatingMobileNavbar ref={dropdownRef}>
 							<Box>
 								<Menu
@@ -116,7 +151,7 @@ export const Navbar = () => {
 								/>
 							</MobileNavbarFooter>
 						</FloatingMobileNavbar>
-					) : null}
+					)}
 				</>
 			) : (
 				<NavbarWrapper>
@@ -124,7 +159,7 @@ export const Navbar = () => {
 						<LogoColor />
 					</ColoredLogo>
 					<Box>
-						<Menu items={menuItems} isFooterIcon />
+						<Menu items={menuItems} />
 					</Box>
 					<NavbarFooterIcons>
 						<Menu items={footerItems} />

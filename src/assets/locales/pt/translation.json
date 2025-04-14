@@ -11,12 +11,15 @@
 		"patients-manager": "Genrecie seus pacientes",
 		"billing-manager": "Gerencie seus pagamentos",
 		"subscription-manager": "Gerencie sua assinatura",
+		"appointments": "Atendimentos",
 		"appointments-manager": "Gerencie seus atendimentos",
 		"change-language": "Mude o idioma",
-		"help": "Centro de ajuda",
+		"help": "Centro de suporte",
 		"logout": "Sair",
 		"plan": "Plano",
 		"cancel": "Cancelar",
+		"delete": "Excluir",
+		"edit": "Alterar",
 		"date-time-format": "{{format}}",
 		"time-remaining": {
 			"days": "Em {{count}} dia(s)",
@@ -28,18 +31,64 @@
 		"paused": "Pausada",
 		"proceed": "Continuar",
 		"resume": "Retomar",
+		"reason": "Motivo",
+		"global-reason": "Motivo geral",
+		"custom-reason": "Descreva o motivo",
+		"select": "Selecione",
+		"unselect": "Desmarcar",
 		"error": {
 			"already-subscribed": "Você já está na nossa lista de espera",
-			"internal-server-error": "Algo aconteceu errado, tente novamente mais tarde"
+			"internal-server-error": "Algo aconteceu errado, tente novamente mais tarde",
+			"invalid-user": "Email ou senha invalidos"
 		},
 		"success": {
 			"subscribed": "Você foi inscrito com sucesso. Por favor verifique o seu -mail!"
-		}
+		},
+		"date": "Data",
+		"time": "Hora",
+		"at": "às",
+		"date-time": "Data e Hora: ",
+		"therapist": "Terapeuta",
+		"appointment-status": {
+			"booked": "Confirmado",
+			"available": "Disponível",
+			"onhold": "Em espera",
+			"blocked": "Bloqueado",
+			"cancelled": "Cancelado"
+		},
+		"contacts": "Contatos",
+		"starts": "Começa às",
+		"ends": "Termina às",
+		"time-range": {
+			"time-from-to": "das {{start}} às {{end}}",
+			"time-range-date": "{{date}} das {{start}} às {{end}}",
+			"your-time": "Seu horário local",
+			"patient-time": "Horário do paciente",
+			"therapist-time": "Horário do terapeuta"
+		},
+		"notification": {
+			"email": "Enviar e-mail",
+			"phone": "Ligar",
+			"whatsapp": "Enviar WhatsApp"
+		},
+		"cancellation-title": "Por favor nos informe o motivo do cancelamento da sua consulta",
+		"cancellation-reason": {
+			"1": "Emergência (Questão Pessoal/Saúde)",
+			"2": "Conflito de Agenda",
+			"3": "Problemas Financeiros",
+			"4": "Questões de Saúde Mental",
+			"5": "Não Comparecimento",
+			"6": "Consulta Encerrada",
+			"7": "Outro"
+		},
+		"cancellation-other-title": "Por favor especifique o motivo",
+		"status": "Disponibilidade"
 	},
 	"components": {
 		"form": {
 			"confirm-password": "Confirmar senha",
 			"keep-loggedin": "Por favor, mantenha-me conectado",
+			"not-valid": "Alguns campos estão faltando",
 			"signup": {
 				"title": "Cadastre-se",
 				"firstName": "Nome",
@@ -50,7 +99,8 @@
 			"signin": {
 				"title": "Entrar",
 				"dont-have-acc": "Você ainda não tem uma conta?",
-				"signup-here-link": "Cadastre-se aqui"
+				"signup-here-link": "Cadastre-se aqui",
+				"forgot-password": "Esqueceu a sua senha?"
 			},
 			"validation": {
 				"required": "{{name}} é um campo obrigatório",
@@ -85,6 +135,11 @@
 				"select-label": "País",
 				"phone-num-label": "Número de {{registerName}}",
 				"phone-number-guide": "Por favor, forneça seu número de telefone com o código da cidade"
+			},
+			"text": {
+				"first-name": "Seu primeiro nome",
+				"last-name": "Seu último sobrenome",
+				"email": "Seu e-mail"
 			}
 		},
 		"navbar": {
@@ -94,7 +149,10 @@
 		"user-details": {
 			"edit": "Editar detalhes",
 			"edit-contacts": "Editar contatos",
-			"change": "Alterar {{name}}"
+			"change": "Alterar {{name}}",
+			"save": "Salvar",
+			"address-not-found": "Nenhum endereço cadastrado. Adicione suas informações.",
+			"detail-not-found": "{{detail}} não cadastrado ainda"
 		},
 		"dashboard": {
 			"card": {
@@ -102,6 +160,9 @@
 				"delay-confirmation": "Você tem certeza que quer pausar o cronômetro?",
 				"pause": "Pausar cronômetro",
 				"session-progress": "Progresso da sessão:"
+			},
+			"availability-card": {
+				"first-availability": "Crie sua disponibilidade de agenda aqui"
 			}
 		},
 		"appointments": {
@@ -139,19 +200,71 @@
 		"header": {
 			"join": "Inscreva-se",
 			"benefits": "Utilidades",
-			"about": "Sobre nós"
+			"contact": "Contato",
+			"language": "Idioma"
 		},
 		"link": {
 			"navigate": {
 				"back": "Voltar",
-				"next": "Prosseguir"
+				"next": "Prosseguir",
+				"finish": "Finalizar",
+				"confirm": "Confirmar",
+				"cancel": "Cancelar"
+			}
+		},
+		"footer": {
+			"contact": "Quer entrar em contato? <a>Você pode nos encontrar aqui</a>",
+			"find-me": "Você pode nos encontrar aqui",
+			"credit": {
+				"illustration": "Ilustrações por <owner>Icons 8</owner> de <page>Ouch!</page>"
+			}
+		},
+		"share-button": {
+			"alert": {
+				"success": "Compartilhado com sucesso!",
+				"success-copy": "Link copiado com sucesso!",
+				"error": "Erro ao compartilhar, tente novamente mais tarde.",
+				"error-copy": "Erro ao copiar o link, tente novamente mais tarde."
 			},
-			"footer": {
-				"contact": "Quer entrar em contato? <a>Você pode me encontrar aqui</a>",
-				"find-me": "Você pode me encontrar aqui",
-				"credit": {
-					"illustration": "Ilustrações por <owner>Icons 8</owner> de <page>Ouch!</page>"
+			"tooltip-tile": "Compartilhar {{with}}",
+			"share-with-patients": "com seus pacientes",
+			"share-infos": {
+				"availability": {
+					"title": "{{therapistName}} compartilhou com você a disponibilidade",
+					"text": "Entre aqui para agendar o seu horário"
 				}
+			}
+		},
+		"agenda": {
+			"modal": "Você está marcando a sua consulta para {{appointment}}",
+			"your-details": "Seus detalhes",
+			"next-week": "Próxima semana",
+			"previous-week": "Semana anterior",
+			"today": "Hoje",
+			"Month": "Mês",
+			"appointment-details": {
+				"title": "Detalhes da sessão",
+				"mailto-subject": "🔔 Sobre sua consulta com {{therapistName}} 🔔",
+				"whatsapp-subject": "Olá, tudo bem? Estou enviando essa mensagem sobre sua consulta comigo, {{therapisName}}",
+				"next-sessions": "Outras sessões",
+				"edit-patient-details": "Alterar detalhes do paciente",
+				"edit-patient-appointment": "Alterar sessão",
+				"edit-availability": "Alterar disponibilidade",
+				"text-status": "Esse horário está {{status}}"
+			},
+			"edit-appointment": {
+				"title": "Editar consulta",
+				"confirmation": "Tem certeza de que quer reagendar esta consulta?"
+			},
+			"cancel-appointment": {
+				"title": "Cancelar consulta(s)",
+				"select-all": "{{select}} Todas",
+				"global-reason": "Por favor, selecione um motivo geral:",
+				"confirmation": "Você tem certeza que deseja cancelar todas as consultas?",
+				"review": "Revise as datas que você selecionou"
+			},
+			"book-appointment": {
+				"title": "Agendando sua consulta"
 			}
 		}
 	},
@@ -192,9 +305,164 @@
 			}
 		},
 		"not-found": {
-			"title": "Eita, algo deu errado!",
+			"title": "Oops, algo deu errado!",
 			"sub-title": "Mas relaxa que já estamos correndo atrás disso!",
 			"note": "Pois é... prometo que estamos :)"
+		},
+		"unsubscribe": {
+			"title": "Até logo, {{email}}!",
+			"body-text": "Agradecemos por fazer parte da nossa jornada. Embora a gente fique triste em ver você partir, entendemos completamente sua decisão. Continuaremos trabalhando duro para oferecer o melhor que podemos e, lembre-se, estaremos sempre com as portas abertas para você, sempre que quiser voltar.",
+			"see-you": "Esperamos você de volta logo logo! ❤️",
+			"confirm": "Clique aqui para completar"
+		},
+		"reset-password": {
+			"reset": "Resetar senha",
+			"change-password": "Alterar senha",
+			"password-rule": "A sua senha deve conter no mínimo:",
+			"password-example": "Exemplo:",
+			"item-letter": "Uma letra {{rule}}",
+			"item-number": "Um número {{rule}}",
+			"item-special": "Um caractere especial {{rule}}",
+			"item-minimum": "9 dígitos",
+			"current-password": "Senha atual"
+		},
+		"availability": {
+			"wizard": {
+				"wizard-items": {
+					"intro": {
+						"label": "Introdução",
+						"title": "Vamos configurar sua disponibilidade. Podemos começar?",
+						"alert": "Você vai precisar finalizar a sua configuração de disponibilidade depois"
+					},
+					"weekdays": {
+						"label": "Escolha os dias da semana",
+						"title": "Por favor nos informe os dias no qual você costuma atender os seus pacientes."
+					},
+					"duration": {
+						"label": "Duração da consulta",
+						"title": "Por favor nos informe quanto tempo dura a sua consulta."
+					},
+					"week-slots": {
+						"label": "Horários em uma semana"
+					}
+				},
+				"intro": {
+					"options": {
+						"proceed": "Sim!",
+						"finish-later": "Deixar para depois"
+					}
+				},
+				"availability-days": {
+					"days": {
+						"mon": "Segunda",
+						"tue": "Terça",
+						"wed": "Quarta",
+						"thu": "Quinta",
+						"fri": "Sexta"
+					},
+					"options": {
+						"all": "Incluir todos os dias",
+						"weekends": "Excluir fins de semana",
+						"specific": "Selecionar dias específicos"
+					}
+				},
+				"duration": {
+					"label": "Duração da consulta",
+					"note": "Caso você tenha mais de um tipo de consulta, nos informe a duração que você mais utiliza. Você poderá alterar isso no futuro, sem maiores problemas!"
+				},
+				"hours": {
+					"no-session": "Nenhuma sessão disponível"
+				},
+				"modal-title": "Repita sua disponibilidade semanal",
+				"modal-info": "Por favor, escolha uma das opções abaixo. Se você selecionar 'semanal,' sua disponibilidade será repetida até o final do mês. Se escolher 'mensal,' ela será repetida até o final do ano.",
+				"complete": "Sessão de disponibilidade concluída!"
+			},
+			"agenda": {
+				"status": {
+					"available": "Disponível",
+					"unavailable": "Indisponível",
+					"booked": "Reservado",
+					"empty": "Vazio",
+					"blocked": "Bloqueado",
+					"cancelled": "Cancelado",
+					"onhold": "Em espera"
+				},
+				"therapist-edit-modal": {
+					"title": "Altere sua disponibilidade"
+				}
+			}
+		},
+		"book-appointment": {
+			"title": "Horários Disponíveis de {{therapisName}}",
+			"description": "Agende facilmente sua consulta. Veja os horários disponíveis e escolha o melhor momento para marcar sua sessão de forma rápida e prática.",
+			"confirmation-should-replicate": "Deseja usar esse dia como sua escolha padrão para futuras consultas?",
+			"recurrence-pattern": {
+				"month": "Toda semana até o fim do mês",
+				"year": "Toda semana até o fim do ano",
+				"single": "Apenas esta consulta",
+				"all-future": "Todas as próximas consultas"
+			},
+			"confirm-edit": "Por favor, confirme que deseja alterar sua consulta de {{previousDate}} para:",
+			"edit-recurrence-title": "Você deseja alterar apenas esta consulta ou todas as próximas?",
+			"edit-appointment-title": "Você está alterando a sua consulta do dia {{formattedDate}} às {{startTime}}."
+		},
+		"booking-confirmation": {
+			"title": "Sua consulta com <strong>{{therapistName}}</strong> está confirmada 🎉",
+			"title-plain": "Sua consulta com {{therapistName}} está confirmada 🎉",
+			"subtitle": "Estamos ansiosos para te ver em breve!",
+			"whats-next": "<strong>{{therapistName}}</strong> entrará em contato com mais detalhes quando estiver perto da consulta",
+			"advise": "Pedimos para que você esteja disponível alguns minutos antes da consula começar",
+			"reschedule": "Você pode remarcar a sua consulta até 1 dia de antecedência.",
+			"cancel": "Para remarcar ou cancelar, por favor <strong>clique aqui</strong>",
+			"help": "Caso tenha alguma dúvida ou precise de ajuda, entre em contato conosco via ",
+			"thanks": "Estamos aqui para te apoiar. Aguardamos sua consulta!",
+			"cancel-or-edit": {
+				"title": "Deseja fazer alguma mudança?",
+				"sub": "Você pode reagendar ou cancelar esta sessão agora.",
+				"appointment-info": "Sua consulta no dia {{date}} às {{startTime}}"
+			},
+			"no-appointments-title": "Você ainda não tem nenhuma consulta marcada",
+			"no-appointments-link": "Clique aqui para agendar suas consultas"
+		},
+		"appointment-list": {
+			"date": "Data",
+			"starts": "Começa",
+			"ends": "Termina",
+			"modal": {
+				"title": "Tem certeza que você deseja {{action}} esta sessão?"
+			},
+			"description": "Aqui você poderá configurar seus horários para consultas e compartilhá-los com seus pacientes. Vamos guiar você por um processo simples para definir seus horários de atendimento, de maneira que eles sejam replicados ao longo das semanas ou até o final do ano. O processo é flexível e você poderá ajustar as informações a qualquer momento no futuro.",
+			"guide": {
+				"step1": {
+					"title": "Decida se quer começar agora ou depois",
+					"description": "Se preferir, você pode voltar a esta etapa mais tarde. Sabemos que nem sempre é possível configurar tudo de imediato, então você terá a opção de retomar o processo no momento que for mais conveniente."
+				},
+				"step2": {
+					"title": "Defina seus dias de folga",
+					"description": "Nos informe quais dias da semana você não estará disponível para consultas. Esses dias ficarão bloqueados, mas poderão ser alterados no futuro, se necessário."
+				},
+				"step3": {
+					"title": "Duração da sessão",
+					"description": "Informe a duração média das suas consultas. Caso ofereça mais de um tipo de sessão, vamos definir um padrão agora e você poderá ajustar os tempos conforme o paciente e o tipo de terapia."
+				},
+				"step4": {
+					"title": "Escolha seus horários",
+					"description": "De maneira visual e interativa, você poderá selecionar os horários em que estará disponível para consultas ao longo da semana. É um processo flexível: se suas preferências mudarem, você pode ajustar seus horários a qualquer momento."
+				}
+			},
+			"session-past": "Consulta passada"
+		},
+		"cancel-appointment": {
+			"title": "Cancelamento de Consulta(s)",
+			"sub-title": "Por favor selecione a(s) consulta(s) que você quer cancelar"
+		},
+		"edit-appointment": {
+			"title": "Altere a Consulta",
+			"sub-title": "Por favor selecione a data que deseja alterar"
+		},
+		"add-patient": {
+			"title": "Adicione um Novo Paciente",
+			"sub-title": "Preencha o formulário abaixo com os detalhes da pessoa"
 		}
 	}
 }

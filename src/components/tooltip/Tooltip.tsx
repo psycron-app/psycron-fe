@@ -6,8 +6,10 @@ export const Tooltip = ({
 	children,
 	placement,
 	title,
+	open,
+	disabled,
 	...rest
-}: TooltipProps) => {
+}: TooltipProps & { disabled?: boolean }) => {
 	const Title = (
 		<Text isFirstUpper fontSize={'0.7rem'}>
 			{title}
@@ -15,8 +17,24 @@ export const Tooltip = ({
 	);
 
 	return (
-		<MUITooltip arrow placement={placement} title={Title} {...rest}>
-			<IconButton>{children}</IconButton>
+		<MUITooltip
+			arrow
+			placement={placement}
+			title={Title}
+			open={open}
+			{...rest}
+			disableHoverListener={disabled}
+			disableFocusListener={disabled}
+			disableTouchListener={disabled}
+		>
+			<span
+				style={{
+					cursor: disabled ? 'not-allowed' : 'pointer',
+					display: 'flex',
+				}}
+			>
+				<IconButton disabled={disabled}>{children}</IconButton>
+			</span>
 		</MUITooltip>
 	);
 };

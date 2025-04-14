@@ -23,8 +23,7 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 			fontSize: '1em',
 			fontWeight: '500',
 			color: textPrimary,
-			boxShadow: shadowMain,
-			textTransform: 'capitalize',
+			textTransform: 'inherit',
 			height: '40px',
 		},
 		sizeLarge: {
@@ -50,26 +49,28 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 				backgroundColor: primary.action.press,
 				boxShadow: shadowPress,
 			},
-			'&:disabled': {
+			'&.Mui-disabled': {
 				backgroundColor: primary.action.disabled,
 				color: textDisabled,
 				filter: shadowDisabled,
+				pointerEvents: 'none',
 			},
 		},
 		containedSecondary: {
 			backgroundColor: secondary.main,
 			'&:hover': {
 				backgroundColor: secondary.action.hover,
-				boxShadow: shadowMain,
+				boxShadow: shadowPress,
 			},
 			'&:focus': {
 				backgroundColor: secondary.action.press,
 				boxShadow: shadowPress,
 			},
-			'&:disabled': {
+			'&.Mui-disabled': {
 				backgroundColor: secondary.action.disabled,
 				color: textDisabled,
 				filter: shadowDisabled,
+				pointerEvents: 'none',
 			},
 		},
 		outlinedPrimary: {
@@ -77,6 +78,7 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 			boxSizing: 'border-box',
 			backgroundColor: 'transparent',
 			'&:hover': {
+				backgroundColor: primary.action.hover,
 				border: generateBorder(primary.action.hover),
 				boxShadow: shadowMain,
 			},
@@ -84,10 +86,11 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 				border: generateBorder(primary.action.press),
 				boxShadow: shadowPress,
 			},
-			'&:disabled': {
+			'&.Mui-disabled': {
 				border: generateBorder(primary.action.disabled),
 				color: textDisabled,
 				filter: shadowDisabled,
+				pointerEvents: 'none',
 			},
 		},
 		outlinedSecondary: {
@@ -95,6 +98,7 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 			backgroundColor: 'transparent',
 			boxSizing: 'border-box',
 			'&:hover': {
+				backgroundColor: secondary.action.hover,
 				border: generateBorder(secondary.action.hover),
 				boxShadow: shadowMain,
 			},
@@ -102,10 +106,11 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 				border: generateBorder(secondary.action.press),
 				boxShadow: shadowPress,
 			},
-			'&:disabled': {
+			'&.Mui-disabled': {
 				border: generateBorder(secondary.action.disabled),
 				filter: shadowDisabled,
 				color: textDisabled,
+				pointerEvents: 'none',
 			},
 		},
 	};

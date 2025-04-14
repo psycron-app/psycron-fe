@@ -1,15 +1,30 @@
 import ReactGA from 'react-ga4';
+import type { Locale } from 'date-fns';
 import {
+	addDays,
 	addMinutes,
 	differenceInDays,
 	differenceInHours,
 	differenceInMinutes,
 	format,
+	startOfDay,
+	startOfToday,
+	startOfWeek,
 } from 'date-fns';
+import { de, enUS, es, fr, ptBR } from 'date-fns/locale';
+import { format as TZFormat, toZonedTime } from 'date-fns-tz';
 import type { TFunction } from 'i18next';
 
 export * from './env';
 export * from './urls';
+
+const locales: Record<string, Locale> = {
+	en: enUS,
+	pt: ptBR,
+	es: es,
+	fr: fr,
+	de: de,
+};
 
 export const formatDateTime = (
 	dateTimeString: string,
@@ -20,6 +35,11 @@ export const formatDateTime = (
 		date,
 		t('globals.date-time-format', { format: 'MMMM d, yyyy h:mmaaa' })
 	);
+};
+
+export const formatDate = (date: Date, locale: string): string => {
+	const selectedLocale = locales[locale] || enUS;
+	return format(date, 'EEEE, dd/MM/yy', { locale: selectedLocale });
 };
 
 export const getTimeRemaining = (
@@ -81,4 +101,101 @@ export const scrollToSection = (id: string) => {
 	if (element) {
 		element.scrollIntoView({ behavior: 'smooth' });
 	}
+};
+
+export const generateTimeSlots = (duration: number) => {
+	const slots = [];
+	let currentTime = startOfDay(new Date());
+
+	while (currentTime.getDate() === startOfDay(new Date()).getDate()) {
+		slots.push(format(currentTime, 'HH:mm'));
+		currentTime = addMinutes(currentTime, duration);
+	}
+
+	return slots;
+};
+
+export const generateWeekDays = (startDate: Date) => {
+	const startOfWeekMonday = startOfWeek(startDate, {
+		weekStartsOn: 0,
+	});
+
+	return Array.from({ length: 7 }, (_, i) => addDays(startOfWeekMonday, i));
+};
+
+export const getWeekDays = (today: Date, dateLocale: Locale) => {
+	const start = startOfWeek(today, { locale: dateLocale });
+	return Array.from({ length: 7 }).map((_, index) => {
+		const day = addDays(start, index);
+		return format(day, 'EEEE', { locale: dateLocale }).charAt(0).toUpperCase();
+	});
+};
+
+export const generateUserTimeZone = () => {
+	return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};
+
+export const formatTimeToTimeZone = (
+	time: string,
+	date: Date,
+	timeZone: string
+): string => {
+	// Example: '19:00', 'Thu Oct 17 2024 19:00:00 GMT+0300', Europe/Tallinn
+	const dateISO = new Date(date).toISOString().split('T')[0];
+	const dateTimeString = `${dateISO}T${time}:00`;
+
+	const zonedDate = toZonedTime(new Date(dateTimeString), timeZone);
+
+	const is12HourFormat =
+		timeZone.includes('America') || timeZone === 'US/Eastern';
+
+	return TZFormat(zonedDate, is12HourFormat ? 'hh:mm a' : 'HH:mm', {
+		timeZone,
+	});
+};
+
+export const formatSessionDateToLocale = (
+	dateString: string,
+	locale: string
+): string => {
+	const date = new Date(dateString);
+
+	if (isNaN(date.getTime())) {
+		throw new Error('Data inválida');
+	}
+
+	const formattedTime = new Intl.DateTimeFormat(locale, {
+		hour: 'numeric',
+		minute: 'numeric',
+		hour12: true,
+	}).format(date);
+
+	if (locale === 'en') {
+		return `${date.toDateString()} at ${formattedTime}`;
+	}
+
+	if (locale === 'pt') {
+		const dayOfWeek = new Intl.DateTimeFormat('pt', { weekday: 'long' }).format(
+			date
+		);
+		const formattedDate = `${dayOfWeek} (${date.toLocaleDateString('pt', {
+			day: '2-digit',
+			month: '2-digit',
+		})})`;
+		return `${formattedDate} às ${formattedTime}`;
+	}
+
+	return new Intl.DateTimeFormat(locale, {
+		dateStyle: 'full',
+		timeStyle: 'short',
+	}).format(date);
+};
+export const isCurrentDay = (day: Date) => {
+	const today = startOfToday();
+
+	return (
+		day.getDate() === today.getDate() &&
+		day.getMonth() === today.getMonth() &&
+		day.getFullYear() === today.getFullYear()
+	);
 };

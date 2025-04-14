@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-
-import { Select } from '../Select/Select';
+import { Select } from '@psycron/components/select/Select';
+import Cookies from 'js-cookie';
 
 import { StyledSelectWrapper } from './Localization.styles';
+import type { ILocalization } from './Localization.types';
 
-const LANGKEY = 'i18nextLng';
+export const LANGKEY = 'i18nextLng';
 
-export const Localization = () => {
+export const Localization = ({ hasMargin }: ILocalization) => {
 	const { i18n } = useTranslation();
 	const { locale } = useParams<{ locale: string }>();
 	const navigate = useNavigate();
@@ -27,7 +28,7 @@ export const Localization = () => {
 	};
 
 	const getDefaultLang = () => {
-		const storedLang = localStorage.getItem(LANGKEY);
+		const storedLang = Cookies.get(LANGKEY);
 		if (storedLang) {
 			return storedLang.toLowerCase();
 		} else {
@@ -46,14 +47,14 @@ export const Localization = () => {
 		const newLang = lng.toLowerCase();
 		i18n.changeLanguage(newLang);
 		setDefaultLang(newLang);
-		localStorage.setItem(LANGKEY, newLang);
+		Cookies.set(LANGKEY, newLang, { expires: 7 });
 
 		const newPath = location.pathname.replace(`/${locale}`, `/${newLang}`);
 		navigate(newPath);
 	};
 
 	useEffect(() => {
-		const storedLang = localStorage.getItem(LANGKEY);
+		const storedLang = Cookies.get(LANGKEY);
 		if (storedLang && i18n.language !== storedLang) {
 			changeLanguage(storedLang.toLowerCase());
 		} else if (locale && i18n.language !== locale) {
@@ -63,8 +64,9 @@ export const Localization = () => {
 	}, [i18n, locale]);
 
 	return (
-		<StyledSelectWrapper>
+		<StyledSelectWrapper hasMargin={hasMargin}>
 			<Select
+				name='language-select'
 				value={defaultLang.split('-')[0]}
 				onChangeSelect={(e) => changeLanguage(e.target.value as string)}
 				items={availableLanguages}

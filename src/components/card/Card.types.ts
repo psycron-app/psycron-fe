@@ -4,11 +4,13 @@ import type { CardActionsProps } from './CardActions/CardActions.types';
 import type { CardTitleProps } from './CardTitle/CardTitle.types';
 
 export type CardTypes = {
-    cardTitle: boolean;
-    children: ReactNode;
+	cardTitle: boolean;
+	children: ReactNode;
 };
 
 export interface CardProps extends CardTypes {
-    cardActionsProps: CardActionsProps;
-    cardTitleProps: CardTitleProps;
+	cardActionsProps: CardActionsProps;
+	cardTitleProps: CardTitleProps;
+	isLoading?: boolean;
+	onClose?: () => void;
 }

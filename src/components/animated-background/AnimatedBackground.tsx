@@ -1,3 +1,5 @@
+import type { RepeatType } from 'framer-motion';
+
 import {
 	AnimatedBackgroundWrapper,
 	GradientBackground,
@@ -5,49 +7,54 @@ import {
 } from './AnimatedBackground.styles';
 
 export const AnimatedBackground = () => {
-	const getRandomPosition = (max: number) =>
-		Math.floor(Math.random() * max) - max / 2;
+	const getRandomPosition = (max: number) => Math.random() * max - max / 2;
 
 	const primaryAnimation = {
 		animate: {
 			x: [
-				getRandomPosition(500),
-				getRandomPosition(500),
-				getRandomPosition(500),
+				0,
+				getRandomPosition(400),
+				getRandomPosition(400),
+				getRandomPosition(400),
+				0,
 			],
 			y: [
-				getRandomPosition(500),
-				getRandomPosition(500),
-				getRandomPosition(500),
+				0,
+				getRandomPosition(400),
+				getRandomPosition(400),
+				getRandomPosition(400),
+				0,
 			],
-			scale: [1, 0.8, 1],
-			rotate: [0, 180, 360],
-			transition: {
-				duration: 7,
-				ease: [0.47, 0, 0.745, 0.715],
-				repeat: Infinity,
-			},
+			scale: [1, 1.1, 0.9, 1.2, 1],
+			rotate: [0, 120, 240, 360],
 		},
+	};
+
+	const transition = {
+		duration: 7,
+		ease: 'easeInOut',
+		repeat: Infinity,
+		repeatType: 'loop' as RepeatType,
 	};
 
 	const secondaryAnimation = {
 		animate: {
 			x: [
-				getRandomPosition(500),
-				getRandomPosition(500),
-				getRandomPosition(500),
+				0,
+				getRandomPosition(400),
+				getRandomPosition(400),
+				getRandomPosition(400),
+				0,
 			],
 			y: [
-				getRandomPosition(500),
-				getRandomPosition(500),
-				getRandomPosition(500),
+				0,
+				getRandomPosition(400),
+				getRandomPosition(400),
+				getRandomPosition(400),
+				0,
 			],
-			rotate: [0, -180, -360],
-			transition: {
-				duration: 7,
-				ease: [0.47, 0, 0.745, 0.715],
-				repeat: Infinity,
-			},
+			scale: [1, 1.2, 0.8, 1.1, 1],
+			rotate: [0, -120, -240, -360],
 		},
 	};
 
@@ -58,11 +65,13 @@ export const AnimatedBackground = () => {
 					gradient='primary'
 					variants={primaryAnimation}
 					animate='animate'
+					transition={transition}
 				/>
 				<GradientBlob
 					gradient='secondary'
 					variants={secondaryAnimation}
 					animate='animate'
+					transition={transition}
 				/>
 			</GradientBackground>
 		</AnimatedBackgroundWrapper>

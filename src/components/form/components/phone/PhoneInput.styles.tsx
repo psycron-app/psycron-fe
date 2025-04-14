@@ -1,29 +1,43 @@
 import styled from '@emotion/styled';
-import { TextField } from '@mui/material';
 import { palette } from '@psycron/theme/palette/palette.theme';
+import { shadowInnerPress } from '@psycron/theme/shadow/shadow.theme';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
-export const CountryFlag = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+export const StyledPhoneInput = styled.div`
+	display: flex;
+	align-items: center;
+	padding: 0 ${spacing.small};
+	border-radius: calc(2 * ${spacing.mediumSmall});
+	box-shadow: ${shadowInnerPress};
+	background-color: ${palette.background.default};
+	color: ${palette.text.primary};
+	height: 50px;
+	width: 100%;
 
-    span {
-        font-size: 2rem;
-    }
-    svg {
-        color: ${palette.primary.main};
-    }
-`;
+	.PhoneInputInput {
+		flex: 1;
+		border: none;
+		outline: none;
+		background-color: transparent;
+		color: ${palette.text.primary};
+		font-size: 16px;
+		padding-left: ${spacing.xs};
+	}
 
-export const PhoneNumberField = styled(TextField)`
-    & input[type='number'] {
-        appearance: textfield; /* Firefox */
-    }
+	.PhoneInputCountry {
+		margin-right: ${spacing.xs};
+	}
 
-    & input[type='number']::-webkit-outer-spin-button,
-    & input[type='number']::-webkit-inner-spin-button {
-        -webkit-appearance: none; /* Chrome, Safari, Edge */
-        margin: 0;
-    }
+	.PhoneInputCountryIcon--border {
+		box-shadow: none;
+		background-color: transparent;
+	}
+
+	.PhoneInputCountryIconImg {
+		border-radius: 50%;
+	}
+
+	.PhoneInputCountrySelectArrow {
+		margin-left: ${spacing.xs};
+	}
 `;

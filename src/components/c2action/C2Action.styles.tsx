@@ -15,7 +15,7 @@ import { motion } from 'framer-motion';
 export const C2ActionWrapper = styled(Box)`
 	display: flex;
 	flex-direction: column;
-	padding: ${spacing.mediumSmall};
+	padding: ${spacing.small};
 	border-radius: ${spacing.medium};
 	box-shadow: ${shadowMain};
 	border: 1px solid rgba(255, 255, 255, 0.3);
@@ -30,7 +30,7 @@ export const C2ActionWrapper = styled(Box)`
 	}
 
 	${isTabletMedia} {
-		width: auto;
+		width: 100%;
 	}
 
 	${isMobileMedia} {
@@ -85,14 +85,4 @@ export const HighlightedText = styled('span')`
 
 export const StyledTextField = styled(TextField)`
 	text-align: center;
-
-	& .MuiInputLabel-root.Mui-focused {
-		top: -0.625rem !important;
-		left: -0.625rem !important;
-	}
-
-	& .MuiInputLabel-root.Mui-error {
-		top: -0.625rem !important;
-		left: -0.625rem !important;
-	}
 `;

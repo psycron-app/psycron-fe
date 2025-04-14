@@ -39,7 +39,7 @@ export const SEOProvider: FC<ISEOContextProps> = ({ seo, children }) => {
 				{ogUrl && <meta property='og:url' content={ogUrl} />}
 				{ogType && <meta property='og:type' content={ogType} />}
 				{ogImage && (
-					<meta property='og:image' content={ogImage || defaultOgImage} />
+					<meta property='og:image' content={ogImage ?? defaultOgImage} />
 				)}
 				<meta property='og:site_name' content='Psycron' />
 
@@ -50,7 +50,7 @@ export const SEOProvider: FC<ISEOContextProps> = ({ seo, children }) => {
 					<meta name='twitter:description' content={ogDescription} />
 				)}
 				{ogImage && (
-					<meta name='twitter:image' content={ogImage || defaultOgImage} />
+					<meta name='twitter:image' content={ogImage ?? defaultOgImage} />
 				)}
 
 				{/* Meta tags for WhatsApp */}

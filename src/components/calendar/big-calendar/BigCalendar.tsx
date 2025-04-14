@@ -340,7 +340,6 @@ export const BigCalendar = ({
 				</FormProvider>
 			</Modal>
 			<Modal
-				isLoading={bookAppointmentFromLinkMttnIsLoading}
 				openModal={openBookingModal}
 				title={
 					mode === 'book'

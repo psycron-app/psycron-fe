@@ -406,7 +406,8 @@
 			"edit-appointment-title": "You are editing your appointment on {{formattedDate}} at {{startTime}}."
 		},
 		"booking-confirmation": {
-			"title": "Your Appointment with <strong>{{therapistName}} </strong> is confirmed 🎉",
+			"title": "Your Appointment with <strong>{{therapistName}}</strong> is confirmed 🎉",
+			"title-plain": "Your Appointment with {{therapistName}} is confirmed 🎉",
 			"subtitle": "We're excited to see you soon!",
 			"whats-next": "<strong>{{therapistName}}</strong> will reach out with additional details as the appointment date approaches.",
 			"advise": "Please be available a few minutes early.",

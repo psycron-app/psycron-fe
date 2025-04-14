@@ -408,6 +408,7 @@
 		},
 		"booking-confirmation": {
 			"title": "Sua consulta com <strong>{{therapistName}}</strong> está confirmada 🎉",
+			"title-plain": "Sua consulta com {{therapistName}} está confirmada 🎉",
 			"subtitle": "Estamos ansiosos para te ver em breve!",
 			"whats-next": "<strong>{{therapistName}}</strong> entrará em contato com mais detalhes quando estiver perto da consulta",
 			"advise": "Pedimos para que você esteja disponível alguns minutos antes da consula começar",

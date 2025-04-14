@@ -15,10 +15,11 @@ import { RadioButtonGroup } from '@psycron/components/radio/RadioButton';
 import { Text } from '@psycron/components/text/Text';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { usePatient } from '@psycron/context/patient/PatientContext';
+import { SEOProvider } from '@psycron/context/seo/SEOContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { useAppointmentParams } from '@psycron/hooks/useAppointmentParams';
 import { useCancellationReasons } from '@psycron/hooks/useCancellationReasons';
-import { PATIENTEDITAPPOINTMENT } from '@psycron/pages/urls';
+import { DOMAIN, PATIENTEDITAPPOINTMENT } from '@psycron/pages/urls';
 import { format } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
@@ -180,8 +181,31 @@ export const AppointmentConfirmation = () => {
 	);
 
 	const bookApointmentLink = `${therapistId}/${PATIENTEDITAPPOINTMENT}`;
+
+	const pageTitle = t('page.booking-confirmation.title-plain', {
+		therapistName: `${firstName} ${lastName}`,
+	});
+
+	const pageUrl = `${DOMAIN}/${locale}/${therapistId}/${patientId}/appointment-confirmation`;
+	const imageUrl = `${DOMAIN}/psycron-meta.png`;
+
+	const appointment_confirmation_SEO = {
+		title: pageTitle,
+		description: t('page.book-appointment.description'),
+		canonicalUrl: pageUrl,
+		ogTitle: t('page.landing.seo.ogTitle'),
+		ogDescription: t('page.landing.seo.ogDescription'),
+		ogUrl: pageUrl,
+		ogType: 'website',
+		ogImage: imageUrl,
+		twitterCard: 'summary_large_image',
+		twitterTitle: t('page.landing.seo.ogTitle'),
+		twitterDescription: t('page.landing.seo.ogDescription'),
+		twitterImage: imageUrl,
+	};
+
 	return (
-		<>
+		<SEOProvider seo={appointment_confirmation_SEO}>
 			<ConfirmationPageWrapper>
 				{formattedSessionDates.length ? (
 					<Box pb={5}>
@@ -305,6 +329,6 @@ export const AppointmentConfirmation = () => {
 					</Box>
 				</FormProvider>
 			</Modal>
-		</>
+		</SEOProvider>
 	);
 };

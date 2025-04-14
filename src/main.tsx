@@ -4,7 +4,6 @@ import ReactGA from 'react-ga4';
 import { I18nextProvider } from 'react-i18next';
 import { ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import '@psycron/index.css';
 
@@ -24,7 +23,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 			<I18nextProvider i18n={i18n}>
 				<ThemeProvider theme={theme}>
 					<App />
-					<ReactQueryDevtools initialIsOpen={false} />
 				</ThemeProvider>
 			</I18nextProvider>
 		</QueryClientProvider>

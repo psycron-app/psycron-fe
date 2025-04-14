@@ -11,7 +11,7 @@ const inputOutlinedStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 	return {
 		root: {
 			borderRadius: `calc(2 * ${spacing.mediumSmall})`,
-			height: '50px',
+			// height: '50px',
 			boxShadow: shadowInnerPress,
 			color: text.primary,
 			'::before': {

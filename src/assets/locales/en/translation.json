@@ -11,12 +11,15 @@
 		"patients-manager": "Patients manager",
 		"billing-manager": "Billing manager",
 		"subscription-manager": "Subscription manager",
-		"appointments-manager": "Appointments manager",
+		"appointments": "Appointments",
+		"appointments-manager": "Manage your appointments",
 		"change-language": "Change language",
 		"help": "Help center",
 		"logout": "Logout",
 		"plan": "Plan",
 		"cancel": "Cancel",
+		"delete": "Delete",
+		"edit": "Edit",
 		"date-time-format": "{{format}}",
 		"time-remaining": {
 			"days": "In {{count}} day(s)",
@@ -28,6 +31,11 @@
 		"paused": "Paused",
 		"proceed": "Proceed",
 		"resume": "Resume",
+		"reason": "Reason",
+		"global-reason": "Global reason",
+		"custom-reason": "Describe the reason",
+		"select": "Select",
+		"unselect": "Unselect",
 		"error": {
 			"already-subscribed": "Your email is already subscribed",
 			"internal-server-error": "Something went wrong, please try again later",
@@ -35,12 +43,51 @@
 		},
 		"success": {
 			"subscribed": "You were successfully subscribed. Please check your email!"
-		}
+		},
+		"date": "Date",
+		"time": "Time",
+		"at": "at",
+		"date-time": "Date and Time: ",
+		"therapist": "Therapist",
+		"appointment-status": {
+			"booked": "Booked",
+			"available": "Available",
+			"onhold": "on Hold",
+			"blocked": "Blocked",
+			"cancelled": "Cancelled"
+		},
+		"contacts": "Contacts",
+		"starts": "Starts",
+		"ends": "Ends",
+		"time-range": {
+			"time-from-to": "from {{start}} to {{end}}",
+			"time-range-date": "{{date}} from {{start}} to {{end}}",
+			"your-time": "Your local time",
+			"patient-time": "Patient's time",
+			"therapist-time": "Therapist's time"
+		},
+		"notification": {
+			"email": "Send email",
+			"phone": "Call patient",
+			"whatsapp": "Send WhatsApp message"
+		},
+		"cancellation-title": "Please choose the reason you are cancelling your appointment",
+		"cancellation-reason": {
+			"1": "Emergency (Personal/Health Issue)",
+			"2": "Schedule Conflict",
+			"3": "Financial Issues",
+			"4": "Mental Issues",
+			"5": "No-Show",
+			"6": "Other"
+		},
+		"cancellation-other-title": "Please specify the reason",
+		"status": "Status"
 	},
 	"components": {
 		"form": {
 			"confirm-password": "Confirm password",
 			"keep-loggedin": "Please keep me logged in",
+			"not-valid": "Some fields are missing",
 			"signup": {
 				"title": "Sign up",
 				"firstName": "First name",
@@ -87,6 +134,11 @@
 				"select-label": "Country",
 				"phone-num-label": "{{registerName}} number here",
 				"phone-number-guide": "Please provide a phone number including the city code if applicable."
+			},
+			"text": {
+				"first-name": "Your first name here",
+				"last-name": "Your last name here",
+				"email": "Your email here"
 			}
 		},
 		"navbar": {
@@ -107,6 +159,9 @@
 				"delay-confirmation": "Are you sure you want to pause the timer?",
 				"pause": "Sause timer",
 				"session-progress": "Session progress:"
+			},
+			"availability-card": {
+				"first-availability": "Please create your first availability here"
 			}
 		},
 		"appointments": {
@@ -150,7 +205,10 @@
 		"link": {
 			"navigate": {
 				"back": "Back",
-				"next": "Proceed"
+				"next": "Proceed",
+				"finish": "Finish",
+				"confirm": "Confirm",
+				"cancel": "Cancel"
 			}
 		},
 		"footer": {
@@ -158,6 +216,54 @@
 			"find-me": "Find us here",
 			"credit": {
 				"illustration": "Illustrations by <owner>Icons 8</owner> from <page>Ouch!</page>"
+			}
+		},
+		"share-button": {
+			"alert": {
+				"success": "Shared successfully!",
+				"success-copy": "Link copied successfully!",
+				"error": "Someting went wrong, please try again later.",
+				"error-copy": "We couldn't copy the link, please try again later."
+			},
+			"tooltip-tile": "Share {{with}}",
+			"share-with-patients": "with your patients",
+			"share-infos": {
+				"availability": {
+					"title": "{{therapistName}} shared with you their availability",
+					"text": "Enter here to book an appointment"
+				}
+			}
+		},
+		"agenda": {
+			"modal": "You are booking for {{appointment}}",
+			"your-details": "Your details",
+			"next-week": "Next week",
+			"previous-week": "Previous week",
+			"today": "Today",
+			"month": "Month",
+			"appointment-details": {
+				"title": "Appointment Details",
+				"mailto-subject": "🔔 About your appointment with {{therapistName}} 🔔",
+				"whatsapp-subject": "Hello, how is it going? I am sending this message regarding your appointment with me, {{therapistName}}",
+				"next-sessions": "Other appointments",
+				"edit-patient-details": "Edit Patient Details",
+				"edit-patient-appointment": "Edit appointment",
+				"edit-availability": "Edit availability",
+				"text-status": "This is slot is {{status}}"
+			},
+			"edit-appointment": {
+				"title": "Edit appointment",
+				"confirmation": "Are you sure you want to reschedule this appointment?"
+			},
+			"cancel-appointment": {
+				"title": "Cancel appointment(s)",
+				"select-all": "{{select}} All",
+				"global-reason": "Please, select a global reason:",
+				"confirmation": "Are you sure you want to cancel all appointments?",
+				"review": "Review the dates you selected"
+			},
+			"book-appointment": {
+				"title": "Booking your appointment"
 			}
 		}
 	},
@@ -218,6 +324,144 @@
 			"item-special": "One special character {{rule}}",
 			"item-minimum": "9 characters long",
 			"current-password": "Current password"
+		},
+		"availability": {
+			"wizard": {
+				"wizard-items": {
+					"intro": {
+						"label": "Intro",
+						"title": "Let's setup your availability. Are you ready?",
+						"alert": "You will need to finish your availability setup later"
+					},
+					"weekdays": {
+						"label": "Choose weekdays",
+						"title": "Tell us the days you usually see patients."
+					},
+					"duration": {
+						"label": "Appointment duration",
+						"title": "Let us know how long your sessions are."
+					},
+					"week-slots": {
+						"label": "Weekly time slots"
+					}
+				},
+				"intro": {
+					"options": {
+						"proceed": "Yes!",
+						"finish-later": "Set availability later"
+					}
+				},
+				"availability-days": {
+					"days": {
+						"mon": "Monday",
+						"tue": "Tuesday",
+						"wed": "Wednesday",
+						"thu": "Thursday",
+						"fri": "Friday"
+					},
+					"options": {
+						"all": "Include all days",
+						"weekends": "Don't include weekends",
+						"specific": "Select specific days"
+					}
+				},
+				"duration": {
+					"label": "Appointment duration",
+					"note": "If you have more than one type of appointment, please let us know the duration you use most often. You will be able to change this in the future without any issues!"
+				},
+				"hours": {
+					"no-session": "No session was found"
+				},
+				"modal-title": "Repeat your weekly availability",
+				"modal-info": "Please choose one of the options below. If you pick 'weekly,' your availability will be repeated until the end of the month. If you pick 'monthly,' it will be repeated until the end of the year.",
+				"complete": "Availability created with success"
+			},
+			"agenda": {
+				"status": {
+					"available": "Available",
+					"unavailable": "Unavailable",
+					"booked": "Booked",
+					"empty": "Empty",
+					"blocked": "Blocked",
+					"cancelled": "Cancelled",
+					"onhold": "On hold"
+				},
+				"therapist-edit-modal": {
+					"title": "Edit your availability"
+				}
+			}
+		},
+		"book-appointment": {
+			"title": "{{therapisName}}'s Open Appointments",
+			"description": "Quickly schedule your therapy session. Check available times and choose the best slot to book your appointment easily and conveniently.",
+			"confirmation-should-replicate": "Would you like to set this day as your default choice for future appointments?",
+			"recurrence-pattern": {
+				"month": "Weekly until month ends",
+				"year": "Weekly until year ends",
+				"single": "Only this appointment",
+				"all-future": "All future appointments"
+			},
+			"confirm-edit": "Please confirm that you want to change your appointment from {{previousDate}} to:",
+			"edit-recurrence-title": "Do you want to update only this appointment or all future appointments?",
+			"edit-appointment-title": "You are editing your appointment on {{formattedDate}} at {{startTime}}."
+		},
+		"booking-confirmation": {
+			"title": "Your Appointment with <strong>{{therapistName}}</strong> is confirmed 🎉",
+			"title-plain": "Your Appointment with {{therapistName}} is confirmed 🎉",
+			"subtitle": "We're excited to see you soon!",
+			"whats-next": "<strong>{{therapistName}}</strong> will reach out with additional details as the appointment date approaches.",
+			"advise": "Please be available a few minutes early.",
+			"reschedule": "You can reschedule your appointment up to 1 day before the session.",
+			"cancel": "To reschedule or cancel , please <strong>click here</strong>",
+			"help": "If you have any questions or need assistance, feel free to contact us at",
+			"thanks": "Thank you! We’re here to support you. Looking forward to your session!",
+			"cancel-or-edit": {
+				"title": "Need to make changes?",
+				"sub": "You can either reschedule or cancel your appointment here.",
+				"appointment-info": "Your appointment on {{date}} at {{startTime}}"
+			},
+			"no-appointments-title": "You dont have any appointments yet",
+			"no-appointments-link": "Click here to start booking an appointment"
+		},
+		"appointment-list": {
+			"date": "Date",
+			"starts": "Starts at",
+			"ends": "Ends at",
+			"modal": {
+				"title": "Are you sure you want to {{action}} this appointment"
+			},
+			"description": "Here you can set up your availability for appointments and share it with your patients. We will guide you through a simple process to define your available times, which will be replicated across the weeks or until the end of the year. The process is flexible, and you will be able to adjust the information at any time in the future.",
+			"guide": {
+				"step1": {
+					"title": "Decide if you want to start now or later",
+					"description": "If you prefer, you can return to this step later. We understand that it’s not always possible to set everything up immediately, so you will have the option to resume the process at a more convenient time."
+				},
+				"step2": {
+					"title": "Set your off days",
+					"description": "Let us know which days of the week you will not be available for appointments. These days will be blocked, but you can change them in the future, if necessary."
+				},
+				"step3": {
+					"title": "Session duration",
+					"description": "Provide the average duration of your appointments. If you offer more than one type of session, we will set a default now, and you can adjust the times later according to the patient and type of therapy."
+				},
+				"step4": {
+					"title": "Choose your available times",
+					"description": "In a visual and interactive way, you can select the times you will be available for appointments throughout the week. It’s a flexible process: if your preferences change, you can adjust your schedule at any time."
+				}
+			},
+			"session-past": "Past session"
+		},
+		"cancel-appointment": {
+			"title": "Cancel Appointment(s)",
+			"sub-title": "Please select the appointment(s) you want to cancel"
+		},
+		"edit-appointment": {
+			"title": "Edit Appointment",
+			"sub-title": "Please select the new date slot"
+		},
+		"add-patient": {
+			"title": "Add a New Patient",
+			"sub-title": "Fill out the form below with the patient’s details"
 		}
 	}
 }

@@ -1,0 +1,153 @@
+{
+    "contacts": {
+        "email": "magnago.gustavo@icloud.com",
+        "phone": "+372"
+    },
+    "_id": "670d2ae67ebb173014f9beb2",
+    "firstName": "Gustavo",
+    "lastName": "Magnago",
+    "receivedNotifications": [],
+    "sessionDates": [
+        {
+            "_id": "670d2ae67ebb173014f9beb1",
+            "sessions": [
+                {
+                    "date": "Thu Oct 17 2024 19:00:00 GMT+0300 (Eastern European Summer Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9beb4"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9beb3"
+                },
+                {
+                    "date": "Thu Oct 24 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9beb8"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9beb7"
+                },
+                {
+                    "date": "Thu Oct 31 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9beba"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9beb9"
+                },
+                {
+                    "date": "Thu Nov 07 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9bebc"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9bebb"
+                },
+                {
+                    "date": "Thu Nov 14 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9bebe"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9bebd"
+                },
+                {
+                    "date": "Thu Nov 21 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9bec0"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9bebf"
+                },
+                {
+                    "date": "Thu Nov 28 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9bec2"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9bec1"
+                },
+                {
+                    "date": "Thu Dec 05 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9bec4"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9bec3"
+                },
+                {
+                    "date": "Thu Dec 12 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9bec6"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9bec5"
+                },
+                {
+                    "date": "Thu Dec 19 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9bec8"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9bec7"
+                },
+                {
+                    "date": "Thu Dec 26 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                    "slots": [
+                        {
+                            "startTime": "19:00",
+                            "endTime": "20:00",
+                            "status": "BOOKED",
+                            "_id": "670d2ae67ebb173014f9beca"
+                        }
+                    ],
+                    "_id": "670d2ae67ebb173014f9bec9"
+                }
+            ]
+        }
+    ],
+    "createdBy": "66c4b4ecbc4627fc2370ba93",
+    "createdAt": "2024-10-14T14:29:58.747Z",
+    "updatedAt": "2024-10-14T14:29:59.096Z",
+    "__v": 1
+}

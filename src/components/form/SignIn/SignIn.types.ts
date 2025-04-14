@@ -18,9 +18,15 @@ export type SignInFormTypes = {
 };
 
 export interface ISignInResponse {
+	refreshToken: string;
 	token: string;
 	user: {
 		email: string;
 		id: string;
 	};
+}
+
+export interface IRefreshToken {
+	accessToken: string;
+	refreshToken: string;
 }

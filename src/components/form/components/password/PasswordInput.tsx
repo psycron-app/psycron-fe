@@ -31,10 +31,9 @@ export const PasswordInput = <T extends FieldValues>({
 	const passwordInputId: Path<T> = passInputId as Path<T>;
 	const confirmPasswordInputId: Path<T> = 'confirmPassword' as Path<T>;
 
-	const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({
-		[passwordInputId]: false,
-		[confirmPasswordInputId]: false,
-	});
+	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+	const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+		useState<boolean>(false);
 
 	const [passwordValue, setPasswordValue] = useState<string>('');
 	const [confirmPasswordValue, setConfirmPasswordValue] = useState<string>('');
@@ -45,11 +44,12 @@ export const PasswordInput = <T extends FieldValues>({
 		}
 	}, [defaultPasswordHash]);
 
-	const toggleVisibility = (id: Path<T>) => {
-		setIsVisible((prev) => ({
-			...prev,
-			[id]: !prev[id],
-		}));
+	const toggleVisibility = () => {
+		setIsPasswordVisible((prev) => !prev);
+	};
+
+	const toggleVisibilityConfirm = () => {
+		setIsConfirmPasswordVisible((prev) => !prev);
 	};
 
 	const handleInputChange = (id: Path<T>, value: string) => {
@@ -82,7 +82,7 @@ export const PasswordInput = <T extends FieldValues>({
 				label={t('globals.password')}
 				id={passwordInputId}
 				fullWidth
-				type={!isVisible[passwordInputId] ? 'password' : 'text'}
+				type={!isPasswordVisible ? 'password' : 'text'}
 				{...register(passwordInputId)}
 				error={!!getHelperText(passwordInputId)}
 				helperText={getHelperText(passwordInputId)}
@@ -94,17 +94,18 @@ export const PasswordInput = <T extends FieldValues>({
 				disabled={disabled}
 				required
 				InputProps={{
-					endAdornment: passwordValue?.length ? (
+					endAdornment: (
 						<InputAdornment position='end'>
 							<StyledIconButton
-								onMouseEnter={() => toggleVisibility(passwordInputId)}
-								onMouseLeave={() => toggleVisibility(passwordInputId)}
+								disabled={!passwordValue?.length}
+								onMouseEnter={() => toggleVisibility()}
+								onMouseLeave={() => toggleVisibility()}
 								edge='end'
 							>
-								{isVisible[passwordInputId] ? <NotVisible /> : <Visible />}
+								{!isPasswordVisible ? <NotVisible /> : <Visible />}
 							</StyledIconButton>
 						</InputAdornment>
-					) : null,
+					),
 				}}
 				hasToConfirm={hasToConfirm}
 			/>
@@ -113,7 +114,7 @@ export const PasswordInput = <T extends FieldValues>({
 					label={t('components.form.confirm-password')}
 					fullWidth
 					id={confirmPasswordInputId}
-					type={!isVisible[confirmPasswordInputId] ? 'password' : 'text'}
+					type={!isConfirmPasswordVisible ? 'password' : 'text'}
 					{...register(confirmPasswordInputId)}
 					error={!!getHelperText(confirmPasswordInputId)}
 					helperText={getHelperText(confirmPasswordInputId)}
@@ -124,21 +125,18 @@ export const PasswordInput = <T extends FieldValues>({
 					}}
 					required={hasToConfirm}
 					InputProps={{
-						endAdornment: confirmPasswordValue?.length ? (
+						endAdornment: (
 							<InputAdornment position='end'>
 								<StyledIconButton
-									onMouseEnter={() => toggleVisibility(confirmPasswordInputId)}
-									onMouseLeave={() => toggleVisibility(confirmPasswordInputId)}
+									disabled={!confirmPasswordValue?.length}
+									onMouseEnter={() => toggleVisibilityConfirm()}
+									onMouseLeave={() => toggleVisibilityConfirm()}
 									edge='end'
 								>
-									{!isVisible[confirmPasswordInputId] ? (
-										<NotVisible />
-									) : (
-										<Visible />
-									)}
+									{!isConfirmPasswordVisible ? <NotVisible /> : <Visible />}
 								</StyledIconButton>
 							</InputAdornment>
-						) : null,
+						),
 					}}
 				/>
 			) : null}

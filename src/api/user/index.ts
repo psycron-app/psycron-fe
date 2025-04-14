@@ -2,30 +2,15 @@ import type { ITherapist } from '@psycron/context/user/auth/UserAuthenticationCo
 
 import apiClient from '../axios-instance';
 
-export interface IUserByIdResponse {
-	user: ITherapist;
-}
-
-export interface IEditUser {
-	data: Partial<ITherapist>;
-	userId: string;
-}
-
-export interface IPasswordChange {
-	confirmPassword: string;
-	newPassword: string;
-	password: string;
-}
-
-export interface IChangePass {
-	data: IPasswordChange;
-	userId: string;
-}
-
-export interface IResponse {
-	message: string;
-	status: string;
-}
+import type {
+	DateInfoParams,
+	IAvailabilityResponse,
+	IChangePass,
+	IEditUser,
+	IPaginatedAvailability,
+	IResponse,
+	IUserByIdResponse,
+} from './index.types';
 
 export const getUserById = async (userId: string): Promise<ITherapist> => {
 	const response = await apiClient.get<IUserByIdResponse>(`/users/${userId}`);
@@ -49,6 +34,31 @@ export const changePassword = async ({ data, userId }: IChangePass) => {
 	const response = await apiClient.post<IResponse>(
 		`/users/password-change/${userId}`,
 		data
+	);
+
+	return response.data;
+};
+
+export const getTherapistLatestAvailability = async (therapistId: string) => {
+	const response = await apiClient.get<IAvailabilityResponse>(
+		`/users/${therapistId}/availability?latest=true`
+	);
+
+	return response.data;
+};
+
+export const getAvailabilityByDayId = async (
+	therapistId: string,
+	params: DateInfoParams
+) => {
+	const response = await apiClient.get<IPaginatedAvailability>(
+		`/users/${therapistId}/availability/by-day`,
+		{
+			params: {
+				dayId: params.dateId,
+				cursor: params.cursor,
+			},
+		}
 	);
 
 	return response.data;

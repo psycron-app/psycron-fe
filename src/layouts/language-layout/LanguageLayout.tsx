@@ -2,9 +2,13 @@ import type { FC } from 'react';
 import { useEffect } from 'react';
 import { Outlet, useParams } from 'react-router-dom';
 import { AlertProvider } from '@psycron/context/alert/AlertContext';
-import { UserGeoLocationProvider } from '@psycron/context/CountryContext';
+import { AppointmentActionsProvider } from '@psycron/context/appointment/appointment-actions/AppointmentActionsContext';
+import { AvailabilityProvider } from '@psycron/context/appointment/availability/AvailabilityContext';
+import { UserGeoLocationProvider } from '@psycron/context/geolocation/CountryContext';
+import { PatientProvider } from '@psycron/context/patient/PatientContext';
 import { AuthProvider } from '@psycron/context/user/auth/UserAuthenticationContext';
 import { UserDetailsProvider } from '@psycron/context/user/details/UserDetailsContext';
+import { WizardProvider } from '@psycron/context/wizard/WizardContext';
 import i18n from '@psycron/i18n';
 import { AnalyticsTracker } from '@psycron/routes/AnalyticsTracker';
 
@@ -21,10 +25,18 @@ export const LanguageLayout: FC = () => {
 		<AlertProvider>
 			<AuthProvider>
 				<UserDetailsProvider>
-					<UserGeoLocationProvider>
-						<AnalyticsTracker />
-						<Outlet />
-					</UserGeoLocationProvider>
+					<AvailabilityProvider>
+						<PatientProvider>
+							<UserGeoLocationProvider>
+								<WizardProvider>
+									<AppointmentActionsProvider>
+										<AnalyticsTracker />
+										<Outlet />
+									</AppointmentActionsProvider>
+								</WizardProvider>
+							</UserGeoLocationProvider>
+						</PatientProvider>
+					</AvailabilityProvider>
 				</UserDetailsProvider>
 			</AuthProvider>
 		</AlertProvider>

@@ -4,7 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import type { CustomError } from '@psycron/api/error';
-import { editUserById, type IEditUser } from '@psycron/api/user';
+import { editUserById } from '@psycron/api/user';
+import type { IEditUser } from '@psycron/api/user/index.types';
 import { Avatar } from '@psycron/components/avatar/Avatar';
 import { AddressForm } from '@psycron/components/form/components/address/AddressForm';
 import { ContactsForm } from '@psycron/components/form/components/contacts/ContactsForm';
@@ -165,6 +166,7 @@ export const EditUser = () => {
 							setPhoneValue={setValue}
 							defaultValues={userDetails?.contacts}
 							disabled={!isEditContacts}
+							setValue={setValue}
 						/>
 						<EditButton>
 							<Switch

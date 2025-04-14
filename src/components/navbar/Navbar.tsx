@@ -1,6 +1,8 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import { Box, IconButton } from '@mui/material';
+import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import useClickOutside from '@psycron/hooks/useClickoutside';
 import useViewport from '@psycron/hooks/useViewport';
@@ -43,9 +45,28 @@ export const Navbar = () => {
 	const dropdownRef = useRef<HTMLDivElement>(null);
 	const { isMobile, isTablet } = useViewport();
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+
+	const [isAppointmentTipOpen, setIsAppointmentTipOpen] =
+		useState<boolean>(true);
+
 	const { toggleUserDetails, userDetails } = useUserDetails();
 
+	const { isAvailabilityDatesEmpty } = useAvailability();
+
+	const { pathname } = useLocation();
+
 	useClickOutside(dropdownRef, () => setIsMenuOpen(false));
+
+	useEffect(() => {
+		if (
+			isAvailabilityDatesEmpty &&
+			!(pathname.includes('appointments') || pathname.includes('availability'))
+		) {
+			setIsAppointmentTipOpen(true);
+		} else {
+			setIsAppointmentTipOpen(false);
+		}
+	}, [isAvailabilityDatesEmpty, pathname]);
 
 	const handleMenuClick = (
 		e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -70,16 +91,21 @@ export const Navbar = () => {
 			name: t('globals.patients'),
 			icon: <PatientList />,
 			path: PATIENTS,
+			disabled: true,
 		},
 		{
 			name: t('globals.billing-manager'),
 			icon: <Payment />,
 			path: PAYMENTS,
+			disabled: true,
 		},
 		{
-			name: t('globals.appointments-manager'),
+			name: isAvailabilityDatesEmpty
+				? t('globals.appointments-manager')
+				: t('globals.appointments'),
 			icon: <Calendar />,
 			path: APPOINTMENTS,
+			open: isAppointmentTipOpen,
 		},
 	];
 
@@ -133,7 +159,7 @@ export const Navbar = () => {
 						<LogoColor />
 					</ColoredLogo>
 					<Box>
-						<Menu items={menuItems} isFooterIcon />
+						<Menu items={menuItems} />
 					</Box>
 					<NavbarFooterIcons>
 						<Menu items={footerItems} />

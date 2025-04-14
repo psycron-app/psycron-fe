@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import type { StatusEnum } from '@psycron/api/user/availability/index.types';
 import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
 import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
 
@@ -6,11 +7,11 @@ export interface AuthContextType {
 	isAuthenticated: boolean;
 	isSessionLoading: boolean;
 	isSessionSuccess: boolean;
+	isSignInMutationLoading: boolean;
+	isSignUpMutationLoading: boolean;
 	logout: () => void;
 	signIn: (data: ISignInForm) => void;
-	signInError: string | null;
 	signUp: (data: ISignUpForm) => void;
-	signUpError: string | null;
 	user?: ITherapist;
 }
 
@@ -33,22 +34,29 @@ export interface IBaseUser {
 	updatedAt?: Date;
 }
 export interface ITherapist extends IBaseUser {
-	availability: Array<{
-		date: Date;
-		slots: Array<{ endTime: string; startTime: string }>;
-	}>;
+	availability: IAvailability[];
 	password: string;
 	patients?: IPatient[];
 	role: 'THERAPIST' | 'ADMIN';
 	speciality?: string;
 	stripeCustomerID?: string;
 	subscriptions?: [];
+	timeZone?: string;
 }
 
 export interface IPatient extends IBaseUser {
-	createdBy?: string;
+	cancelledAppointments?: ICancelledAppointment[];
+	createdBy?: ITherapist | string;
 	receivedNotifications?: INotification[];
 	role: 'PATIENT';
+	sessionDates: ISessionDatesGroup[];
+	timeZone?: string;
+}
+
+export interface ISessionDatesGroup {
+	_id?: string;
+	date: string | Date;
+	slots: ISlot[];
 }
 
 export interface IContactInfo {
@@ -74,4 +82,77 @@ export interface INotification {
 	dateUpdated: Date;
 	from: string;
 	method: string;
+}
+
+export interface IAvailability {
+	completed: boolean;
+	consultationDuration: number;
+	createAvailabilitySession: ISessionAvailability;
+	date?: Date;
+	slots: ISlot[];
+	therapistId: string;
+	weekday:
+		| 'Monday'
+		| 'Tuesday'
+		| 'Wednesday'
+		| 'Thursday'
+		| 'Friday'
+		| 'Saturday'
+		| 'Sunday';
+}
+
+export interface ISessionAvailability {
+	completed?: boolean;
+	consultationDuration?: number;
+	step?: number;
+	unavailableHours?: {
+		endTime: string;
+		startTime: string;
+	}[];
+	weekdays?: string[];
+}
+
+export interface ISlot {
+	_id: string;
+	canceledAt?: string | null;
+	customReason?: string | null;
+	endTime: string;
+	note?: string;
+	patientId?: string;
+	reasonCode?: string | null;
+	startTime: string;
+	status: StatusEnum;
+}
+
+export type ISlotStatus =
+	| 'AVAILABLE'
+	| 'BLOCKED'
+	| 'BOOKED'
+	| 'ONHOLD'
+	| 'CANCELLED'
+	| 'EMPTY';
+
+export interface ISessionDate {
+	_id: string;
+	date: Date;
+	slots?: ISlot[];
+}
+
+export interface IBookSessionWithLink {
+	availabilityDayId: string;
+	patient: Partial<IPatient>;
+	shouldReplicate?: boolean;
+	slotId: string;
+	timeZone: string;
+}
+
+export interface ICancelledAppointment {
+	cancelledAt: Date;
+	customReason?: string;
+	date: Date;
+	endTime: string;
+	reasonCode?: number;
+	slotId: string;
+	startTime: string;
+	triggeredBy: 'PATIENT' | 'THERAPIST';
 }

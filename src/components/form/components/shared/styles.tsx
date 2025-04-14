@@ -1,12 +1,19 @@
-import { Box, styled, TextField } from '@mui/material';
+import { Box, css, styled, TextField } from '@mui/material';
 import { palette } from '@psycron/theme/palette/palette.theme';
 import { shadowPress } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
-export const InputFields = styled(TextField)`
+export const InputFields = styled(TextField, {
+	shouldForwardProp: (props) => props !== 'maxWidth',
+})<{ maxWidth: string }>`
 	margin: ${spacing.small} 0;
 	box-sizing: border-box;
-	max-width: 400px;
+
+	${({ maxWidth }) =>
+		maxWidth &&
+		css`
+			max-width: ${maxWidth};
+		`}
 `;
 
 export const SignUpWrapper = styled(Box)`
@@ -24,6 +31,7 @@ export const SignUpWrapper = styled(Box)`
 export const LogoWrapper = styled(Box)`
 	display: flex;
 	justify-content: center;
+	padding-bottom: ${spacing.medium};
 
 	svg {
 		width: 3.25rem;

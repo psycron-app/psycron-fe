@@ -1,138 +1,85 @@
-import { useEffect, useState } from 'react';
-import type { FieldValues, Path } from 'react-hook-form';
+import { useEffect } from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Grid, type SelectChangeEvent } from '@mui/material';
-import countryList from '@psycron/assets/countries/countries.json';
-import { Info, Logo } from '@psycron/components/icons';
-import { Select } from '@psycron/components/Select/Select';
-import { Tooltip } from '@psycron/components/tooltip/Tooltip';
-import { useUserGeolocation } from '@psycron/context/CountryContext';
-import type { CountryDataSimple } from '@psycron/context/CountryContext.types';
+import PhoneInput from 'react-phone-number-input';
+import en from 'react-phone-number-input/locale/en';
+import pt from 'react-phone-number-input/locale/pt';
+import { useParams } from 'react-router-dom';
+import { Box } from '@mui/material';
+import { Text } from '@psycron/components/text/Text';
+import { useUserGeolocation } from '@psycron/context/geolocation/CountryContext';
 import { palette } from '@psycron/theme/palette/palette.theme';
 
-import { CountryFlag, PhoneNumberField } from './PhoneInput.styles';
+import 'react-phone-number-input/style.css';
+
+import { StyledPhoneInput } from './PhoneInput.styles';
 import type { PhoneInputProps } from './PhoneInput.types';
 
-export const PhoneInput = <T extends FieldValues>({
-	register,
+export const PhoneInputComponent = ({
 	registerName,
-	errors,
 	defaultValue,
 	disabled,
-}: PhoneInputProps<T>) => {
+	required,
+}: PhoneInputProps) => {
 	const { t } = useTranslation();
 
+	const labelsMap: Record<string, Record<string, string>> = {
+		en,
+		pt,
+	};
+
+	const { locale } = useParams<{ locale: string }>();
+	const labels = labelsMap[locale] ?? en;
+
+	const {
+		control,
+		setValue,
+		formState: { errors },
+	} = useFormContext();
+
 	const { countryData } = useUserGeolocation();
-
-	const [selectedCountry, setSelectedCountry] = useState<
-		CountryDataSimple & { name?: string }
-	>(countryData);
-
-	const [defaultNumberVal, setDefaultNumberVal] = useState<string>('');
-
-	const countries = countryList.map((c) => ({
-		name: c.name,
-		value: c.dialCode,
-	}));
-
-	const findCountry = (
-		countries: { name: string; value: string }[],
-		value?: string
-	) => countries.find((country) => value?.includes(country.value));
-
-	const foundCountryCode = findCountry(countries, defaultValue);
-
-	const flag = countryList.find(
-		(c) => c.dialCode === foundCountryCode?.value
-	)?.flag;
+	const defaultCountry = countryData.countryCode2 ?? 'BR';
 
 	useEffect(() => {
 		if (defaultValue) {
-			setDefaultNumberVal(
-				defaultValue?.replace(String(foundCountryCode?.value), '')
-			);
-			setSelectedCountry({
-				callingCode: foundCountryCode!.value,
-				countryEmoji: flag,
-				name: countryList.find((c) => c.dialCode === foundCountryCode?.value)
-					?.name,
-			});
-		} else {
-			setSelectedCountry({
-				callingCode: countryData.callingCode,
-				countryEmoji: countryData.countryEmoji,
-				name: countryList.find((c) => c.dialCode === countryData.callingCode)
-					?.name,
-			});
+			setValue(registerName, defaultValue);
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [countryData]);
-
-	const handlePhoneChange = (e: SelectChangeEvent<string>) => {
-		setSelectedCountry({
-			callingCode: e.target.value,
-			countryEmoji: countryList.find((c) => c.dialCode === e.target.value)
-				?.flag,
-		});
-	};
-
-	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		setDefaultNumberVal(e.target.value);
-	};
+	}, [defaultValue, registerName, setValue]);
 
 	const inputRegisterName = t(`globals.${registerName}`);
 
 	return (
-		<Grid
-			container
-			columns={12}
-			direction='row'
-			alignItems='center'
-			columnSpacing={2}
-		>
-			<Grid item xs={1}>
-				<CountryFlag>
-					{countryData.callingCode === null ? (
-						<Logo />
-					) : (
-						<span>{selectedCountry?.countryEmoji}</span>
-					)}
-				</CountryFlag>
-			</Grid>
-			<Grid item xs={4}>
-				<Select
-					items={countries}
-					required
-					selectLabel={t('components.input.phone-input.select-label')}
-					{...register('countryCode' as Path<T>)}
-					subtitle
-					value={selectedCountry.callingCode ?? ''}
-					fullWidth
-					onChangeSelect={handlePhoneChange}
-					disabled={disabled}
-				/>
-			</Grid>
-			<Grid item xs={6.5}>
-				<PhoneNumberField
-					type='tel'
-					label={t('components.input.phone-input.phone-num-label', {
-						registerName: inputRegisterName,
-					})}
-					required
-					fullWidth
-					value={defaultNumberVal}
-					{...register(registerName as Path<T>)}
-					error={!!errors?.[registerName]}
-					helperText={errors?.[registerName]?.message as string}
-					onChange={handleInputChange}
-					disabled={disabled}
-				/>
-			</Grid>
-			<Grid item xs={0.5}>
-				<Tooltip title={t('components.input.phone-input.phone-number-guide')}>
-					<Info color={palette.info.main} />
-				</Tooltip>
-			</Grid>
-		</Grid>
+		<Box width='100%'>
+			<Controller
+				name={registerName}
+				control={control}
+				defaultValue={defaultValue ?? ''}
+				render={({ field }) => (
+					<StyledPhoneInput>
+						<PhoneInput
+							labels={labels}
+							defaultCountry={defaultCountry}
+							value={field.value}
+							onChange={(value) => {
+								field.onChange(value);
+								setValue(registerName, value);
+							}}
+							onBlur={field.onBlur}
+							disabled={disabled}
+							autoComplete='tel'
+							placeholder={t('components.input.phone-input.phone-num-label', {
+								registerName: inputRegisterName,
+							})}
+							required={required}
+						/>
+					</StyledPhoneInput>
+				)}
+			/>
+			{errors?.[registerName] && (
+				<Text variant='caption' color={palette.error.main}>
+					{errors[registerName]?.message as string}
+				</Text>
+			)}
+		</Box>
 	);
 };

@@ -7,12 +7,25 @@ import { StyledFormControlLabel } from './Checkbox.styles';
 import type { ICheckboxProps } from './Checkbox.types';
 
 export const Checkbox = forwardRef(
-	({ labelKey, register }: ICheckboxProps, ref: Ref<HTMLInputElement>) => {
+	(
+		{ labelKey, register, checked, onChange, shouldBold }: ICheckboxProps,
+		ref: Ref<HTMLInputElement>
+	) => {
 		const { t } = useTranslation();
+
+		const isControlled = checked !== undefined;
 
 		return (
 			<StyledFormControlLabel
-				control={<MUICheckbox inputRef={ref} {...register} />}
+				shouldBold={shouldBold}
+				control={
+					<MUICheckbox
+						inputRef={ref}
+						{...(register ? register : {})}
+						checked={isControlled ? checked : undefined}
+						onChange={isControlled ? onChange : undefined}
+					/>
+				}
 				label={t(labelKey)}
 			/>
 		);

@@ -6,7 +6,7 @@ import { Link } from '@psycron/components/link/Link';
 import { Localization } from '@psycron/components/localization/Localization';
 import { Text } from '@psycron/components/text/Text';
 import useViewport from '@psycron/hooks/useViewport';
-import { HOMEPAGE, SIGNIN, SIGNUP } from '@psycron/pages/urls';
+import { DOMAIN, SIGNIN, SIGNUP } from '@psycron/pages/urls';
 
 import { Button } from '../button/Button';
 
@@ -51,7 +51,7 @@ export const Header = ({ hideLinks = false }: IHeaderProps) => {
 	return (
 		<HeaderWrapper>
 			<BrandWrapper>
-				<BrandLink href={HOMEPAGE} aria-label='Go to homepage'>
+				<BrandLink href={DOMAIN} aria-label='Go to homepage'>
 					<img
 						src='/images/og-image.png'
 						width={'auto'}

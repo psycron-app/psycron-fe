@@ -10,8 +10,11 @@ import {
 	ListItemText,
 } from '@mui/material';
 import type { CustomError } from '@psycron/api/error';
-import type { IChangePass, IPasswordChange } from '@psycron/api/user';
 import { changePassword } from '@psycron/api/user';
+import type {
+	IChangePass,
+	IPasswordChange,
+} from '@psycron/api/user/index.types';
 import { FormFooter } from '@psycron/components/form/components/footer/FormFooter';
 import { PasswordInput } from '@psycron/components/form/components/password/PasswordInput';
 import { StyledIconButton } from '@psycron/components/form/components/password/PasswordInput.styles';

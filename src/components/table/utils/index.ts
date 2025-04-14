@@ -1,6 +1,10 @@
 import type { ITableCellProps } from '../components/table-cell/TableCell.types';
 
-export const tableBones = (action?: boolean, index?: number, isSmall?: boolean) => {
+export const tableBones = (
+	action?: boolean,
+	index?: number,
+	isSmall?: boolean
+) => {
 	if (action) return 0.5;
 	if (index === 0 && !isSmall) return 1.5;
 	return 1;
@@ -17,6 +21,6 @@ export const filterItems = (
 	return items.filter(
 		(item) =>
 			!(isTablet && hideTablet.includes(item.id)) &&
-      !(isMobile && combinedHideMobile.includes(item.id))
+			!(isMobile && combinedHideMobile.includes(item.id))
 	);
 };

@@ -1,5 +1,6 @@
-import { Button as MUIButton } from '@mui/material';
+import { Box, Button as MUIButton } from '@mui/material';
 
+import { BttnLoader, StyledBttnContentWrapper } from './Button.styles';
 import type { IButtonProps } from './Button.types';
 
 export const Button = ({
@@ -10,16 +11,17 @@ export const Button = ({
 	small,
 	fullWidth,
 	type,
+	loading,
 	...props
 }: IButtonProps) => {
 	const bttnColor = () => {
 		switch (true) {
-		case secondary:
-			return 'secondary';
-		case tertiary:
-			return 'tertiary';
-		default:
-			return 'primary';
+			case secondary:
+				return 'secondary';
+			case tertiary:
+				return 'tertiary';
+			default:
+				return 'primary';
 		}
 	};
 
@@ -28,12 +30,18 @@ export const Button = ({
 			color={bttnColor()}
 			variant={secondary ? 'outlined' : 'contained'}
 			size={small ? 'small' : 'medium'}
-			onClick={type === 'submit' ? undefined : onClick}
-			fullWidth={fullWidth}
 			type={type}
+			fullWidth={fullWidth}
+			disabled={loading}
+			onClick={onClick}
 			{...props}
 		>
-			{children}
+			<StyledBttnContentWrapper>
+				{loading && <BttnLoader size={25} color='secondary' thickness={5} />}
+				<Box component='span' sx={{ mx: 'auto' }}>
+					{children}
+				</Box>
+			</StyledBttnContentWrapper>
 		</MUIButton>
 	);
 };

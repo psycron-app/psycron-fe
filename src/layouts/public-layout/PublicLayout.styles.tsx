@@ -7,7 +7,8 @@ export const PublicLayoutWrapper = styled(Box)`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	justify-content: flex-start;
+
+	min-height: 100vh;
 `;
 
 export const PublicLayoutContent = styled(Box)`
@@ -15,19 +16,25 @@ export const PublicLayoutContent = styled(Box)`
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
 	padding: 0;
 	z-index: 2;
+
+	flex: 1;
+	margin-bottom: var(--footer-height);
 `;
 
 export const FooterWrapper = styled(Box)`
-	position: relative;
 	padding: 0 ${spacing.large} ${spacing.small};
-	z-index: 2;
+	z-index: 1000;
 	height: var(--footer-height);
 
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+	position: relative;
+	width: 100%;
 `;
 
 export const FooterContent = styled(Box)`

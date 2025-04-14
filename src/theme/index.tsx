@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material';
 
-import alertStyles from './alert/alert.theme';
+import { alertStyles, snackBarStyles } from './alert/alert.theme';
 import avatarStyles from './avatar/avatar.theme';
 import buttonStyles from './button/button.theme';
 import linkStyles from './button/link/link.theme';
@@ -17,13 +17,14 @@ import paginationItemStyles from './pagination/pagination.theme';
 import { palette } from './palette/palette.theme';
 import type { GrayShades } from './palette/palette.types';
 import paperStyles from './paper/paper.theme';
+import popoverStyles from './popover/popover.theme';
 import progressBarStyles from './progress-bar/progressBar.theme';
 import radioStyles from './radio/radio.theme';
 import menuItemStyles from './select/menu-item/menuItem.theme';
 import selectStyles from './select/select.theme';
 import { spacing } from './spacing/spacing.theme';
 import switchStyles from './swtich/switch.theme';
-import tooltipeStyles from './tooltip/tooltip.theme';
+import tooltipStyles from './tooltip/tooltip.theme';
 
 declare module '@mui/material/styles' {
 	interface Palette {
@@ -68,7 +69,7 @@ const theme = createTheme({
 			styleOverrides: dividerStyles(createTheme({ palette })),
 		},
 		MuiTooltip: {
-			styleOverrides: tooltipeStyles(createTheme({ palette })),
+			styleOverrides: tooltipStyles(createTheme({ palette })),
 		},
 		MuiLinearProgress: {
 			styleOverrides: progressBarStyles(createTheme({ palette })),
@@ -111,6 +112,12 @@ const theme = createTheme({
 		},
 		MuiTextField: {
 			styleOverrides: textFieldStyles(),
+		},
+		MuiPopover: {
+			styleOverrides: popoverStyles(),
+		},
+		MuiSnackbar: {
+			styleOverrides: snackBarStyles(),
 		},
 	},
 });

@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Box, Typography } from '@mui/material';
 import { EditUser } from '@psycron/components/icons';
+import { Text } from '@psycron/components/text/Text';
 import { Tooltip } from '@psycron/components/tooltip/Tooltip';
+import { useAppointmentActions } from '@psycron/context/appointment/appointment-actions/AppointmentActionsContext';
+import useViewport from '@psycron/hooks/useViewport';
 import { formatDateTime } from '@psycron/utils/variables';
 
 import {
@@ -9,6 +11,8 @@ import {
 	FullAmountItem,
 	HasDiscountCell,
 	StyledCellWrapper,
+	StyledIconWrapper,
+	StyledStatusCell,
 } from './TableCell.styles';
 import type { ITableCellProps } from './TableCell.types';
 
@@ -20,8 +24,16 @@ export const TableCell = ({
 	isHead,
 	isPatients,
 	id,
+	tooltip,
+	iconElements,
+	session,
+	onCellClick,
 }: ITableCellProps) => {
+	const { isMobile, isTablet } = useViewport();
+
 	const { t } = useTranslation();
+
+	const { handleEditClick, handleCancelClick } = useAppointmentActions();
 
 	const align = (icon?: boolean, numeric?: boolean) => {
 		if (icon || numeric) return 'center';
@@ -31,87 +43,127 @@ export const TableCell = ({
 	const renderContent = () => {
 		if (isHead) {
 			return (
-				<Typography
+				<Text
 					width='100%'
 					textAlign={align(icon, numeric)}
 					variant='subtitle2'
-					fontSize='0.8rem'
-					textTransform='capitalize'
+					fontSize={isMobile || isTablet ? '0.8rem' : '1rem'}
+					fontWeight={600}
+					display='flex'
+					justifyContent='center'
 					m={1}
 				>
 					{label}
-				</Typography>
+				</Text>
+			);
+		}
+
+		if (id.startsWith('status-')) {
+			const status = id.split('-')[1];
+
+			return (
+				<StyledStatusCell
+					borderBottom={'1px solid red'}
+					textAlign={align(icon, numeric)}
+					variant='body2'
+					status={status}
+				>
+					{label}
+				</StyledStatusCell>
 			);
 		}
 
 		switch (id) {
-		case 'nextSession':
-		case 'latestPayment':
-			return (
-				<DateCell id={id}>
-					<Typography
+			case 'nextSession':
+			case 'latestPayment':
+				return (
+					<DateCell id={id}>
+						<Text
+							width='100%'
+							textAlign={align(icon, numeric)}
+							variant='body2'
+							fontSize='0.8rem'
+						>
+							{formatDateTime(String(label), t)}
+						</Text>
+					</DateCell>
+				);
+
+			case 'hasDiscount':
+				return (
+					<HasDiscountCell label={String(label)}>
+						<Text
+							textAlign={align(icon, numeric)}
+							variant='body2'
+							fontSize='0.8rem'
+						>
+							{label}
+						</Text>
+					</HasDiscountCell>
+				);
+
+			case 'fullAmount':
+				return (
+					<FullAmountItem>
+						<Text
+							textAlign={align(icon, numeric)}
+							variant='body2'
+							fontSize='0.8rem'
+						>
+							{label}
+						</Text>
+					</FullAmountItem>
+				);
+
+			default:
+				return (
+					<Text
 						width='100%'
 						textAlign={align(icon, numeric)}
 						variant='body2'
 						fontSize='0.8rem'
-					>
-						{formatDateTime(label, t)}
-					</Typography>
-				</DateCell>
-			);
-
-		case 'hasDiscount':
-			return (
-				<HasDiscountCell label={label}>
-					<Typography
-						textAlign={align(icon, numeric)}
-						variant='body2'
-						fontSize='0.8rem'
+						textTransform='capitalize'
+						p={2}
 					>
 						{label}
-					</Typography>
-				</HasDiscountCell>
-			);
+					</Text>
+				);
+		}
+	};
 
-		case 'fullAmount':
-			return (
-				<FullAmountItem>
-					<Typography
-						textAlign={align(icon, numeric)}
-						variant='body2'
-						fontSize='0.8rem'
-					>
-						{label}
-					</Typography>
-				</FullAmountItem>
-			);
-
-		default:
-			return (
-				<Typography
-					width='100%'
-					textAlign={align(icon, numeric)}
-					variant='body2'
-					fontSize='0.8rem'
-					p={2}
-				>
-					{label}
-				</Typography>
-			);
+	const handleClick = (key: string) => {
+		if (key?.includes('edit')) {
+			handleEditClick(session);
+		} else if (key?.includes('close')) {
+			handleCancelClick(session);
 		}
 	};
 
 	return (
-		<StyledCellWrapper>
+		<StyledCellWrapper
+			onClick={() => onCellClick?.()}
+			style={{ cursor: onCellClick ? 'pointer' : 'default' }}
+		>
 			{action ? (
 				!isHead ? (
-					<Box p={2}>
-						<Tooltip
-							title={isPatients ? t('components.patients-table.manage') : ''}
-						>
-							{isPatients ? <EditUser /> : <div>ICON</div>}
-						</Tooltip>
-					</Box>
+					<StyledIconWrapper>
+						{Array.isArray(iconElements) &&
+							iconElements.map((element, index) => {
+								return (
+									<Tooltip
+										key={index}
+										onClick={() => handleClick(element.key)}
+										title={
+											isPatients
+												? t('components.patients-table.manage')
+												: tooltip?.[index]
+										}
+									>
+										{isPatients ? <EditUser /> : element}
+									</Tooltip>
+								);
+							})}
+					</StyledIconWrapper>
 				) : null
 			) : (
 				renderContent()

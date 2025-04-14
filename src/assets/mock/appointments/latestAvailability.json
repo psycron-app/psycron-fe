@@ -1,0 +1,2900 @@
+{
+    "latestAvailability": {
+        "_id": "66fbfc3ca6b7f26b47e37a1a",
+        "therapistId": "66c4b4ecbc4627fc2370ba93",
+        "availabilityDates": [
+            {
+                "date": "Mon Oct 07 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a1c"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a1d"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a1e"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a1f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a20"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a21"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a22"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a23"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a24"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a1b"
+            },
+            {
+                "date": "Tue Oct 01 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a26"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a27"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a28"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a29"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a25"
+            },
+            {
+                "date": "Wed Oct 02 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a2b"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a2c"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a2d"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a2e"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a2f"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a2a"
+            },
+            {
+                "date": "Thu Oct 03 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a31"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a32"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a33"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a34"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a35"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a30"
+            },
+            {
+                "date": "Fri Oct 04 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a37"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a38"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a39"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a3a"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a3b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a3c"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a3d"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a3e"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a3f"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a36"
+            },
+            {
+                "date": "Mon Oct 14 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a41"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a42"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a43"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a44"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a45"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a46"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a47"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a48"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a49"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a40"
+            },
+            {
+                "date": "Tue Oct 08 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a4b"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a4c"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a4d"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a4e"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a4a"
+            },
+            {
+                "date": "Wed Oct 09 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a50"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a51"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a52"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a53"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a54"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a4f"
+            },
+            {
+                "date": "Thu Oct 10 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a56"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a57"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a58"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a59"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a5a"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a55"
+            },
+            {
+                "date": "Fri Oct 11 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a5c"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a5d"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a5e"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a5f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a60"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a61"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a62"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a63"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a64"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a5b"
+            },
+            {
+                "date": "Mon Oct 21 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a66"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a67"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a68"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a69"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a6a"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a6c"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a6d"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a6e"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a65"
+            },
+            {
+                "date": "Tue Oct 15 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a70"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a71"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a72"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a73"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a6f"
+            },
+            {
+                "date": "Wed Oct 16 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a75"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a76"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a77"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a78"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a79"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a74"
+            },
+            {
+                "date": "Thu Oct 17 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a7b"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a7c"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a7d"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "66fbfc3ca6b7f26b47e37a7e"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a7f"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a7a"
+            },
+            {
+                "date": "Fri Oct 18 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a81"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a82"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a83"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a86"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a89"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a80"
+            },
+            {
+                "date": "Mon Oct 28 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a8b"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a8c"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a8d"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a8e"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a8f"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a91"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a92"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a93"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a8a"
+            },
+            {
+                "date": "Tue Oct 22 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a96"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a97"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a94"
+            },
+            {
+                "date": "Wed Oct 23 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a9a"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a9b"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a9c"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37a9e"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a99"
+            },
+            {
+                "date": "Thu Oct 24 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aa0"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aa1"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a78308294e"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aa4"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37a9f"
+            },
+            {
+                "date": "Fri Oct 25 2024 16:42:20 GMT+0300 (Eastern European Summer Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aa6"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aa7"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aa8"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aab"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aae"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37aa5"
+            },
+            {
+                "date": "Mon Nov 04 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ab0"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ab1"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ab2"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ab3"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ab4"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ab6"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ab7"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ab8"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37aaf"
+            },
+            {
+                "date": "Tue Oct 29 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37abb"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37abc"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37ab9"
+            },
+            {
+                "date": "Wed Oct 30 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37abf"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ac0"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ac1"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ac3"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37abe"
+            },
+            {
+                "date": "Thu Oct 31 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ac5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ac6"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082950"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ac9"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37ac4"
+            },
+            {
+                "date": "Fri Nov 01 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37acb"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37acc"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37acd"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ad0"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ad3"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37aca"
+            },
+            {
+                "date": "Mon Nov 11 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ad5"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ad6"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ad7"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ad8"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ad9"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37adb"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37adc"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37add"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37ad4"
+            },
+            {
+                "date": "Tue Nov 05 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ae0"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ae1"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37ade"
+            },
+            {
+                "date": "Wed Nov 06 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ae4"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ae5"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ae6"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ae8"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37ae3"
+            },
+            {
+                "date": "Thu Nov 07 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aea"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aeb"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082952"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37aee"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37ae9"
+            },
+            {
+                "date": "Fri Nov 08 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37af0"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37af1"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37af2"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37af5"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37af8"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37aef"
+            },
+            {
+                "date": "Mon Nov 18 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37afa"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37afb"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37afc"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37afd"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37afe"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b00"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b01"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b02"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37af9"
+            },
+            {
+                "date": "Tue Nov 12 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b05"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b06"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b03"
+            },
+            {
+                "date": "Wed Nov 13 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b09"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b0a"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b0b"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b0d"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b08"
+            },
+            {
+                "date": "Thu Nov 14 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b0f"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b10"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082954"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b13"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b0e"
+            },
+            {
+                "date": "Fri Nov 15 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b15"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b16"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b17"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b1a"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b1d"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b14"
+            },
+            {
+                "date": "Mon Nov 25 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b1f"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b20"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b21"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b22"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b23"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b25"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b26"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b27"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b1e"
+            },
+            {
+                "date": "Tue Nov 19 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b2a"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b2b"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b28"
+            },
+            {
+                "date": "Wed Nov 20 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b2e"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b2f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b30"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b32"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b2d"
+            },
+            {
+                "date": "Thu Nov 21 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b34"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b35"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082956"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b38"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b33"
+            },
+            {
+                "date": "Fri Nov 22 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b3a"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b3b"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b3c"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b3f"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b42"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b39"
+            },
+            {
+                "date": "Mon Dec 02 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b44"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b45"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b46"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b47"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b48"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b4a"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b4b"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b4c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b43"
+            },
+            {
+                "date": "Tue Nov 26 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b4f"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b50"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b4d"
+            },
+            {
+                "date": "Wed Nov 27 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b53"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b54"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b55"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b57"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b52"
+            },
+            {
+                "date": "Thu Nov 28 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b59"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b5a"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082958"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b5d"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b58"
+            },
+            {
+                "date": "Fri Nov 29 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b5f"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b60"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b61"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b64"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b67"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b5e"
+            },
+            {
+                "date": "Mon Dec 09 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b69"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b6a"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b6b"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b6c"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b6d"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b6f"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b70"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b71"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b68"
+            },
+            {
+                "date": "Tue Dec 03 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b74"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b75"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b72"
+            },
+            {
+                "date": "Wed Dec 04 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b78"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b79"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b7a"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b7c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b77"
+            },
+            {
+                "date": "Thu Dec 05 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b7e"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b7f"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a78308295a"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b82"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b7d"
+            },
+            {
+                "date": "Fri Dec 06 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b84"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b85"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b86"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b89"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b8c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b83"
+            },
+            {
+                "date": "Mon Dec 16 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b8e"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b8f"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b90"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b91"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b92"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b94"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b95"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b96"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b8d"
+            },
+            {
+                "date": "Tue Dec 10 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b99"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b9a"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b97"
+            },
+            {
+                "date": "Wed Dec 11 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b9d"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b9e"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37b9f"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ba1"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37b9c"
+            },
+            {
+                "date": "Thu Dec 12 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ba3"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ba4"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a78308295c"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ba7"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37ba2"
+            },
+            {
+                "date": "Fri Dec 13 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37ba9"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37baa"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bab"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bae"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bb1"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37ba8"
+            },
+            {
+                "date": "Mon Dec 23 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bb4"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bb5"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bb6"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bb7"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bb9"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bba"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bbb"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37bb2"
+            },
+            {
+                "date": "Tue Dec 17 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bbe"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bbf"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37bbc"
+            },
+            {
+                "date": "Wed Dec 18 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bc2"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bc3"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bc4"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bc6"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37bc1"
+            },
+            {
+                "date": "Thu Dec 19 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bc8"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bc9"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a78308295e"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bcc"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37bc7"
+            },
+            {
+                "date": "Fri Dec 20 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bce"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bcf"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bd0"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bd3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bd6"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37bcd"
+            },
+            {
+                "date": "Mon Dec 30 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bd8"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bd9"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bda"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bdb"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bdc"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "BOOKED",
+                        "_id": "670d131be8916c263dbf57d5"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bde"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bdf"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37be0"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37bd7"
+            },
+            {
+                "date": "Tue Dec 24 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "BOOKED",
+                        "_id": "670d22b82aa7c0776db17eab"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37be3"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37be4"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d27324ce934c9d935079c"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37be1"
+            },
+            {
+                "date": "Wed Dec 25 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37be7"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37be8"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37be9"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d1a48725585cb0d927d54"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37beb"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37be6"
+            },
+            {
+                "date": "Thu Dec 26 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bed"
+                    },
+                    {
+                        "startTime": "11:00",
+                        "endTime": "12:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bee"
+                    },
+                    {
+                        "startTime": "17:00",
+                        "endTime": "18:00",
+                        "status": "BOOKED",
+                        "_id": "670d1f3265ed99a783082960"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "670d2ae67ebb173014f9beb3"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bf1"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37bec"
+            },
+            {
+                "date": "Fri Dec 27 2024 16:42:20 GMT+0200 (Eastern European Standard Time)",
+                "slots": [
+                    {
+                        "startTime": "09:00",
+                        "endTime": "10:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bf3"
+                    },
+                    {
+                        "startTime": "10:00",
+                        "endTime": "11:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bf4"
+                    },
+                    {
+                        "startTime": "18:00",
+                        "endTime": "19:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bf5"
+                    },
+                    {
+                        "startTime": "19:00",
+                        "endTime": "20:00",
+                        "status": "BOOKED",
+                        "_id": "67080080ebdb078416602b6f"
+                    },
+                    {
+                        "startTime": "16:00",
+                        "endTime": "17:00",
+                        "status": "BOOKED",
+                        "_id": "6708035af5a7009162748d6b"
+                    },
+                    {
+                        "startTime": "15:00",
+                        "endTime": "16:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bf8"
+                    },
+                    {
+                        "startTime": "14:00",
+                        "endTime": "15:00",
+                        "status": "BOOKED",
+                        "_id": "6708039b9d5ad4203818cd25"
+                    },
+                    {
+                        "startTime": "13:00",
+                        "endTime": "14:00",
+                        "status": "BOOKED",
+                        "_id": "670802812d68b1b46ca370dd"
+                    },
+                    {
+                        "startTime": "12:00",
+                        "endTime": "13:00",
+                        "status": "AVAILABLE",
+                        "_id": "66fbfc3ca6b7f26b47e37bfb"
+                    }
+                ],
+                "_id": "66fbfc3ca6b7f26b47e37bf2"
+            }
+        ],
+        "consultationDuration": 60,
+        "createAvailabilitySession": "66fbfc08a6b7f26b47e3798e",
+        "createdAt": "2024-10-01T13:42:20.905Z",
+        "updatedAt": "2024-10-14T14:29:58.950Z",
+        "__v": 1,
+        "conflicts": []
+    }
+}

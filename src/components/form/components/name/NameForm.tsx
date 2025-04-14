@@ -1,48 +1,63 @@
-import type { FieldValues, Path } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { TextFieldProps } from '@mui/material';
-import { Box, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 
-import { NameFormWrapper, StyledNameInput } from './NameForm.styles';
+import {
+	FirstNameInputWrapper,
+	LastNameInputWrapper,
+	NameFormWrapper,
+} from './NameForm.styles';
 import type { NameFormProps } from './NameForm.types';
 
-export const NameForm = <T extends FieldValues>({
-	errors,
-	register,
+export const NameForm = ({
 	placeholderFirstName,
 	placeholderLastName,
 	disabled,
-}: NameFormProps<T> & TextFieldProps) => {
+	required,
+}: NameFormProps & TextFieldProps) => {
 	const { t } = useTranslation();
+
+	const {
+		register,
+		formState: { errors },
+	} = useFormContext();
 
 	return (
 		<NameFormWrapper>
-			<Box width={'100%'}>
-				<StyledNameInput
+			<FirstNameInputWrapper>
+				<TextField
 					label={t('components.form.signup.firstName')}
 					fullWidth
 					id='firstName'
 					defaultValue={placeholderFirstName}
-					{...register('firstName' as Path<T>)}
+					placeholder={
+						!placeholderFirstName?.length &&
+						t('components.input.text.first-name')
+					}
+					{...register('firstName')}
 					error={!!errors.firstName}
 					helperText={errors.firstName?.message as string}
-					required
+					required={required}
 					disabled={disabled}
 				/>
-			</Box>
-			<Box width={'100%'}>
+			</FirstNameInputWrapper>
+			<LastNameInputWrapper>
 				<TextField
 					label={t('components.form.signup.lastName')}
 					fullWidth
 					id='lastName'
 					defaultValue={placeholderLastName}
-					{...register('lastName' as Path<T>)}
+					placeholder={
+						!placeholderLastName?.length && t('components.input.text.last-name')
+					}
+					{...register('lastName')}
 					error={!!errors?.lastName}
 					helperText={errors?.lastName?.message as string}
-					required
+					required={required}
 					disabled={disabled}
 				/>
-			</Box>
+			</LastNameInputWrapper>
 		</NameFormWrapper>
 	);
 };

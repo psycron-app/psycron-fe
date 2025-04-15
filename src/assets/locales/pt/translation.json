@@ -419,7 +419,8 @@
 			"cancel-or-edit": {
 				"title": "Deseja fazer alguma mudança?",
 				"sub": "Você pode reagendar ou cancelar esta sessão agora.",
-				"appointment-info": "Sua consulta no dia {{date}} às {{startTime}}"
+				"appointment-info": "Sua consulta no dia {{date}} às {{startTime}}",
+				"donwload-ics": "Adicione ao seu calendário 📅"
 			},
 			"no-appointments-title": "Você ainda não tem nenhuma consulta marcada",
 			"no-appointments-link": "Clique aqui para agendar suas consultas"

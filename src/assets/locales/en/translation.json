@@ -418,7 +418,8 @@
 			"cancel-or-edit": {
 				"title": "Need to make changes?",
 				"sub": "You can either reschedule or cancel your appointment here.",
-				"appointment-info": "Your appointment on {{date}} at {{startTime}}"
+				"appointment-info": "Your appointment on {{date}} at {{startTime}}",
+				"donwload-ics": "Add to calendar 📅"
 			},
 			"no-appointments-title": "You dont have any appointments yet",
 			"no-appointments-link": "Click here to start booking an appointment"

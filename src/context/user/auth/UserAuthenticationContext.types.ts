@@ -47,7 +47,7 @@ export interface ITherapist extends IBaseUser {
 export interface IPatient extends IBaseUser {
 	cancelledAppointments?: ICancelledAppointment[];
 	createdBy?: ITherapist | string;
-	receivedNotifications?: INotification[];
+	notifications?: INotification[];
 	role: 'PATIENT';
 	sessionDates: ISessionDatesGroup[];
 	timeZone?: string;
@@ -78,10 +78,12 @@ export interface IAddress {
 }
 
 export interface INotification {
-	body: string;
-	dateUpdated: Date;
-	from: string;
-	method: string;
+	channel: string;
+	content: string;
+	icsContent: string;
+	id: string;
+	messageType: string;
+	sentAt: Date;
 }
 
 export interface IAvailability {

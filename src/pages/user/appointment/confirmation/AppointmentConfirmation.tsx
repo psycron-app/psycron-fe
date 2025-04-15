@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, TextField } from '@mui/material';
 import type { CancelAppointmentFormData } from '@psycron/api/user/availability/index.types';
 import { CancellationReasonEnum } from '@psycron/api/user/availability/index.types';
+import { Button } from '@psycron/components/button/Button';
 import type { ISelectedSlot } from '@psycron/components/calendar/big-calendar/BigCalendar.types';
 import { getFormattedTimeLabels } from '@psycron/components/calendar/big-calendar/components/appointment-details/utils';
 import { Globe, MapPin } from '@psycron/components/icons';
@@ -125,6 +126,8 @@ export const AppointmentConfirmation = () => {
 
 	const { firstName, lastName } = userDetails;
 
+	const lastIcsNotification = patientDetails.notifications.at(-1);
+
 	const handleEditAppointment = (selectedSlot: ISelectedSlot) => {
 		setSelectedSlotToEdit(selectedSlot);
 		setIsEditOrCancelOpen(true);
@@ -204,6 +207,18 @@ export const AppointmentConfirmation = () => {
 		twitterImage: imageUrl,
 	};
 
+	const downloadIcs = (icsContent: string, filename: string) => {
+		const blob = new Blob([icsContent], {
+			type: 'text/calendar;charset=utf-8',
+		});
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.href = url;
+		link.download = filename;
+		link.click();
+		URL.revokeObjectURL(url);
+	};
+
 	return (
 		<SEOProvider seo={appointment_confirmation_SEO}>
 			<ConfirmationPageWrapper>
@@ -267,9 +282,23 @@ export const AppointmentConfirmation = () => {
 									);
 								}
 							)}
-							<Text variant='caption' pt={2}>
-								{t('page.booking-confirmation.advise')}
-							</Text>
+							<Box display='flex' flexDirection='column'>
+								<Text variant='caption' py={2}>
+									{t('page.booking-confirmation.advise')}
+								</Text>
+								{lastIcsNotification?.icsContent && (
+									<Button
+										onClick={() =>
+											downloadIcs(
+												lastIcsNotification.icsContent,
+												`appointment-with-${firstName}.ics`
+											)
+										}
+									>
+										{t('page.booking-confirmation.cancel-or-edit.donwload-ics')}
+									</Button>
+								)}
+							</Box>
 						</Box>
 					) : (
 						<Box>

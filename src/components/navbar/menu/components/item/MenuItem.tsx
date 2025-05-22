@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 
 import { MobileMenuItem, StyledMenuItem } from './MenuItem.styles';
@@ -11,6 +12,15 @@ export const MenuItem = ({
 	disabled,
 	open,
 }: IMenuItem) => {
+	const [shouldOpenTooltip, setShouldOpenTooltip] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (open) {
+			const timeout = setTimeout(() => setShouldOpenTooltip(true), 100);
+			return () => clearTimeout(timeout);
+		}
+	}, [open]);
+
 	return (
 		<>
 			{isFullList ? (
@@ -28,7 +38,7 @@ export const MenuItem = ({
 					placement='right'
 					disabled={disabled}
 					isFooterIcon={isFooterIcon}
-					open={open}
+					open={shouldOpenTooltip || undefined}
 				>
 					{icon}
 				</StyledMenuItem>

@@ -30,6 +30,7 @@ import { Lock as IconLock } from './Lock';
 import { Mail as IconMail } from './Mail';
 import { MapPin as IconMapPin } from './MapPin';
 import { Month as IconMonth } from './Month';
+import { Send as IconSend } from './Send';
 import { Share as IconShare } from './Share';
 import { Today as IconToday } from './Today';
 import { UnAvailable as IconUnAvailable } from './UnAvailable';
@@ -66,6 +67,7 @@ import { Watch as IconWatch } from './Watch';
 import { WhatsApp as IconWhatsApp } from './Whatsapp';
 
 export const Pause = withIconColor(IconPause);
+export const Send = withIconColor(IconSend);
 export const Globe = withIconColor(IconGlobe);
 export const MapPin = withIconColor(IconMapPin);
 export const ClockIn = withIconColor(IconClockIn);

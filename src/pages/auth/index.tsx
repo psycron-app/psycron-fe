@@ -16,7 +16,9 @@ import { AuthPageWrapper } from './index.styles';
 export const AuthPage = () => {
 	const { signIn, signUp, isSessionLoading, isAuthenticated } = useAuth();
 
-	const { pathname } = useLocation();
+	const { pathname, state } = useLocation();
+
+	const from = state?.from?.pathname || `/${i18n.language}/${DASHBOARD}`;
 
 	const {
 		register,
@@ -37,7 +39,7 @@ export const AuthPage = () => {
 	}
 
 	if (isAuthenticated) {
-		return <Navigate to={`/${i18n.language}/${DASHBOARD}`} replace />;
+		return <Navigate to={from} replace />;
 	}
 
 	return (

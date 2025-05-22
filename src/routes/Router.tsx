@@ -6,6 +6,7 @@ import i18n from '@psycron/i18n';
 import { AppLayout } from '@psycron/layouts/app/app-layout/AppLayout';
 import { LanguageLayout } from '@psycron/layouts/language-layout/LanguageLayout';
 import { PublicLayout } from '@psycron/layouts/public-layout/PublicLayout';
+import { NotFound } from '@psycron/pages/error/NotFound';
 
 import privateRoutes from './PrivateRoutes';
 import publicRoutes from './PublicRoutes';
@@ -24,12 +25,14 @@ const Router = () => {
 							{publicRoutes.map(({ path, element }, index) => (
 								<Route key={index} path={path} element={element} />
 							))}
+							<Route path='*' element={<NotFound />} />
 						</Route>
 
 						<Route element={<AppLayout />}>
 							{privateRoutes.map(({ path, element }, index) => (
 								<Route key={index} path={path} element={element} />
 							))}
+							<Route path='*' element={<NotFound />} />
 						</Route>
 					</Route>
 				</Routes>

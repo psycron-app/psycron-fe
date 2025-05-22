@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getSession, logoutFc, signInFc, signUpFc } from '@psycron/api/auth';
 import type { CustomError } from '@psycron/api/error';
 import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
@@ -22,12 +22,14 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const { showAlert } = useAlert();
 
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
 	const [user, setUser] = useState<ITherapist | null>(null);
+	const [manualLogin, setManualLogin] = useState<boolean>(false);
 
 	const isTokenValid = (token: string | null): boolean => {
 		if (!token) return false;
@@ -79,7 +81,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 				localStorage.setItem(REFRESH_TOKEN, res.refreshToken);
 			}
 			setIsAuthenticated(true);
-			navigate(DASHBOARD);
+			if (manualLogin) {
+				const from = location.state?.from?.pathname || DASHBOARD;
+				navigate(from);
+			}
 		},
 		onError: (error: CustomError) => {
 			showAlert({
@@ -118,8 +123,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		},
 	});
 
-	const signIn = (data: ISignInForm) => signInMutation.mutate(data);
-	const signUp = (data: ISignUpForm) => signUpMutation.mutate(data);
+	const signIn = (data: ISignInForm) => {
+		setManualLogin(true);
+		signInMutation.mutate(data);
+	};
+
+	const signUp = (data: ISignUpForm) => {
+		setManualLogin(true);
+		signUpMutation.mutate(data);
+	};
 	const logout = () => logoutMutation.mutate();
 
 	return (

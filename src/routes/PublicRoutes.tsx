@@ -2,6 +2,7 @@ import { AuthPage } from '@psycron/pages/auth';
 import { ChangePassword } from '@psycron/pages/auth/password/ChangePassword';
 import { ResetPassword } from '@psycron/pages/auth/password/ResetPassword';
 import { Home } from '@psycron/pages/home/HomePage';
+import { Testing } from '@psycron/pages/testing/indext';
 import { Unsubscribe } from '@psycron/pages/unsubscribe/Unsubscribe';
 import {
 	APPOINTMENTCONFIRMATIONPATH,
@@ -32,6 +33,10 @@ const publicRoutes = [
 	{
 		path: `:userId/${PATIENTEDITAPPOINTMENT}/edit/:availabilityDayId`,
 		element: <BookAppointment />,
+	},
+	{
+		path: 'test',
+		element: <Testing />,
 	},
 ];
 

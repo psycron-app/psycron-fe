@@ -1,3 +1,3 @@
 export interface IPromptProps {
-	prompt: string;
+	onSubmit: (text: string) => void;
 }

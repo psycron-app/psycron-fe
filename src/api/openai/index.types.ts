@@ -1,4 +1,4 @@
-import apiClient from '@psycron/api/axios-instance';
+import type { IChatMessage } from '@psycron/components/chat/message/ChatMessage.types';
 
 import type {
 	IWeekdaysNames,
@@ -21,12 +21,45 @@ export interface IGeneratedAvailability {
 	recurrencePattern: RecurrencePattern;
 }
 
-export const generateAvailabilityFromPrompt = async (
-	payload: IGenerateAvailabilityPayload
-): Promise<IGeneratedAvailability> => {
-	const response = await apiClient.post<IGeneratedAvailability>(
-		'/ai/availability/generate',
-		payload
-	);
-	return response.data;
-};
+export interface ICollectAvailabilityStepResponse {
+	availabilityDraft: IAvailabilityDraft;
+	isDraftComplete?: boolean;
+	nextQuestion: string;
+	threadId: string;
+}
+
+export interface IAvailabilityDraft {
+	days?: Array<{
+		endTime: string;
+		startTime: string;
+		weekday:
+			| 'MONDAY'
+			| 'TUESDAY'
+			| 'WEDNESDAY'
+			| 'THURSDAY'
+			| 'FRIDAY'
+			| 'SATURDAY'
+			| 'SUNDAY';
+	}>;
+	recurrencePattern?: 'WEEKLY' | 'MONTHLY';
+	therapySettings: ITherapySettings[];
+	therapyTypes?: string[];
+}
+
+export interface ITherapySettings {
+	durationInMinutes: number;
+	gapBetweenSessionsInMinutes?: number;
+	type: string;
+}
+
+export type ChatMessageRole = 'system' | 'user' | 'assistant';
+
+export interface AvailabilityThreadResponse {
+	isDraftComplete: boolean;
+	lastStep: string;
+	latestDraft: IAvailabilityDraft;
+	messages: IChatMessage[];
+	threadId: string;
+}
+
+export type OnTokenCallback = (token: string) => void;

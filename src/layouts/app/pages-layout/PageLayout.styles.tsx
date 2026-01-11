@@ -4,7 +4,7 @@ import { isMobileMedia } from '@psycron/theme/media-queries/mediaQueries';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const PageLayoutWrapper = styled(Box)`
-	height: 100%;
+	height: 100vh;
 	display: flex;
 	flex-direction: column;
 `;
@@ -33,9 +33,9 @@ export const PageLoaderWrapper = styled(Box)`
 `;
 
 export const PageChildrenWrapper = styled(Box)`
-	height: 100%;
-
-	flex-grow: 1;
+	flex: 1;
 	overflow-y: auto;
 	overflow-x: hidden;
+	display: flex;
+	flex-direction: column;
 `;

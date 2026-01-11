@@ -1,7 +1,10 @@
-import type { ReactNode } from 'react';
+import type { ChatMessageRole } from '@psycron/api/openai/index.types';
 
 export interface IChatMessage {
 	bot?: boolean;
 	icon?: boolean;
-	message: string | ReactNode;
+	isThinking?: boolean;
+	message: string;
+	role: ChatMessageRole;
+	shouldApplyGlass?: boolean;
 }

@@ -465,5 +465,11 @@
 			"title": "Adicione um Novo Paciente",
 			"sub-title": "Preencha o formulário abaixo com os detalhes da pessoa"
 		}
+	},
+	"chat": {
+		"greeting": "Olá! Eu sou a Júpiter, sua assistente para configurar sua agenda de atendimentos. Vamos construir isso juntos, passo a passo 🧘‍♀️! Vamos?",
+		"let-start": "Quais tipos de terapia você oferece?",
+		"system-instruction": "Você é uma assistente gentil que ajuda terapeutas a montar sua agenda passo a passo. Sempre responda com a próxima pergunta e os dados extraídos até o momento. Por exemplo, se a pergunta for sobre reccurencePattern, você deve explicar que weekly significa até o fim do mês e monthly até o fim do ano",
+		"error": "Oops! Não foi possível continuar a conversa. Tente novamente."
 	}
 }

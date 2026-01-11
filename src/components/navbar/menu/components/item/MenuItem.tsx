@@ -24,9 +24,9 @@ export const MenuItem = ({
 	return (
 		<>
 			{isFullList ? (
-				<MobileMenuItem p={isFooterIcon ? 1 : 4} disabled={disabled}>
+				<MobileMenuItem disabled={disabled}>
 					<Box>{icon}</Box>
-					<Box px={isFooterIcon ? 1 : 3}>
+					<Box>
 						<Typography variant='subtitle1' textTransform='capitalize'>
 							{name}
 						</Typography>

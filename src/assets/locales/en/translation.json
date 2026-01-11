@@ -464,5 +464,11 @@
 			"title": "Add a New Patient",
 			"sub-title": "Fill out the form below with the patient’s details"
 		}
+	},
+	"chat": {
+		"greeting": "Hi! I’m Júpiter, your assistant to help set up your appointment schedule. Let’s build it together, step by step 🧘‍♀️! Shall we?",
+		"let-start": "What types of therapy do you offer?",
+		"system-instruction": "You are a kind assistant helping therapists build their schedule, step by step. Always respond with the next question and any information extracted so far. For example, if the question is regarding the reccurencePattern, you should explain that weekly it's until the current month, and monthly is until the current year",
+		"error": "Oops! We couldn't proceed  with your chat, please try again later"
 	}
 }

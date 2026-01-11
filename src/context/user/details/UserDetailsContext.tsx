@@ -1,17 +1,13 @@
 import { createContext, useContext, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserById } from '@psycron/api/user';
-import { getAvailabilitySession } from '@psycron/api/user/availability';
 import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import { EDITUSERPATH } from '@psycron/pages/urls';
 import { THERAPIST_ID } from '@psycron/utils/tokens';
 import { useQuery } from '@tanstack/react-query';
 
 import { useAuth } from '../auth/UserAuthenticationContext';
-import type {
-	IAvailability,
-	ITherapist,
-} from '../auth/UserAuthenticationContext.types';
+import type { ITherapist } from '../auth/UserAuthenticationContext.types';
 
 import type {
 	UserDetailsContextType,
@@ -98,15 +94,6 @@ export const useUserDetails = (passedUserId?: string) => {
 		? userDetails.availability[userDetails.availability.length - 1]
 		: null;
 
-	const { data: sessionData, isLoading: sessionDataIsLoading } = useQuery({
-		queryKey: ['availabilitySession', latestSessionId],
-		queryFn: async () => {
-			if (!latestSessionId) return null;
-			return getAvailabilitySession(latestSessionId as Partial<IAvailability>);
-		},
-		enabled: !!latestSessionId,
-	});
-
 	const therapistIdFromStorage = useSecureStorage(
 		THERAPIST_ID,
 		userDetails?._id,
@@ -124,8 +111,6 @@ export const useUserDetails = (passedUserId?: string) => {
 		isUserDetailsLoading: isUserDetailsLoading,
 		isUserDetailsSucces,
 		therapistId,
-		sessionData,
-		sessionDataIsLoading,
 		latestSessionId,
 	};
 };

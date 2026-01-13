@@ -1,5 +1,5 @@
-import type { FC } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { type FC } from 'react';
+import { Outlet } from 'react-router-dom';
 import { Box, Divider } from '@mui/material';
 import { Navbar } from '@psycron/components/navbar/Navbar';
 import { UserDetailsCard } from '@psycron/components/user/components/user-details-card/UserDetailsCard';
@@ -19,6 +19,7 @@ export const AppLayout: FC = () => {
 	const { isMobile, isTablet } = useViewport();
 
 	const { isAuthenticated } = useAuth();
+
 	const sessionStatus = useAuthSession();
 
 	const { isUserDetailsVisible, userDetails } = useUserDetails();
@@ -45,7 +46,6 @@ export const AppLayout: FC = () => {
 				</DividerWrapper>
 			</NavBarWrapper>
 			<Content>
-				{isAuthenticated ? <Outlet /> : <Navigate to='/' replace />}
 				<Outlet />
 				{isAuthenticated && isUserDetailsVisible && (
 					<UserDetailsCard

@@ -16,16 +16,18 @@ export const Tooltip = ({
 		</Text>
 	);
 
+	const isControlled = typeof open === 'boolean';
+
 	return (
 		<MUITooltip
 			arrow
 			placement={placement}
 			title={Title}
-			open={open}
+			open={isControlled ? open : undefined}
+			disableHoverListener={isControlled}
+			disableFocusListener={isControlled}
+			disableTouchListener={isControlled}
 			{...rest}
-			disableHoverListener={disabled}
-			disableFocusListener={disabled}
-			disableTouchListener={disabled}
 		>
 			<span
 				style={{

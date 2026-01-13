@@ -11,8 +11,7 @@ export const StyledMenuItem = styled(Tooltip, {
 		props !== 'isFooterIcon' && props !== 'disabled',
 })<Pick<IMenuItem, 'isFooterIcon' | 'disabled'>>`
 	border-radius: 50%;
-	padding: ${({ isFooterIcon }) =>
-		!isFooterIcon ? spacing.xs : spacing.small};
+	padding: ${spacing.xs};
 
 	${({ disabled }) =>
 		disabled &&
@@ -64,6 +63,8 @@ export const MobileMenuItem = styled(Box, {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+
+	padding: ${spacing.xs};
 
 	&:hover {
 		cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};

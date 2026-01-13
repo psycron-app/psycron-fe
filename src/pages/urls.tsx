@@ -37,6 +37,7 @@ export const APPOINTMENTCONFIRMATION = `${APPOINTMENT}-confirmation`;
 
 export const AVAILABILITY = `${AVAILABILITYPATH}/${USERID}`;
 export const AVAILABILITYWIZARD = `${AVAILABILITYPATH}/create`;
+export const AVAILABILITYGENERATE = `${AVAILABILITYPATH}/generate`;
 export const AGENDA = 'agenda';
 export const BOOKAPPOINTMENT = `${USERID}/book-appointment`;
 export const PATIENTEDITAPPOINTMENT = 'book-appointment';

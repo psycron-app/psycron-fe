@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import type { ChangeEvent } from 'react';
 import { useState } from 'react';
 import type { FieldValues, Path } from 'react-hook-form';
@@ -99,7 +98,7 @@ export const AddressForm = <T extends FieldValues>({
 					handlePlaceSelect={handlePlaceSelect}
 				/>
 			) : null}
-			<Grid item xs={12} md={8}>
+			<Grid size={{ xs: 12, md: 8 }}>
 				<TextField
 					label={t('components.form.address-form.street')}
 					id='route'
@@ -114,7 +113,7 @@ export const AddressForm = <T extends FieldValues>({
 					disabled={disabled}
 				/>
 			</Grid>
-			<Grid item xs={4} md={4}>
+			<Grid size={{ xs: 4, md: 4 }}>
 				<TextField
 					id='streetNumber'
 					label={t('components.form.address-form.number')}
@@ -129,7 +128,7 @@ export const AddressForm = <T extends FieldValues>({
 					disabled={disabled}
 				/>
 			</Grid>
-			<Grid item xs={8} md={6}>
+			<Grid size={{ xs: 8, md: 6 }}>
 				<TextField
 					id='sublocality'
 					label={t('components.form.address-form.hood')}
@@ -145,7 +144,7 @@ export const AddressForm = <T extends FieldValues>({
 				/>
 			</Grid>
 			{addMoreInfo ? (
-				<Grid item xs={12}>
+				<Grid size={{ xs: 12 }}>
 					<ComplementaryField
 						id='moreInfo'
 						label={t('components.form.address-form.more-info')}
@@ -157,7 +156,7 @@ export const AddressForm = <T extends FieldValues>({
 					/>
 				</Grid>
 			) : null}
-			<Grid item xs={5} md={6}>
+			<Grid size={{ xs: 5, md: 6 }}>
 				<TextField
 					id='political'
 					label={t('components.form.address-form.city')}
@@ -172,7 +171,7 @@ export const AddressForm = <T extends FieldValues>({
 					disabled={disabled}
 				/>
 			</Grid>
-			<Grid item xs={7} md={6}>
+			<Grid size={{ xs: 7, md: 6 }}>
 				<TextField
 					id='administrativeArea'
 					label={t('components.form.address-form.state')}
@@ -187,7 +186,7 @@ export const AddressForm = <T extends FieldValues>({
 					disabled={disabled}
 				/>
 			</Grid>
-			<Grid item xs={4} md={6}>
+			<Grid size={{ xs: 4, md: 6 }}>
 				<TextField
 					id='postalCode'
 					label={t('components.form.address-form.zip')}
@@ -202,7 +201,7 @@ export const AddressForm = <T extends FieldValues>({
 					disabled={disabled}
 				/>
 			</Grid>
-			<Grid item xs={8} md={6}>
+			<Grid size={{ xs: 8, md: 6 }}>
 				<TextField
 					id='country'
 					label={t('components.form.address-form.country')}
@@ -217,7 +216,7 @@ export const AddressForm = <T extends FieldValues>({
 					disabled={disabled}
 				/>
 			</Grid>
-			<Grid item xs={8} display='flex' alignItems='center'>
+			<Grid display='flex' alignItems='center' size={{ xs: 8 }}>
 				<Switch
 					onChange={() => setAddMoreInfo((prev) => !prev)}
 					value={addMoreInfo}

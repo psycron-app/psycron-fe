@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+ 
 import { Box, css, styled } from '@mui/material';
 import { Text } from '@psycron/components/text/Text';
 import { isBiggerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueries';

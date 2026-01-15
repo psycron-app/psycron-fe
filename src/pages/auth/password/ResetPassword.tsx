@@ -36,7 +36,7 @@ export const ResetPassword = () => {
 			});
 		},
 		onError: (error: CustomError) => {
-			setResetPassError(error.message);
+			setResetPassError(t(error.message));
 		},
 	});
 

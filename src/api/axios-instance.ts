@@ -1,8 +1,8 @@
 import { ID_TOKEN, REFRESH_TOKEN } from '@psycron/utils/tokens';
 import axios from 'axios';
 
-import { refreshTokenService } from './auth';
 import { sanitizeAuthError } from './auth/auth-errors';
+import { refreshTokenService } from './auth';
 import { CustomError } from './error';
 
 const apiClient = axios.create({

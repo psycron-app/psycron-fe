@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getSession, logoutFc, signInFc, signUpFc } from '@psycron/api/auth';
 import type { CustomError } from '@psycron/api/error';
@@ -21,6 +22,7 @@ import type {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -89,7 +91,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		onError: (error: CustomError) => {
 			showAlert({
 				severity: 'error',
-				message: error.message,
+				message: t(error.message),
 			});
 		},
 	});
@@ -109,7 +111,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		onError: (error: CustomError) => {
 			showAlert({
 				severity: 'error',
-				message: error.message,
+				message: t(error.message),
 			});
 		},
 	});

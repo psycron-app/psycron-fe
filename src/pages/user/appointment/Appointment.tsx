@@ -41,7 +41,7 @@ export const AppointmentPage = () => {
 
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
-		console.log('🚀 ~ currentDay ~ today:', today);
+		// TODO: Remove debug log - console.log('🚀 ~ currentDay ~ today:', today);
 
 		const normalizedDates = availabilityData?.dates?.map((d) => ({
 			...d,
@@ -52,10 +52,10 @@ export const AppointmentPage = () => {
 		const todayMatch = normalizedDates.find((d) => {
 			const date = new Date(d.date);
 			date.setHours(0, 0, 0, 0);
-			console.log('🚀 ~ todayMatch ~ date:', date);
+			// TODO: Remove debug log - console.log('🚀 ~ todayMatch ~ date:', date);
 			return date.getTime() === today.getTime();
 		});
-		console.log('🚀 ~ todayMatch ~ todayMatch:', todayMatch);
+		// TODO: Remove debug log - console.log('🚀 ~ todayMatch ~ todayMatch:', todayMatch);
 
 		if (todayMatch) {
 			return {

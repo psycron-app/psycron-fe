@@ -9,7 +9,7 @@ import type { IChatMessageList } from './ChatMessageList.types';
 
 export const ChatMessageList = ({ messages }: IChatMessageList) => {
 	const { isSending } = useAvailabilityAssistant();
-	console.log('isSending:', isSending);
+	// TODO: Remove debug log - console.log('isSending:', isSending);
 	const bottomRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {

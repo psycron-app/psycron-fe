@@ -1,30 +1,138 @@
-# React + TypeScript + Vite
+# Psycron Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React application for therapists to manage appointments, availability, and patient scheduling.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Framework:** React 18 + TypeScript
+- **Build Tool:** Vite
+- **UI Library:** Material-UI (MUI) with Emotion
+- **State Management:** React Query + React Context
+- **Forms:** React Hook Form + Yup validation
+- **Routing:** React Router v6
+- **Internationalization:** i18next
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Prerequisites
 
-- Configure the top-level `parserOptions` property like this:
+- Node.js 18+
+- npm or yarn
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/psycron-app/psycron-fe.git
+cd psycron-fe
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env
+# Edit .env with your configuration
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Environment Setup
+
+Copy `.env.example` to `.env` and configure:
+
+```bash
+# Required
+VITE_PSYCRON_BASE_API_URL=http://localhost:8080/api/v1
+
+# Optional (features disabled if not set)
+VITE_IP_GEO_KEY=your_key_here
+VITE_GOOGLE_MAPS_API_KEY=your_key_here
+VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+> **Security Note:** Never commit `.env` files. See [SECURITY.md](./SECURITY.md) for details.
+
+### Development
+
+```bash
+# Start development server
+npm run dev
+
+# Run linting
+npm run lint
+
+# Start Storybook
+npm run storybook
+```
+
+### Production Build
+
+```bash
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Project Structure
+
+```
+src/
+├── api/          # API modules and axios configuration
+├── components/   # Reusable UI components
+├── context/      # React Context providers
+├── hooks/        # Custom React hooks
+├── layouts/      # Page layout components
+├── pages/        # Route page components
+├── routes/       # Router configuration
+├── theme/        # MUI theme and design tokens
+└── utils/        # Utility functions
+```
+
+## Deployment
+
+### Environment Variables
+
+Set these in your deployment platform (Vercel, Netlify, etc.):
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `VITE_PSYCRON_BASE_API_URL` | Yes | Backend API URL |
+| `VITE_IP_GEO_KEY` | No | IP Geolocation API key |
+| `VITE_GOOGLE_MAPS_API_KEY` | No | Google Maps API key |
+| `VITE_GA_MEASUREMENT_ID` | No | Google Analytics ID |
+
+### Deployment Checklist
+
+- [ ] Set all required environment variables
+- [ ] Verify API URL uses HTTPS
+- [ ] Run `npm audit` before deployment
+- [ ] Test authentication flow
+- [ ] Verify CORS configuration with backend
+
+### Backend Integration
+
+Ensure the backend is configured with:
+
+- CORS whitelist including your frontend domain
+- HTTPS enabled
+- Proper security headers (see [SECURITY.md](./SECURITY.md))
+
+## Security
+
+See [SECURITY.md](./SECURITY.md) for:
+
+- Environment variable guidelines
+- Secure development practices
+- Deployment security checklist
+- Vulnerability reporting
+
+## Contributing
+
+1. Create a feature branch from `dev`
+2. Follow the coding standards in [CLAUDE.md](./CLAUDE.md)
+3. Run `npm run lint` before committing
+4. Submit a PR with clear description
+
+## License
+
+Proprietary - All rights reserved.

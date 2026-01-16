@@ -141,4 +141,9 @@ export const palette: Palette = {
 		'09': '#484C4E',
 		dark: '#363A3B',
 	},
+	brand: {
+		purple: '#683fff',
+		light: '#f0ebff',
+		dark: '#4a2db8',
+	},
 };

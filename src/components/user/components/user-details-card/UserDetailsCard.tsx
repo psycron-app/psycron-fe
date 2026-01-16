@@ -9,9 +9,12 @@ import type { IUserDetailsCardProps } from './UserDetailsCard.types';
 
 export const UserDetailsCard = ({ plan, user }: IUserDetailsCardProps) => {
 	const userDetailsCardRef = useRef<HTMLDivElement | null>(null);
-	const { toggleUserDetails, isUserDetailsVisible } = useUserDetails();
+	const { toggleUserDetails, isUserDetailsVisible, isDeleteOpen } =
+		useUserDetails();
 
-	useClickOutside(userDetailsCardRef, toggleUserDetails);
+	useClickOutside(userDetailsCardRef, () => {
+		if (!isDeleteOpen) toggleUserDetails();
+	});
 
 	return (
 		<>

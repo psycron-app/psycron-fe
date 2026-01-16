@@ -5,7 +5,7 @@ import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const InputFields = styled(TextField, {
 	shouldForwardProp: (props) => props !== 'maxWidth',
-})<{ maxWidth: string }>`
+})<{ maxWidth?: string }>`
 	margin: ${spacing.small} 0;
 	box-sizing: border-box;
 

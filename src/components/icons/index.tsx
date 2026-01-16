@@ -23,6 +23,7 @@ import { CheckSuccess as IconCheckSuccess } from './CheckSuccess';
 import { Close as IconClose } from './Close';
 import { DashboardIcon as IconDashboardIcon } from './DashboardIcon';
 import { Dots as IconDots } from './Dots';
+import { Download as IconDownload } from './Download';
 import { Error as IconError } from './Error';
 import { Globe as IconGlobe } from './Globe';
 import { HealthTracker as IconHealthTracker } from './HealthTracker';
@@ -68,6 +69,7 @@ import { Watch as IconWatch } from './Watch';
 import { WhatsApp as IconWhatsApp } from './Whatsapp';
 
 export const Pause = withIconColor(IconPause);
+export const Download = withIconColor(IconDownload);
 export const Send = withIconColor(IconSend);
 export const Globe = withIconColor(IconGlobe);
 export const MapPin = withIconColor(IconMapPin);

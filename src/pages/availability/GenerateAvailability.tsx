@@ -8,7 +8,7 @@ import { GenerateAvailabilityContentWrapper } from './GenerateAvailability.style
 
 export const GenerateAvailability = () => {
 	const { messages, sendMessage } = useAvailabilityAssistant();
-	console.log('🚀 ~ GenerateAvailability ~ messages:', messages);
+	// TODO: Remove debug log - console.log('🚀 ~ GenerateAvailability ~ messages:', messages);
 
 	return (
 		<PageLayout title={'Generate your Availability'} isLoading={false}>

@@ -1,4 +1,4 @@
-/* eslint-disable indent */
+ 
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';

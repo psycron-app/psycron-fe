@@ -25,7 +25,7 @@ export const AvailabilityHours = () => {
 	}
 
 	const { consultationDuration, weekdays } = sessionData;
-	console.log('🚀 ~ AvailabilityHours ~ weekdays:', weekdays);
+	// TODO: Remove debug log - console.log('🚀 ~ AvailabilityHours ~ weekdays:', weekdays);
 
 	const dayHours = generateTimeSlots(consultationDuration);
 

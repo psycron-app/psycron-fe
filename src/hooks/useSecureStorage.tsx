@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
-import { getEncryptionKey } from '@psycron/api/auth';
-import CryptoJS from 'crypto-js';
 
-const encryptData = (data: string, key: string) => {
-	return CryptoJS.AES.encrypt(data, key).toString();
-};
-
-const decryptData = (encryptedData: string, key: string) => {
-	try {
-		const bytes = CryptoJS.AES.decrypt(encryptedData, key);
-		return bytes.toString(CryptoJS.enc.Utf8);
-	} catch {
-		return null;
-	}
-};
-
+/**
+ * Secure Storage Hook
+ *
+ * Stores values in localStorage/sessionStorage with automatic expiry.
+ *
+ * Note: Encryption was removed in P1.3 security review.
+ * The stored values (therapist ID, patient ID) are not secrets,
+ * so encryption added complexity without security benefit.
+ *
+ * @param key - Storage key
+ * @param value - Value to store (optional)
+ * @param expiryMinutes - TTL in minutes (default: 60)
+ * @param storageType - 'local' or 'session' (default: 'local')
+ */
 export const useSecureStorage = (
 	key: string,
 	value?: string,
@@ -22,34 +21,17 @@ export const useSecureStorage = (
 	storageType: 'local' | 'session' = 'local'
 ) => {
 	const [storedValue, setStoredValue] = useState<string | null>(null);
-	const [encryptionKey, setEncryptionKey] = useState<string | null>(null);
 
+	// Read from storage on mount
 	useEffect(() => {
-		const fetchKey = async () => {
-			try {
-				const fetchedKey = await getEncryptionKey();
-				setEncryptionKey(fetchedKey);
-			} catch (error) {
-				setEncryptionKey(null);
-			}
-		};
-
-		fetchKey();
-	}, []);
-
-	useEffect(() => {
-		if (!encryptionKey) return;
-
 		const storage = storageType === 'local' ? localStorage : sessionStorage;
-		const encryptedItem = storage.getItem(key);
+		const storedItem = storage.getItem(key);
 
-		if (encryptedItem) {
+		if (storedItem) {
 			try {
-				const decryptedItem = decryptData(encryptedItem, encryptionKey);
-				if (!decryptedItem) return;
+				const parsedData = JSON.parse(storedItem);
 
-				// 🔹 Verifica se o dado já expirou
-				const parsedData = JSON.parse(decryptedItem);
+				// Check if expired
 				if (parsedData.expiry && new Date().getTime() > parsedData.expiry) {
 					storage.removeItem(key);
 					setStoredValue(null);
@@ -57,27 +39,38 @@ export const useSecureStorage = (
 				}
 
 				setStoredValue(parsedData.value);
-			} catch (error) {
-				// eslint-disable-next-line no-console
-				console.error('Failed to decrypt data:', error);
+			} catch {
+				// Invalid JSON - remove corrupted data
+				storage.removeItem(key);
+				setStoredValue(null);
 			}
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [encryptionKey]);
+	}, [key, storageType]);
 
+	// Write to storage when value changes
 	useEffect(() => {
-		if (!encryptionKey || !value || value === storedValue) return;
+		if (!value || value === storedValue) return;
 
 		const expiryTimestamp = new Date().getTime() + expiryMinutes * 60 * 1000;
-
 		const dataToStore = JSON.stringify({ value, expiry: expiryTimestamp });
-		const encryptedValue = encryptData(dataToStore, encryptionKey);
 
 		const storage = storageType === 'local' ? localStorage : sessionStorage;
-		storage.setItem(key, encryptedValue);
+		storage.setItem(key, dataToStore);
 		setStoredValue(value);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [value, key, expiryMinutes, encryptionKey]);
+	}, [value, key, expiryMinutes, storageType, storedValue]);
 
 	return storedValue;
 };
+
+/**
+ * @deprecated - CryptoJS encryption removed in P1.3
+ *
+ * Previous implementation used backend encryption key:
+ * // const encryptData = (data: string, key: string) => {
+ * //   return CryptoJS.AES.encrypt(data, key).toString();
+ * // };
+ * // const decryptData = (encryptedData: string, key: string) => {
+ * //   const bytes = CryptoJS.AES.decrypt(encryptedData, key);
+ * //   return bytes.toString(CryptoJS.enc.Utf8);
+ * // };
+ */

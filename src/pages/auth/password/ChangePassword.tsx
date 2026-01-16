@@ -39,10 +39,10 @@ export const ChangePassword = () => {
 			});
 		},
 		onError: (error: CustomError) => {
-			setPasswordResetError(error.message);
+			setPasswordResetError(t(error.message));
 			if (error.statusCode === 404) {
 				showAlert({
-					message: error.message,
+					message: t(error.message),
 					severity: 'error',
 				});
 				setTimeout(() => {

@@ -1,4 +1,20 @@
 {
+	"auth": {
+		"error": {
+			"login-failed": "Invalid email or password. Please check your credentials and try again.",
+			"registration-failed": "Unable to complete registration. Please check your information and try again.",
+			"password-reset-request": "If this email is registered, you will receive password reset instructions.",
+			"password-reset-failed": "Unable to reset password. The link may have expired. Please request a new one.",
+			"session-expired": "Your session has expired. Please sign in again.",
+			"rate-limited": "Too many attempts. Please wait a moment before trying again.",
+			"generic": "Something went wrong. Please try again later."
+		},
+		"success": {
+			"password-reset-request": "If this email is registered, you will receive password reset instructions shortly.",
+			"password-reset": "Your password has been changed successfully. You can now sign in.",
+			"logout": "You have been signed out successfully."
+		}
+	},
 	"globals": {
 		"email": "Email",
 		"password": "Password",

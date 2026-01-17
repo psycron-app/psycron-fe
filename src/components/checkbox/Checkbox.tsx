@@ -21,7 +21,7 @@ export const Checkbox = forwardRef(
 				shouldBold={shouldBold}
 				control={
 					<MUICheckbox
-						inputRef={ref}
+						slotProps={{ input: { ref } }}
 						{...(!isControlled && props.register ? props.register : {})}
 						checked={isControlled ? props.checked : undefined}
 						onChange={isControlled ? props.onChange : undefined}

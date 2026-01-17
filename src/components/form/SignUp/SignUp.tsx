@@ -48,7 +48,7 @@ export const SignUp = ({ onSubmit }: SignUpFormTypes) => {
 				</Box>
 				<Box>
 					<Checkbox
-						labelKey={t('components.form.keep-loggedin')}
+						labelKey={'components.form.keep-loggedin'}
 						register={register('stayConnected')}
 					/>
 				</Box>

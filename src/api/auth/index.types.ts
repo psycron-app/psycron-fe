@@ -1,3 +1,5 @@
+import type { ITherapist } from '@psycron/context/user/auth/UserAuthenticationContext.types';
+
 export type RegisterRequestPayload = {
 	consent: ConsentPayload;
 	// Service expects this:
@@ -13,6 +15,11 @@ export type RegisterRequestPayload = {
 	stayConnected?: boolean;
 
 	timeZone?: string;
+};
+
+export type SessionResponse = {
+	isAuthenticated: boolean;
+	user: ITherapist;
 };
 
 export type RegisterResponse = {

@@ -8,6 +8,7 @@ export const StyledFormControlLabel = styled(FormControlLabel, {
 
 	.MuiFormControlLabel-label {
 		font-weight: ${({ shouldBold }) => (shouldBold ? 600 : 'normal')};
+		display: flex;
 	}
 
 	${isBiggerThanMediumMedia} {

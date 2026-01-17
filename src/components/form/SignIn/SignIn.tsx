@@ -1,3 +1,4 @@
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
 import { Button } from '@psycron/components/button/Button';
@@ -11,17 +12,18 @@ import { PasswordInput } from '../components/password/PasswordInput';
 import { SignLayout } from '../components/shared/SignLayout';
 import { InputFields } from '../components/shared/styles';
 
-import type { SignInFormTypes } from './SignIn.types';
+import type { ISignInForm, SignInFormTypes } from './SignIn.types';
 
-export const SignIn = ({
-	handleSubmit,
-	errors,
-	onSubmit,
-	register,
-}: SignInFormTypes) => {
+export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 	const { t } = useTranslation();
 
 	const { isSignInMutationLoading } = useAuth();
+
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useFormContext<ISignInForm>();
 
 	return (
 		<SignLayout isSignin isLoading={isSignInMutationLoading}>
@@ -36,7 +38,7 @@ export const SignIn = ({
 					helperText={errors.email?.message}
 					maxWidth='100%'
 				/>
-				<PasswordInput errors={errors} register={register} />
+				<PasswordInput<ISignInForm> errors={errors} register={register} />
 				<Box
 					display='flex'
 					flexDirection='column'

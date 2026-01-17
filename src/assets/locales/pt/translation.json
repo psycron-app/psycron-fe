@@ -144,6 +144,10 @@
 			"contacts-form": {
 				"contact-via": "Entrar em contato via {{method}}?",
 				"contact-via-same": "O número é o mesmo para o Whatsapp?"
+			},
+			"consent": {
+				"terms": "Eu concordo com a <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Serviço</termsLink>",
+				"marketing": "Eu concordo em receber <marketingLink>comunicações de marketing</marketingLink>"
 			}
 		},
 		"input": {

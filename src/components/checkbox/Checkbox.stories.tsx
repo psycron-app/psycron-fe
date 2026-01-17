@@ -1,5 +1,5 @@
 import type { FieldValues } from 'react-hook-form';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Checkbox } from './Checkbox';
 import type { ICheckboxProps } from './Checkbox.types';

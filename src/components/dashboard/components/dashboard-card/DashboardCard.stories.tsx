@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import mockAppointments from '@psycron/assets/mock/appointments/mockAppointments.json';
 import { Appointment, PatientManager } from '@psycron/components/icons';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { DashboardCard } from './DashboardCard';
 import type { IDashboardCardProps } from './DashboardCard.types';

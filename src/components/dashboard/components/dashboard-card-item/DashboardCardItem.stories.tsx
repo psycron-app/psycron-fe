@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { DashboardCardItem } from './DashboardCardItem';
 import type { IDashboarcCardItemProps } from './DashboardCardItem.types';

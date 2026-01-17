@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { CircularProgress } from './CircularProgress';
 import type { ICircularProgressProps } from './CircularProgress.types';

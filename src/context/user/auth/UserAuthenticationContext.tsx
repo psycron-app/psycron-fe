@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getSession, logoutFc, signInFc, signUpFc } from '@psycron/api/auth';
@@ -7,12 +14,13 @@ import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
 import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { DASHBOARD, HOMEPAGE } from '@psycron/pages/urls';
-import { ID_TOKEN, REFRESH_TOKEN } from '@psycron/utils/tokens';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { JwtPayload } from 'jwt-decode';
-import { jwtDecode } from 'jwt-decode';
 
-import { clearTokens, setTokens } from './utils/helpers';
+import {
+	clearAuthTokens,
+	getAccessToken,
+	setTokens,
+} from './utils/tokenStorage';
 import type {
 	AuthContextType,
 	AuthProviderProps,
@@ -22,6 +30,8 @@ import type {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+type LocationState = { from?: { pathname?: string } };
+
 export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
@@ -29,81 +39,100 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const queryClient = useQueryClient();
 	const { showAlert } = useAlert();
 
-	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+	// This is only for controlling navigation behavior after sign-in/up.
+	// We keep it minimal and derived from the trigger, not scattered.
+	const [redirectAfterAuth, setRedirectAfterAuth] = useState<string | null>(
+		null
+	);
 
-	const [user, setUser] = useState<ITherapist | null>(null);
-	const [manualLogin, setManualLogin] = useState<boolean>(false);
+	const accessToken = getAccessToken();
+	const hasAccessToken = Boolean(accessToken);
 
-	const isTokenValid = (token: string | null): boolean => {
-		if (!token) return false;
-
-		try {
-			const decoded = jwtDecode<JwtPayload>(token);
-			if (!decoded.exp) return false;
-
-			return decoded.exp * 1000 > Date.now();
-		} catch {
-			return false;
-		}
-	};
-
-	const authToken = localStorage.getItem(ID_TOKEN);
-	const isTokenStillValid = isTokenValid(authToken);
-
+	/**
+	 * Source of truth: session query.
+	 * If token exists, we ask backend "who am I?".
+	 */
 	const {
 		data: sessionData,
 		isLoading: isSessionLoading,
 		isSuccess: isSessionSuccess,
+		isError: isSessionError,
 	} = useQuery<IUserData>({
 		queryKey: ['session'],
 		queryFn: getSession,
-		enabled: isTokenStillValid,
+		enabled: hasAccessToken,
 		retry: false,
 	});
 
-	useEffect(() => {
-		if (!authToken || !isTokenValid(authToken)) {
-			setIsAuthenticated(false);
-			setUser(null);
-			return;
-		}
+	const isAuthenticated = Boolean(sessionData?.isAuthenticated);
+	const user: ITherapist | null = sessionData?.user ?? null;
 
-		if (sessionData?.isAuthenticated) {
-			setIsAuthenticated(true);
-			setUser(sessionData.user);
+	/**
+	 * If session fails (token expired / invalid), clear tokens.
+	 * Axios refresh interceptor may already handle it, but this is a safe guard.
+	 */
+	useEffect(() => {
+		if (hasAccessToken && isSessionError) {
+			clearAuthTokens();
 		}
-	}, [authToken, sessionData]);
+	}, [hasAccessToken, isSessionError]);
+
+	const handleAuthSuccess = useCallback(
+		async (args: {
+			accessToken: string;
+			persist: boolean;
+			redirectTo?: string;
+			refreshToken: string;
+		}) => {
+			if (!args.accessToken || !args.refreshToken) {
+				clearAuthTokens();
+				throw new Error('Missing auth tokens');
+			}
+
+			setTokens({
+				accessToken: args.accessToken,
+				refreshToken: args.refreshToken,
+				persist: args.persist,
+			});
+
+			await queryClient.invalidateQueries({ queryKey: ['session'] });
+
+			navigate(args.redirectTo ?? DASHBOARD, { replace: true });
+		},
+		[navigate, queryClient]
+	);
 
 	const signInMutation = useMutation({
 		mutationFn: signInFc,
-		onSuccess: (res) => {
-			if (res.token) {
-				localStorage.setItem(ID_TOKEN, res.token);
-			}
-			if (res.refreshToken) {
-				localStorage.setItem(REFRESH_TOKEN, res.refreshToken);
-			}
-			setIsAuthenticated(true);
-			if (manualLogin) {
-				const from = location.state?.from?.pathname || DASHBOARD;
-				navigate(from);
-			}
+		onSuccess: async (res, variables: ISignInForm) => {
+			// Decide persistence using the form checkbox
+			const persist = Boolean(variables.stayConnected);
+
+			await handleAuthSuccess({
+				accessToken: res.token,
+				refreshToken: res.refreshToken,
+				persist,
+				redirectTo: redirectAfterAuth ?? DASHBOARD,
+			});
+
+			setRedirectAfterAuth(null);
 		},
 		onError: (error: CustomError) => {
-			showAlert({
-				severity: 'error',
-				message: t(error.message),
-			});
+			showAlert({ severity: 'error', message: t(error.message) });
 		},
 	});
 
 	const signUpMutation = useMutation({
 		mutationFn: signUpFc,
-		onSuccess: async (res) => {
-			setTokens(res.token, res.refreshToken);
+		onSuccess: async (res, variables: ISignUpForm) => {
+			const persist = Boolean(variables.stayConnected);
 
-			await queryClient.invalidateQueries({ queryKey: ['session'] });
-			navigate(DASHBOARD);
+			await handleAuthSuccess({
+				accessToken: res.token,
+				refreshToken: res.refreshToken,
+				persist,
+				redirectTo: DASHBOARD,
+			});
 		},
 		onError: (error: CustomError) => {
 			showAlert({ severity: 'error', message: t(error.message) });
@@ -113,58 +142,75 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const logoutMutation = useMutation({
 		mutationFn: logoutFc,
 		onSuccess: async () => {
-			clearTokens();
-			setIsAuthenticated(false);
-			setUser(null);
-
+			clearAuthTokens();
 			await queryClient.removeQueries({ queryKey: ['session'] });
-
-			navigate(HOMEPAGE);
+			navigate(HOMEPAGE, { replace: true });
 		},
 		onError: async () => {
 			// Even if API fails, locally log out for safety
-			clearTokens();
-			setIsAuthenticated(false);
-			setUser(null);
+			clearAuthTokens();
 			await queryClient.removeQueries({ queryKey: ['session'] });
-			navigate(HOMEPAGE);
+			navigate(HOMEPAGE, { replace: true });
 		},
 	});
 
-	const signIn = (data: ISignInForm) => {
-		setManualLogin(true);
-		signInMutation.mutate(data);
-	};
+	/**
+	 * Public API (what your package will export)
+	 */
+	const signIn = useCallback(
+		(data: ISignInForm) => {
+			const state = location.state as LocationState | null;
+			const from = state?.from?.pathname;
 
-	const signUp = (data: ISignUpForm) => {
-		setManualLogin(true);
-		signUpMutation.mutate(data);
-	};
-	const logout = () => logoutMutation.mutate();
+			// store where to go after success (only for signIn)
+			setRedirectAfterAuth(from ?? DASHBOARD);
 
-	return (
-		<AuthContext.Provider
-			value={{
-				signIn,
-				signUp,
-				logout,
-				isAuthenticated,
-				isSessionLoading,
-				isSessionSuccess,
-				user,
-				isSignInMutationLoading: signInMutation.isPending,
-				isSignUpMutationLoading: signUpMutation.isPending,
-			}}
-		>
-			{children}
-		</AuthContext.Provider>
+			signInMutation.mutate(data);
+		},
+		[location.state, signInMutation]
 	);
+
+	const signUp = useCallback(
+		(data: ISignUpForm) => {
+			signUpMutation.mutate(data);
+		},
+		[signUpMutation]
+	);
+
+	const logout = useCallback(() => {
+		logoutMutation.mutate();
+	}, [logoutMutation]);
+
+	const value = useMemo<AuthContextType>(
+		() => ({
+			signIn,
+			signUp,
+			logout,
+			isAuthenticated,
+			isSessionLoading,
+			isSessionSuccess,
+			user,
+			isSignInMutationLoading: signInMutation.isPending,
+			isSignUpMutationLoading: signUpMutation.isPending,
+		}),
+		[
+			signIn,
+			signUp,
+			logout,
+			isAuthenticated,
+			isSessionLoading,
+			isSessionSuccess,
+			user,
+			signInMutation.isPending,
+			signUpMutation.isPending,
+		]
+	);
+
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = (): AuthContextType => {
 	const context = useContext(AuthContext);
-	if (!context) {
-		throw new Error('useAuth must be used within an AuthProvider');
-	}
+	if (!context) throw new Error('useAuth must be used within an AuthProvider');
 	return context;
 };

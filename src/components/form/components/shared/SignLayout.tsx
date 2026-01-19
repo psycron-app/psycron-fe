@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import { LogoColor } from '@psycron/components/icons/brand/LogoColor';
 import { Link } from '@psycron/components/link/Link';
 import { NavigateLink } from '@psycron/components/link/navigate/NavigateLink';
@@ -8,7 +8,7 @@ import { Loader } from '@psycron/components/loader/Loader';
 import { SIGNIN, SIGNUP } from '@psycron/pages/urls';
 
 import type { ISignLayout } from './SignLayout.types';
-import { LogoWrapper, SignUpWrapper } from './styles';
+import { LogoWrapper, SignLayoutFooterLink, SignUpWrapper } from './styles';
 
 export const SignLayout: FC<ISignLayout> = ({
 	children,
@@ -26,7 +26,7 @@ export const SignLayout: FC<ISignLayout> = ({
 			{!isLoading ? (
 				<>
 					{children}
-					<Box display='flex' justifyContent='flex-start' alignItems='center'>
+					<SignLayoutFooterLink>
 						{isReset ? (
 							<NavigateLink isBack />
 						) : (
@@ -43,7 +43,7 @@ export const SignLayout: FC<ISignLayout> = ({
 								</Link>
 							</>
 						)}
-					</Box>
+					</SignLayoutFooterLink>
 				</>
 			) : (
 				<Loader />

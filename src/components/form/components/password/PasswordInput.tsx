@@ -5,11 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { InputAdornment, TextField } from '@mui/material';
 import { NotVisible, Visible } from '@psycron/components/icons';
 
-import {
-	PasswordWrapper,
-	StyledIconButton,
-	StyledInput,
-} from './PasswordInput.styles';
+import { PasswordWrapper, StyledIconButton } from './PasswordInput.styles';
 import type { PasswordInputProps } from './PasswordInput.types';
 
 export const PasswordInput = <T extends FieldValues>({
@@ -57,7 +53,7 @@ export const PasswordInput = <T extends FieldValues>({
 
 	return (
 		<PasswordWrapper>
-			<StyledInput
+			<TextField
 				label={t('globals.password')}
 				id={String(passwordName)}
 				fullWidth

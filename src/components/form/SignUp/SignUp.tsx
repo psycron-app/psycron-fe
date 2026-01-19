@@ -1,11 +1,13 @@
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Button } from '@psycron/components/button/Button';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
 import { Link } from '@psycron/components/link/Link';
 import { Text } from '@psycron/components/text/Text';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
+import { GoogleOAuthButton } from '@psycron/features/auth/google/GoogleOAuthButton';
 import i18n from '@psycron/i18n';
 import { externalUrls } from '@psycron/pages/urls';
 
@@ -14,11 +16,13 @@ import { PasswordInput } from '../components/password/PasswordInput';
 import { SignLayout } from '../components/shared/SignLayout';
 import { InputFields } from '../components/shared/styles';
 
+import { StyledSignUpForm } from './SignUp.styles';
 import type { ISignUpForm, SignUpFormTypes } from './SignUp.types';
 
 export const SignUp = ({ onSubmit }: SignUpFormTypes) => {
 	const { t } = useTranslation();
 	const { isSignUpMutationLoading } = useAuth();
+	const { locale } = useParams<{ locale: string }>();
 
 	const {
 		register,
@@ -28,7 +32,7 @@ export const SignUp = ({ onSubmit }: SignUpFormTypes) => {
 
 	return (
 		<SignLayout isLoading={isSignUpMutationLoading}>
-			<Box component='form' onSubmit={handleSubmit(onSubmit)}>
+			<StyledSignUpForm as='form' onSubmit={handleSubmit(onSubmit)}>
 				<NameForm<ISignUpForm> required />
 				<InputFields
 					label={t('globals.email')}
@@ -40,19 +44,17 @@ export const SignUp = ({ onSubmit }: SignUpFormTypes) => {
 					helperText={errors.email?.message}
 					maxWidth='100%'
 				/>
-				<PasswordInput errors={errors} register={register} hasToConfirm />
-				<Box pt={4}>
-					<Button type='submit' fullWidth>
-						{t('components.form.signup.title')}
-					</Button>
-				</Box>
-				<Box>
+				<PasswordInput<ISignUpForm> hasToConfirm />
+
+				<Button type='submit' fullWidth>
+					{t('components.form.signup.title')}
+				</Button>
+				<GoogleOAuthButton locale={locale} />
+				<Box display='flex' flexDirection='column'>
 					<Checkbox
 						labelKey={'components.form.keep-loggedin'}
 						register={register('stayConnected')}
 					/>
-				</Box>
-				<Box mt={2} display='flex' flexDirection='column'>
 					<Checkbox
 						label={
 							<Trans
@@ -89,7 +91,7 @@ export const SignUp = ({ onSubmit }: SignUpFormTypes) => {
 							: null}
 					</Text>
 				</Box>
-			</Box>
+			</StyledSignUpForm>
 		</SignLayout>
 	);
 };

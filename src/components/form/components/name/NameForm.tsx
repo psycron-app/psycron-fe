@@ -3,11 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { TextField } from '@mui/material';
 
-import {
-	FirstNameInputWrapper,
-	LastNameInputWrapper,
-	NameFormWrapper,
-} from './NameForm.styles';
+import { NameFormWrapper, NameInputWrapper } from './NameForm.styles';
 import type { NameFormProps } from './NameForm.types';
 
 export const NameForm = <T extends FieldValues>({
@@ -36,7 +32,7 @@ export const NameForm = <T extends FieldValues>({
 
 	return (
 		<NameFormWrapper>
-			<FirstNameInputWrapper>
+			<NameInputWrapper>
 				<TextField
 					label={labelFirstName ?? t('components.form.signup.first-name')}
 					fullWidth
@@ -55,9 +51,9 @@ export const NameForm = <T extends FieldValues>({
 					required={required}
 					disabled={disabled}
 				/>
-			</FirstNameInputWrapper>
+			</NameInputWrapper>
 
-			<LastNameInputWrapper>
+			<NameInputWrapper>
 				<TextField
 					label={labelLastName ?? t('components.form.signup.last-name')}
 					fullWidth
@@ -76,7 +72,7 @@ export const NameForm = <T extends FieldValues>({
 					required={required}
 					disabled={disabled}
 				/>
-			</LastNameInputWrapper>
+			</NameInputWrapper>
 		</NameFormWrapper>
 	);
 };

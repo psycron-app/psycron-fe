@@ -15,7 +15,6 @@ export const startGoogleOAuth = ({
 }: StartGoogleOAuthArgs = {}): void => {
 	const apiBase = import.meta.env.VITE_PSYCRON_BASE_API_URL as string;
 
-	// ✅ will become {apiBase}/auth/google (keeping /api/v1)
 	const url = makeUrl(apiBase, 'auth/google');
 
 	url.searchParams.set('timeZone', getTimeZone());

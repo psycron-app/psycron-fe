@@ -9,6 +9,7 @@ import { Button } from '@psycron/components/button/Button';
 import { SignLayout } from '@psycron/components/form/components/shared/SignLayout';
 import { InputFields } from '@psycron/components/form/components/shared/styles';
 import { useAlert } from '@psycron/context/alert/AlertContext';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 import { useMutation } from '@tanstack/react-query';
 
 import { AuthPageWrapper } from '../index.styles';
@@ -49,8 +50,11 @@ export const ResetPassword = () => {
 			<SignLayout isReset>
 				<Box
 					component='form'
+					display='flex'
+					flexDirection='column'
 					onSubmit={handleSubmit(onSubmit)}
 					width='18.75rem'
+					gap={spacing.small}
 				>
 					<InputFields
 						label={t('globals.email')}

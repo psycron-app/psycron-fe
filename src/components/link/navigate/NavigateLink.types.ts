@@ -4,7 +4,7 @@ export type INavigateLinkProps =
 	| {
 			isBack: true;
 			nextPage?: null;
-			to: To;
+			to?: To;
 	  }
 	| {
 			isBack: false;

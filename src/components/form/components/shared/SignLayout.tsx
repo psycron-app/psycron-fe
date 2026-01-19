@@ -26,12 +26,7 @@ export const SignLayout: FC<ISignLayout> = ({
 			{!isLoading ? (
 				<>
 					{children}
-					<Box
-						mt={5}
-						display='flex'
-						justifyContent='center'
-						alignItems='center'
-					>
+					<Box display='flex' justifyContent='flex-start' alignItems='center'>
 						{isReset ? (
 							<NavigateLink isBack />
 						) : (

@@ -48,6 +48,7 @@ import { Copy as IconCopy } from './Copy';
 import { Edit as IconEdit } from './Edit';
 import { FilterIcon as IconFilter } from './Filter';
 import { FilterCloseIcon as IconFilterClose } from './FilterClose';
+import { Google as IconGoogle } from './Google';
 import { HelpIcon as IconHelp } from './Help';
 import { Login as IconLogin } from './Login';
 import { Logout as IconLogout } from './Logout';
@@ -69,6 +70,7 @@ import { Watch as IconWatch } from './Watch';
 import { WhatsApp as IconWhatsApp } from './Whatsapp';
 
 export const Pause = withIconColor(IconPause);
+export const Google = withIconColor(IconGoogle);
 export const Download = withIconColor(IconDownload);
 export const Send = withIconColor(IconSend);
 export const Globe = withIconColor(IconGlobe);

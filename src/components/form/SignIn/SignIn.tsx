@@ -1,12 +1,15 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Button } from '@psycron/components/button/Button';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
 import { Link } from '@psycron/components/link/Link';
 import { Text } from '@psycron/components/text/Text';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
+import { GoogleOAuthButton } from '@psycron/features/auth/google/GoogleOAuthButton';
 import { REQPASSRESET } from '@psycron/pages/urls';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import { PasswordInput } from '../components/password/PasswordInput';
 import { SignLayout } from '../components/shared/SignLayout';
@@ -18,6 +21,7 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 	const { t } = useTranslation();
 
 	const { isSignInMutationLoading } = useAuth();
+	const { locale } = useParams<{ locale: string }>();
 
 	const {
 		register,
@@ -27,7 +31,13 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 
 	return (
 		<SignLayout isSignin isLoading={isSignInMutationLoading}>
-			<Box component='form' onSubmit={handleSubmit(onSubmit)}>
+			<Box
+				component='form'
+				gap={spacing.small}
+				display='flex'
+				flexDirection={'column'}
+				onSubmit={handleSubmit(onSubmit)}
+			>
 				<InputFields
 					label={t('globals.email')}
 					fullWidth
@@ -38,13 +48,13 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 					helperText={errors.email?.message}
 					maxWidth='100%'
 				/>
-				<PasswordInput<ISignInForm> errors={errors} register={register} />
+				<PasswordInput<ISignInForm> />
+				<GoogleOAuthButton locale={locale} />
 				<Box
 					display='flex'
 					flexDirection='column'
 					justifyContent='center'
 					alignItems='center'
-					pt={4}
 				>
 					<Button type='submit' fullWidth>
 						{t('components.form.signin.title')}

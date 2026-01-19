@@ -15,7 +15,8 @@
 			"password-reset-request": "If this email is registered, you will receive password reset instructions shortly.",
 			"password-reset": "Your password has been changed successfully. You can now sign in.",
 			"logout": "You have been signed out successfully."
-		}
+		},
+		"continue-google": "Continue with Google"
 	},
 	"globals": {
 		"email": "Email",

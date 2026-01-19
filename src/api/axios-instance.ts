@@ -1,51 +1,72 @@
-import { ID_TOKEN, REFRESH_TOKEN } from '@psycron/utils/tokens';
+import {
+	clearAuthTokens,
+	getAccessToken,
+	getRefreshToken,
+	setTokensKeepingAuthPersistence,
+} from '@psycron/context/user/auth/utils/tokenStorage';
+import type {
+	AxiosError,
+	AxiosInstance,
+	InternalAxiosRequestConfig,
+} from 'axios';
 import axios from 'axios';
 
 import { sanitizeAuthError } from './auth/auth-errors';
 import { refreshTokenService } from './auth';
 import { CustomError } from './error';
 
-const apiClient = axios.create({
-	baseURL: import.meta.env.VITE_PSYCRON_BASE_API_URL,
+type ApiErrorPayload = {
+	message?: string;
+};
+
+type RetryableRequestConfig = InternalAxiosRequestConfig & {
+	_retry?: boolean;
+};
+
+const apiClient: AxiosInstance = axios.create({
+	baseURL: import.meta.env.VITE_PSYCRON_BASE_API_URL as string,
 	headers: {
 		'Content-Type': 'application/json',
 	},
 	withCredentials: true,
 });
 
-/**
- * Request interceptor - adds auth token to requests
- */
+const createSanitizedError = (
+	message: string,
+	statusCode: number,
+	requestUrl: string
+): CustomError => {
+	const rawError = new CustomError(message, statusCode);
+	return sanitizeAuthError(rawError, requestUrl);
+};
+
 apiClient.interceptors.request.use(
-	(config) => {
-		const token = localStorage.getItem(ID_TOKEN);
+	(config: InternalAxiosRequestConfig) => {
+		const token = getAccessToken();
+
 		if (token) {
-			config.headers['Authorization'] = `Bearer ${token}`;
+			// InternalAxiosRequestConfig.headers is AxiosHeaders in newer axios versions
+			config.headers.set('Authorization', `Bearer ${token}`);
 		}
+
 		return config;
 	},
 	(error) => Promise.reject(error)
 );
 
-/**
- * Response interceptor - handles errors and token refresh
- *
- * Security: All auth-related errors are sanitized to prevent user enumeration.
- * Rate limiting: 429 responses include retry information.
- */
 apiClient.interceptors.response.use(
 	(response) => response,
-	async (error) => {
-		const originalRequest = error.config;
-		const statusCode = error.response?.status || 500;
-		const requestUrl = originalRequest?.url || '';
+	async (error: AxiosError<ApiErrorPayload>) => {
+		const originalRequest = error.config as RetryableRequestConfig | undefined;
+		const statusCode = error.response?.status ?? 500;
+		const requestUrl = originalRequest?.url ?? '';
 
-		// Handle 401 Unauthorized - attempt token refresh
-		if (statusCode === 401 && !originalRequest._retry) {
+		// 401 -> attempt refresh once
+		if (statusCode === 401 && originalRequest && !originalRequest._retry) {
 			originalRequest._retry = true;
 
 			try {
-				const storedRefreshToken = localStorage.getItem(REFRESH_TOKEN);
+				const storedRefreshToken = getRefreshToken();
 
 				if (!storedRefreshToken) {
 					clearAuthTokens();
@@ -57,12 +78,13 @@ apiClient.interceptors.response.use(
 				const { accessToken, refreshToken } =
 					await refreshTokenService(storedRefreshToken);
 
-				localStorage.setItem(ID_TOKEN, accessToken);
-				localStorage.setItem(REFRESH_TOKEN, refreshToken);
+				// Keep the same storage kind the user originally chose
+				setTokensKeepingAuthPersistence({ accessToken, refreshToken });
 
+				// Update headers and retry
 				apiClient.defaults.headers.common['Authorization'] =
 					`Bearer ${accessToken}`;
-				originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
+				originalRequest.headers.set('Authorization', `Bearer ${accessToken}`);
 
 				return apiClient(originalRequest);
 			} catch {
@@ -73,48 +95,32 @@ apiClient.interceptors.response.use(
 			}
 		}
 
-		// Handle 429 Rate Limited
+		// 429 rate limit
 		if (statusCode === 429) {
-			const retryAfter = error.response?.headers?.['retry-after'];
+			const retryAfterHeader = error.response?.headers?.['retry-after'];
 			const rateLimitError = createSanitizedError(
 				'Rate limited',
 				429,
 				requestUrl
 			);
-			if (retryAfter) {
-				(rateLimitError as CustomError & { retryAfter: number }).retryAfter =
-					parseInt(retryAfter, 10);
+
+			if (typeof retryAfterHeader === 'string') {
+				const parsed = Number.parseInt(retryAfterHeader, 10);
+				if (!Number.isNaN(parsed)) {
+					(rateLimitError as CustomError & { retryAfter: number }).retryAfter =
+						parsed;
+				}
 			}
+
 			return Promise.reject(rateLimitError);
 		}
 
-		// Create and sanitize the error
-		const errorMessage =
-			error.response?.data?.message || 'Unknown error occurred';
+		const message = error.response?.data?.message ?? 'Unknown error occurred';
+
 		return Promise.reject(
-			createSanitizedError(errorMessage, statusCode, requestUrl)
+			createSanitizedError(message, statusCode, requestUrl)
 		);
 	}
 );
-
-/**
- * Creates a sanitized error that prevents user enumeration
- */
-const createSanitizedError = (
-	message: string,
-	statusCode: number,
-	requestUrl: string
-): CustomError => {
-	const rawError = new CustomError(message, statusCode);
-	return sanitizeAuthError(rawError, requestUrl);
-};
-
-/**
- * Clears all auth tokens from storage
- */
-const clearAuthTokens = (): void => {
-	localStorage.removeItem(ID_TOKEN);
-	localStorage.removeItem(REFRESH_TOKEN);
-};
 
 export default apiClient;

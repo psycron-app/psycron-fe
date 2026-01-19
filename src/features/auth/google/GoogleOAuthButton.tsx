@@ -15,11 +15,18 @@ export const GoogleOAuthButton = ({
 }: GoogleOAuthButtonProps) => {
 	const { t } = useTranslation();
 
-	const stayConnected = useWatch({ name: 'stayConnected' });
+	const stayConnected = useWatch({ name: 'stayConnected' }) as
+		| boolean
+		| undefined;
 
 	return (
 		<StyledGoogleButton
-			onClick={() => startGoogleOAuth({ locale, stayConnected })}
+			onClick={() =>
+				startGoogleOAuth({
+					locale,
+					stayConnected: Boolean(stayConnected),
+				})
+			}
 			disabled={disabled}
 			fullWidth
 			tertiary

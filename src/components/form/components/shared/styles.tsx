@@ -42,3 +42,9 @@ export const LogoWrapper = styled(Box)`
 		height: auto;
 	}
 `;
+
+export const SignLayoutFooterLink = styled(Box)`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;

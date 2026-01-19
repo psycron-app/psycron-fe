@@ -1,3 +1,4 @@
+import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { Google } from '@psycron/components/icons';
 
@@ -10,10 +11,11 @@ import { startGoogleOAuth } from './startGoogleOAuth';
 
 export const GoogleOAuthButton = ({
 	locale,
-	stayConnected,
 	disabled,
 }: GoogleOAuthButtonProps) => {
 	const { t } = useTranslation();
+
+	const stayConnected = useWatch({ name: 'stayConnected' });
 
 	return (
 		<StyledGoogleButton

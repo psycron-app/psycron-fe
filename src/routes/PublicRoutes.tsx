@@ -1,4 +1,5 @@
 import { AuthPage } from '@psycron/pages/auth';
+import { AuthCallback } from '@psycron/pages/auth/callback/AuthCallback';
 import { ChangePassword } from '@psycron/pages/auth/password/ChangePassword';
 import { ResetPassword } from '@psycron/pages/auth/password/ResetPassword';
 import { Home } from '@psycron/pages/home/HomePage';
@@ -25,6 +26,7 @@ const publicRoutes = [
 	{ path: UNSUBSCRIBE, element: <Unsubscribe /> },
 	{ path: SIGNIN, element: <AuthPage /> },
 	{ path: SIGNUP, element: <AuthPage /> },
+	{ path: 'auth/callback', element: <AuthCallback /> },
 	{ path: REQPASSRESET, element: <ResetPassword /> },
 	{ path: PASSRESET, element: <ChangePassword /> },
 	{ path: BOOKAPPOINTMENT, element: <BookAppointment /> },

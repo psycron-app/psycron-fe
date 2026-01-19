@@ -8,7 +8,6 @@ import useClickOutside from '@psycron/hooks/useClickoutside';
 import useViewport from '@psycron/hooks/useViewport';
 import {
 	APPOINTMENTS,
-	AVAILABILITYGENERATE,
 	DASHBOARD,
 	EDITUSERPATH,
 	LOGOUT,
@@ -99,12 +98,6 @@ export const Navbar = () => {
 			icon: <Payment />,
 			path: PAYMENTS,
 			disabled: true,
-		},
-		{
-			name: 'avalll',
-			icon: <Payment />,
-			path: AVAILABILITYGENERATE,
-			disabled: false,
 		},
 		{
 			name: t('globals.appointments-manager'),

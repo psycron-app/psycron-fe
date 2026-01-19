@@ -63,3 +63,16 @@ export const getAvailabilityByDayId = async (
 
 	return response.data;
 };
+
+export const deleteUserById = async (userId: string): Promise<IResponse> => {
+	const response = await apiClient.delete<IResponse>(`/users/delete/${userId}`);
+	return response.data;
+};
+
+export const exportUserDataById = async (userId: string): Promise<Blob> => {
+	const response = await apiClient.get(`/users/${userId}/export`, {
+		responseType: 'blob',
+	});
+
+	return response.data as Blob;
+};

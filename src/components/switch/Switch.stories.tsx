@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 // import { Switch } from './components/item/Switch';
 import { SwitchGroup } from './SwitchGroup';

@@ -11,7 +11,7 @@ import { PasswordInput } from '@psycron/components/form/components/password/Pass
 import { SignLayout } from '@psycron/components/form/components/shared/SignLayout';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import i18n from '@psycron/i18n';
-import { REQPASSRESET } from '@psycron/pages/urls';
+import { REQPASSRESET, SIGNIN } from '@psycron/pages/urls';
 import { useMutation } from '@tanstack/react-query';
 
 import { AuthPageWrapper } from '../index.styles';
@@ -37,6 +37,9 @@ export const ChangePassword = () => {
 				message: data.message,
 				severity: data.status as AlertProps['severity'],
 			});
+			setTimeout(() => {
+				navigate(`/${i18n.language}/${SIGNIN}`, { replace: true });
+			}, 2000);
 		},
 		onError: (error: CustomError) => {
 			setPasswordResetError(t(error.message));
@@ -71,8 +74,9 @@ export const ChangePassword = () => {
 					<Box
 						display='flex'
 						flexDirection='column'
-						justifyContent='center'
+						justifyContent='flex-start'
 						alignItems='center'
+						marginTop='1.25rem'
 					>
 						<Button type='submit' fullWidth>
 							{t('page.reset-password.change-password')}

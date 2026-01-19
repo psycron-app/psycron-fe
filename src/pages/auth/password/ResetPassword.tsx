@@ -47,7 +47,11 @@ export const ResetPassword = () => {
 	return (
 		<AuthPageWrapper>
 			<SignLayout isReset>
-				<Box component='form' onSubmit={handleSubmit(onSubmit)}>
+				<Box
+					component='form'
+					onSubmit={handleSubmit(onSubmit)}
+					width='18.75rem'
+				>
 					<InputFields
 						label={t('globals.email')}
 						fullWidth
@@ -56,12 +60,11 @@ export const ResetPassword = () => {
 						autoComplete='email'
 						error={!!errors.email || !!resetPassError?.length}
 						helperText={resetPassError}
-						maxWidth='25rem'
 					/>
 					<Box
 						display='flex'
 						flexDirection='column'
-						justifyContent='center'
+						justifyContent='flex-start'
 						alignItems='center'
 					>
 						<Button type='submit' fullWidth>

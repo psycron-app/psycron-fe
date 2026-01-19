@@ -1,6 +1,6 @@
 import type { FieldValues } from 'react-hook-form';
 import { useForm } from 'react-hook-form';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { PasswordInput } from './PasswordInput';
 import type { PasswordInputProps } from './PasswordInput.types';

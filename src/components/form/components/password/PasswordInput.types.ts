@@ -1,13 +1,8 @@
-import type {
-	FieldErrors,
-	FieldValues,
-	UseFormRegister,
-} from 'react-hook-form';
+import type { FieldValues, Path } from 'react-hook-form';
 
-export interface PasswordInputProps<T extends FieldValues> {
-	defaultPasswordHash?: string;
+export type PasswordInputProps<T extends FieldValues> = {
+	confirmName?: Path<T>;
 	disabled?: boolean;
-	errors: FieldErrors<T> | string | null;
 	hasToConfirm?: boolean;
-	register: UseFormRegister<T>;
-}
+	name?: Path<T>;
+};

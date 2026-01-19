@@ -7,7 +7,9 @@
 			"password-reset-failed": "Unable to reset password. The link may have expired. Please request a new one.",
 			"session-expired": "Your session has expired. Please sign in again.",
 			"rate-limited": "Too many attempts. Please wait a moment before trying again.",
-			"generic": "Something went wrong. Please try again later."
+			"generic": "Something went wrong. Please try again later.",
+			"not-found": "User ID not found",
+			"not-allowed": "You can't delete this account."
 		},
 		"success": {
 			"password-reset-request": "If this email is registered, you will receive password reset instructions shortly.",
@@ -106,8 +108,8 @@
 			"not-valid": "Some fields are missing",
 			"signup": {
 				"title": "Sign up",
-				"firstName": "First name",
-				"lastName": "Last name",
+				"first-name": "First name",
+				"last-name": "Last name",
 				"already-have-acc": "Already have an account?",
 				"signin-here-link": "Sign in here"
 			},
@@ -143,6 +145,10 @@
 			"contacts-form": {
 				"contact-via": "Contact via {{method}}?",
 				"contact-via-same": "Is phone number the same as whatsapp?"
+			},
+			"consent": {
+				"terms": "I agree to the <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Service</termsLink>",
+				"marketing": "I consent to receive <marketingLink>marketing communications</marketingLink>"
 			}
 		},
 		"input": {
@@ -167,7 +173,12 @@
 			"change": "Change {{name}}",
 			"save": "Save details",
 			"address-not-found": "Address not found. Please add your info.",
-			"detail-not-found": "{{detail}} is not registered yet"
+			"detail-not-found": "{{detail}} is not registered yet",
+			"delete": {
+				"title": "Delete account",
+				"description": "Your account will be deactivated and your personal data anonymised within 30 days. You can contact support to cancel this request.",
+				"confirmation": "Delete permanently"
+			}
 		},
 		"dashboard": {
 			"card": {

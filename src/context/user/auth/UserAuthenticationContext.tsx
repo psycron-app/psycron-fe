@@ -8,10 +8,11 @@ import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { DASHBOARD, HOMEPAGE } from '@psycron/pages/urls';
 import { ID_TOKEN, REFRESH_TOKEN } from '@psycron/utils/tokens';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { JwtPayload } from 'jwt-decode';
 import { jwtDecode } from 'jwt-decode';
 
+import { clearTokens, setTokens } from './utils/helpers';
 import type {
 	AuthContextType,
 	AuthProviderProps,
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const location = useLocation();
-
+	const queryClient = useQueryClient();
 	const { showAlert } = useAlert();
 
 	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -98,29 +99,34 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
 	const signUpMutation = useMutation({
 		mutationFn: signUpFc,
-		onSuccess: (res) => {
-			if (res.token) {
-				localStorage.setItem(ID_TOKEN, res.token);
-			}
-			if (res.refreshToken) {
-				localStorage.setItem(REFRESH_TOKEN, res.refreshToken);
-			}
-			setIsAuthenticated(true);
+		onSuccess: async (res) => {
+			setTokens(res.token, res.refreshToken);
+
+			await queryClient.invalidateQueries({ queryKey: ['session'] });
 			navigate(DASHBOARD);
 		},
 		onError: (error: CustomError) => {
-			showAlert({
-				severity: 'error',
-				message: t(error.message),
-			});
+			showAlert({ severity: 'error', message: t(error.message) });
 		},
 	});
 
 	const logoutMutation = useMutation({
 		mutationFn: logoutFc,
-		onSuccess: () => {
+		onSuccess: async () => {
+			clearTokens();
 			setIsAuthenticated(false);
 			setUser(null);
+
+			await queryClient.removeQueries({ queryKey: ['session'] });
+
+			navigate(HOMEPAGE);
+		},
+		onError: async () => {
+			// Even if API fails, locally log out for safety
+			clearTokens();
+			setIsAuthenticated(false);
+			setUser(null);
+			await queryClient.removeQueries({ queryKey: ['session'] });
 			navigate(HOMEPAGE);
 		},
 	});

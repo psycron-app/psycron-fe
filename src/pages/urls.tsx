@@ -46,3 +46,14 @@ export const RESCHEDULEAPPOINTMENT = `${DOMAIN}/${APPOINTMENTID}/edit-appointmen
 export const PATIENTAPPOINTMENTSLIST = `${PATIENTID}/${APPOINTMENTS}`;
 
 export const ADDPATIENT = 'patient/create';
+
+// TODO: replace with your real routes when BE/pages are ready
+export const PRIVACY_POLICY = 'privacy-policy';
+export const TERMS_OF_SERVICE = 'terms-of-service';
+export const MARKETING_COMMS = 'marketing-communications';
+
+export const externalUrls = (locale: string) => ({
+	PRIVACY: `${DOMAIN}/${locale}/${PRIVACY_POLICY}`,
+	TERMS: `${DOMAIN}/${locale}/${TERMS_OF_SERVICE}`,
+	MARKETING: `${DOMAIN}/${locale}/${MARKETING_COMMS}`,
+});

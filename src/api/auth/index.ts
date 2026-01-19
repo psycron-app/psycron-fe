@@ -12,21 +12,42 @@ import type {
 	IEmailForm,
 	IEmailResponse,
 } from '@psycron/pages/auth/password/ResetPassword.types';
-import { ID_TOKEN } from '@psycron/utils/tokens';
 
 import apiClient from '../axios-instance';
 
-export const signInFc = async (data: ISignInForm): Promise<ISignInResponse> => {
-	const response = await apiClient.post<ISignInResponse>('/users/login', data);
+import { mapSignUpFormToRegisterPayload } from './utils/auth-utils';
+import type {
+	AuthSuccessResponse,
+	RegisterResponse,
+	SessionResponse,
+	SignUpGoogleRequest,
+} from './index.types';
+
+export const signUpFc = async (
+	data: ISignUpForm
+): Promise<RegisterResponse> => {
+	const payload = mapSignUpFormToRegisterPayload(data);
+
+	const response = await apiClient.post<RegisterResponse>(
+		'/users/register',
+		payload
+	);
+
 	return response.data;
 };
 
-export const signUpFc = async (data: ISignUpForm): Promise<ISignInResponse> => {
-	const response = await apiClient.post<ISignInResponse>(
+export const signUpWithGoogleFc = async (
+	payload: SignUpGoogleRequest
+): Promise<AuthSuccessResponse> => {
+	const response = await apiClient.post<AuthSuccessResponse>(
 		'/users/register',
-		data
+		payload
 	);
+	return response.data;
+};
 
+export const signInFc = async (data: ISignInForm): Promise<ISignInResponse> => {
+	const response = await apiClient.post<ISignInResponse>('/users/login', data);
 	return response.data;
 };
 
@@ -34,15 +55,8 @@ export const logoutFc = async (): Promise<void> => {
 	await apiClient.post('/users/logout');
 };
 
-export const getSession = async (): Promise<{ isAuthenticated: boolean }> => {
-	const token = localStorage.getItem(ID_TOKEN);
-
-	const response = await apiClient.get('/users/session', {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-
+export const getSession = async (): Promise<SessionResponse> => {
+	const response = await apiClient.get<SessionResponse>('/users/session');
 	return response.data;
 };
 

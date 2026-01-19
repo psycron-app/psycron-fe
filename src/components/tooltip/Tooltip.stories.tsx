@@ -1,6 +1,6 @@
 import type { TooltipProps } from '@mui/material';
 import { palette } from '@psycron/theme/palette/palette.theme';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Info } from '../icons';
 

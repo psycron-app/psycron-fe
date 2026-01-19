@@ -1,6 +1,6 @@
+import type { FieldValues, Path } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import type { TextFieldProps } from '@mui/material';
 import { TextField } from '@mui/material';
 
 import {
@@ -10,50 +10,69 @@ import {
 } from './NameForm.styles';
 import type { NameFormProps } from './NameForm.types';
 
-export const NameForm = ({
-	placeholderFirstName,
-	placeholderLastName,
+export const NameForm = <T extends FieldValues>({
 	disabled,
 	required,
-}: NameFormProps & TextFieldProps) => {
+	fields,
+	defaultFirstName,
+	defaultLastName,
+	placeholderFirstName,
+	placeholderLastName,
+	labelFirstName,
+	labelLastName,
+}: NameFormProps<T>) => {
 	const { t } = useTranslation();
 
 	const {
 		register,
 		formState: { errors },
-	} = useFormContext();
+	} = useFormContext<T>();
+
+	const firstNamePath = fields?.firstName ?? ('firstName' as Path<T>);
+	const lastNamePath = fields?.lastName ?? ('lastName' as Path<T>);
+
+	const firstNameError = errors[firstNamePath];
+	const lastNameError = errors[lastNamePath];
 
 	return (
 		<NameFormWrapper>
 			<FirstNameInputWrapper>
 				<TextField
-					label={t('components.form.signup.firstName')}
+					label={labelFirstName ?? t('components.form.signup.first-name')}
 					fullWidth
-					id='firstName'
-					defaultValue={placeholderFirstName}
+					id={String(firstNamePath)}
+					defaultValue={defaultFirstName}
 					placeholder={
-						!placeholderFirstName?.length &&
-						t('components.input.text.first-name')
+						placeholderFirstName ?? t('components.input.text.first-name')
 					}
-					{...register('firstName')}
-					error={!!errors.firstName}
-					helperText={errors.firstName?.message as string}
+					{...register(firstNamePath)}
+					error={Boolean(firstNameError)}
+					helperText={
+						typeof firstNameError?.message === 'string'
+							? firstNameError.message
+							: undefined
+					}
 					required={required}
 					disabled={disabled}
 				/>
 			</FirstNameInputWrapper>
+
 			<LastNameInputWrapper>
 				<TextField
-					label={t('components.form.signup.lastName')}
+					label={labelLastName ?? t('components.form.signup.last-name')}
 					fullWidth
-					id='lastName'
-					defaultValue={placeholderLastName}
+					id={String(lastNamePath)}
+					defaultValue={defaultLastName}
 					placeholder={
-						!placeholderLastName?.length && t('components.input.text.last-name')
+						placeholderLastName ?? t('components.input.text.last-name')
 					}
-					{...register('lastName')}
-					error={!!errors?.lastName}
-					helperText={errors?.lastName?.message as string}
+					{...register(lastNamePath)}
+					error={Boolean(lastNameError)}
+					helperText={
+						typeof lastNameError?.message === 'string'
+							? lastNameError.message
+							: undefined
+					}
 					required={required}
 					disabled={disabled}
 				/>

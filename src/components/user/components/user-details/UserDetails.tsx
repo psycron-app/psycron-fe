@@ -1,9 +1,11 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Box, Typography } from '@mui/material';
+import { Box, Dialog, DialogTitle, Typography } from '@mui/material';
 import { Avatar } from '@psycron/components/avatar/Avatar';
+import { Button } from '@psycron/components/button/Button';
 import {
 	Address,
+	Download,
 	EditUser,
 	Password,
 	PatientList,
@@ -14,7 +16,6 @@ import {
 } from '@psycron/components/icons';
 import { Tooltip } from '@psycron/components/tooltip/Tooltip';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
-import useClickOutside from '@psycron/hooks/useClickoutside';
 import useViewport from '@psycron/hooks/useViewport';
 import { palette } from '@psycron/theme/palette/palette.theme';
 
@@ -23,6 +24,9 @@ import { ContactInfoItem } from '../contact-info-item/ContactInfoItem';
 import type { IUserDetailsCardProps } from '../user-details-card/UserDetailsCard.types';
 
 import {
+	DeleteAccountDialogContent,
+	DeleteDialogActions,
+	DownloadWrapper,
 	Item,
 	ItemWrapper,
 	NameEmailBox,
@@ -33,13 +37,23 @@ import {
 } from './UserDetails.styles';
 
 export const UserDetails = ({ plan, user }: IUserDetailsCardProps) => {
-	const userDetailsCardRef = useRef<HTMLDivElement | null>(null);
-	const [isEditUser, setIsEditUser] = useState<boolean>(false);
+	const [isEditUser, setIsEditUser] = useState(false);
 
 	const { t } = useTranslation();
 
-	const { toggleUserDetails, handleClickEditUser, handleClickEditSession } =
-		useUserDetails();
+	const {
+		handleClickEditUser,
+		handleClickEditSession,
+		isOwnSettings,
+		deleteMyAccount,
+		isDeletePending,
+		closeDeleteDialog,
+		openDeleteDialog,
+		isDeleteOpen,
+		downloadMyData,
+		isDownloadPending,
+	} = useUserDetails();
+
 	const { isMobile, isTablet } = useViewport();
 
 	const { name: planName, status: planStatus } = plan;
@@ -51,8 +65,6 @@ export const UserDetails = ({ plan, user }: IUserDetailsCardProps) => {
 		address,
 		// image,
 	} = user;
-
-	useClickOutside(userDetailsCardRef, toggleUserDetails);
 
 	const planStatusInfo = (
 		<Box display='flex'>
@@ -224,6 +236,50 @@ export const UserDetails = ({ plan, user }: IUserDetailsCardProps) => {
 						)
 					)}
 				</UserDetailsItems>
+				{isOwnSettings ? (
+					<Box mt={2} display='flex' justifyContent='flex-end'>
+						<Button variant='outlined' color='error' onClick={openDeleteDialog}>
+							{t('components.user-details.delete.title')}
+						</Button>
+					</Box>
+				) : null}
+				<Dialog
+					open={isDeleteOpen}
+					onClose={(_e, reason) => {
+						if (isDeletePending) return;
+						if (reason === 'backdropClick') return;
+						closeDeleteDialog();
+					}}
+				>
+					<DialogTitle>
+						{t('components.user-details.delete.title')} ?
+					</DialogTitle>
+					<DeleteAccountDialogContent>
+						<Typography variant='body2'>
+							{t('components.user-details.delete.description')}
+						</Typography>
+						<DownloadWrapper
+							as='button'
+							onClick={downloadMyData}
+							disabled={isDownloadPending || isDeletePending}
+						>
+							<Download />
+						</DownloadWrapper>
+					</DeleteAccountDialogContent>
+					<DeleteDialogActions>
+						<Button onClick={closeDeleteDialog} disabled={isDeletePending}>
+							{t('components.link.navigate.cancel')}
+						</Button>
+						<Button
+							onClick={() => deleteMyAccount()}
+							color='error'
+							variant='contained'
+							disabled={isDeletePending}
+						>
+							{t('components.user-details.delete.confirmation')}
+						</Button>
+					</DeleteDialogActions>
+				</Dialog>
 			</Box>
 		</>
 	);

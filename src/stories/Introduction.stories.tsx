@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Link } from '@psycron/components/link/Link';
 import { palette } from '@psycron/theme/palette/palette.theme';
-import { type Meta } from '@storybook/react';
+import { type Meta } from '@storybook/react-vite';
 import {
 	AppWindow,
 	Atom,

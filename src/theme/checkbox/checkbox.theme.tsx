@@ -13,6 +13,9 @@ const checkboxStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 		},
 		root: {
 			color: primary.main,
+			'&  div': {
+				border: '1px solid red',
+			},
 			[`&.${checkboxClasses.checked}`]: {
 				color: primary.action.press,
 			},

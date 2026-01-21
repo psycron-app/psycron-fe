@@ -124,7 +124,7 @@ export const palette: Palette = {
 		},
 	},
 	background: {
-		default: '#F7FAFA',
+		default: '#f7fafa',
 		paper: '#F1F7FB',
 	},
 	black: '#060B0E',

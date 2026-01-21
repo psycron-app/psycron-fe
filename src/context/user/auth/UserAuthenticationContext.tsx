@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { getSession, logoutFc, signInFc, signUpFc } from '@psycron/api/auth';
 import type { CustomError } from '@psycron/api/error';
 import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
-import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
+import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.types';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { DASHBOARD, HOMEPAGE } from '@psycron/pages/urls';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';

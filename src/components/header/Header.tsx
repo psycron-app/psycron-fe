@@ -1,4 +1,3 @@
- 
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
@@ -39,11 +38,11 @@ export const Header = ({ hideLinks = false }: IHeaderProps) => {
 		},
 		isSignInPage
 			? {
-					name: t('components.form.signup.title'),
+					name: t('components.form.signup.sign-up'),
 					to: SIGNUP,
 				}
 			: {
-					name: t('components.form.signin.title'),
+					name: t('components.form.signin.sign-in'),
 					to: SIGNIN,
 				},
 	];

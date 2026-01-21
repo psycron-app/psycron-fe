@@ -1,8 +1,8 @@
 import { type SubmitHandler, useForm } from 'react-hook-form';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { SignUp } from './SignUp';
-import type { ISignUpForm, SignUpFormTypes } from './SignUp.types';
+import { SignUp } from './SignUpEmail';
+import type { ISignUpForm, SignUpFormTypes } from './SignUpEmail.types';
 
 const DefaultSignUp = (args: SignUpFormTypes) => <SignUp {...args} />;
 

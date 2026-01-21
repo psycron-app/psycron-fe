@@ -13,5 +13,7 @@ export interface ISignUpForm {
 	stayConnected?: boolean;
 }
 export type SignUpFormTypes = {
+	isLoading: boolean;
+	onBack: () => void;
 	onSubmit: SubmitHandler<ISignUpForm>;
 };

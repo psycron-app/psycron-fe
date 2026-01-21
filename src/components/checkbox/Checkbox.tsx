@@ -10,7 +10,7 @@ export const Checkbox = forwardRef(
 	(props: ICheckboxProps, ref: Ref<HTMLInputElement>) => {
 		const { t } = useTranslation();
 
-		const { shouldBold } = props;
+		const { shouldBold, required } = props;
 
 		const label = 'label' in props ? props.label : t(props.labelKey);
 
@@ -19,6 +19,8 @@ export const Checkbox = forwardRef(
 		return (
 			<StyledFormControlLabel
 				shouldBold={shouldBold}
+				required={required}
+				label={label}
 				control={
 					<MUICheckbox
 						slotProps={{ input: { ref } }}
@@ -27,7 +29,6 @@ export const Checkbox = forwardRef(
 						onChange={isControlled ? props.onChange : undefined}
 					/>
 				}
-				label={label}
 			/>
 		);
 	}

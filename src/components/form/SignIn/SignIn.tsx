@@ -1,9 +1,10 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { Button } from '@psycron/components/button/Button';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
+import { Divider } from '@psycron/components/divider/Divider';
 import { Link } from '@psycron/components/link/Link';
 import { Text } from '@psycron/components/text/Text';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
@@ -13,8 +14,8 @@ import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import { PasswordInput } from '../components/password/PasswordInput';
 import { SignLayout } from '../components/shared/SignLayout';
-import { InputFields } from '../components/shared/styles';
 
+import { SignInConsentWrapper } from './Signin.styles';
 import type { ISignInForm, SignInFormTypes } from './SignIn.types';
 
 export const SignIn = ({ onSubmit }: SignInFormTypes) => {
@@ -30,7 +31,13 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 	} = useFormContext<ISignInForm>();
 
 	return (
-		<SignLayout isSignin isLoading={isSignInMutationLoading}>
+		<SignLayout
+			isSignin
+			isLoading={isSignInMutationLoading}
+			title={t('components.form.signin.title')}
+		>
+			<GoogleOAuthButton locale={locale} />
+			<Divider />
 			<Box
 				component='form'
 				gap={spacing.small}
@@ -38,40 +45,35 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 				flexDirection={'column'}
 				onSubmit={handleSubmit(onSubmit)}
 			>
-				<InputFields
+				<TextField
 					label={t('globals.email')}
 					fullWidth
+					variant='outlined'
 					id='email'
 					{...register('email')}
 					autoComplete='email'
 					error={!!errors.email}
 					helperText={errors.email?.message}
-					maxWidth='100%'
 				/>
 				<PasswordInput<ISignInForm> />
-				<GoogleOAuthButton locale={locale} />
 				<Box
 					display='flex'
 					flexDirection='column'
 					justifyContent='center'
 					alignItems='center'
 				>
-					<Button type='submit' fullWidth>
-						{t('components.form.signin.title')}
+					<Button type='submit' fullWidth size='large'>
+						{t('components.form.signin.sign-in')}
 					</Button>
-					<Box>
+					<SignInConsentWrapper>
 						<Checkbox
 							labelKey={'components.form.keep-loggedin'}
 							register={register('stayConnected')}
 						/>
-					</Box>
-					<Box>
 						<Link to={REQPASSRESET}>
-							<Text variant='caption'>
-								{t('components.form.signin.forgot-password')}
-							</Text>
+							<Text>{t('components.form.signin.forgot-password')}</Text>
 						</Link>
-					</Box>
+					</SignInConsentWrapper>
 				</Box>
 			</Box>
 		</SignLayout>

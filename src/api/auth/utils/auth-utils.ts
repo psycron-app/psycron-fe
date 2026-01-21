@@ -1,4 +1,4 @@
-import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
+import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.types';
 
 import type { RegisterRequestPayload } from '../index.types';
 

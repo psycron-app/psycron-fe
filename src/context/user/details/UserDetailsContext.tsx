@@ -1,4 +1,10 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useMemo,
+	useState,
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -30,43 +36,54 @@ const clearAuthTokens = (): void => {
 	localStorage.removeItem(THERAPIST_ID);
 };
 
+const isEditSession = (value: string): value is EditSession => {
+	return (
+		value === 'password' || value === 'subscription' || value === 'patients'
+	);
+};
+
 export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 	const [isUserDetailsVisible, setIsUserDetailsVisible] = useState(false);
-
 	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
-	const openDeleteDialog = () => setIsDeleteOpen(true);
-	const closeDeleteDialog = () => setIsDeleteOpen(false);
-
 	const navigate = useNavigate();
-
 	const { user } = useAuth();
 
-	const toggleUserDetails = () => {
+	const toggleUserDetails = useCallback(() => {
 		setIsUserDetailsVisible((prev) => !prev);
-	};
+	}, []);
 
-	const handleClickEditUser = (id: string) => {
-		navigate(`${EDITUSERPATH}/${id}`);
-		toggleUserDetails();
-	};
+	const openDeleteDialog = useCallback(() => setIsDeleteOpen(true), []);
+	const closeDeleteDialog = useCallback(() => setIsDeleteOpen(false), []);
 
-	const handleClickEditSession = (userId: string, session: string) => {
-		const editUserPath = `${EDITUSERPATH}/${userId}`;
+	const handleClickEditUser = useCallback(
+		(id: string) => {
+			navigate(`${EDITUSERPATH}/${id}`);
+			toggleUserDetails();
+		},
+		[navigate, toggleUserDetails]
+	);
 
-		const specialPaths: Record<EditSession, string> = {
-			password: `${editUserPath}/password`,
-			subscription: '/subscription-manager',
-			patients: '/patients-manager',
-		};
+	const handleClickEditSession = useCallback(
+		(userId: string, session: string) => {
+			const editUserPath = `${EDITUSERPATH}/${userId}`;
 
-		if (session in specialPaths) {
-			navigate(specialPaths[session as EditSession]);
-		} else {
-			navigate(`${editUserPath}/${session}`);
-		}
-		toggleUserDetails();
-	};
+			const specialPaths: Record<EditSession, string> = {
+				password: `${editUserPath}/password`,
+				subscription: '/subscription-manager',
+				patients: '/patients-manager',
+			};
+
+			if (isEditSession(session)) {
+				navigate(specialPaths[session]);
+			} else {
+				navigate(`${editUserPath}/${session}`);
+			}
+
+			toggleUserDetails();
+		},
+		[navigate, toggleUserDetails]
+	);
 
 	return (
 		<UserDetailsContext.Provider
@@ -92,15 +109,17 @@ export const useUserDetails = (passedUserId?: string) => {
 		throw new Error('useUserDetails must be used within a UserDetailsProvider');
 	}
 
-	const { user, toggleUserDetails } = context;
+	const { user: sessionUser, toggleUserDetails, closeDeleteDialog } = context;
 
 	const queryClient = useQueryClient();
 	const { t } = useTranslation();
 
-	const userId = passedUserId ?? user?._id ?? null;
+	const sessionUserId = sessionUser?._id;
+	const userId = passedUserId ?? sessionUserId ?? null;
 
 	const isOwnSettings =
-		Boolean(user?._id) && (passedUserId == null || passedUserId === user._id);
+		Boolean(sessionUserId) &&
+		(passedUserId == null || passedUserId === sessionUserId);
 
 	const {
 		data: userDetails,
@@ -118,39 +137,65 @@ export const useUserDetails = (passedUserId?: string) => {
 		gcTime: 1000 * 60 * 10,
 	});
 
+	/**
+	 * ✅ Your BE returns availability as IDs (ObjectId[])
+	 * so latest session id should be derived from those.
+	 */
+	const latestSessionId = useMemo(() => {
+		const ids = userDetails?.availability ?? [];
+		return ids.length ? ids[ids.length - 1] : null;
+	}, [userDetails?.availability]);
+
+	/**
+	 * ✅ keep storage logic, but make selection deterministic:
+	 * sessionUserId > secureStorage > fetched userDetails id
+	 */
+	const therapistIdFromStorage = useSecureStorage(
+		THERAPIST_ID,
+		userDetails?._id,
+		1440,
+		'local'
+	);
+
+	const therapistId = useMemo(() => {
+		return sessionUserId ?? therapistIdFromStorage ?? userDetails?._id ?? '';
+	}, [sessionUserId, therapistIdFromStorage, userDetails?._id]);
+
 	const deleteMyAccountMutation = useMutation({
 		mutationFn: async () => {
-			if (!user?._id) {
-				throw new Error(t('auth.error.not-found'));
-			}
-			if (!isOwnSettings) {
-				throw new Error(t('auth.error.not-allowed'));
-			}
-			return deleteUserById(user._id);
+			if (!sessionUserId) throw new Error(t('auth.error.not-found'));
+			if (!isOwnSettings) throw new Error(t('auth.error.not-allowed'));
+			return deleteUserById(sessionUserId);
 		},
 		onSuccess: async () => {
 			clearAuthTokens();
 			queryClient.clear();
+			closeDeleteDialog();
 			toggleUserDetails();
 		},
 	});
 
-	const deleteMyAccount = () => {
+	const deleteMyAccount = useCallback(() => {
 		deleteMyAccountMutation.mutate();
-	};
+	}, [deleteMyAccountMutation]);
 
 	const downloadMyDataMutation = useMutation({
 		mutationFn: async () => {
-			if (!user?._id) throw new Error(t('auth.error.not-found'));
+			if (!sessionUserId) throw new Error(t('auth.error.not-found'));
 			if (!isOwnSettings) throw new Error(t('auth.error.not-allowed'));
-			return exportUserDataById(user._id);
+			return exportUserDataById(sessionUserId);
 		},
 		onSuccess: (blob) => {
+			// avoid crashing if session user is missing
+			const profile = userDetails ?? sessionUser;
+			const safeFirst = profile?.firstName ?? 'User';
+			const safeLast = profile?.lastName ?? 'Psycron';
+
 			const url = window.URL.createObjectURL(blob);
 			const a = document.createElement('a');
-
 			a.href = url;
-			a.download = `${user.firstName}-${user.lastName}-Psycron-data-export.json`;
+			a.download = `${safeFirst}-${safeLast}-Psycron-data-export.json`;
+
 			document.body.appendChild(a);
 			a.click();
 			a.remove();
@@ -159,34 +204,23 @@ export const useUserDetails = (passedUserId?: string) => {
 		},
 	});
 
-	const downloadMyData = () => downloadMyDataMutation.mutate();
-
-	const latestSessionId = userDetails?.availability?.length
-		? userDetails.availability[userDetails.availability.length - 1]
-		: null;
-
-	const therapistIdFromStorage = useSecureStorage(
-		THERAPIST_ID,
-		userDetails?._id,
-		1440,
-		'local'
-	);
-
-	const therapistId: string = useMemo(() => {
-		return Object.is(user, null) ? userDetails?._id : therapistIdFromStorage;
-	}, [therapistIdFromStorage, user, userDetails?._id]);
+	const downloadMyData = useCallback(() => {
+		downloadMyDataMutation.mutate();
+	}, [downloadMyDataMutation]);
 
 	return {
 		...context,
 		userDetails,
-		isUserDetailsLoading: isUserDetailsLoading,
+		isUserDetailsLoading,
 		isUserDetailsSucces,
 		therapistId,
 		latestSessionId,
 		isOwnSettings,
+
 		deleteMyAccount,
 		isDeletePending: deleteMyAccountMutation.isPending,
 		deleteError: deleteMyAccountMutation.error,
+
 		downloadMyData,
 		isDownloadPending: downloadMyDataMutation.isPending,
 		downloadError: downloadMyDataMutation.error,

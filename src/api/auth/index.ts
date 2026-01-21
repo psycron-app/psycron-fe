@@ -3,7 +3,7 @@ import type {
 	ISignInForm,
 	ISignInResponse,
 } from '@psycron/components/form/SignIn/SignIn.types';
-import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
+import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.types';
 import type {
 	IResetPass,
 	IResetPassResponse,

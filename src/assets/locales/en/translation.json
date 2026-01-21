@@ -16,7 +16,8 @@
 			"password-reset": "Your password has been changed successfully. You can now sign in.",
 			"logout": "You have been signed out successfully."
 		},
-		"continue-google": "Continue with Google"
+		"continue-google": "Continue with Google",
+		"continue-email": "Continue with email"
 	},
 	"globals": {
 		"email": "Email",
@@ -105,18 +106,21 @@
 	"components": {
 		"form": {
 			"confirm-password": "Confirm password",
-			"keep-loggedin": "Please keep me logged in",
+			"keep-loggedin": "Keep me logged in",
 			"not-valid": "Some fields are missing",
 			"signup": {
-				"title": "Sign up",
+				"sign-up": "Sign up",
+				"title-email": "Create your account",
+				"title": "Create your Psycron account",
 				"first-name": "First name",
 				"last-name": "Last name",
 				"already-have-acc": "Already have an account?",
 				"signin-here-link": "Sign in here"
 			},
 			"signin": {
-				"title": "Sign in",
-				"dont-have-acc": "You dont have an account yet?",
+				"sign-in": "Sign in",
+				"title": "Welcome back",
+				"dont-have-acc": "Don't have an account?",
 				"signup-here-link": "Sign up here",
 				"forgot-password": "Forgot your password?"
 			},
@@ -148,8 +152,9 @@
 				"contact-via-same": "Is phone number the same as whatsapp?"
 			},
 			"consent": {
-				"terms": "I agree to the <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Service</termsLink>",
-				"marketing": "I consent to receive <marketingLink>marketing communications</marketingLink>"
+				"terms": "I agree to the <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Service.</termsLink>",
+				"marketing": "I consent to receive <marketingLink>marketing communications.</marketingLink>",
+				"info": "By continuing, you agree to Psycron's <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Service.</termsLink>"
 			}
 		},
 		"input": {

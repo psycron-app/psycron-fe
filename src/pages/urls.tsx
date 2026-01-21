@@ -24,6 +24,7 @@ export const UNSUBSCRIBE = ':token/unsubscribe';
 // PRIVATE
 export const DASHBOARD = 'dashboard';
 // PRIVATE - USER
+export const USERDETAILS = USERID;
 export const EDITUSERPATH = 'edit';
 export const EDITUSER = `${EDITUSERPATH}/${USERID}`;
 export const EDITUSERBYSESSION = `${EDITUSER}/:session`;

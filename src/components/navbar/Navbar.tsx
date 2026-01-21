@@ -9,7 +9,6 @@ import useViewport from '@psycron/hooks/useViewport';
 import {
 	APPOINTMENTS,
 	DASHBOARD,
-	EDITUSERPATH,
 	LOGOUT,
 	PATIENTS,
 	PAYMENTS,
@@ -84,7 +83,7 @@ export const Navbar = () => {
 		{
 			name: t('components.navbar.user-settings'),
 			icon: <UserSettings />,
-			path: `${EDITUSERPATH}/${userDetails?._id}`,
+			path: `${userDetails?._id}`,
 			onClick: () => toggleUserDetails(),
 		},
 		{

@@ -30,6 +30,8 @@ export const GoogleOAuthButton = ({
 			disabled={disabled}
 			fullWidth
 			tertiary
+			variant='outlined'
+			size='large'
 			aria-label={t('auth.continue-google')}
 		>
 			<Google />

@@ -1,35 +1,70 @@
 import type {
 	ISlot,
+	ISODateString,
 	ITherapist,
+	MongoId,
 } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
-export interface IUserByIdResponse {
-	user: ITherapist;
-}
-
-export interface IEditUser {
-	data: Partial<ITherapist>;
-	userId: string;
-}
-
-export interface IPasswordChange {
-	confirmPassword: string;
-	newPassword: string;
-	password: string;
-}
-
-export interface IChangePass {
-	data: IPasswordChange;
-	userId: string;
-}
-
+/**
+ * Shared API response helpers
+ */
 export interface IResponse {
 	message: string;
 	status: string;
 }
 
-export interface ITherapistById {
-	therapistId: string;
+/**
+ * GET /users/:id
+ */
+export interface IUserByIdResponse {
+	user: ITherapist;
+}
+
+/**
+ * POST /users/edit/:id
+ */
+export interface IEditUser {
+	data: Partial<ITherapist>;
+	userId: MongoId;
+}
+
+/**
+ * POST /users/password-change/:id
+ *
+ * NOTE: Your BE expects: currentPassword/newPassword/confirmPassword
+ * Your old type used "password" — rename to match BE.
+ */
+export interface IPasswordChangePayload {
+	confirmPassword: string;
+	currentPassword: string;
+	newPassword: string;
+}
+
+export interface IChangePass {
+	data: IPasswordChangePayload;
+	userId: MongoId;
+}
+
+/**
+ * Availability endpoints
+ *
+ * GET /users/:therapistId/availability?latest=true
+ *
+ * Your response:
+ * {
+ *   dates: [{ _id, date, slots }],
+ *   firstDate, lastDate, isEmpty, totalPages
+ * }
+ */
+export interface IDateInfo {
+	date: ISODateString;
+	dateId?: MongoId;
+}
+
+export interface IAvailabilityDate {
+	_id: MongoId;
+	date: ISODateString;
+	slots: ISlot[];
 }
 
 export interface IAvailabilityResponse {
@@ -40,33 +75,34 @@ export interface IAvailabilityResponse {
 	totalPages: number;
 }
 
-export interface IDateInfo {
-	date: Date;
-	dateId?: string;
-}
-
+/**
+ * GET /users/:therapistId/availability/by-day?dayId=...&cursor=...
+ */
 export interface DateInfoParams {
 	cursor?: string;
-	dateId: string;
+	dateId: MongoId;
 }
 
-export interface IAvailabilityDate {
-	_id: string;
-	date: Date;
-	slots: ISlot[];
+/**
+ * Pagination shape from BE.
+ */
+export interface IPagination {
+	hasNextPage: boolean;
+	hasPrevPage: boolean;
+	nextCursor: string | null;
+	previousCursor: string | null;
+	totalItems: number;
 }
 
 export interface IPaginatedAvailability {
 	availabilityDates: IAvailabilityDate[];
-	conflicts?: [];
+	// if conflicts are implemented, type properly later
+	conflicts?: unknown[];
+
 	consultationDuration?: number;
-	pagination: {
-		hasNextPage: boolean;
-		hasPrevPage: boolean;
-		nextCursor: string | null;
-		previousCursor: string | null;
-		totalItems: number;
-	};
-	therapistId: string;
+
+	pagination: IPagination;
+	therapistId: MongoId;
+
 	timezone?: string;
 }

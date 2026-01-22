@@ -8,7 +8,13 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getSession, logoutFc, signInFc, signUpFc } from '@psycron/api/auth';
+import {
+	getSession,
+	logoutFc,
+	signInFc,
+	signUpFc,
+	verifyEmail,
+} from '@psycron/api/auth';
 import type { CustomError } from '@psycron/api/error';
 import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
 import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.types';
@@ -139,6 +145,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 		},
 	});
 
+	const verifyEmailMutation = useMutation({
+		mutationFn: verifyEmail,
+		onError: (error: CustomError) => {
+			showAlert({ severity: 'error', message: t(error.message) });
+		},
+	});
+
+	const verifyEmailToken = useCallback(
+		async (token: string) => {
+			return verifyEmailMutation.mutateAsync(token);
+		},
+		[verifyEmailMutation]
+	);
+
 	const logoutMutation = useMutation({
 		mutationFn: logoutFc,
 		onSuccess: async () => {
@@ -192,6 +212,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			user,
 			isSignInMutationLoading: signInMutation.isPending,
 			isSignUpMutationLoading: signUpMutation.isPending,
+			verifyEmailToken,
+			isVerifyEmailLoading: verifyEmailMutation.isPending,
 		}),
 		[
 			signIn,
@@ -203,6 +225,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			user,
 			signInMutation.isPending,
 			signUpMutation.isPending,
+			verifyEmailToken,
+			verifyEmailMutation.isPending,
 		]
 	);
 

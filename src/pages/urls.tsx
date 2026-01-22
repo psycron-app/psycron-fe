@@ -17,6 +17,8 @@ export const SIGNUP = 'sign-up';
 export const LOGOUT = 'logout';
 export const REQPASSRESET = 'reset-password';
 export const PASSRESET = 'password-reset/:token';
+export const VERIFYEMAIL = 'auth/verify-email';
+export const AUTHCALLBACK = 'auth/callback';
 
 // UNSUBSCRIBE
 export const UNSUBSCRIBE = ':token/unsubscribe';

@@ -2,6 +2,7 @@ import type {
 	IRefreshToken,
 	ISignInForm,
 	ISignInResponse,
+	IVerifyEmailResponse,
 } from '@psycron/components/form/SignIn/SignIn.types';
 import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.types';
 import type {
@@ -82,9 +83,22 @@ export const resetPassword = async (
 export const refreshTokenService = async (
 	refreshToken: string
 ): Promise<IRefreshToken> => {
-	const { data } = await apiClient.post('/token/refresh-token', {
+	const { data } = await apiClient.post<IRefreshToken>('/token/refresh-token', {
 		refreshToken,
 	});
+
+	return data;
+};
+
+export const verifyEmail = async (
+	token: string
+): Promise<IVerifyEmailResponse> => {
+	const { data } = await apiClient.post<IVerifyEmailResponse>(
+		'/users/verify-email',
+		{
+			token,
+		}
+	);
 
 	return data;
 };

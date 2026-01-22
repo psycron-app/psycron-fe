@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react';
 import type { StatusEnum } from '@psycron/api/user/availability/index.types';
-import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
+import type {
+	ISignInForm,
+	IVerifyEmailResponse,
+} from '@psycron/components/form/SignIn/SignIn.types';
 import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.types';
 
 export type ISODateString = string;
@@ -15,10 +18,12 @@ export interface AuthContextType {
 	isSessionSuccess: boolean;
 	isSignInMutationLoading: boolean;
 	isSignUpMutationLoading: boolean;
+	isVerifyEmailLoading: boolean;
 	logout: () => void;
 	signIn: (data: ISignInForm) => void;
 	signUp: (data: ISignUpForm) => void;
 	user?: ITherapist;
+	verifyEmailToken: (token: string) => Promise<IVerifyEmailResponse>;
 }
 
 export interface AuthProviderProps {

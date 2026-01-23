@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { setTokens } from '@psycron/context/user/auth/utils/tokenStorage';
 import i18n from '@psycron/i18n';
-import { DASHBOARD, EDITUSERBYSESSION, SIGNIN } from '@psycron/pages/urls';
+import { AVAILABILITYGENERATE, DASHBOARD, SIGNIN } from '@psycron/pages/urls';
 
 type RouteParams = {
 	locale?: string;
@@ -29,9 +29,8 @@ export const AuthCallback: React.FC = () => {
 		const refreshToken = params.get('refreshToken');
 		const error = params.get('error');
 
-		// Optional query params (nice for future-proofing)
-		const stayConnected = params.get('stayConnected'); // 'true' | 'false' | null
-		const intent = params.get('intent'); // 'login' | 'signup' | null
+		const stayConnected = params.get('stayConnected');
+		const intent = params.get('intent');
 		const isNewUser = params.get('isNewUser') === 'true';
 
 		const locale = getSafeLocale(localeFromRoute);
@@ -48,9 +47,6 @@ export const AuthCallback: React.FC = () => {
 			return;
 		}
 
-		// Decide persistence:
-		// - if BE sends stayConnected, use it
-		// - otherwise default to "true" (least surprising for OAuth)
 		const persist = stayConnected === null ? true : stayConnected === 'true';
 
 		setTokens({
@@ -59,9 +55,8 @@ export const AuthCallback: React.FC = () => {
 			persist,
 		});
 
-		// If you later implement onboarding for new users:
 		if (intent === 'signup' && isNewUser) {
-			navigate(`/${locale}/${EDITUSERBYSESSION}`, { replace: true });
+			navigate(`/${locale}/${AVAILABILITYGENERATE}`, { replace: true });
 			return;
 		}
 

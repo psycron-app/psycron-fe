@@ -27,8 +27,17 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 	const {
 		register,
 		handleSubmit,
+		watch,
 		formState: { errors },
 	} = useFormContext<ISignInForm>();
+
+	const email = watch('email');
+	const password = watch('password');
+
+	const canSubmit =
+		Boolean(email?.trim()) &&
+		Boolean(password?.trim()) &&
+		!isSignInMutationLoading;
 
 	return (
 		<SignLayout
@@ -62,7 +71,12 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 					justifyContent='center'
 					alignItems='center'
 				>
-					<Button type='submit' fullWidth size='large'>
+					<Button
+						type='submit'
+						fullWidth
+						size='large'
+						disabled={!canSubmit || isSignInMutationLoading}
+					>
 						{t('components.form.signin.sign-in')}
 					</Button>
 					<SignInConsentWrapper>

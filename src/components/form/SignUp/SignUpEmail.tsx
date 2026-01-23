@@ -31,9 +31,25 @@ export const SignUpEmail = ({
 
 	const {
 		register,
+
 		handleSubmit,
+		watch,
 		formState: { errors },
 	} = useFormContext<ISignUpForm>();
+
+	const firstName = watch('firstName');
+	const lastName = watch('lastName');
+	const email = watch('email');
+	const password = watch('password');
+	const confirmPassword = watch('confirmPassword');
+
+	const canSubmit =
+		Boolean(firstName?.trim()) &&
+		Boolean(lastName?.trim()) &&
+		Boolean(email?.trim()) &&
+		Boolean(password?.trim()) &&
+		Boolean(confirmPassword?.trim()) &&
+		!isLoading;
 
 	return (
 		<SignLayout
@@ -52,6 +68,7 @@ export const SignUpEmail = ({
 					label={t('globals.email')}
 					fullWidth
 					variant='outlined'
+					required
 					id='email'
 					{...register('email')}
 					autoComplete='email'
@@ -61,7 +78,12 @@ export const SignUpEmail = ({
 				/>
 				<PasswordInput<ISignUpForm> hasToConfirm />
 
-				<Button type='submit' fullWidth size='medium'>
+				<Button
+					type='submit'
+					fullWidth
+					size='large'
+					disabled={!canSubmit || isLoading}
+				>
 					{t('components.form.signup.title-email')}
 				</Button>
 				<Box display='flex' flexDirection='column'>

@@ -6,6 +6,8 @@ export interface IPageLayout {
 	backTo?: To;
 	children: ReactNode;
 	isLoading?: boolean;
+	link?: string;
+	linkName?: string;
 	subTitle?: string;
 	title?: string;
 }

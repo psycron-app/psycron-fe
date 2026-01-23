@@ -57,6 +57,7 @@ export const PasswordInput = <T extends FieldValues>({
 				label={t('globals.password')}
 				id={String(passwordName)}
 				fullWidth
+				variant='outlined'
 				type={showPassword ? 'text' : 'password'}
 				{...register(passwordName)}
 				error={Boolean(passwordHelper)}
@@ -87,6 +88,7 @@ export const PasswordInput = <T extends FieldValues>({
 					label={t('components.form.confirm-password')}
 					fullWidth
 					id={String(confirmFieldName)}
+					variant='outlined'
 					type={showConfirm ? 'text' : 'password'}
 					{...register(confirmFieldName)}
 					error={Boolean(confirmHelper)}

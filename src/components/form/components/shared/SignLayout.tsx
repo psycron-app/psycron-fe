@@ -7,14 +7,20 @@ import { NavigateLink } from '@psycron/components/link/navigate/NavigateLink';
 import { Loader } from '@psycron/components/loader/Loader';
 import { SIGNIN, SIGNUP } from '@psycron/pages/urls';
 
+import {
+	LogoWrapper,
+	SignLayoutFooterLink,
+	SignTitle,
+	SignUpWrapper,
+} from './SignLayout.styles';
 import type { ISignLayout } from './SignLayout.types';
-import { LogoWrapper, SignLayoutFooterLink, SignUpWrapper } from './styles';
 
 export const SignLayout: FC<ISignLayout> = ({
 	children,
 	isSignin,
 	isReset,
 	isLoading,
+	title,
 }: ISignLayout) => {
 	const { t } = useTranslation();
 
@@ -22,6 +28,7 @@ export const SignLayout: FC<ISignLayout> = ({
 		<SignUpWrapper>
 			<LogoWrapper>
 				<LogoColor />
+				{String(title) ? <SignTitle>{title}</SignTitle> : null}
 			</LogoWrapper>
 			{!isLoading ? (
 				<>

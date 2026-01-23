@@ -14,7 +14,7 @@ import { Text } from '@psycron/components/text/Text';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
-import { AVAILABILITYWIZARD } from '@psycron/pages/urls';
+import { AVAILABILITYGENERATE, AVAILABILITYWIZARD } from '@psycron/pages/urls';
 
 import {
 	CalendarWrapper,
@@ -123,7 +123,12 @@ export const AppointmentPage = () => {
 	]);
 
 	return (
-		<PageLayout title={t('globals.appointments')} isLoading={loadingState}>
+		<PageLayout
+			title={t('globals.appointments')}
+			isLoading={loadingState}
+			link={AVAILABILITYGENERATE}
+			linkName='Generate Availability with Jupiter'
+		>
 			<Box height={'100%'} position={'relative'}>
 				{isAvailabilityDatesEmpty ? (
 					<>

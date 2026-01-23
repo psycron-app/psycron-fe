@@ -1,7 +1,16 @@
 import type { ReactNode } from 'react';
 import type { StatusEnum } from '@psycron/api/user/availability/index.types';
-import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
-import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
+import type {
+	ISignInForm,
+	IVerifyEmailResponse,
+} from '@psycron/components/form/SignIn/SignIn.types';
+import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.types';
+
+export type ISODateString = string;
+export type MongoId = string;
+
+export type TherapistRole = 'THERAPIST' | 'ADMIN';
+export type AuthProvider = 'local' | 'google';
 
 export interface AuthContextType {
 	isAuthenticated: boolean;
@@ -9,10 +18,12 @@ export interface AuthContextType {
 	isSessionSuccess: boolean;
 	isSignInMutationLoading: boolean;
 	isSignUpMutationLoading: boolean;
+	isVerifyEmailLoading: boolean;
 	logout: () => void;
 	signIn: (data: ISignInForm) => void;
 	signUp: (data: ISignUpForm) => void;
 	user?: ITherapist;
+	verifyEmailToken: (token: string) => Promise<IVerifyEmailResponse>;
 }
 
 export interface AuthProviderProps {
@@ -24,58 +35,73 @@ export interface IUserData {
 	user?: ITherapist;
 }
 
-export interface IBaseUser {
-	_id: string;
-	address: IAddress;
-	contacts: IContactInfo;
-	createdAt?: Date;
-	firstName: string;
-	lastName: string;
-	updatedAt?: Date;
-}
-export interface ITherapist extends IBaseUser {
-	availability: IAvailability[];
-	password: string;
-	patients?: IPatient[];
-	role: 'THERAPIST' | 'ADMIN';
-	speciality?: string;
-	stripeCustomerID?: string;
-	subscriptions?: [];
-	timeZone?: string;
-}
-
-export interface IPatient extends IBaseUser {
-	cancelledAppointments?: ICancelledAppointment[];
-	createdBy?: ITherapist | string;
-	notifications?: INotification[];
-	role: 'PATIENT';
-	sessionDates: ISessionDatesGroup[];
-	timeZone?: string;
-}
-
-export interface ISessionDatesGroup {
-	_id?: string;
-	date: string | Date;
-	slots: ISlot[];
-}
-
 export interface IContactInfo {
 	email: string;
 	phone?: string;
 	whatsapp?: string;
 }
 
-export interface IAddress {
-	address?: string;
-	administrativeArea?: string;
-	city?: string;
-	country?: string;
-	moreInfo?: string;
-	postalCode?: string;
-	route?: string;
-	streetNumber?: string;
-	sublocality?: string;
+export interface IGoogleCalendar {
+	accessToken?: string;
+	calendarId?: string;
+	lastSyncAt?: ISODateString;
+	refreshToken?: string;
+	syncEnabled: boolean;
+	tokenExpiresAt?: ISODateString;
 }
+
+export interface IConsent {
+	dataProcessingAcceptedAt: ISODateString | null;
+	marketingEmailsAcceptedAt: ISODateString | null;
+	privacyPolicyAcceptedAt: ISODateString | null;
+	termsAcceptedAt: ISODateString | null;
+}
+
+export interface IConsentHistoryEntry {
+	action: 'granted' | 'withdrawn';
+	ipAddress?: string;
+	timestamp: ISODateString;
+	type: string;
+	userAgent?: string;
+}
+
+export interface IBaseUser {
+	_id: MongoId;
+	contacts: IContactInfo;
+	createdAt?: ISODateString;
+	firstName: string;
+	lastName: string;
+	updatedAt?: ISODateString;
+}
+
+export interface ITherapist extends IBaseUser {
+	anonymizedAt?: ISODateString | null;
+	// Google fields (from BE payload)
+	authProvider?: AuthProvider;
+
+	availability: MongoId[];
+	// GDPR/LGPD
+	consent?: IConsent;
+	consentHistory?: IConsentHistoryEntry[];
+
+	deletedAt?: ISODateString | null;
+
+	googleCalendar?: IGoogleCalendar;
+	googleId?: string;
+	notifications: MongoId[];
+	// local-only
+	password?: string;
+
+	// IDs (because BE is not populating in /users/:id)
+	patients: MongoId[];
+	picture?: string;
+	role: TherapistRole;
+	timeZone: string;
+}
+
+/**
+ * Other entities used by other endpoints
+ */
 
 export interface INotification {
 	channel: string;
@@ -83,78 +109,58 @@ export interface INotification {
 	icsContent: string;
 	id: string;
 	messageType: string;
-	sentAt: Date;
-}
-
-export interface IAvailability {
-	completed: boolean;
-	consultationDuration: number;
-	createAvailabilitySession: ISessionAvailability;
-	date?: Date;
-	slots: ISlot[];
-	therapistId: string;
-	weekday:
-		| 'Monday'
-		| 'Tuesday'
-		| 'Wednesday'
-		| 'Thursday'
-		| 'Friday'
-		| 'Saturday'
-		| 'Sunday';
-}
-
-export interface ISessionAvailability {
-	completed?: boolean;
-	consultationDuration?: number;
-	step?: number;
-	unavailableHours?: {
-		endTime: string;
-		startTime: string;
-	}[];
-	weekdays?: string[];
+	sentAt: ISODateString;
 }
 
 export interface ISlot {
-	_id: string;
-	canceledAt?: string | null;
+	_id: MongoId;
+	canceledAt?: ISODateString | null;
 	customReason?: string | null;
 	endTime: string;
 	note?: string;
-	patientId?: string;
+	patientId?: MongoId;
 	reasonCode?: string | null;
 	startTime: string;
 	status: StatusEnum;
 }
 
-export type ISlotStatus =
-	| 'AVAILABLE'
-	| 'BLOCKED'
-	| 'BOOKED'
-	| 'ONHOLD'
-	| 'CANCELLED'
-	| 'EMPTY';
+export interface IAvailabilityDate {
+	_id: MongoId;
+	date: ISODateString;
+	slots: ISlot[];
+}
 
-export interface ISessionDate {
-	_id: string;
-	date: Date;
-	slots?: ISlot[];
+export interface ISessionDatesGroup {
+	_id?: MongoId;
+	date: ISODateString;
+	slots: ISlot[];
+}
+
+export interface IPatient extends IBaseUser {
+	cancelledAppointments?: ICancelledAppointment[];
+	createdBy?: ITherapist | MongoId;
+	notifications?: INotification[];
+
+	role: 'PATIENT';
+	sessionDates: ISessionDatesGroup[];
+	timeZone?: string;
 }
 
 export interface IBookSessionWithLink {
-	availabilityDayId: string;
+	availabilityDayId: MongoId;
 	patient: Partial<IPatient>;
 	shouldReplicate?: boolean;
-	slotId: string;
+	slotId: MongoId;
 	timeZone: string;
 }
 
 export interface ICancelledAppointment {
-	cancelledAt: Date;
+	cancelledAt: ISODateString;
 	customReason?: string;
-	date: Date;
+	date: ISODateString;
 	endTime: string;
 	reasonCode?: number;
-	slotId: string;
+	slotId: MongoId;
 	startTime: string;
 	triggeredBy: 'PATIENT' | 'THERAPIST';
 }

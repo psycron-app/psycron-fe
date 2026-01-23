@@ -7,15 +7,11 @@ import type { CustomError } from '@psycron/api/error';
 import { editUserById } from '@psycron/api/user';
 import type { IEditUser } from '@psycron/api/user/index.types';
 import { Avatar } from '@psycron/components/avatar/Avatar';
-import { AddressForm } from '@psycron/components/form/components/address/AddressForm';
-import { ContactsForm } from '@psycron/components/form/components/contacts/ContactsForm';
 import { FormFooter } from '@psycron/components/form/components/footer/FormFooter';
-import { NameForm } from '@psycron/components/form/components/name/NameForm';
 import { Loader } from '@psycron/components/loader/Loader';
 import { Switch } from '@psycron/components/switch/components/item/Switch';
 import { Text } from '@psycron/components/text/Text';
 import { useAlert } from '@psycron/context/alert/AlertContext';
-import type { IAddress } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 import { useMutation } from '@tanstack/react-query';
@@ -39,13 +35,7 @@ export const EditUser = () => {
 
 	const { showAlert } = useAlert();
 
-	const {
-		register,
-		handleSubmit,
-		getValues,
-		setValue,
-		formState: { errors },
-	} = useForm();
+	const { handleSubmit, getValues } = useForm();
 
 	useEffect(() => {
 		setIsEditName(session === 'name');
@@ -92,36 +82,8 @@ export const EditUser = () => {
 					phone: data.countryCode + data.phone || userDetails.contacts.phone,
 					whatsapp: data.whatsapp || userDetails.contacts.whatsapp,
 				},
-				address: {
-					administrativeArea:
-						data.administrativeArea || userDetails.address?.administrativeArea,
-					city: data.city || userDetails.address?.city,
-					country: data.country || userDetails.address?.country,
-					streetNumber: data.streetNumber || userDetails.address?.streetNumber,
-					route: data.route || userDetails.address?.route,
-					postalCode: data.postalCode || userDetails.address?.postalCode,
-					sublocality: data.sublocality || userDetails.address?.sublocality,
-				},
 			},
 		};
-
-		const addressFields = [
-			'administrativeArea',
-			'city',
-			'country',
-			'streetNumber',
-			'route',
-			'postalCode',
-			'sublocality',
-		];
-
-		const isAddressEmpty = addressFields.every(
-			(field) => !editData.data.address?.[field as keyof IAddress]
-		);
-
-		if (isAddressEmpty) {
-			delete editData.data.address;
-		}
 
 		editUserMutation.mutate(editData);
 	};
@@ -140,13 +102,11 @@ export const EditUser = () => {
 							src={''}
 							large
 						/>
-						<NameForm
-							errors={errors}
-							register={register}
+						{/* <NameForm
 							placeholderFirstName={userDetails?.firstName}
 							placeholderLastName={userDetails?.lastName}
 							disabled={!isEditName}
-						/>
+						/> */}
 					</Box>
 					<EditButton>
 						<Switch
@@ -159,7 +119,7 @@ export const EditUser = () => {
 
 				<Box mb={spacing.xxl}>
 					<EditingBox isEditing={isEditContacts}>
-						<ContactsForm
+						{/* <ContactsForm
 							errors={errors}
 							register={register}
 							getPhoneValue={getValues}
@@ -167,7 +127,7 @@ export const EditUser = () => {
 							defaultValues={userDetails?.contacts}
 							disabled={!isEditContacts}
 							setValue={setValue}
-						/>
+						/> */}
 						<EditButton>
 							<Switch
 								label={t('components.user-details.edit-contacts')}
@@ -178,12 +138,6 @@ export const EditUser = () => {
 					</EditingBox>
 
 					<EditingBox isEditing={isEditAddress}>
-						<AddressForm
-							errors={errors}
-							register={register}
-							defaultValues={userDetails?.address}
-							disabled={!isEditAddress}
-						/>
 						<EditButton>
 							<Switch
 								label={t('components.user-details.change', {

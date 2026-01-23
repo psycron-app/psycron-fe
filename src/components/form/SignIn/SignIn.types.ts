@@ -23,3 +23,8 @@ export interface IRefreshToken {
 	accessToken: string;
 	refreshToken: string;
 }
+
+export interface IVerifyEmailResponse {
+	message: string;
+	status: 'success' | 'error';
+}

@@ -2,11 +2,13 @@ import { AuthPage } from '@psycron/pages/auth';
 import { AuthCallback } from '@psycron/pages/auth/callback/AuthCallback';
 import { ChangePassword } from '@psycron/pages/auth/password/ChangePassword';
 import { ResetPassword } from '@psycron/pages/auth/password/ResetPassword';
+import { VerifyEmail } from '@psycron/pages/auth/verification/email/VerifyEmail';
 import { Home } from '@psycron/pages/home/HomePage';
 import { Testing } from '@psycron/pages/testing/indext';
 import { Unsubscribe } from '@psycron/pages/unsubscribe/Unsubscribe';
 import {
 	APPOINTMENTCONFIRMATIONPATH,
+	AUTHCALLBACK,
 	BOOKAPPOINTMENT,
 	HOMEPAGE,
 	PASSRESET,
@@ -16,6 +18,7 @@ import {
 	SIGNIN,
 	SIGNUP,
 	UNSUBSCRIBE,
+	VERIFYEMAIL,
 } from '@psycron/pages/urls';
 import { BookAppointment } from '@psycron/pages/user/appointment/booking/BookAppointment';
 import { AppointmentConfirmation } from '@psycron/pages/user/appointment/confirmation/AppointmentConfirmation';
@@ -26,7 +29,8 @@ const publicRoutes = [
 	{ path: UNSUBSCRIBE, element: <Unsubscribe /> },
 	{ path: SIGNIN, element: <AuthPage /> },
 	{ path: SIGNUP, element: <AuthPage /> },
-	{ path: 'auth/callback', element: <AuthCallback /> },
+	{ path: AUTHCALLBACK, element: <AuthCallback /> },
+	{ path: VERIFYEMAIL, element: <VerifyEmail /> },
 	{ path: REQPASSRESET, element: <ResetPassword /> },
 	{ path: PASSRESET, element: <ChangePassword /> },
 	{ path: BOOKAPPOINTMENT, element: <BookAppointment /> },

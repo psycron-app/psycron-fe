@@ -14,6 +14,9 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 	const {
 		primary,
 		secondary,
+		brand,
+		tertiary,
+		gray,
 		text: { primary: textPrimary, disabled: textDisabled },
 	} = palette as unknown as Palette;
 
@@ -33,6 +36,7 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 		},
 		sizeMedium: {
 			padding: `${spacing.xxs} ${spacing.mediumSmall}`,
+			height: '42px',
 		},
 		sizeSmall: {
 			padding: `${spacing.space} ${spacing.small}`,
@@ -108,6 +112,26 @@ const buttonStyles = ({ palette }: Theme): Record<string, CSSObject> => {
 			},
 			'&.Mui-disabled': {
 				border: generateBorder(secondary.action.disabled),
+				filter: shadowDisabled,
+				color: textDisabled,
+				pointerEvents: 'none',
+			},
+		},
+		outlinedTertiary: {
+			border: `2px solid ${brand.purple}`,
+			backgroundColor: 'transparent',
+			boxSizing: 'border-box',
+			'&:hover': {
+				backgroundColor: brand.dark,
+				boxShadow: shadowMain,
+				color: gray['01'],
+			},
+			'&:focus': {
+				border: generateBorder(brand.dark),
+				boxShadow: shadowPress,
+			},
+			'&.Mui-disabled': {
+				border: generateBorder(tertiary.action.disabled),
 				filter: shadowDisabled,
 				color: textDisabled,
 				pointerEvents: 'none',

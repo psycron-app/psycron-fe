@@ -4,7 +4,6 @@ import { Box, Dialog, DialogTitle, Typography } from '@mui/material';
 import { Avatar } from '@psycron/components/avatar/Avatar';
 import { Button } from '@psycron/components/button/Button';
 import {
-	Address,
 	Download,
 	EditUser,
 	Password,
@@ -19,7 +18,6 @@ import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext
 import useViewport from '@psycron/hooks/useViewport';
 import { palette } from '@psycron/theme/palette/palette.theme';
 
-import { AddressInfoItem } from '../address-info-item/AddressInfoItem';
 import { ContactInfoItem } from '../contact-info-item/ContactInfoItem';
 import type { IUserDetailsCardProps } from '../user-details-card/UserDetailsCard.types';
 
@@ -62,7 +60,6 @@ export const UserDetails = ({ plan, user }: IUserDetailsCardProps) => {
 		firstName,
 		lastName,
 		patients,
-		address,
 		// image,
 	} = user;
 
@@ -70,43 +67,6 @@ export const UserDetails = ({ plan, user }: IUserDetailsCardProps) => {
 		<Box display='flex'>
 			<Typography px={2}>{planName}</Typography>
 			{planStatus === 'paid' ? <PlanPaid /> : <PlanUnpaid />}
-		</Box>
-	);
-
-	const addressDetails = [
-		{ value: `${address?.route ?? ''} ${address?.streetNumber ?? ''}`.trim() },
-		{ value: address?.moreInfo ?? '' },
-		{ value: `${address?.sublocality ?? ''} ${address?.city ?? ''}`.trim() },
-		{
-			value:
-				`${address?.administrativeArea ?? ''} ${address?.postalCode ?? ''}`.trim(),
-		},
-		{ value: address?.country ?? '' },
-	];
-
-	const hasAddressInfo = addressDetails.some(
-		(detail) => detail.value && detail.value.trim() !== ''
-	);
-
-	const addressInfo = (
-		<Box display='flex' flexDirection='column' alignItems='flex-end'>
-			{hasAddressInfo ? (
-				addressDetails.map((detail, index) =>
-					detail.value.trim() ? (
-						<AddressInfoItem key={index} value={detail.value} />
-					) : null
-				)
-			) : (
-				<Typography
-					variant='body2'
-					pb={1}
-					color={palette.text.disabled}
-					textAlign='end'
-					width={'60%'}
-				>
-					{t('components.user-details.address-not-found')}
-				</Typography>
-			)}
 		</Box>
 	);
 
@@ -148,15 +108,6 @@ export const UserDetails = ({ plan, user }: IUserDetailsCardProps) => {
 			value: constactsInfo,
 			edit: t('components.user-details.edit-contacts'),
 			subPath: 'contacts',
-		},
-		{
-			name: t('globals.address'),
-			icon: <Address />,
-			value: addressInfo,
-			edit: t('components.user-details.change', {
-				name: t('globals.address'),
-			}),
-			subPath: 'address',
 		},
 		{
 			name: t('globals.plan'),

@@ -1,6 +1,5 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
-import { AnimatedBackground } from '@psycron/components/animated-background/AnimatedBackground';
 import { Header } from '@psycron/components/header/Header';
 import { Link } from '@psycron/components/link/Link';
 import { Text } from '@psycron/components/text/Text';
@@ -53,7 +52,6 @@ export const PublicLayout = () => {
 					</Text>
 				</FooterContent>
 			</FooterWrapper>
-			<AnimatedBackground />
 		</>
 	);
 };

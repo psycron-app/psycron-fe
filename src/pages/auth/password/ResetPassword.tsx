@@ -7,7 +7,7 @@ import { requestPassReset } from '@psycron/api/auth';
 import type { CustomError } from '@psycron/api/error';
 import { Button } from '@psycron/components/button/Button';
 import { SignLayout } from '@psycron/components/form/components/shared/SignLayout';
-import { InputFields } from '@psycron/components/form/components/shared/styles';
+import { InputFields } from '@psycron/components/form/components/shared/SignLayout.styles';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 import { useMutation } from '@tanstack/react-query';

@@ -8,9 +8,7 @@ import useClickOutside from '@psycron/hooks/useClickoutside';
 import useViewport from '@psycron/hooks/useViewport';
 import {
 	APPOINTMENTS,
-	AVAILABILITYGENERATE,
 	DASHBOARD,
-	EDITUSERPATH,
 	LOGOUT,
 	PATIENTS,
 	PAYMENTS,
@@ -85,7 +83,7 @@ export const Navbar = () => {
 		{
 			name: t('components.navbar.user-settings'),
 			icon: <UserSettings />,
-			path: `${EDITUSERPATH}/${userDetails?._id}`,
+			path: `${userDetails?._id}`,
 			onClick: () => toggleUserDetails(),
 		},
 		{
@@ -99,12 +97,6 @@ export const Navbar = () => {
 			icon: <Payment />,
 			path: PAYMENTS,
 			disabled: true,
-		},
-		{
-			name: 'avalll',
-			icon: <Payment />,
-			path: AVAILABILITYGENERATE,
-			disabled: false,
 		},
 		{
 			name: t('globals.appointments-manager'),

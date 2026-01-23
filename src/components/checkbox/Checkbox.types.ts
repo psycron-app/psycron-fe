@@ -26,5 +26,6 @@ type WithLabelKey = {
 
 export type ICheckboxProps = (Uncontrolled | Controlled) &
 	(WithLabelNode | WithLabelKey) & {
+		required?: boolean;
 		shouldBold?: boolean;
 	};

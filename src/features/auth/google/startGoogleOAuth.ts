@@ -1,3 +1,5 @@
+import { DASHBOARD } from '@psycron/pages/urls';
+
 import type { StartGoogleOAuthArgs } from './GoogleOAuthButton.types';
 
 const getTimeZone = (): string =>
@@ -18,6 +20,7 @@ export const startGoogleOAuth = ({
 	const url = makeUrl(apiBase, 'auth/google');
 
 	url.searchParams.set('timeZone', getTimeZone());
+	url.searchParams.set('returnTo', `/${DASHBOARD}`);
 
 	if (typeof stayConnected === 'boolean') {
 		url.searchParams.set('stayConnected', String(stayConnected));

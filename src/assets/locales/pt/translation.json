@@ -14,7 +14,8 @@
 			"password-reset": "Sua senha foi alterada com sucesso. Você já pode fazer login.",
 			"logout": "Você saiu com sucesso."
 		},
-		"continue-google": "Continuar com Google"
+		"continue-google": "Continuar com Google",
+		"continue-email": "Continue com seu e-mail"
 	},
 	"globals": {
 		"email": "E-mail",
@@ -104,17 +105,20 @@
 	"components": {
 		"form": {
 			"confirm-password": "Confirmar senha",
-			"keep-loggedin": "Por favor, mantenha-me conectado",
+			"keep-loggedin": "Mantenha-me online",
 			"not-valid": "Alguns campos estão faltando",
 			"signup": {
-				"title": "Cadastre-se",
+				"sign-up": "Cadastra-se",
+				"title-email": "Crie sua conta ",
+				"title": "Crie a sua conta Psycron",
 				"firstName": "Nome",
 				"lastName": "Sobrenome",
 				"already-have-acc": "Você já tem uma conta?",
 				"signin-here-link": "Clique aqui para entrar"
 			},
 			"signin": {
-				"title": "Entrar",
+				"sign-in": "Entrar",
+				"title": "Olá de volta!",
 				"dont-have-acc": "Você ainda não tem uma conta?",
 				"signup-here-link": "Cadastre-se aqui",
 				"forgot-password": "Esqueceu a sua senha?"
@@ -148,7 +152,8 @@
 			},
 			"consent": {
 				"terms": "Eu concordo com a <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Serviço</termsLink>",
-				"marketing": "Eu concordo em receber <marketingLink>comunicações de marketing</marketingLink>"
+				"marketing": "Eu concordo em receber <marketingLink>comunicações de marketing.</marketingLink>",
+				"info": "Ao continuar, você automaticamente aceita as <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Serviço</termsLink> da Psycron."
 			}
 		},
 		"input": {

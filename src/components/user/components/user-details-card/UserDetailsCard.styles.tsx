@@ -26,25 +26,27 @@ const blurIn = keyframes`
 `;
 
 export const UserDetailsCardWrapper = styled(Box, {
-	shouldForwardProp: (prop) => prop !== 'isVisible',
-})<{ isVisible?: boolean }>`
+	shouldForwardProp: (prop) => prop !== 'isVisible' && prop !== 'isPage',
+})<{ isPage?: boolean; isVisible?: boolean }>`
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: auto;
 
-	width: 34.375rem;
+	width: ${({ isPage }) => (!isPage ? '34.375rem' : '100%')};
 	max-height: calc(98dvh - (2 * ${spacing.medium}));
 	min-height: 0;
 
 	display: flex;
 	flex-direction: column;
+	align-items: ${({ isPage }) => (!isPage ? 'normal' : 'center')};
 	overflow: hidden;
 
 	padding: 0;
 	border-radius: calc(2 * ${spacing.medium});
-	border-top-left-radius: 0;
-	box-shadow: ${shadowMain};
+	border-top-left-radius: ${({ isPage }) =>
+		!isPage ? 0 : `calc(2 * ${spacing.medium})`};
+	box-shadow: ${({ isPage }) => (!isPage ? `${shadowMain}` : 'none')};
 	backdrop-filter: blur(10px);
 	z-index: 100;
 	border: 2px solid rgba(233, 214, 255, 0.1);
@@ -63,9 +65,12 @@ export const UserDetailsCardWrapper = styled(Box, {
 	}
 `;
 
-export const UserDetailsCardTop = styled(Box)`
+export const UserDetailsCardTop = styled(Box, {
+	shouldForwardProp: (prop) => prop !== 'isPage',
+})<{ isPage?: boolean }>`
 	padding: ${spacing.mediumSmall};
-	border-top-right-radius: calc(2 * ${spacing.medium});
+	border-top-right-radius: ${({ isPage }) =>
+		!isPage ? `calc(2 * ${spacing.medium})` : 0};
 	background-color: ${hexToRgba(palette.tertiary.main, 0.5)};
 	width: 100%;
 	display: flex;
@@ -81,6 +86,12 @@ export const UserDestailsTopInfo = styled(Box)`
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
+`;
+
+export const UserDestailsTopInfoWrapper = styled(Box)`
+	display: flex;
+	align-items: flex-start;
+	gap: ${spacing.small};
 `;
 
 export const UserDetailsTopActionsWrapper = styled(Box)`
@@ -107,7 +118,9 @@ export const UserDetailsSectionWrapper = styled(Box)`
 	padding: 0;
 `;
 
-export const UserDetailsBody = styled(Box)`
+export const UserDetailsBody = styled(Box, {
+	shouldForwardProp: (prop) => prop !== 'isPage',
+})<{ isPage?: boolean }>`
 	display: flex;
 	flex-direction: column;
 	padding: ${spacing.small};
@@ -116,6 +129,12 @@ export const UserDetailsBody = styled(Box)`
 	flex: 1;
 	min-height: 0;
 	overflow-y: auto;
+
+	width: ${({ isPage }) => (isPage ? '34.375rem' : '100%')};
+
+	${isMobileMedia} {
+		width: 100%;
+	}
 `;
 
 export const DownloadWrapper = styled(Box, {

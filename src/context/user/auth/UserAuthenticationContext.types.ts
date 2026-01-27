@@ -91,11 +91,11 @@ export interface ITherapist extends IBaseUser {
 	notifications: MongoId[];
 	// local-only
 	password?: string;
-
 	// IDs (because BE is not populating in /users/:id)
 	patients: MongoId[];
 	picture?: string;
 	role: TherapistRole;
+	stripeCustomerID?: string;
 	timeZone: string;
 }
 

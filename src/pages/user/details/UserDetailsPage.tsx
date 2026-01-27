@@ -4,9 +4,5 @@ import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext
 export const UserDetailsPage = () => {
 	const { userDetails } = useUserDetails();
 
-	return (
-		<>
-			<UserDetailsCard user={userDetails} />
-		</>
-	);
+	return <UserDetailsCard user={userDetails} isPage />;
 };

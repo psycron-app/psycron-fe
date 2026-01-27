@@ -1,4 +1,4 @@
-import type { ITherapist } from '@psycron/context/user/details/UserDetailsContext.types';
+import type { ITherapist } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
 export const mapUserToSubscriptionUIModel = (
 	user: ITherapist

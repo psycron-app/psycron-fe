@@ -2,8 +2,6 @@ import type { ReactNode } from 'react';
 
 import type { ITherapist } from '../auth/UserAuthenticationContext.types';
 
-export type EditSession = 'password' | 'subscription' | 'patients';
-
 export interface UserDetailsProviderProps {
 	children: ReactNode;
 }

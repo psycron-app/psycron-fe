@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { Box, Dialog, DialogTitle } from '@mui/material';
 import { Avatar } from '@psycron/components/avatar/Avatar';
 import { Button } from '@psycron/components/button/Button';
@@ -18,6 +19,7 @@ import { Tooltip } from '@psycron/components/tooltip/Tooltip';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import useClickOutside from '@psycron/hooks/useClickoutside';
 import useViewport from '@psycron/hooks/useViewport';
+import { PATIENTS } from '@psycron/pages/urls';
 
 import { AccountSectionContent } from './components/account/AccountSectionContent';
 import { ContactSectionContent } from './components/contact/ContactSectionContent';
@@ -31,6 +33,7 @@ import {
 	DeleteDialogActions,
 	DownloadWrapper,
 	UserDestailsTopInfo,
+	UserDestailsTopInfoWrapper,
 	UserDetailsBody,
 	UserDetailsCardTop,
 	UserDetailsCardWrapper,
@@ -44,14 +47,16 @@ const enableSubscriptionMock =
 	import.meta.env.DEV &&
 	import.meta.env.VITE_ENABLE_SUBSCRIPTION_MOCK === 'true';
 
-export const UserDetailsCard = ({ user }: IUserDetailsCardProps) => {
+export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 	const userDetailsCardRef = useRef<HTMLDivElement | null>(null);
+	const navigate = useNavigate();
 	const { t } = useTranslation();
 
 	const { isMobile, isTablet } = useViewport();
 
 	const {
 		toggleUserDetails,
+		isUserDetailsVisible,
 		isDeleteOpen,
 		isOwnSettings,
 		handleClickEditSession,
@@ -130,7 +135,10 @@ export const UserDetailsCard = ({ user }: IUserDetailsCardProps) => {
 			children: (
 				<PatientsSectionContent
 					patients={patients}
-					onGoToPatients={() => handleClickEditSession(_id, 'patients')}
+					onGoToPatients={() => {
+						navigate(PATIENTS);
+						toggleUserDetails();
+					}}
 				/>
 			),
 		},
@@ -141,21 +149,27 @@ export const UserDetailsCard = ({ user }: IUserDetailsCardProps) => {
 	});
 
 	return (
-		<UserDetailsCardWrapper ref={userDetailsCardRef} isVisible={true}>
-			<UserDetailsCardTop>
-				<Avatar
-					src={picture}
-					large={!(isMobile || isTablet)}
-					firstName={firstName}
-					lastName={lastName}
-				/>
-				<UserDestailsTopInfo>
-					<Text
-						variant='subtitle1'
-						fontWeight={600}
-					>{`${firstName} ${lastName}`}</Text>
-					<Text variant='subtitle2'>{email}</Text>
-				</UserDestailsTopInfo>
+		<UserDetailsCardWrapper
+			ref={userDetailsCardRef}
+			isVisible={isPage || isUserDetailsVisible}
+			isPage={isPage}
+		>
+			<UserDetailsCardTop isPage={isPage}>
+				<UserDestailsTopInfoWrapper>
+					<Avatar
+						src={picture}
+						large={!(isMobile || isTablet)}
+						firstName={firstName}
+						lastName={lastName}
+					/>
+					<UserDestailsTopInfo>
+						<Text
+							variant='subtitle1'
+							fontWeight={600}
+						>{`${firstName} ${lastName}`}</Text>
+						<Text variant='subtitle2'>{email}</Text>
+					</UserDestailsTopInfo>
+				</UserDestailsTopInfoWrapper>
 				<UserDetailsTopActionsWrapper>
 					<UserDetailsTopActionButton onClick={() => handleClickEditUser(_id)}>
 						<Tooltip
@@ -165,18 +179,17 @@ export const UserDetailsCard = ({ user }: IUserDetailsCardProps) => {
 							<EditUser />
 						</Tooltip>
 					</UserDetailsTopActionButton>
-					<UserDetailsTopActionButton onClick={() => toggleUserDetails()}>
-						<Tooltip
-							title={t('globals.close')}
-							placement={isMobile || isTablet ? 'left' : 'right'}
-						>
-							<Close />
-						</Tooltip>
-					</UserDetailsTopActionButton>
+					{!isPage ? (
+						<UserDetailsTopActionButton onClick={() => toggleUserDetails()}>
+							<Tooltip title={t('globals.close')} placement='left'>
+								<Close />
+							</Tooltip>
+						</UserDetailsTopActionButton>
+					) : null}
 				</UserDetailsTopActionsWrapper>
 			</UserDetailsCardTop>
 
-			<UserDetailsBody>
+			<UserDetailsBody isPage={isPage}>
 				{userDetailsSectionList.map(({ icon, title, children }, _index) => {
 					return (
 						<UserDetailsSectionWrapper key={_index}>

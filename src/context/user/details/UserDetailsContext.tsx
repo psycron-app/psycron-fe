@@ -21,7 +21,6 @@ import { useAuth } from '../auth/UserAuthenticationContext';
 import type { ITherapist } from '../auth/UserAuthenticationContext.types';
 
 import type {
-	EditSession,
 	UserDetailsContextType,
 	UserDetailsProviderProps,
 } from './UserDetailsContext.types';
@@ -36,14 +35,9 @@ const clearAuthTokens = (): void => {
 	localStorage.removeItem(THERAPIST_ID);
 };
 
-const isEditSession = (value: string): value is EditSession => {
-	return (
-		value === 'password' || value === 'subscription' || value === 'patients'
-	);
-};
-
 export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 	const [isUserDetailsVisible, setIsUserDetailsVisible] = useState(false);
+
 	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
 	const navigate = useNavigate();
@@ -59,27 +53,18 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 	const handleClickEditUser = useCallback(
 		(id: string) => {
 			navigate(`${EDITUSERPATH}/${id}`);
-			toggleUserDetails();
+			if (isUserDetailsVisible === false) {
+				return;
+			}
+			return toggleUserDetails();
 		},
-		[navigate, toggleUserDetails]
+		[isUserDetailsVisible, navigate, toggleUserDetails]
 	);
 
 	const handleClickEditSession = useCallback(
 		(userId: string, session: string) => {
 			const editUserPath = `${EDITUSERPATH}/${userId}`;
-
-			const specialPaths: Record<EditSession, string> = {
-				password: `${editUserPath}/password`,
-				subscription: '/subscription-manager',
-				patients: '/patients-manager',
-			};
-
-			if (isEditSession(session)) {
-				navigate(specialPaths[session]);
-			} else {
-				navigate(`${editUserPath}/${session}`);
-			}
-
+			navigate(`${editUserPath}/${session}`);
 			toggleUserDetails();
 		},
 		[navigate, toggleUserDetails]
@@ -137,19 +122,11 @@ export const useUserDetails = (passedUserId?: string) => {
 		gcTime: 1000 * 60 * 10,
 	});
 
-	/**
-	 * ✅ Your BE returns availability as IDs (ObjectId[])
-	 * so latest session id should be derived from those.
-	 */
 	const latestSessionId = useMemo(() => {
 		const ids = userDetails?.availability ?? [];
 		return ids.length ? ids[ids.length - 1] : null;
 	}, [userDetails?.availability]);
 
-	/**
-	 * ✅ keep storage logic, but make selection deterministic:
-	 * sessionUserId > secureStorage > fetched userDetails id
-	 */
 	const therapistIdFromStorage = useSecureStorage(
 		THERAPIST_ID,
 		userDetails?._id,

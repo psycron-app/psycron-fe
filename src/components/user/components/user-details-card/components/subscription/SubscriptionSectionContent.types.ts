@@ -1,4 +1,4 @@
-import type { SubscriptionStatus } from '@psycron/context/user/details/UserDetailsContext.types';
+export type SubscriptionStatus = 'active' | 'tester';
 
 export type SubscriptionUIModel =
 	| {

@@ -35,7 +35,7 @@ export const UserDetailsPill = styled(Box, {
 	border-radius: ${spacing.small};
 
 	border: 1px solid
-		${({ tone }) => (tone === 'info' ? palette.info.main : palette.gray['03'])};
+		${({ tone }) => (tone === 'info' ? palette.info.main : palette.gray['02'])};
 
 	background-color: ${({ tone }) =>
 		tone === 'info' ? palette.info.light : palette.gray['02']};

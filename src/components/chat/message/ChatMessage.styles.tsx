@@ -4,7 +4,7 @@ import { isBiggerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueri
 import { palette } from '@psycron/theme/palette/palette.theme';
 import {
 	shadowMain,
-	smallPurpleShadow,
+	shadowMediumPurple,
 	smallShadow,
 } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
@@ -42,7 +42,7 @@ export const ChatMessageWrapper = styled(Box, {
 						${palette.primary.main} 0%,
 						${palette.info.main} 100%
 					);
-					box-shadow: ${smallPurpleShadow};
+					box-shadow: ${shadowMediumPurple};
 
 					p {
 						color: ${palette.background.paper};

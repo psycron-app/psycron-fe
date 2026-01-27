@@ -1,29 +1,241 @@
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Box, Dialog, DialogTitle } from '@mui/material';
+import { Avatar } from '@psycron/components/avatar/Avatar';
+import { Button } from '@psycron/components/button/Button';
+import {
+	Account,
+	Close,
+	Download,
+	EditUser,
+	Patients,
+	Phone,
+	Security,
+	Subscription,
+} from '@psycron/components/icons';
+import { Text } from '@psycron/components/text/Text';
+import { Tooltip } from '@psycron/components/tooltip/Tooltip';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import useClickOutside from '@psycron/hooks/useClickoutside';
+import useViewport from '@psycron/hooks/useViewport';
 
-import { UserDetails } from '../user-details/UserDetails';
-
-import { UserDetailsCardWrapper } from './UserDetailsCard.styles';
+import { AccountSectionContent } from './components/account/AccountSectionContent';
+import { ContactSectionContent } from './components/contact/ContactSectionContent';
+import { PatientsSectionContent } from './components/patients/PatientsSectionContent';
+import { UserDetailsSection } from './components/section/UserDetailsSection';
+import { SecuritySectionContent } from './components/security/SecuritySectionContent';
+import { mapUserToSubscriptionUIModel } from './components/subscription/subscription.mapper';
+import { SubscriptionSectionContent } from './components/subscription/SubscriptionSectionContent';
+import {
+	DeleteAccountDialogContent,
+	DeleteDialogActions,
+	DownloadWrapper,
+	UserDestailsTopInfo,
+	UserDetailsBody,
+	UserDetailsCardTop,
+	UserDetailsCardWrapper,
+	UserDetailsSectionWrapper,
+	UserDetailsTopActionButton,
+	UserDetailsTopActionsWrapper,
+} from './UserDetailsCard.styles';
 import type { IUserDetailsCardProps } from './UserDetailsCard.types';
 
-export const UserDetailsCard = ({ plan, user }: IUserDetailsCardProps) => {
+const enableSubscriptionMock =
+	import.meta.env.DEV &&
+	import.meta.env.VITE_ENABLE_SUBSCRIPTION_MOCK === 'true';
+
+export const UserDetailsCard = ({ user }: IUserDetailsCardProps) => {
 	const userDetailsCardRef = useRef<HTMLDivElement | null>(null);
-	const { toggleUserDetails, isUserDetailsVisible, isDeleteOpen } =
-		useUserDetails();
+	const { t } = useTranslation();
+
+	const { isMobile, isTablet } = useViewport();
+
+	const {
+		toggleUserDetails,
+		isDeleteOpen,
+		isOwnSettings,
+		handleClickEditSession,
+		handleClickEditUser,
+		openDeleteDialog,
+		closeDeleteDialog,
+		deleteMyAccount,
+		isDeletePending,
+		downloadMyData,
+		isDownloadPending,
+	} = useUserDetails();
+
+	const { firstName, lastName, authProvider, _id, patients } = user;
+
+	const picture = user?.picture ?? null;
+	const email = user.contacts?.email ?? '';
+	const phone = user.contacts?.phone ?? null;
+	const whatsapp = user.contacts?.whatsapp ?? null;
+
+	const subscriptionModel = enableSubscriptionMock
+		? {
+				kind: 'subscribed' as const,
+				planName: 'Premium Plan',
+				status: 'active' as const,
+				renewsAt: '2026-02-21T00:00:00.000Z',
+			}
+		: mapUserToSubscriptionUIModel(user);
+
+	const userDetailsSectionList = [
+		{
+			icon: <Account />,
+			title: t('components.user-details.section.title.account'),
+			children: (
+				<AccountSectionContent
+					name={`${firstName} ${lastName}`}
+					email={email}
+					authMethod={authProvider}
+					isEmailReadOnly
+				/>
+			),
+		},
+		{
+			icon: <Security />,
+			title: t('components.user-details.section.title.security'),
+			children: (
+				<SecuritySectionContent
+					authProvider={authProvider}
+					onChangePassword={() => handleClickEditSession(_id, 'password')}
+				/>
+			),
+		},
+		{
+			icon: <Phone />,
+			title: t('components.user-details.section.title.contact'),
+			children: (
+				<ContactSectionContent
+					phone={phone}
+					whatsapp={whatsapp}
+					onEditContacts={() => handleClickEditSession(_id, 'contacts')}
+				/>
+			),
+		},
+		{
+			icon: <Subscription />,
+			title: t('components.user-details.section.title.subscription'),
+			children: (
+				<SubscriptionSectionContent
+					model={subscriptionModel}
+					onManage={() => handleClickEditSession(_id, 'subscription')}
+				/>
+			),
+		},
+		{
+			icon: <Patients />,
+			title: t('components.user-details.section.title.patients'),
+			children: (
+				<PatientsSectionContent
+					patients={patients}
+					onGoToPatients={() => handleClickEditSession(_id, 'patients')}
+				/>
+			),
+		},
+	];
 
 	useClickOutside(userDetailsCardRef, () => {
 		if (!isDeleteOpen) toggleUserDetails();
 	});
 
 	return (
-		<>
-			<UserDetailsCardWrapper
-				ref={userDetailsCardRef}
-				isVisible={isUserDetailsVisible}
-			>
-				<UserDetails user={user} plan={plan} />
-			</UserDetailsCardWrapper>
-		</>
+		<UserDetailsCardWrapper ref={userDetailsCardRef} isVisible={true}>
+			<UserDetailsCardTop>
+				<Avatar
+					src={picture}
+					large={!(isMobile || isTablet)}
+					firstName={firstName}
+					lastName={lastName}
+				/>
+				<UserDestailsTopInfo>
+					<Text
+						variant='subtitle1'
+						fontWeight={600}
+					>{`${firstName} ${lastName}`}</Text>
+					<Text variant='subtitle2'>{email}</Text>
+				</UserDestailsTopInfo>
+				<UserDetailsTopActionsWrapper>
+					<UserDetailsTopActionButton onClick={() => handleClickEditUser(_id)}>
+						<Tooltip
+							title={t('components.user-details.edit')}
+							placement={isMobile || isTablet ? 'left' : 'right'}
+						>
+							<EditUser />
+						</Tooltip>
+					</UserDetailsTopActionButton>
+					<UserDetailsTopActionButton onClick={() => toggleUserDetails()}>
+						<Tooltip
+							title={t('globals.close')}
+							placement={isMobile || isTablet ? 'left' : 'right'}
+						>
+							<Close />
+						</Tooltip>
+					</UserDetailsTopActionButton>
+				</UserDetailsTopActionsWrapper>
+			</UserDetailsCardTop>
+
+			<UserDetailsBody>
+				{userDetailsSectionList.map(({ icon, title, children }, _index) => {
+					return (
+						<UserDetailsSectionWrapper key={_index}>
+							<UserDetailsSection icon={icon} title={title}>
+								{children}
+							</UserDetailsSection>
+						</UserDetailsSectionWrapper>
+					);
+				})}
+				{isOwnSettings ? (
+					<Box pt={2} display='flex' justifyContent='flex-end'>
+						<Button
+							variant='outlined'
+							color='error'
+							small
+							onClick={openDeleteDialog}
+						>
+							{t('components.user-details.delete.title')}
+						</Button>
+					</Box>
+				) : null}
+				<Dialog
+					open={isDeleteOpen}
+					onClose={(_e, reason) => {
+						if (isDeletePending) return;
+						if (reason === 'backdropClick') return;
+						closeDeleteDialog();
+					}}
+				>
+					<DialogTitle>
+						{t('components.user-details.delete.title')} ?
+					</DialogTitle>
+					<DeleteAccountDialogContent>
+						<Text variant='body2'>
+							{t('components.user-details.delete.description')}
+						</Text>
+						<DownloadWrapper
+							as='button'
+							onClick={downloadMyData}
+							disabled={isDownloadPending || isDeletePending}
+						>
+							<Download />
+						</DownloadWrapper>
+					</DeleteAccountDialogContent>
+					<DeleteDialogActions>
+						<Button onClick={closeDeleteDialog} disabled={isDeletePending}>
+							{t('components.link.navigate.cancel')}
+						</Button>
+						<Button
+							onClick={() => deleteMyAccount()}
+							color='error'
+							variant='contained'
+							disabled={isDeletePending}
+						>
+							{t('components.user-details.delete.confirmation')}
+						</Button>
+					</DeleteDialogActions>
+				</Dialog>
+			</UserDetailsBody>
+		</UserDetailsCardWrapper>
 	);
 };

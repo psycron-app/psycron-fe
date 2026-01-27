@@ -24,13 +24,6 @@ export const AppLayout: FC = () => {
 
 	const { isUserDetailsVisible, userDetails } = useUserDetails();
 
-	const mockUserDetailsCardProps = {
-		plan: {
-			name: 'Premium',
-			status: 'paid',
-		},
-	};
-
 	if (sessionStatus) return sessionStatus;
 
 	return (
@@ -48,10 +41,7 @@ export const AppLayout: FC = () => {
 			<Content>
 				<Outlet />
 				{isAuthenticated && isUserDetailsVisible && (
-					<UserDetailsCard
-						user={userDetails}
-						plan={mockUserDetailsCardProps.plan}
-					/>
+					<UserDetailsCard user={userDetails} />
 				)}
 			</Content>
 		</LayoutWrapper>

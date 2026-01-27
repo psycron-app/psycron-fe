@@ -1,8 +1,10 @@
-import { ID_TOKEN, REFRESH_TOKEN } from '@psycron/utils/tokens';
+import {
+	ID_TOKEN,
+	REFRESH_TOKEN,
+	STORAGE_KIND_KEY,
+} from '@psycron/utils/tokens';
 
 export type AuthPersistence = 'local' | 'session';
-
-const STORAGE_KIND_KEY = 'psycron_auth_persistence';
 
 const getStorageByKind = (kind: AuthPersistence): Storage =>
 	kind === 'session' ? sessionStorage : localStorage;

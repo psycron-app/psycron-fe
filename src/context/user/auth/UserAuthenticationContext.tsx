@@ -45,8 +45,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const queryClient = useQueryClient();
 	const { showAlert } = useAlert();
 
-	// This is only for controlling navigation behavior after sign-in/up.
-	// We keep it minimal and derived from the trigger, not scattered.
 	const [redirectAfterAuth, setRedirectAfterAuth] = useState<string | null>(
 		null
 	);
@@ -54,15 +52,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const accessToken = getAccessToken();
 	const hasAccessToken = Boolean(accessToken);
 
-	/**
-	 * Source of truth: session query.
-	 * If token exists, we ask backend "who am I?".
-	 */
 	const {
 		data: sessionData,
 		isLoading: isSessionLoading,
 		isSuccess: isSessionSuccess,
 		isError: isSessionError,
+		error: sessionError,
 	} = useQuery<IUserData>({
 		queryKey: ['session'],
 		queryFn: getSession,
@@ -73,15 +68,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const isAuthenticated = Boolean(sessionData?.isAuthenticated);
 	const user: ITherapist | null = sessionData?.user ?? null;
 
-	/**
-	 * If session fails (token expired / invalid), clear tokens.
-	 * Axios refresh interceptor may already handle it, but this is a safe guard.
-	 */
 	useEffect(() => {
-		if (hasAccessToken && isSessionError) {
-			clearAuthTokens();
+		if (!hasAccessToken || !isSessionError) return;
+
+		const err = sessionError as unknown;
+
+		if (err && typeof err === 'object' && 'statusCode' in err) {
+			const statusCode = (err as { statusCode: number }).statusCode;
+
+			if (statusCode === 401 || statusCode === 403) {
+				clearAuthTokens();
+			}
 		}
-	}, [hasAccessToken, isSessionError]);
+	}, [hasAccessToken, isSessionError, sessionError]);
 
 	const handleAuthSuccess = useCallback(
 		async (args: {
@@ -111,7 +110,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const signInMutation = useMutation({
 		mutationFn: signInFc,
 		onSuccess: async (res, variables: ISignInForm) => {
-			// Decide persistence using the form checkbox
 			const persist = Boolean(variables.stayConnected);
 
 			await handleAuthSuccess({
@@ -167,22 +165,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			navigate(HOMEPAGE, { replace: true });
 		},
 		onError: async () => {
-			// Even if API fails, locally log out for safety
 			clearAuthTokens();
 			await queryClient.removeQueries({ queryKey: ['session'] });
 			navigate(HOMEPAGE, { replace: true });
 		},
 	});
 
-	/**
-	 * Public API (what your package will export)
-	 */
 	const signIn = useCallback(
 		(data: ISignInForm) => {
 			const state = location.state as LocationState | null;
 			const from = state?.from?.pathname;
 
-			// store where to go after success (only for signIn)
 			setRedirectAfterAuth(from ?? DASHBOARD);
 
 			signInMutation.mutate(data);

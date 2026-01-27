@@ -1,23 +1,10 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { setTokens } from '@psycron/context/user/auth/utils/tokenStorage';
-import i18n from '@psycron/i18n';
 import { AVAILABILITYGENERATE, DASHBOARD, SIGNIN } from '@psycron/pages/urls';
 
-type RouteParams = {
-	locale?: string;
-};
-
-const getSafeLocale = (value?: string): string => {
-	// Keep this aligned with your supported locales
-	const supported = new Set(['en', 'pt']);
-	if (value && supported.has(value)) return value;
-
-	const fromI18n = i18n.resolvedLanguage ?? i18n.language;
-	if (fromI18n && supported.has(fromI18n)) return fromI18n;
-
-	return 'en';
-};
+import { getSafeLocale } from './utils/getSafeLocale';
+import type { RouteParams } from './AuthCallback.types';
 
 export const AuthCallback: React.FC = () => {
 	const navigate = useNavigate();

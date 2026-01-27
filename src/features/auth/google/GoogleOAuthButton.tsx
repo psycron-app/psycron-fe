@@ -12,6 +12,7 @@ import { startGoogleOAuth } from './startGoogleOAuth';
 export const GoogleOAuthButton = ({
 	locale,
 	disabled,
+	intent,
 }: GoogleOAuthButtonProps) => {
 	const { t } = useTranslation();
 
@@ -25,6 +26,7 @@ export const GoogleOAuthButton = ({
 				startGoogleOAuth({
 					locale,
 					stayConnected: Boolean(stayConnected),
+					intent,
 				})
 			}
 			disabled={disabled}

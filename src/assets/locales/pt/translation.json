@@ -18,7 +18,8 @@
 		"continue-email": "Continue com seu e-mail"
 	},
 	"globals": {
-		"email": "E-mail",
+		"email": "Email",
+		"name": "Nome",
 		"password": "Senha",
 		"phone": "Telefone",
 		"whatsapp": "Whatsapp",
@@ -100,7 +101,10 @@
 			"7": "Outro"
 		},
 		"cancellation-other-title": "Por favor especifique o motivo",
-		"status": "Disponibilidade"
+		"status": "Disponibilidade",
+		"close": "Fechar",
+		"read-only": "Apenas leitura",
+		"auth-method": "Método de autenticação"
 	},
 	"components": {
 		"form": {
@@ -175,10 +179,32 @@
 		"user-details": {
 			"edit": "Editar detalhes",
 			"edit-contacts": "Editar contatos",
+			"add-contacts": "Adicione seu {{contactValue}}",
 			"change": "Alterar {{name}}",
 			"save": "Salvar",
 			"address-not-found": "Nenhum endereço cadastrado. Adicione suas informações.",
-			"detail-not-found": "{{detail}} não cadastrado ainda"
+			"detail-not-found": "{{detail}} não cadastrado ainda",
+			"delete": {
+				"title": "Excluir conta",
+				"description": "Sua conta será desativada e seus dados ficarão anônimos dentro de 30 dias. Você pode entrar em contato com nosso suporte técnico para mais detalhes.",
+				"confirmation": "Excluir"
+			},
+			"section": {
+				"title": {
+					"account": "Conta",
+					"security": "Segurança",
+					"contact": "Contatos",
+					"subscription": "Assinatura",
+					"patients": "Pacientes"
+				},
+				"local": "Email e Senha",
+				"security": {
+					"google-mgmt": "Gerenciada por Google - A sua senha é seguramente guardada através do sistema de autênticação da Google e nós não tem acesso."
+				},
+				"contact": {
+					"title-empty": "Adicione seu número para receber notificações em SMS ou WhatsApp."
+				}
+			}
 		},
 		"dashboard": {
 			"card": {

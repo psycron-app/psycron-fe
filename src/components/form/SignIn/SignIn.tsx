@@ -45,7 +45,11 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 			isLoading={isSignInMutationLoading}
 			title={t('components.form.signin.title')}
 		>
-			<GoogleOAuthButton locale={locale} />
+			<GoogleOAuthButton
+				locale={locale}
+				intent='signin'
+				disabled={isSignInMutationLoading}
+			/>
 			<Divider />
 			<Box
 				component='form'

@@ -18,4 +18,7 @@ export const smallShadow =
 
 export const shadowMain = '0px 10px 15px -3px rgba(0, 0, 0, 0.1)';
 
-export const smallPurpleShadow = `-4px 5px 10px -6px ${palette.info.main}`;
+export const shadowMediumPurple = `-4px 5px 10px -6px ${palette.info.main}`;
+
+export const shadowSmallPurple =
+	'0px 3px 1px -2px rgba(0, 0, 0, 0.2),0px 2px 2px 0px rgba(208, 88, 255, 0.14),0px 1px 5px 0px rgba(194, 95, 255, 0.12)';

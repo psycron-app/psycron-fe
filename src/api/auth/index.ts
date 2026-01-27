@@ -17,12 +17,7 @@ import type {
 import apiClient from '../axios-instance';
 
 import { mapSignUpFormToRegisterPayload } from './utils/auth-utils';
-import type {
-	AuthSuccessResponse,
-	RegisterResponse,
-	SessionResponse,
-	SignUpGoogleRequest,
-} from './index.types';
+import type { RegisterResponse, SessionResponse } from './index.types';
 
 export const signUpFc = async (
 	data: ISignUpForm
@@ -34,16 +29,6 @@ export const signUpFc = async (
 		payload
 	);
 
-	return response.data;
-};
-
-export const signUpWithGoogleFc = async (
-	payload: SignUpGoogleRequest
-): Promise<AuthSuccessResponse> => {
-	const response = await apiClient.post<AuthSuccessResponse>(
-		'/users/register',
-		payload
-	);
 	return response.data;
 };
 

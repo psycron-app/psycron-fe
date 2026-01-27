@@ -14,13 +14,15 @@ const makeUrl = (base: string, path: string): URL => {
 export const startGoogleOAuth = ({
 	stayConnected,
 	locale,
-}: StartGoogleOAuthArgs = {}): void => {
+	intent,
+}: StartGoogleOAuthArgs): void => {
 	const apiBase = import.meta.env.VITE_PSYCRON_BASE_API_URL as string;
 
 	const url = makeUrl(apiBase, 'auth/google');
 
 	url.searchParams.set('timeZone', getTimeZone());
 	url.searchParams.set('returnTo', `/${DASHBOARD}`);
+	url.searchParams.set('intent', intent);
 
 	if (typeof stayConnected === 'boolean') {
 		url.searchParams.set('stayConnected', String(stayConnected));

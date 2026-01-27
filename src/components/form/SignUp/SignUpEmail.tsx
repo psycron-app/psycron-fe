@@ -31,7 +31,6 @@ export const SignUpEmail = ({
 
 	const {
 		register,
-
 		handleSubmit,
 		watch,
 		formState: { errors },

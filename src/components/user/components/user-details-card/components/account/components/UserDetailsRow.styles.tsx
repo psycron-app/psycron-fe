@@ -9,7 +9,7 @@ export const UserDetailsRowContainer = styled(Box)`
 	display: flex;
 	gap: ${spacing.small};
 	justify-content: space-between;
-	align-items: flex-start;
+	align-items: center;
 
 	${isMobileMedia} {
 		gap: ${spacing.xs};

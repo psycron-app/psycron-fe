@@ -52,7 +52,7 @@ export const ADDPATIENT = 'patient/create';
 
 // TODO: replace with your real routes when BE/pages are ready
 export const PRIVACY_POLICY = 'privacy-policy';
-export const TERMS_OF_SERVICE = 'terms-of-service';
+export const TERMS_OF_SERVICE = 'terms-of-use';
 export const MARKETING_COMMS = 'marketing-communications';
 
 export const externalUrls = (locale: string) => ({

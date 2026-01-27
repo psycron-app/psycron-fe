@@ -19,7 +19,8 @@ import { Tooltip } from '@psycron/components/tooltip/Tooltip';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import useClickOutside from '@psycron/hooks/useClickoutside';
 import useViewport from '@psycron/hooks/useViewport';
-import { PATIENTS } from '@psycron/pages/urls';
+import i18n from '@psycron/i18n';
+import { externalUrls, PATIENTS } from '@psycron/pages/urls';
 
 import { AccountSectionContent } from './components/account/AccountSectionContent';
 import { ContactSectionContent } from './components/contact/ContactSectionContent';
@@ -69,7 +70,7 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 		isDownloadPending,
 	} = useUserDetails();
 
-	const { firstName, lastName, authProvider, _id, patients } = user;
+	const { firstName, lastName, authProvider, _id, patients, consent } = user;
 
 	const picture = user?.picture ?? null;
 	const email = user.contacts?.email ?? '';
@@ -99,16 +100,6 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 			),
 		},
 		{
-			icon: <Security />,
-			title: t('components.user-details.section.title.security'),
-			children: (
-				<SecuritySectionContent
-					authProvider={authProvider}
-					onChangePassword={() => handleClickEditSession(_id, 'password')}
-				/>
-			),
-		},
-		{
 			icon: <Phone />,
 			title: t('components.user-details.section.title.contact'),
 			children: (
@@ -116,6 +107,19 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 					phone={phone}
 					whatsapp={whatsapp}
 					onEditContacts={() => handleClickEditSession(_id, 'contacts')}
+				/>
+			),
+		},
+		{
+			icon: <Patients />,
+			title: t('components.user-details.section.title.patients'),
+			children: (
+				<PatientsSectionContent
+					patients={patients}
+					onGoToPatients={() => {
+						navigate(PATIENTS);
+						toggleUserDetails();
+					}}
 				/>
 			),
 		},
@@ -130,14 +134,18 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 			),
 		},
 		{
-			icon: <Patients />,
-			title: t('components.user-details.section.title.patients'),
+			icon: <Security />,
+			title: t('components.user-details.section.title.security'),
 			children: (
-				<PatientsSectionContent
-					patients={patients}
-					onGoToPatients={() => {
-						navigate(PATIENTS);
-						toggleUserDetails();
+				<SecuritySectionContent
+					authProvider={authProvider}
+					onChangePassword={() => handleClickEditSession(_id, 'password')}
+					consent={{
+						userConsent: consent,
+						links: {
+							privacy: externalUrls(i18n.language).PRIVACY,
+							terms: externalUrls(i18n.language).TERMS,
+						},
 					}}
 				/>
 			),

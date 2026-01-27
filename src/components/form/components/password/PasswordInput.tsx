@@ -5,14 +5,17 @@ import { useTranslation } from 'react-i18next';
 import { InputAdornment, TextField } from '@mui/material';
 import { NotVisible, Visible } from '@psycron/components/icons';
 
+import { getPathError } from '../phone/utils/getPathError';
+
 import { PasswordWrapper, StyledIconButton } from './PasswordInput.styles';
 import type { PasswordInputProps } from './PasswordInput.types';
 
 export const PasswordInput = <T extends FieldValues>({
+	disabled,
+	hasToConfirm,
+	fields,
 	name,
 	confirmName,
-	hasToConfirm,
-	disabled,
 }: PasswordInputProps<T>) => {
 	const { t } = useTranslation();
 	const {
@@ -21,12 +24,17 @@ export const PasswordInput = <T extends FieldValues>({
 		watch,
 	} = useFormContext<T>();
 
-	const passwordName = useMemo(() => name ?? ('password' as Path<T>), [name]);
+	const passwordName = useMemo<Path<T>>(() => {
+		if (fields?.password) return fields.password;
+		if (name) return name;
+		return 'password' as Path<T>;
+	}, [fields?.password, name]);
 
-	const confirmFieldName = useMemo(
-		() => confirmName ?? ('confirmPassword' as Path<T>),
-		[confirmName]
-	);
+	const confirmFieldName = useMemo<Path<T>>(() => {
+		if (fields?.confirmPassword) return fields.confirmPassword;
+		if (confirmName) return confirmName;
+		return 'confirmPassword' as Path<T>;
+	}, [fields?.confirmPassword, confirmName]);
 
 	const passwordValue = watch(passwordName) as unknown as string | undefined;
 	const confirmValue = watch(confirmFieldName) as unknown as string | undefined;
@@ -34,21 +42,23 @@ export const PasswordInput = <T extends FieldValues>({
 	const [showPassword, setShowPassword] = useState(false);
 	const [showConfirm, setShowConfirm] = useState(false);
 
-	const passwordError = errors?.[passwordName];
-	const confirmError = errors?.[confirmFieldName];
+	const passwordError = useMemo(
+		() => getPathError(errors, String(passwordName)),
+		[errors, passwordName]
+	);
+	const confirmError = useMemo(
+		() => getPathError(errors, String(confirmFieldName)),
+		[errors, confirmFieldName]
+	);
 
 	const passwordHelper =
-		typeof passwordError === 'object' &&
-		passwordError &&
-		'message' in passwordError
-			? String(passwordError.message ?? '')
+		typeof passwordError?.message === 'string'
+			? passwordError.message
 			: undefined;
 
 	const confirmHelper =
-		typeof confirmError === 'object' &&
-		confirmError &&
-		'message' in confirmError
-			? String(confirmError.message ?? '')
+		typeof confirmError?.message === 'string'
+			? confirmError.message
 			: undefined;
 
 	return (

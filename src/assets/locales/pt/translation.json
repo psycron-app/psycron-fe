@@ -104,7 +104,10 @@
 		"status": "Disponibilidade",
 		"close": "Fechar",
 		"read-only": "Apenas leitura",
-		"auth-method": "Método de autenticação"
+		"auth-method": "Método de autenticação",
+		"privacy-policy": "Política de Privacidade",
+		"terms-of-service": "Termos de Uso",
+		"privacy": "Privacidade"
 	},
 	"components": {
 		"form": {
@@ -155,9 +158,9 @@
 				"contact-via-same": "O número é o mesmo para o Whatsapp?"
 			},
 			"consent": {
-				"terms": "Eu concordo com a <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Serviço</termsLink>",
+				"terms": "Eu concordo com a <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Uso</termsLink>",
 				"marketing": "Eu concordo em receber <marketingLink>comunicações de marketing.</marketingLink>",
-				"info": "Ao continuar, você automaticamente aceita as <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Serviço</termsLink> da Psycron."
+				"info": "Ao continuar, você automaticamente aceita as <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Uso</termsLink> da Psycron."
 			}
 		},
 		"input": {
@@ -192,14 +195,17 @@
 			"section": {
 				"title": {
 					"account": "Conta",
-					"security": "Segurança",
+					"security": "Segurança & Privacidade",
 					"contact": "Contatos",
 					"subscription": "Assinatura",
 					"patients": "Pacientes"
 				},
 				"local": "Email e Senha",
 				"security": {
-					"google-mgmt": "Gerenciada por Google - A sua senha é seguramente guardada através do sistema de autênticação da Google e nós não tem acesso."
+					"google-mgmt": "Gerenciada por Google - A sua senha é seguramente guardada através do sistema de autênticação da Google e nós não tem acesso.",
+					"accepted": "Ao criar sua conta na Psycron, você concordou com nossos <privacyLink>Política de Privacidade</privacyLink> e <termsLink>Termos de Uso</termsLink>.",
+					"accepted-info": "Você pode revisar esses documentos a qualquer momento.",
+					"marketing": "Receber comunicações de marketing e news"
 				},
 				"contact": {
 					"title-empty": "Adicione seu número para receber notificações em SMS ou WhatsApp."

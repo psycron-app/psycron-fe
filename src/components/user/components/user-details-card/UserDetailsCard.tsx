@@ -68,11 +68,12 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 		isDeletePending,
 		downloadMyData,
 		isDownloadPending,
+		pictureUrl,
 	} = useUserDetails();
 
 	const { firstName, lastName, authProvider, _id, patients, consent } = user;
 
-	const picture = user?.picture ?? null;
+	const picture = pictureUrl ?? null;
 	const email = user.contacts?.email ?? '';
 	const phone = user.contacts?.phone ?? null;
 	const whatsapp = user.contacts?.whatsapp ?? null;

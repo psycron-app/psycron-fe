@@ -69,6 +69,13 @@ export const EditUserDetailsMarketingConsentLabel = styled(Text)`
 	display: flex;
 	white-space: normal;
 	overflow-wrap: anywhere;
+
+	${isMobileMedia} {
+		flex-direction: column;
+		justify-content: center;
+		width: 100%;
+		align-items: center;
+	}
 `;
 
 export const EditUserDetailsMarketingConsentWrapper = styled(Box)`
@@ -81,4 +88,15 @@ export const EditUserDetailsMarketingConsentWrapper = styled(Box)`
 export const EditUserDetailsMarketingSwitcher = styled(Box)`
 	display: flex;
 	padding-left: ${spacing.small};
+
+	${isMobileMedia} {
+		width: 100%;
+		& label {
+			width: 100%;
+
+			.MuiFormControlLabel-label {
+				width: 100%;
+			}
+		}
+	}
 `;

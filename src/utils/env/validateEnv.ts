@@ -8,6 +8,7 @@
  */
 
 export interface EnvConfig {
+	VITE_ASSETS_CDN_URL: string;
 	VITE_GA_MEASUREMENT_ID?: string;
 	VITE_GOOGLE_MAPS_API_KEY?: string;
 	VITE_IP_GEO_KEY?: string;
@@ -136,7 +137,9 @@ export const validateEnv = (): ValidationResult => {
 	for (const [varName, description] of Object.entries(OPTIONAL_ENV_VARS)) {
 		const value = import.meta.env[varName];
 		if (!value || isPlaceholder(value)) {
-			warnings.push(`Optional: ${varName} not configured. Feature disabled: ${description}`);
+			warnings.push(
+				`Optional: ${varName} not configured. Feature disabled: ${description}`
+			);
 		}
 	}
 
@@ -183,6 +186,7 @@ export const getEnvConfig = (): EnvConfig => {
 		VITE_IP_GEO_KEY: import.meta.env.VITE_IP_GEO_KEY,
 		VITE_GOOGLE_MAPS_API_KEY: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
 		VITE_GA_MEASUREMENT_ID: import.meta.env.VITE_GA_MEASUREMENT_ID,
+		VITE_ASSETS_CDN_URL: import.meta.env.VITE_ASSETS_CDN_URL,
 	};
 };
 

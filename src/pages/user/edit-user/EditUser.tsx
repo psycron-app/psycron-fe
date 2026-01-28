@@ -5,7 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import type { CustomError } from '@psycron/api/error';
 import { editUserById } from '@psycron/api/user';
 import type { IEditUser } from '@psycron/api/user/index.types';
-import { Avatar } from '@psycron/components/avatar/Avatar';
+import { AvatarUploader } from '@psycron/components/avatar/avatar-uploader/AvatarUploader';
 import { ContactsForm } from '@psycron/components/form/components/contacts/ContactsForm';
 import { FormFooter } from '@psycron/components/form/components/footer/FormFooter';
 import { NameForm } from '@psycron/components/form/components/name/NameForm';
@@ -44,9 +44,10 @@ export const EditUser = () => {
 		isUserDetailsSucces,
 		isUserDetailsLoading,
 		updateMarketingConsent,
+		pictureUrl,
 	} = useUserDetails(userId);
 
-	const { firstName, lastName, contacts, picture, _id, authProvider, consent } =
+	const { firstName, lastName, contacts, _id, authProvider, consent } =
 		userDetails;
 
 	const isGoogleUser = authProvider === 'google';
@@ -160,11 +161,11 @@ export const EditUser = () => {
 					onSubmit={methods.handleSubmit(onSubmit)}
 				>
 					<EditUserDetailsAvatarWrapper>
-						<Avatar
+						<AvatarUploader
+							userId={_id}
 							firstName={firstName}
 							lastName={lastName}
-							src={picture}
-							large
+							picture={pictureUrl}
 						/>
 					</EditUserDetailsAvatarWrapper>
 

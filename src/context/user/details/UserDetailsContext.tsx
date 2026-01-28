@@ -13,6 +13,7 @@ import {
 	getUserById,
 	updateMarketingConsent as updateMarketingConsentApi,
 } from '@psycron/api/user';
+import { buildCdnUrl } from '@psycron/api/user/upload-picture';
 import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import { EDITUSERPATH } from '@psycron/pages/urls';
 import { ID_TOKEN, REFRESH_TOKEN, THERAPIST_ID } from '@psycron/utils/tokens';
@@ -123,6 +124,15 @@ export const useUserDetails = (passedUserId?: string) => {
 		gcTime: 1000 * 60 * 10,
 	});
 
+	const pictureUrl = useMemo(() => {
+		if (!userDetails) return null;
+
+		const fromUser = buildCdnUrl(userDetails.picture);
+		if (fromUser) return fromUser;
+
+		return userDetails.google?.picture ?? null;
+	}, [userDetails]);
+
 	const latestSessionId = useMemo(() => {
 		const ids = userDetails?.availability ?? [];
 		return ids.length ? ids[ids.length - 1] : null;
@@ -217,6 +227,7 @@ export const useUserDetails = (passedUserId?: string) => {
 	return {
 		...context,
 		userDetails,
+		pictureUrl,
 		isUserDetailsLoading,
 		isUserDetailsSucces,
 		therapistId,

@@ -86,10 +86,3 @@ export const updateMarketingConsent = async (
 		granted,
 	});
 };
-
-export const updateUserPicture = async (
-	userId: string,
-	picture: string | null
-) => {
-	return await apiClient.post(`/users/${userId}/picture`, { picture });
-};

@@ -88,7 +88,7 @@ export interface ITherapist extends IBaseUser {
 	consentHistory?: IConsentHistoryEntry[];
 
 	deletedAt?: ISODateString | null;
-
+	google: IGoogleUser;
 	googleCalendar?: IGoogleCalendar;
 	googleId?: string;
 	notifications: MongoId[];
@@ -100,6 +100,16 @@ export interface ITherapist extends IBaseUser {
 	role: TherapistRole;
 	stripeCustomerID?: string;
 	timeZone: string;
+}
+
+export interface IGoogleUser {
+	email: string;
+	familyName: string;
+	givenName: string;
+	id: string;
+	name: string;
+	picture: string;
+	updatedAt: Date;
 }
 
 /**

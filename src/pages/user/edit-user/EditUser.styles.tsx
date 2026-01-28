@@ -77,3 +77,8 @@ export const EditUserDetailsMarketingConsentWrapper = styled(Box)`
 	align-items: flex-start;
 	gap: ${spacing.small};
 `;
+
+export const EditUserDetailsMarketingSwitcher = styled(Box)`
+	display: flex;
+	padding-left: ${spacing.small};
+`;

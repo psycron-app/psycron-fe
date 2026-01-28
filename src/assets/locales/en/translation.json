@@ -183,6 +183,7 @@
 		"user-details": {
 			"edit": "Edit details",
 			"edit-contacts": "Edit contacts",
+			"edit-success": "Details updated",
 			"add-contacts": "Add your {{contactValue}} number",
 			"change": "Change {{name}}",
 			"save": "Save details",

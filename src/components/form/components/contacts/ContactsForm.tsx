@@ -80,21 +80,27 @@ export const ContactsForm = <T extends FieldValues>({
 			<ContactsFormSwitchWrapper>
 				<Switch
 					small={isSmallerThanTablet}
-					onChange={() => {
+					checked={hasWhatsApp}
+					onChange={(_, next) => {
 						if (disabled) return;
-						setValue(hasWhatsAppPath, !hasWhatsApp as never, {
+
+						setValue(hasWhatsAppPath, next as never, {
 							shouldDirty: true,
 							shouldTouch: true,
 						});
-						if (hasWhatsApp) {
+
+						// If user turned WhatsApp off, reset dependent state
+						if (!next) {
 							setValue(isPhoneWppPath, false as never, {
+								shouldDirty: true,
+								shouldTouch: true,
+							});
+							setValue(whatsappPath, '' as never, {
 								shouldDirty: true,
 								shouldTouch: true,
 							});
 						}
 					}}
-					value={hasWhatsApp}
-					defaultChecked={hasWhatsApp}
 					label={t('components.form.contacts-form.contact-via', {
 						method: 'Whatsapp',
 					})}
@@ -103,22 +109,27 @@ export const ContactsForm = <T extends FieldValues>({
 			</ContactsFormSwitchWrapper>
 
 			{hasWhatsApp ? (
-				<ContactsFormSwitchWrapper>
-					<Switch
-						small={isSmallerThanTablet}
-						onChange={() => {
-							if (disabled) return;
-							setValue(isPhoneWppPath, !isPhoneWpp as never, {
+				<Switch
+					small={isSmallerThanTablet}
+					checked={isPhoneWpp}
+					onChange={(_, next) => {
+						if (disabled) return;
+
+						setValue(isPhoneWppPath, next as never, {
+							shouldDirty: true,
+							shouldTouch: true,
+						});
+
+						if (next) {
+							setValue(whatsappPath, '' as never, {
 								shouldDirty: true,
 								shouldTouch: true,
 							});
-						}}
-						value={isPhoneWpp}
-						defaultChecked={isPhoneWpp}
-						label={t('components.form.contacts-form.contact-via-same')}
-						disabled={disabled}
-					/>
-				</ContactsFormSwitchWrapper>
+						}
+					}}
+					label={t('components.form.contacts-form.contact-via-same')}
+					disabled={disabled}
+				/>
 			) : null}
 
 			<input type='hidden' {...register(hasWhatsAppPath)} />

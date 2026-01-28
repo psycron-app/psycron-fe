@@ -51,7 +51,7 @@ export const ConsentBlock = styled(Box)`
 	border: 1px solid ${palette.gray['02']};
 `;
 
-export const ConsentAcceptedInfo = styled(Text)`
+export const ConsentAcceptedInfo = styled(Box)`
 	display: block;
 
 	white-space: normal;

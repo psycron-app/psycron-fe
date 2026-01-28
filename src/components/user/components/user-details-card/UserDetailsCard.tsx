@@ -139,6 +139,7 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 			children: (
 				<SecuritySectionContent
 					authProvider={authProvider}
+					userId={_id}
 					onChangePassword={() => handleClickEditSession(_id, 'password')}
 					consent={{
 						userConsent: consent,

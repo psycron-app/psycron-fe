@@ -27,6 +27,7 @@ import {
 	EditUserDetailsAvatarWrapper,
 	EditUserDetailsMarketingConsentLabel,
 	EditUserDetailsMarketingConsentWrapper,
+	EditUserDetailsMarketingSwitcher,
 	EditUserFormContainer,
 } from './EditUser.styles';
 import type { EditUserFormValues } from './EditUser.types';
@@ -38,8 +39,12 @@ export const EditUser = () => {
 
 	const { userId, session } = useParams<{ session?: string; userId: string }>();
 
-	const { userDetails, isUserDetailsSucces, isUserDetailsLoading } =
-		useUserDetails(userId);
+	const {
+		userDetails,
+		isUserDetailsSucces,
+		isUserDetailsLoading,
+		updateMarketingConsent,
+	} = useUserDetails(userId);
 
 	const { firstName, lastName, contacts, picture, _id, authProvider, consent } =
 		userDetails;
@@ -94,16 +99,14 @@ export const EditUser = () => {
 		mutationFn: (payload: IEditUser) => editUserById(payload),
 		onSuccess: () => {
 			showAlert({
-				message: t('components.user-details.edit-success', 'Details updated'),
+				message: t('components.user-details.edit-success'),
 				severity: 'success',
 			});
 			navigate(-1);
 		},
 		onError: (error: CustomError) => {
 			showAlert({
-				message:
-					error.message ||
-					t('globals.something-went-wrong', 'Something went wrong'),
+				message: error.message || t('globals.error.internal-server-error'),
 				severity: 'error',
 			});
 		},
@@ -202,14 +205,6 @@ export const EditUser = () => {
 						title={t('globals.password')}
 						isEnabled={enabled.password}
 						disabled={!canEdit.password}
-						hint={
-							!canEdit.password
-								? t(
-										'components.user-details.password.google-disabled',
-										'Password is managed by Google for this account.'
-									)
-								: undefined
-						}
 						onToggle={() =>
 							setEnabled((s) => ({ ...s, password: !s.password }))
 						}
@@ -226,25 +221,29 @@ export const EditUser = () => {
 						<Text variant='subtitle1' fontWeight={700}>
 							{t('globals.privacy')}
 						</Text>
-						<Switch
-							checked={marketingAccepted}
-							label={
-								<EditUserDetailsMarketingConsentLabel as='span'>
-									<Trans
-										i18nKey='components.form.consent.marketing'
-										components={{
-											marketingLink: (
-												<Link to={externalUrls(i18n.language).MARKETING} />
-											),
-										}}
-									/>
-								</EditUserDetailsMarketingConsentLabel>
-							}
-							onChange={(_, next) => {
-								setMarketingAccepted(next);
-								// call mutation(next)
-							}}
-						/>
+						<EditUserDetailsMarketingSwitcher>
+							<Switch
+								checked={marketingAccepted}
+								label={
+									<EditUserDetailsMarketingConsentLabel as='span'>
+										<Trans
+											i18nKey='components.form.consent.marketing'
+											components={{
+												marketingLink: (
+													<Link to={externalUrls(i18n.language).MARKETING} />
+												),
+											}}
+										/>
+									</EditUserDetailsMarketingConsentLabel>
+								}
+								onChange={(_, next) => {
+									setMarketingAccepted(next);
+									updateMarketingConsent(next, () => {
+										setMarketingAccepted(!next);
+									});
+								}}
+							/>
+						</EditUserDetailsMarketingSwitcher>
 					</EditUserDetailsMarketingConsentWrapper>
 					<FormFooter
 						disabled={!(enabled.name || enabled.contacts || enabled.password)}

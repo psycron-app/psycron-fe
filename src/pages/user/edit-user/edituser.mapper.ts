@@ -28,7 +28,7 @@ export const toEditUserDefaults = (
 });
 
 export const buildEditUserPayload = (args: {
-	enabled: { contacts: boolean; name: boolean };
+	enabled: { contacts: boolean; name: boolean; password?: boolean };
 	original: EditUserFormValues;
 	userId: string;
 	values: EditUserFormValues;
@@ -43,10 +43,30 @@ export const buildEditUserPayload = (args: {
 	}
 
 	if (enabled.contacts) {
+		const email = values.contacts.email.trim() || original.contacts.email;
+		const phone = values.contacts.phone?.trim() || original.contacts.phone;
+
+		const hasWhatsApp =
+			values.contacts.hasWhatsApp ?? original.contacts.hasWhatsApp ?? false;
+
+		const isPhoneWpp =
+			values.contacts.isPhoneWpp ?? original.contacts.isPhoneWpp ?? false;
+
+		const whatsapp = !hasWhatsApp
+			? null
+			: isPhoneWpp
+				? (phone ?? null)
+				: values.contacts.whatsapp?.trim() ||
+					original.contacts.whatsapp ||
+					null;
+
 		data.contacts = {
-			email: values.contacts.email.trim() || original.contacts.email,
-			phone: values.contacts.phone?.trim() || original.contacts.phone,
-			whatsapp: values.contacts.whatsapp?.trim() || original.contacts.whatsapp,
+			email,
+			phone: phone ?? null,
+			whatsapp,
+
+			hasWhatsApp,
+			isPhoneWpp: hasWhatsApp ? isPhoneWpp : false,
 		};
 	}
 

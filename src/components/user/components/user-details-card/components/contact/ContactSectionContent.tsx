@@ -35,7 +35,7 @@ export const ContactSectionContent = ({
 					<ContactEmptyTitle>
 						{t('components.user-details.section.contact.title-empty')}
 					</ContactEmptyTitle>
-					<Button type='button' tertiary onClick={onEditContacts}>
+					<Button type='button' onClick={onEditContacts}>
 						{t('components.user-details.add-contacts', {
 							contactValue: t('globals.phone'),
 						})}

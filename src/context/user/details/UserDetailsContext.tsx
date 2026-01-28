@@ -11,6 +11,7 @@ import {
 	deleteUserById,
 	exportUserDataById,
 	getUserById,
+	updateMarketingConsent as updateMarketingConsentApi,
 } from '@psycron/api/user';
 import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import { EDITUSERPATH } from '@psycron/pages/urls';
@@ -185,6 +186,34 @@ export const useUserDetails = (passedUserId?: string) => {
 		downloadMyDataMutation.mutate();
 	}, [downloadMyDataMutation]);
 
+	const updateMarketingConsentMutation = useMutation<void, Error, boolean>({
+		mutationFn: async (granted: boolean): Promise<void> => {
+			if (!sessionUserId) {
+				throw new Error(t('auth.error.not-found'));
+			}
+
+			if (!isOwnSettings) {
+				throw new Error(t('auth.error.not-allowed'));
+			}
+
+			await updateMarketingConsentApi(sessionUserId, granted);
+		},
+		onSuccess: async () => {
+			await queryClient.invalidateQueries({
+				queryKey: ['userDetails', sessionUserId],
+			});
+		},
+	});
+
+	const updateMarketingConsent = useCallback(
+		(granted: boolean, onError?: () => void) => {
+			updateMarketingConsentMutation.mutate(granted, {
+				onError,
+			});
+		},
+		[updateMarketingConsentMutation]
+	);
+
 	return {
 		...context,
 		userDetails,
@@ -201,5 +230,9 @@ export const useUserDetails = (passedUserId?: string) => {
 		downloadMyData,
 		isDownloadPending: downloadMyDataMutation.isPending,
 		downloadError: downloadMyDataMutation.error,
+
+		updateMarketingConsent,
+		isUpdatingMarketingConsent: updateMarketingConsentMutation.isPending,
+		marketingConsentError: updateMarketingConsentMutation.error,
 	};
 };

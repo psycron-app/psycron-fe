@@ -10,6 +10,7 @@ export type SecuritySectionContentProps = {
 		userConsent: IConsent;
 	};
 	onChangePassword?: () => void;
+	userId: string;
 };
 export type SecurityConsentLinks = {
 	privacy: string;

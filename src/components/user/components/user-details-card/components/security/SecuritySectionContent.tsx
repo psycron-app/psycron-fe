@@ -4,6 +4,7 @@ import { Button } from '@psycron/components/button/Button';
 import { Password } from '@psycron/components/icons';
 import { Link } from '@psycron/components/link/Link';
 import { Switch } from '@psycron/components/switch/components/item/Switch';
+import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 
 import { UserDetailsRow } from '../account/components/UserDetailsRow';
 
@@ -22,10 +23,13 @@ export const SecuritySectionContent = ({
 	authProvider,
 	onChangePassword,
 	consent,
+	userId,
 }: SecuritySectionContentProps) => {
 	const { t } = useTranslation();
 
 	const { links, userConsent } = consent;
+
+	const { updateMarketingConsent } = useUserDetails(userId);
 
 	const initialMarketingAccepted =
 		userConsent.marketingEmailsAcceptedAt != null;
@@ -71,7 +75,9 @@ export const SecuritySectionContent = ({
 						checked={marketingAccepted}
 						onChange={(_, next) => {
 							setMarketingAccepted(next);
-							// call mutation(next)
+							updateMarketingConsent(next, () => {
+								setMarketingAccepted(!next);
+							});
 						}}
 					/>
 				}

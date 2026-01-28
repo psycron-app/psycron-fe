@@ -1,10 +1,9 @@
 import type { ReactNode } from 'react';
 
-export type EditSectionProps = {
+export interface EditSectionProps {
 	children: ReactNode;
 	disabled?: boolean;
-	hint?: string;
 	isEnabled: boolean;
-	onToggle: () => void;
+	onToggle: (next: boolean) => void;
 	title: string;
-};
+}

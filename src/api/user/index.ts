@@ -76,3 +76,20 @@ export const exportUserDataById = async (userId: string): Promise<Blob> => {
 
 	return response.data as Blob;
 };
+
+export const updateMarketingConsent = async (
+	userId: string,
+	granted: boolean
+) => {
+	return await apiClient.post(`/users/${userId}/consent`, {
+		consentType: 'marketingEmailsAccepted',
+		granted,
+	});
+};
+
+export const updateUserPicture = async (
+	userId: string,
+	picture: string | null
+) => {
+	return await apiClient.post(`/users/${userId}/picture`, { picture });
+};

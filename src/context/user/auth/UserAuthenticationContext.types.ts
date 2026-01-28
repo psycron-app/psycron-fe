@@ -37,6 +37,9 @@ export interface IUserData {
 
 export interface IContactInfo {
 	email: string;
+	hasWhatsApp?: boolean;
+	isPhoneWpp?: boolean;
+
 	phone?: string;
 	whatsapp?: string;
 }

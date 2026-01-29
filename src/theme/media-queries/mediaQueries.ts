@@ -3,6 +3,7 @@ const baseFontSize = 16;
 const pxToRem = (px: number) => px / baseFontSize;
 
 export const pixBreakpoints = {
+	smalMobile: 430,
 	mobile: 767,
 	tablet: 1023,
 	medium: 1439,
@@ -10,6 +11,7 @@ export const pixBreakpoints = {
 };
 
 export const breakpoints = {
+	smallMobile: pxToRem(pixBreakpoints.smalMobile), // 26.875rem
 	mobile: pxToRem(pixBreakpoints.mobile), // 47.9375rem
 	tablet: pxToRem(pixBreakpoints.tablet), // 63.9375rem
 	medium: pxToRem(pixBreakpoints.medium), // 89.9375rem

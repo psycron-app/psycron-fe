@@ -21,6 +21,7 @@
 	},
 	"globals": {
 		"email": "Email",
+		"name": "Name",
 		"password": "Password",
 		"phone": "Phone",
 		"whatsapp": "Whatsapp",
@@ -101,7 +102,13 @@
 			"6": "Other"
 		},
 		"cancellation-other-title": "Please specify the reason",
-		"status": "Status"
+		"status": "Status",
+		"close": "Close",
+		"read-only": "Read-only",
+		"auth-method": "Auth method",
+		"privacy-policy": "Privacy Policy",
+		"terms-of-service": "Terms of Use",
+		"privacy": "Privacy"
 	},
 	"components": {
 		"form": {
@@ -152,9 +159,9 @@
 				"contact-via-same": "Is phone number the same as whatsapp?"
 			},
 			"consent": {
-				"terms": "I agree to the <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Service.</termsLink>",
+				"terms": "I agree to the <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Use.</termsLink>",
 				"marketing": "I consent to receive <marketingLink>marketing communications.</marketingLink>",
-				"info": "By continuing, you agree to Psycron's <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Service.</termsLink>"
+				"info": "By continuing, you agree to Psycron's <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Use.</termsLink>"
 			}
 		},
 		"input": {
@@ -176,6 +183,8 @@
 		"user-details": {
 			"edit": "Edit details",
 			"edit-contacts": "Edit contacts",
+			"edit-success": "Details updated",
+			"add-contacts": "Add your {{contactValue}} number",
 			"change": "Change {{name}}",
 			"save": "Save details",
 			"address-not-found": "Address not found. Please add your info.",
@@ -184,6 +193,25 @@
 				"title": "Delete account",
 				"description": "Your account will be deactivated and your personal data anonymised within 30 days. You can contact support to cancel this request.",
 				"confirmation": "Delete permanently"
+			},
+			"section": {
+				"title": {
+					"account": "Account",
+					"security": "Security & Privacy",
+					"contact": "Contact",
+					"subscription": "Subscription",
+					"patients": "Patients"
+				},
+				"local": "Email & Password",
+				"security": {
+					"google-mgmt": "Managed by Google - Your password is securely handled through Google's authentication system.",
+					"accepted": "By creating your Psycron account, you agreed to our <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Use.</termsLink>",
+					"accepted-info": "You can review these documents at any time.",
+					"marketing": "Receive marketing communications"
+				},
+				"contact": {
+					"title-empty": "Add your phone number to enable SMS or WhatsApp notifications."
+				}
 			}
 		},
 		"dashboard": {

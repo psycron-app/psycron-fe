@@ -21,8 +21,8 @@ export const SignUpStart = ({ onContinueWithEmail }: SignUpStartProps) => {
 	return (
 		<SignLayout title={t('components.form.signup.title')}>
 			<SignUpStartGoogleOAuthWrapper>
-				<GoogleOAuthButton locale={locale} />
-				<SignUpStartConsentText as='p' variant='caption'>
+				<GoogleOAuthButton locale={locale} intent='signup' />
+				<SignUpStartConsentText as='div' variant='caption'>
 					<Trans
 						i18nKey='components.form.consent.info'
 						components={{

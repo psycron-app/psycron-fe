@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
+import { Text } from '@psycron/components/text/Text';
 
 import { MobileMenuItem, StyledMenuItem } from './MenuItem.styles';
 import type { IMenuItem } from './MenuItem.types';
@@ -27,9 +28,9 @@ export const MenuItem = ({
 				<MobileMenuItem disabled={disabled}>
 					<Box>{icon}</Box>
 					<Box>
-						<Typography variant='subtitle1' textTransform='capitalize'>
+						<Text variant='subtitle1' textTransform='capitalize'>
 							{name}
-						</Typography>
+						</Text>
 					</Box>
 				</MobileMenuItem>
 			) : (

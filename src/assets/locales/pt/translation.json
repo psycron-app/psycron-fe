@@ -18,7 +18,8 @@
 		"continue-email": "Continue com seu e-mail"
 	},
 	"globals": {
-		"email": "E-mail",
+		"email": "Email",
+		"name": "Nome",
 		"password": "Senha",
 		"phone": "Telefone",
 		"whatsapp": "Whatsapp",
@@ -100,7 +101,13 @@
 			"7": "Outro"
 		},
 		"cancellation-other-title": "Por favor especifique o motivo",
-		"status": "Disponibilidade"
+		"status": "Disponibilidade",
+		"close": "Fechar",
+		"read-only": "Apenas leitura",
+		"auth-method": "Método de autenticação",
+		"privacy-policy": "Política de Privacidade",
+		"terms-of-service": "Termos de Uso",
+		"privacy": "Privacidade"
 	},
 	"components": {
 		"form": {
@@ -151,9 +158,9 @@
 				"contact-via-same": "O número é o mesmo para o Whatsapp?"
 			},
 			"consent": {
-				"terms": "Eu concordo com a <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Serviço</termsLink>",
+				"terms": "Eu concordo com a <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Uso</termsLink>",
 				"marketing": "Eu concordo em receber <marketingLink>comunicações de marketing.</marketingLink>",
-				"info": "Ao continuar, você automaticamente aceita as <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Serviço</termsLink> da Psycron."
+				"info": "Ao continuar, você automaticamente aceita as <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Uso</termsLink> da Psycron."
 			}
 		},
 		"input": {
@@ -175,10 +182,36 @@
 		"user-details": {
 			"edit": "Editar detalhes",
 			"edit-contacts": "Editar contatos",
+			"edit-success": "Dados atualizados",
+			"add-contacts": "Adicione seu {{contactValue}}",
 			"change": "Alterar {{name}}",
 			"save": "Salvar",
 			"address-not-found": "Nenhum endereço cadastrado. Adicione suas informações.",
-			"detail-not-found": "{{detail}} não cadastrado ainda"
+			"detail-not-found": "{{detail}} não cadastrado ainda",
+			"delete": {
+				"title": "Excluir conta",
+				"description": "Sua conta será desativada e seus dados ficarão anônimos dentro de 30 dias. Você pode entrar em contato com nosso suporte técnico para mais detalhes.",
+				"confirmation": "Excluir"
+			},
+			"section": {
+				"title": {
+					"account": "Conta",
+					"security": "Segurança & Privacidade",
+					"contact": "Contatos",
+					"subscription": "Assinatura",
+					"patients": "Pacientes"
+				},
+				"local": "Email e Senha",
+				"security": {
+					"google-mgmt": "Gerenciada por Google - A sua senha é seguramente guardada através do sistema de autênticação da Google e nós não tem acesso.",
+					"accepted": "Ao criar sua conta na Psycron, você concordou com nossos <privacyLink>Política de Privacidade</privacyLink> e <termsLink>Termos de Uso</termsLink>.",
+					"accepted-info": "Você pode revisar esses documentos a qualquer momento.",
+					"marketing": "Receber comunicações de marketing e news"
+				},
+				"contact": {
+					"title-empty": "Adicione seu número para receber notificações em SMS ou WhatsApp."
+				}
+			}
 		},
 		"dashboard": {
 			"card": {

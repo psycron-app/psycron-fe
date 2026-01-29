@@ -1,18 +1,46 @@
 import styled from '@emotion/styled';
-import { palette } from '@psycron/theme/palette/palette.theme';
-import { shadowInnerPress } from '@psycron/theme/shadow/shadow.theme';
+import { hexToRgba, palette } from '@psycron/theme/palette/palette.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
-export const StyledPhoneInput = styled.div`
+import type { StyledPhoneInputProps } from './PhoneInput.types';
+
+export const StyledPhoneInput = styled.div<StyledPhoneInputProps>`
 	display: flex;
 	align-items: center;
 	padding: 0 ${spacing.small};
 	border-radius: calc(2 * ${spacing.mediumSmall});
-	box-shadow: ${shadowInnerPress};
-	background-color: ${palette.background.default};
+
+	background-color: ${({ isDisabled }) =>
+		isDisabled ? palette.tertiary.action.disabled : palette.background.default};
+
 	color: ${palette.text.primary};
+
 	height: 50px;
 	width: 100%;
+
+	border: 1px solid
+		${({ hasError, isDisabled, isFocused }) => {
+			if (isDisabled) return palette.tertiary.action.disabled;
+			if (hasError) return palette.error.main;
+			if (isFocused) return palette.brand.purple;
+			return palette.brand.purple;
+		}};
+
+	&:hover {
+		border-color: ${({ hasError, isDisabled }) => {
+			if (isDisabled) return palette.tertiary.action.disabled;
+			if (hasError) return palette.error.main;
+			return palette.tertiary.main;
+		}};
+	}
+
+	${({ isFocused, isDisabled }) =>
+		isFocused &&
+		!isDisabled &&
+		`
+    border-width: 2px;
+    box-shadow: 0 0 0 3px ${hexToRgba(palette.brand.purple, 0.18)};
+  `}
 
 	.PhoneInputInput {
 		flex: 1;
@@ -34,7 +62,7 @@ export const StyledPhoneInput = styled.div`
 	}
 
 	.PhoneInputCountryIconImg {
-		border-radius: 50%;
+		border-radius: 20%;
 	}
 
 	.PhoneInputCountrySelectArrow {

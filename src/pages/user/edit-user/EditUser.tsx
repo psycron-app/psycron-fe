@@ -1,156 +1,256 @@
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { useEffect, useMemo, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Box } from '@mui/material';
 import type { CustomError } from '@psycron/api/error';
 import { editUserById } from '@psycron/api/user';
 import type { IEditUser } from '@psycron/api/user/index.types';
-import { Avatar } from '@psycron/components/avatar/Avatar';
+import { AvatarUploader } from '@psycron/components/avatar/avatar-uploader/AvatarUploader';
+import { ContactsForm } from '@psycron/components/form/components/contacts/ContactsForm';
 import { FormFooter } from '@psycron/components/form/components/footer/FormFooter';
+import { NameForm } from '@psycron/components/form/components/name/NameForm';
+import { PasswordInput } from '@psycron/components/form/components/password/PasswordInput';
+import { Link } from '@psycron/components/link/Link';
 import { Loader } from '@psycron/components/loader/Loader';
 import { Switch } from '@psycron/components/switch/components/item/Switch';
 import { Text } from '@psycron/components/text/Text';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
-import { spacing } from '@psycron/theme/spacing/spacing.theme';
+import i18n from '@psycron/i18n';
+import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
+import { externalUrls } from '@psycron/pages/urls';
 import { useMutation } from '@tanstack/react-query';
 
-import { EditButton, EditingBox, EditUserWrapper } from './EditUser.styles';
+import { EditSection } from './components/EditSection';
+import { buildEditUserPayload, toEditUserDefaults } from './edituser.mapper';
+import {
+	EditUserDetailsAvatarWrapper,
+	EditUserDetailsMarketingConsentLabel,
+	EditUserDetailsMarketingConsentWrapper,
+	EditUserDetailsMarketingSwitcher,
+	EditUserFormContainer,
+} from './EditUser.styles';
+import type { EditUserFormValues } from './EditUser.types';
 
 export const EditUser = () => {
 	const { t } = useTranslation();
-	const { userId } = useParams<{ userId: string }>();
-	const { session } = useParams<{ session: string }>();
-
 	const navigate = useNavigate();
-
-	const { userDetails, isUserDetailsSucces, isUserDetailsLoading } =
-		useUserDetails(userId);
-
-	const [isEditName, setIsEditName] = useState<boolean>(false);
-
-	const [isEditContacts, setIsEditContacts] = useState<boolean>(false);
-	const [isEditAddress, setIsEditAddress] = useState<boolean>(false);
-
 	const { showAlert } = useAlert();
 
-	const { handleSubmit, getValues } = useForm();
+	const { userId, session } = useParams<{ session?: string; userId: string }>();
+
+	const {
+		userDetails,
+		isUserDetailsSucces,
+		isUserDetailsLoading,
+		updateMarketingConsent,
+		pictureUrl,
+	} = useUserDetails(userId);
+
+	const { firstName, lastName, contacts, _id, authProvider, consent } =
+		userDetails;
+
+	const isGoogleUser = authProvider === 'google';
+
+	const canEdit = {
+		name: true,
+		contacts: true,
+		password: !isGoogleUser,
+	};
+
+	const initialMarketingAccepted = consent.marketingEmailsAcceptedAt != null;
+	const [marketingAccepted, setMarketingAccepted] = useState(
+		initialMarketingAccepted
+	);
+
+	const [enabled, setEnabled] = useState({
+		name: false,
+		contacts: false,
+		password: false,
+	});
+
+	const methods = useForm<EditUserFormValues>({
+		mode: 'onBlur',
+		defaultValues: {
+			firstName: '',
+			lastName: '',
+			contacts: { email: '' },
+		},
+	});
+
+	const originalDefaults = useMemo(() => {
+		if (!userDetails) return null;
+		return toEditUserDefaults(userDetails);
+	}, [userDetails]);
 
 	useEffect(() => {
-		setIsEditName(session === 'name');
-		setIsEditContacts(session === 'contacts');
-		setIsEditAddress(session === 'address');
-	}, [session]);
+		if (!originalDefaults) return;
+		methods.reset(originalDefaults, { keepDirty: false, keepTouched: false });
+	}, [originalDefaults, methods]);
+
+	useEffect(() => {
+		setEnabled({
+			name: session === 'name' && canEdit.name,
+			contacts: session === 'contacts' && canEdit.contacts,
+			password: session === 'password' && canEdit.password,
+		});
+	}, [session, canEdit.name, canEdit.contacts, canEdit.password]);
 
 	const editUserMutation = useMutation({
-		mutationFn: (editData: IEditUser) => editUserById(editData),
+		mutationFn: (payload: IEditUser) => editUserById(payload),
 		onSuccess: () => {
 			showAlert({
-				message: 'Details edited successfully',
+				message: t('components.user-details.edit-success'),
 				severity: 'success',
 			});
-
-			setIsEditName(false);
-			setIsEditContacts(false);
-			setIsEditAddress(false);
-
 			navigate(-1);
 		},
 		onError: (error: CustomError) => {
 			showAlert({
-				message: error.message || 'something went wrong',
+				message: error.message || t('globals.error.internal-server-error'),
 				severity: 'error',
 			});
 		},
 	});
 
-	if (isUserDetailsLoading || !isUserDetailsSucces) {
+	if (
+		isUserDetailsLoading ||
+		!isUserDetailsSucces ||
+		!userDetails ||
+		!originalDefaults
+	) {
 		return <Loader />;
 	}
 
-	const handleSave = () => {
-		const data = getValues();
-
-		const editData: IEditUser = {
-			userId: userDetails._id,
-			data: {
-				firstName: data.firstName || userDetails.firstName,
-				lastName: data.lastName || userDetails.lastName,
-				contacts: {
-					email: data.email || userDetails.contacts.email,
-					phone: data.countryCode + data.phone || userDetails.contacts.phone,
-					whatsapp: data.whatsapp || userDetails.contacts.whatsapp,
-				},
-			},
+	const onSubmit = (values: EditUserFormValues) => {
+		const effectiveEnabled = {
+			...enabled,
+			password: enabled.password && canEdit.password,
 		};
 
-		editUserMutation.mutate(editData);
+		if (
+			!effectiveEnabled.name &&
+			!effectiveEnabled.contacts &&
+			!effectiveEnabled.password
+		) {
+			showAlert({
+				message: t(
+					'components.user-details.no-changes',
+					'Select something to edit'
+				),
+				severity: 'info',
+			});
+			return;
+		}
+
+		const payload = buildEditUserPayload({
+			userId: _id,
+			values,
+			enabled: effectiveEnabled,
+			original: originalDefaults,
+		});
+
+		editUserMutation.mutate(payload);
 	};
 
 	return (
-		<Box width='100%' display='flex' justifyContent='center'>
-			<Text variant='h6' pb={5}>
-				{t('components.user-details.edit')}
-			</Text>
-			<EditUserWrapper as='form' onSubmit={handleSubmit(handleSave)}>
-				<EditingBox isEditing={isEditName}>
-					<Box display='flex' alignItems='center'>
-						<Avatar
-							firstName={userDetails?.firstName}
-							lastName={userDetails?.lastName}
-							src={''}
-							large
+		<PageLayout title={t('components.user-details.edit')}>
+			<FormProvider {...methods}>
+				<EditUserFormContainer
+					as='form'
+					onSubmit={methods.handleSubmit(onSubmit)}
+				>
+					<EditUserDetailsAvatarWrapper>
+						<AvatarUploader
+							userId={_id}
+							firstName={firstName}
+							lastName={lastName}
+							picture={pictureUrl}
 						/>
-						{/* <NameForm
-							placeholderFirstName={userDetails?.firstName}
-							placeholderLastName={userDetails?.lastName}
-							disabled={!isEditName}
-						/> */}
-					</Box>
-					<EditButton>
-						<Switch
-							label={t('components.user-details.edit')}
-							defaultChecked={isEditName}
-							onChange={() => setIsEditName((prev) => !prev)}
+					</EditUserDetailsAvatarWrapper>
+
+					<EditSection
+						title={t('globals.name')}
+						isEnabled={enabled.name}
+						onToggle={() => setEnabled((s) => ({ ...s, name: !s.name }))}
+					>
+						<NameForm<EditUserFormValues>
+							required
+							disabled={!enabled.name}
+							fields={{ firstName: 'firstName', lastName: 'lastName' }}
+							placeholderFirstName={firstName}
+							placeholderLastName={lastName}
 						/>
-					</EditButton>
-				</EditingBox>
-
-				<Box mb={spacing.xxl}>
-					<EditingBox isEditing={isEditContacts}>
-						{/* <ContactsForm
-							errors={errors}
-							register={register}
-							getPhoneValue={getValues}
-							setPhoneValue={setValue}
-							defaultValues={userDetails?.contacts}
-							disabled={!isEditContacts}
-							setValue={setValue}
-						/> */}
-						<EditButton>
+					</EditSection>
+					<EditSection
+						title={t('components.user-details.section.title.contact')}
+						isEnabled={enabled.contacts}
+						onToggle={() =>
+							setEnabled((s) => ({ ...s, contacts: !s.contacts }))
+						}
+					>
+						<ContactsForm<EditUserFormValues>
+							disabled={!enabled.contacts}
+							required
+							defaultValues={contacts}
+							fields={{
+								email: 'contacts.email',
+								phone: 'contacts.phone',
+								whatsapp: 'contacts.whatsapp',
+								hasWhatsApp: 'contacts.hasWhatsApp',
+								isPhoneWpp: 'contacts.isPhoneWpp',
+							}}
+						/>
+					</EditSection>
+					<EditSection
+						title={t('globals.password')}
+						isEnabled={enabled.password}
+						disabled={!canEdit.password}
+						onToggle={() =>
+							setEnabled((s) => ({ ...s, password: !s.password }))
+						}
+					>
+						<PasswordInput<EditUserFormValues>
+							hasToConfirm
+							disabled={!enabled.password || !canEdit.password}
+							fields={{
+								password: 'password',
+							}}
+						/>
+					</EditSection>
+					<EditUserDetailsMarketingConsentWrapper>
+						<Text variant='subtitle1' fontWeight={700}>
+							{t('globals.privacy')}
+						</Text>
+						<EditUserDetailsMarketingSwitcher>
 							<Switch
-								label={t('components.user-details.edit-contacts')}
-								defaultChecked={isEditContacts}
-								onChange={() => setIsEditContacts((prev) => !prev)}
+								checked={marketingAccepted}
+								label={
+									<EditUserDetailsMarketingConsentLabel as='span'>
+										<Trans
+											i18nKey='components.form.consent.marketing'
+											components={{
+												marketingLink: (
+													<Link to={externalUrls(i18n.language).MARKETING} />
+												),
+											}}
+										/>
+									</EditUserDetailsMarketingConsentLabel>
+								}
+								onChange={(_, next) => {
+									setMarketingAccepted(next);
+									updateMarketingConsent(next, () => {
+										setMarketingAccepted(!next);
+									});
+								}}
 							/>
-						</EditButton>
-					</EditingBox>
-
-					<EditingBox isEditing={isEditAddress}>
-						<EditButton>
-							<Switch
-								label={t('components.user-details.change', {
-									name: t('globals.address'),
-								})}
-								defaultChecked={isEditAddress}
-								onChange={() => setIsEditAddress((prev) => !prev)}
-							/>
-						</EditButton>
-					</EditingBox>
-				</Box>
-				<FormFooter />
-			</EditUserWrapper>
-		</Box>
+						</EditUserDetailsMarketingSwitcher>
+					</EditUserDetailsMarketingConsentWrapper>
+					<FormFooter
+						disabled={!(enabled.name || enabled.contacts || enabled.password)}
+					/>
+				</EditUserFormContainer>
+			</FormProvider>
+		</PageLayout>
 	);
 };

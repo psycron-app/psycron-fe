@@ -1,10 +1,13 @@
-export type GoogleOAuthButtonProps = {
-	disabled?: boolean;
-	locale: string;
-	stayConnected?: boolean;
-};
+export type GoogleOAuthIntent = 'signin' | 'signup';
 
 export type StartGoogleOAuthArgs = {
+	intent: GoogleOAuthIntent;
 	locale?: string;
-	stayConnected?: boolean;
+	stayConnected?: boolean; // required
+};
+
+export type GoogleOAuthButtonProps = {
+	disabled?: boolean;
+	intent: GoogleOAuthIntent;
+	locale?: string; // required
 };

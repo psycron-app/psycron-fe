@@ -21,13 +21,13 @@ export const Content = styled(Box)`
 	flex-direction: column;
 	padding-top: ${spacing.medium};
 	padding: 0;
-
 	padding-left: 0;
 
 	overflow-y: hidden;
 	overflow-x: hidden;
 
 	z-index: 50;
+	position: relative;
 
 	${isBiggerThanMediumMedia} {
 		margin-top: 0;

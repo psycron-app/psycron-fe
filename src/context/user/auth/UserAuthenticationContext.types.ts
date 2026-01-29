@@ -37,6 +37,9 @@ export interface IUserData {
 
 export interface IContactInfo {
 	email: string;
+	hasWhatsApp?: boolean;
+	isPhoneWpp?: boolean;
+
 	phone?: string;
 	whatsapp?: string;
 }
@@ -85,18 +88,28 @@ export interface ITherapist extends IBaseUser {
 	consentHistory?: IConsentHistoryEntry[];
 
 	deletedAt?: ISODateString | null;
-
+	google: IGoogleUser;
 	googleCalendar?: IGoogleCalendar;
 	googleId?: string;
 	notifications: MongoId[];
 	// local-only
 	password?: string;
-
 	// IDs (because BE is not populating in /users/:id)
 	patients: MongoId[];
 	picture?: string;
 	role: TherapistRole;
+	stripeCustomerID?: string;
 	timeZone: string;
+}
+
+export interface IGoogleUser {
+	email: string;
+	familyName: string;
+	givenName: string;
+	id: string;
+	name: string;
+	picture: string;
+	updatedAt: Date;
 }
 
 /**

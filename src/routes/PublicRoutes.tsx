@@ -3,8 +3,7 @@ import { AuthCallback } from '@psycron/pages/auth/callback/AuthCallback';
 import { ChangePassword } from '@psycron/pages/auth/password/ChangePassword';
 import { ResetPassword } from '@psycron/pages/auth/password/ResetPassword';
 import { VerifyEmail } from '@psycron/pages/auth/verification/email/VerifyEmail';
-import { Home } from '@psycron/pages/home/HomePage';
-import { Testing } from '@psycron/pages/testing/indext';
+import { TestHomePage } from '@psycron/pages/back-office/home/TestHomePage';
 import { Unsubscribe } from '@psycron/pages/unsubscribe/Unsubscribe';
 import {
 	APPOINTMENTCONFIRMATIONPATH,
@@ -25,7 +24,7 @@ import { AppointmentConfirmation } from '@psycron/pages/user/appointment/confirm
 import { AppointmentsList } from '@psycron/pages/user/appointment/list/patient/AppointmentsList';
 
 const publicRoutes = [
-	{ path: HOMEPAGE, element: <Home /> },
+	{ path: HOMEPAGE, element: <TestHomePage /> },
 	{ path: UNSUBSCRIBE, element: <Unsubscribe /> },
 	{ path: SIGNIN, element: <AuthPage /> },
 	{ path: SIGNUP, element: <AuthPage /> },
@@ -39,10 +38,6 @@ const publicRoutes = [
 	{
 		path: `:userId/${PATIENTEDITAPPOINTMENT}/edit/:availabilityDayId`,
 		element: <BookAppointment />,
-	},
-	{
-		path: 'test',
-		element: <Testing />,
 	},
 ];
 

@@ -1,4 +1,5 @@
 import { ID_TOKEN } from '@psycron/utils/tokens';
+import { PSYCRON_BASE_API } from '@psycron/utils/variables';
 
 import apiClient from '../axios-instance';
 
@@ -10,7 +11,7 @@ import type {
 	OnTokenCallback,
 } from './index.types';
 
-const baseURL = import.meta.env.VITE_PSYCRON_BASE_API_URL;
+const baseURL = PSYCRON_BASE_API;
 
 export const generateAvailabilityFromPrompt = async (
 	payload: IGenerateAvailabilityPayload

@@ -25,6 +25,7 @@ export const UNSUBSCRIBE = ':token/unsubscribe';
 
 // PRIVATE
 export const DASHBOARD = 'dashboard';
+export const BACKOFFICE = 'backoffice';
 // PRIVATE - USER
 export const USERDETAILS = USERID;
 export const EDITUSERPATH = 'edit';
@@ -50,7 +51,6 @@ export const PATIENTAPPOINTMENTSLIST = `${PATIENTID}/${APPOINTMENTS}`;
 
 export const ADDPATIENT = 'patient/create';
 
-// TODO: replace with your real routes when BE/pages are ready
 export const PRIVACY_POLICY = 'privacy-policy';
 export const TERMS_OF_SERVICE = 'terms-of-use';
 export const MARKETING_COMMS = 'marketing-communications';

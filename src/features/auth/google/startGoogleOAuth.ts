@@ -1,4 +1,6 @@
-import { DASHBOARD } from '@psycron/pages/urls';
+import { BACKOFFICE, DASHBOARD } from '@psycron/pages/urls';
+import { isTestEnv } from '@psycron/utils/runtimeEnv';
+import { PSYCRON_BASE_API } from '@psycron/utils/variables';
 
 import type { StartGoogleOAuthArgs } from './GoogleOAuthButton.types';
 
@@ -16,15 +18,21 @@ export const startGoogleOAuth = ({
 	locale,
 	intent,
 }: StartGoogleOAuthArgs): void => {
-	const apiBase = import.meta.env.VITE_PSYCRON_BASE_API_URL as string;
+	const apiBase = PSYCRON_BASE_API;
 
-	const url = makeUrl(apiBase, 'auth/google');
+	const isTest = isTestEnv();
+
+	const path = isTest ? 'auth/worker/google' : 'auth/google';
+
+	const url = makeUrl(apiBase, path);
+
+	const returnPath = isTest ? BACKOFFICE : DASHBOARD;
 
 	url.searchParams.set('timeZone', getTimeZone());
-	url.searchParams.set('returnTo', `/${DASHBOARD}`);
+	url.searchParams.set('returnTo', `/${returnPath}`);
 	url.searchParams.set('intent', intent);
 
-	if (typeof stayConnected === 'boolean') {
+	if (typeof stayConnected === 'boolean' || isTest) {
 		url.searchParams.set('stayConnected', String(stayConnected));
 	}
 

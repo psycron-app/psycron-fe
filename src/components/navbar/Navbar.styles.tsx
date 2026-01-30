@@ -44,10 +44,7 @@ export const NavbarFooterIcons = styled(Box)`
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-
-	svg {
-		height: 50px;
-	}
+	gap: ${spacing.small};
 `;
 
 const dropdownAnimation = keyframes`
@@ -118,11 +115,26 @@ export const FloatingMobileNavbar = styled(Box)`
 export const MobileNavbarFooter = styled(Box)`
 	padding-top: ${spacing.xs};
 
-	svg {
-		height: 25px;
-	}
+	display: flex;
+	flex-direction: column;
+	gap: ${spacing.small};
+`;
 
-	h6 {
-		font-size: 0.8rem;
+export const DesktopkMenuWrapper = styled(Box)`
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: ${spacing.small};
+`;
+
+export const MobileMenuWrapper = styled(Box)`
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	gap: ${spacing.small};
+
+	.MuiFormControl-root {
+		height: 40px;
 	}
 `;

@@ -9,6 +9,5 @@ export interface IMenuItem {
 	isFullList?: boolean;
 	name: string;
 	onClick?: () => void;
-	open?: boolean;
 	path?: string;
 }

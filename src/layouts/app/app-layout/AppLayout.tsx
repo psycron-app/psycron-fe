@@ -1,12 +1,31 @@
 import { type FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import { Box, Divider } from '@mui/material';
+import {
+	Calendar,
+	DashboardIcon,
+	Help,
+	Language,
+	Logout,
+	PatientList,
+	Payment,
+	UserSettings,
+} from '@psycron/components/icons';
+import { Localization } from '@psycron/components/localization/Localization';
 import { Navbar } from '@psycron/components/navbar/Navbar';
 import { UserDetailsCard } from '@psycron/components/user/components/user-details-card/UserDetailsCard';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { useAuthSession } from '@psycron/hooks/useAuthSession';
 import useViewport from '@psycron/hooks/useViewport';
+import {
+	APPOINTMENTS,
+	DASHBOARD,
+	LOGOUT,
+	PATIENTS,
+	PAYMENTS,
+} from '@psycron/pages/urls';
 
 import {
 	Content,
@@ -16,13 +35,57 @@ import {
 } from './AppLayout.styles';
 
 export const AppLayout: FC = () => {
+	const { t } = useTranslation();
 	const { isMobile, isTablet } = useViewport();
 
 	const { isAuthenticated } = useAuth();
 
 	const sessionStatus = useAuthSession();
 
-	const { isUserDetailsVisible, userDetails } = useUserDetails();
+	const { isUserDetailsVisible, userDetails, toggleUserDetails } =
+		useUserDetails();
+
+	const menuItems = [
+		{
+			name: t('components.navbar.dashboard'),
+			icon: <DashboardIcon />,
+			path: DASHBOARD,
+		},
+		{
+			name: t('components.navbar.user-settings'),
+			icon: <UserSettings />,
+			path: `${userDetails?._id}`,
+			onClick: () => toggleUserDetails(),
+		},
+		{
+			name: t('globals.patients'),
+			icon: <PatientList />,
+			path: PATIENTS,
+			disabled: true,
+		},
+		{
+			name: t('globals.billing-manager'),
+			icon: <Payment />,
+			path: PAYMENTS,
+			disabled: true,
+		},
+		{
+			name: t('globals.appointments-manager'),
+			icon: <Calendar />,
+			path: APPOINTMENTS,
+			open: false,
+		},
+	];
+
+	const footerItems = [
+		{
+			name: t('globals.change-language'),
+			icon: <Language />,
+			component: <Localization />,
+		},
+		{ name: t('globals.help'), icon: <Help />, path: '/help-center' },
+		{ name: t('globals.logout'), icon: <Logout />, path: LOGOUT },
+	];
 
 	if (sessionStatus) return sessionStatus;
 
@@ -30,7 +93,7 @@ export const AppLayout: FC = () => {
 		<LayoutWrapper>
 			<NavBarWrapper>
 				<Box>
-					<Navbar />
+					<Navbar items={menuItems} footerItems={footerItems} />
 				</Box>
 				<DividerWrapper>
 					<Divider

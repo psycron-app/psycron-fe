@@ -1,20 +1,24 @@
-import type { TooltipProps } from '@mui/material';
-import { IconButton, Tooltip as MUITooltip } from '@mui/material';
+import { Tooltip as MUITooltip } from '@mui/material';
 import { Text } from '@psycron/components/text/Text';
+
+import { TootleTipIconButton } from './Tooltip.styles';
+import type { PsycronTooltipProps } from './Tooltip.types';
 
 export const Tooltip = ({
 	children,
 	placement,
 	title,
 	open,
-	disabled,
-	...rest
-}: TooltipProps & { disabled?: boolean }) => {
-	const Title = (
-		<Text isFirstUpper fontSize={'0.7rem'}>
-			{title}
-		</Text>
-	);
+	disabled = false,
+}: PsycronTooltipProps) => {
+	const Title =
+		typeof title === 'string' || typeof title === 'number' ? (
+			<Text isFirstUpper fontSize={'0.7rem'}>
+				{title}
+			</Text>
+		) : (
+			title
+		);
 
 	const isControlled = typeof open === 'boolean';
 
@@ -22,20 +26,21 @@ export const Tooltip = ({
 		<MUITooltip
 			arrow
 			placement={placement}
-			title={Title}
-			open={isControlled ? open : undefined}
-			disableHoverListener={isControlled}
-			disableFocusListener={isControlled}
-			disableTouchListener={isControlled}
-			{...rest}
+			title={disabled ? '' : Title}
+			open={disabled ? false : isControlled ? open : undefined}
+			disableHoverListener={disabled}
+			disableFocusListener={disabled}
+			disableTouchListener={disabled}
 		>
 			<span
 				style={{
+					display: 'inline-flex',
 					cursor: disabled ? 'not-allowed' : 'pointer',
-					display: 'flex',
 				}}
 			>
-				<IconButton disabled={disabled}>{children}</IconButton>
+				<TootleTipIconButton disabled={disabled}>
+					{children}
+				</TootleTipIconButton>
 			</span>
 		</MUITooltip>
 	);

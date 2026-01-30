@@ -25,7 +25,7 @@ type RetryableRequestConfig = InternalAxiosRequestConfig & {
 };
 
 const apiClient: AxiosInstance = axios.create({
-	baseURL: PSYCRON_BASE_API,
+	baseURL: PSYCRON_BASE_API as string,
 	headers: {
 		'Content-Type': 'application/json',
 	},

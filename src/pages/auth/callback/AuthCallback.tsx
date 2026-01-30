@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { setTokens } from '@psycron/context/user/auth/utils/tokenStorage';
-import { setWorkerTokens } from '@psycron/context/worker/auth/utils/workerTokenStorage';
+import { setWorkerTokens } from '@psycron/context/worker/utils/workerTokenStorage';
 import i18n from '@psycron/i18n';
 import { AVAILABILITYGENERATE, DASHBOARD, SIGNIN } from '@psycron/pages/urls';
 

@@ -1,5 +1,7 @@
 import { Box, styled } from '@mui/material';
+import { Text } from '@psycron/components/text/Text';
 import { isBiggerThanMediumMedia } from '@psycron/theme/media-queries/mediaQueries';
+import { palette } from '@psycron/theme/palette/palette.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const AppLayoutDividerMobilePadding = `${spacing.small}`;
@@ -26,8 +28,8 @@ export const Content = styled(Box)`
 	overflow-y: hidden;
 	overflow-x: hidden;
 
-	z-index: 50;
 	position: relative;
+	justify-content: space-between;
 
 	${isBiggerThanMediumMedia} {
 		margin-top: 0;
@@ -58,4 +60,25 @@ export const DividerWrapper = styled(Box)`
 		padding-right: ${spacing.small};
 		padding-bottom: 0;
 	}
+`;
+
+export const BackofficeFooter = styled(Box)`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+
+	p {
+		font-size: 0.8rem;
+	}
+
+	${isBiggerThanMediumMedia} {
+		flex-direction: row;
+	}
+`;
+
+export const BackofficeFooterEmail = styled(Text)`
+	padding-left: ${spacing.xxs};
+	color: ${palette.brand.purple};
+	font-weight: 500;
 `;

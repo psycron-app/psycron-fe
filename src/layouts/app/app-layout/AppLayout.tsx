@@ -2,6 +2,7 @@ import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import { Box, Divider } from '@mui/material';
+import { EnvironmentBanner } from '@psycron/components/environment-banner/EnvironmentBanner';
 import {
 	Calendar,
 	DashboardIcon,
@@ -15,6 +16,7 @@ import {
 import { Localization } from '@psycron/components/localization/Localization';
 import { Navbar } from '@psycron/components/navbar/Navbar';
 import { UserDetailsCard } from '@psycron/components/user/components/user-details-card/UserDetailsCard';
+import { useRuntimeEnv } from '@psycron/context/runtime/RuntimeEnvContext';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { useAuthSession } from '@psycron/hooks/useAuthSession';
@@ -37,6 +39,7 @@ import {
 export const AppLayout: FC = () => {
 	const { t } = useTranslation();
 	const { isMobile, isTablet } = useViewport();
+	const { isTestingEnv } = useRuntimeEnv();
 
 	const { isAuthenticated } = useAuth();
 
@@ -58,6 +61,12 @@ export const AppLayout: FC = () => {
 			onClick: () => toggleUserDetails(),
 		},
 		{
+			name: t('globals.appointments-manager'),
+			icon: <Calendar />,
+			path: APPOINTMENTS,
+			disabled: true,
+		},
+		{
 			name: t('globals.patients'),
 			icon: <PatientList />,
 			path: PATIENTS,
@@ -69,12 +78,6 @@ export const AppLayout: FC = () => {
 			path: PAYMENTS,
 			disabled: true,
 		},
-		{
-			name: t('globals.appointments-manager'),
-			icon: <Calendar />,
-			path: APPOINTMENTS,
-			open: false,
-		},
 	];
 
 	const footerItems = [
@@ -83,7 +86,12 @@ export const AppLayout: FC = () => {
 			icon: <Language />,
 			component: <Localization />,
 		},
-		{ name: t('globals.help'), icon: <Help />, path: '/help-center' },
+		{
+			name: t('globals.help'),
+			icon: <Help />,
+			path: '/help-center',
+			disabled: true,
+		},
 		{ name: t('globals.logout'), icon: <Logout />, path: LOGOUT },
 	];
 
@@ -102,6 +110,7 @@ export const AppLayout: FC = () => {
 				</DividerWrapper>
 			</NavBarWrapper>
 			<Content>
+				<EnvironmentBanner isVisible={isTestingEnv} />
 				<Outlet />
 				{isAuthenticated && isUserDetailsVisible && (
 					<UserDetailsCard user={userDetails} />

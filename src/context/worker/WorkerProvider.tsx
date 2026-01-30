@@ -63,7 +63,7 @@ export const WorkerProvider: React.FC<React.PropsWithChildren> = ({
 export const useWorker = (): WorkerContextValue => {
 	const ctx = useContext(WorkerAuthContext);
 	if (!ctx) {
-		throw new Error('useWorker must be used within WorkerAuthProvider');
+		throw new Error('useWorker must be used within WorkerProvider');
 	}
 	return ctx;
 };

@@ -6,12 +6,11 @@ import { AppointmentActionsProvider } from '@psycron/context/appointment/appoint
 import { AvailabilityProvider } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { UserGeoLocationProvider } from '@psycron/context/geolocation/CountryContext';
 import { PatientProvider } from '@psycron/context/patient/PatientContext';
+import { RuntimeEnvProvider } from '@psycron/context/runtime/RuntimeEnvContext';
 import { AuthProvider } from '@psycron/context/user/auth/UserAuthenticationContext';
 import { UserDetailsProvider } from '@psycron/context/user/details/UserDetailsContext';
-import { WorkerProvider } from '@psycron/context/worker/WorkerProvider';
 import i18n from '@psycron/i18n';
 import { AnalyticsTracker } from '@psycron/routes/AnalyticsTracker';
-import { WorkerGuard } from '@psycron/routes/WorkerGuard';
 
 export const LanguageLayout: FC = () => {
 	const { locale } = useParams<{ locale: string }>();
@@ -23,25 +22,23 @@ export const LanguageLayout: FC = () => {
 	}, [locale]);
 
 	return (
-		<WorkerProvider>
-			<WorkerGuard>
-				<AlertProvider>
-					<AuthProvider>
-						<UserDetailsProvider>
-							<AvailabilityProvider>
-								<PatientProvider>
-									<UserGeoLocationProvider>
-										<AppointmentActionsProvider>
-											<AnalyticsTracker />
-											<Outlet />
-										</AppointmentActionsProvider>
-									</UserGeoLocationProvider>
-								</PatientProvider>
-							</AvailabilityProvider>
-						</UserDetailsProvider>
-					</AuthProvider>
-				</AlertProvider>
-			</WorkerGuard>
-		</WorkerProvider>
+		<RuntimeEnvProvider>
+			<AlertProvider>
+				<AuthProvider>
+					<UserDetailsProvider>
+						<AvailabilityProvider>
+							<PatientProvider>
+								<UserGeoLocationProvider>
+									<AppointmentActionsProvider>
+										<AnalyticsTracker />
+										<Outlet />
+									</AppointmentActionsProvider>
+								</UserGeoLocationProvider>
+							</PatientProvider>
+						</AvailabilityProvider>
+					</UserDetailsProvider>
+				</AuthProvider>
+			</AlertProvider>
+		</RuntimeEnvProvider>
 	);
 };

@@ -3,6 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { SignLayout } from '@psycron/components/form/components/shared/SignLayout';
+import { useRuntimeEnv } from '@psycron/context/runtime/RuntimeEnvContext';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
 import { GoogleOAuthButton } from '@psycron/features/auth/google/GoogleOAuthButton';
 
@@ -14,6 +15,8 @@ export const TestHomePage = () => {
 	const { locale } = useParams<{ locale: string }>();
 	const navigate = useNavigate();
 
+	const { isTestingEnv } = useRuntimeEnv();
+
 	const methods = useForm({
 		mode: 'onSubmit',
 		shouldUnregister: true,
@@ -21,13 +24,11 @@ export const TestHomePage = () => {
 
 	const { isSignInMutationLoading } = useAuth();
 
-	const isTestEnv = window.location.hostname.startsWith('test.');
-
 	useEffect(() => {
-		if (!isTestEnv) {
+		if (!isTestingEnv) {
 			navigate(SIGNIN);
 		}
-	}, [isTestEnv, navigate]);
+	}, [isTestingEnv, navigate]);
 
 	return (
 		<AuthPageWrapper>
@@ -37,6 +38,7 @@ export const TestHomePage = () => {
 						locale={locale}
 						intent='signin'
 						disabled={isSignInMutationLoading}
+						audience={'worker'}
 					/>
 				</FormProvider>
 			</SignLayout>

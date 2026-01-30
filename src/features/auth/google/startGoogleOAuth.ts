@@ -1,5 +1,4 @@
 import { BACKOFFICE, DASHBOARD } from '@psycron/pages/urls';
-import { isTestEnv } from '@psycron/utils/runtimeEnv';
 import { PSYCRON_BASE_API } from '@psycron/utils/variables';
 
 import type { StartGoogleOAuthArgs } from './GoogleOAuthButton.types';
@@ -13,26 +12,46 @@ const makeUrl = (base: string, path: string): URL => {
 	return new URL(normalizedPath, normalizedBase);
 };
 
+const getOAuthConfig = (
+	audience: StartGoogleOAuthArgs['audience']
+): {
+	path: string;
+	returnPath: string;
+	shouldIncludeStayConnected: boolean;
+} => {
+	if (audience === 'worker') {
+		return {
+			path: 'auth/worker/google',
+			returnPath: BACKOFFICE,
+			shouldIncludeStayConnected: true,
+		};
+	}
+
+	return {
+		path: 'auth/google',
+		returnPath: DASHBOARD,
+		shouldIncludeStayConnected: true,
+	};
+};
+
 export const startGoogleOAuth = ({
 	stayConnected,
 	locale,
 	intent,
+	audience,
 }: StartGoogleOAuthArgs): void => {
 	const apiBase = PSYCRON_BASE_API;
 
-	const isTest = isTestEnv();
-
-	const path = isTest ? 'auth/worker/google' : 'auth/google';
+	const { path, returnPath, shouldIncludeStayConnected } =
+		getOAuthConfig(audience);
 
 	const url = makeUrl(apiBase, path);
-
-	const returnPath = isTest ? BACKOFFICE : DASHBOARD;
 
 	url.searchParams.set('timeZone', getTimeZone());
 	url.searchParams.set('returnTo', `/${returnPath}`);
 	url.searchParams.set('intent', intent);
 
-	if (typeof stayConnected === 'boolean' || isTest) {
+	if (shouldIncludeStayConnected && typeof stayConnected === 'boolean') {
 		url.searchParams.set('stayConnected', String(stayConnected));
 	}
 

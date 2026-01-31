@@ -30,11 +30,14 @@ import { Globe as IconGlobe } from './Globe';
 import { HealthTracker as IconHealthTracker } from './HealthTracker';
 import { Info as IconInfo } from './Info';
 import { Lock as IconLock } from './Lock';
+import { LockKeyhole as IconLockKeyhole } from './LockKeyhole';
 import { Mail as IconMail } from './Mail';
 import { MapPin as IconMapPin } from './MapPin';
 import { Month as IconMonth } from './Month';
 import { Send as IconSend } from './Send';
 import { Share as IconShare } from './Share';
+import { TestOff as IconTestOff } from './TestOff';
+import { TestOn as IconTestOn } from './TestOn';
 import { Today as IconToday } from './Today';
 import { UnAvailable as IconUnAvailable } from './UnAvailable';
 
@@ -74,6 +77,10 @@ import { Watch as IconWatch } from './Watch';
 import { WhatsApp as IconWhatsApp } from './Whatsapp';
 
 export const Patients = withIconColor(IconPatients);
+
+export const LockKeyhole = withIconColor(IconLockKeyhole);
+export const TestOff = withIconColor(IconTestOff);
+export const TestOn = withIconColor(IconTestOn);
 export const Pause = withIconColor(IconPause);
 export const Subscription = withIconColor(IconSubscription);
 export const Security = withIconColor(IconSecurity);

@@ -24,6 +24,8 @@ export const SignLayout: FC<ISignLayout> = ({
 }: ISignLayout) => {
 	const { t } = useTranslation();
 
+	const isTestEnv = window.location.hostname.startsWith('test.');
+
 	return (
 		<SignUpWrapper>
 			<LogoWrapper>
@@ -36,7 +38,7 @@ export const SignLayout: FC<ISignLayout> = ({
 					<SignLayoutFooterLink>
 						{isReset ? (
 							<NavigateLink isBack />
-						) : (
+						) : !isTestEnv ? (
 							<>
 								<Typography variant='caption'>
 									{isSignin
@@ -49,7 +51,7 @@ export const SignLayout: FC<ISignLayout> = ({
 										: t('components.form.signup.signin-here-link')}
 								</Link>
 							</>
-						)}
+						) : null}
 					</SignLayoutFooterLink>
 				</>
 			) : (

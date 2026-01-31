@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@psycron/components/button/Button';
 import { Alert, Patients } from '@psycron/components/icons';
 import { Text } from '@psycron/components/text/Text';
+import { useRuntimeEnv } from '@psycron/context/runtime/RuntimeEnvContext';
 
 import {
 	PatientsCard,
@@ -21,6 +22,8 @@ export const PatientsSectionContent = ({
 	onGoToPatients,
 }: PatientsSectionContentProps) => {
 	const { t } = useTranslation();
+
+	const { isTestingEnv } = useRuntimeEnv();
 
 	const total = useMemo(() => patients?.length ?? 0, [patients]);
 	const hasPatients = total > 0;
@@ -55,6 +58,7 @@ export const PatientsSectionContent = ({
 					variant='outlined'
 					onClick={onGoToPatients}
 					fullWidth
+					disabled={isTestingEnv}
 				>
 					{t('components.user-details.patients.cta', 'Go to patients')}
 				</Button>
@@ -83,6 +87,7 @@ export const PatientsSectionContent = ({
 				variant='outlined'
 				onClick={onGoToPatients}
 				fullWidth
+				disabled={isTestingEnv}
 			>
 				{t('components.user-details.patients.cta', 'Go to patients')}
 			</Button>

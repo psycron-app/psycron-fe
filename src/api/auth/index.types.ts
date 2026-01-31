@@ -55,3 +55,12 @@ export type SignUpLocalRequest = {
 };
 
 export type SignUpRequest = SignUpLocalRequest;
+
+export type RefreshTokenResponse = {
+	accessToken: string;
+	refreshToken: string;
+};
+
+export type RefreshTokenPayload = {
+	refreshToken: string;
+};

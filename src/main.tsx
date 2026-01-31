@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import ReactGA from 'react-ga4';
 import { I18nextProvider } from 'react-i18next';
 import { ThemeProvider } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -49,12 +48,6 @@ if (!envValidation.isValid) {
 }
 
 const queryClient = new QueryClient();
-
-// Initialize Google Analytics only if configured
-const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID;
-if (measurementId && !measurementId.includes('XXXXXXXXXX')) {
-	ReactGA.initialize(measurementId);
-}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>

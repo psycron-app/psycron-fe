@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
+import { useState } from 'react';
 import { Text } from '@psycron/components/text/Text';
+import { useCanHover } from '@psycron/hooks/userCanHover';
 
-import { MobileMenuItem, StyledMenuItem } from './MenuItem.styles';
+import {
+	MenuIconWrap,
+	MobileMenuIconWrapper,
+	MobileMenuItem,
+	StyledMenuItem,
+} from './MenuItem.styles';
 import type { IMenuItem } from './MenuItem.types';
 
 export const MenuItem = ({
@@ -11,37 +16,46 @@ export const MenuItem = ({
 	isFooterIcon,
 	isFullList,
 	disabled,
-	open,
+	hoverIcon,
 }: IMenuItem) => {
-	const [shouldOpenTooltip, setShouldOpenTooltip] = useState<boolean>(false);
+	const canHover = useCanHover();
+	const [isHovered, setIsHovered] = useState(false);
 
-	useEffect(() => {
-		if (open) {
-			const timeout = setTimeout(() => setShouldOpenTooltip(true), 100);
-			return () => clearTimeout(timeout);
-		}
-	}, [open]);
+	const shouldSwap = !isFullList && canHover && Boolean(hoverIcon);
+
+	const renderedIcon = shouldSwap && isHovered && hoverIcon ? hoverIcon : icon;
 
 	return (
 		<>
 			{isFullList ? (
 				<MobileMenuItem disabled={disabled}>
-					<Box>{icon}</Box>
-					<Box>
-						<Text variant='subtitle1' textTransform='capitalize'>
-							{name}
-						</Text>
-					</Box>
+					<MobileMenuIconWrapper>{icon}</MobileMenuIconWrapper>
+					<Text textTransform='capitalize'>{name}</Text>
 				</MobileMenuItem>
 			) : (
 				<StyledMenuItem
 					title={name}
 					placement='right'
 					disabled={disabled}
-					isFooterIcon={isFooterIcon}
-					open={shouldOpenTooltip || undefined}
+					$disabled={disabled}
+					$isFooterIcon={isFooterIcon}
 				>
-					{icon}
+					<MenuIconWrap
+						onMouseEnter={() => {
+							if (shouldSwap) setIsHovered(true);
+						}}
+						onMouseLeave={() => {
+							if (shouldSwap) setIsHovered(false);
+						}}
+						onFocus={() => {
+							if (shouldSwap) setIsHovered(true);
+						}}
+						onBlur={() => {
+							if (shouldSwap) setIsHovered(false);
+						}}
+					>
+						{renderedIcon}
+					</MenuIconWrap>
 				</StyledMenuItem>
 			)}
 		</>

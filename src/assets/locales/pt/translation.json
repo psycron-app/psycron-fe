@@ -177,7 +177,8 @@
 		},
 		"navbar": {
 			"dashboard": "Painel",
-			"user-settings": "Configurações"
+			"user-settings": "Configurações",
+			"test": "Testes"
 		},
 		"user-details": {
 			"edit": "Editar detalhes",

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Box, TextField } from '@mui/material';
 import type { CancelAppointmentFormData } from '@psycron/api/user/availability/index.types';
 import { CancellationReasonEnum } from '@psycron/api/user/availability/index.types';
-import { Button } from '@psycron/components/button/Button';
+// import { Button } from '@psycron/components/button/Button';
 import type { ISelectedSlot } from '@psycron/components/calendar/big-calendar/BigCalendar.types';
 import { getFormattedTimeLabels } from '@psycron/components/calendar/big-calendar/components/appointment-details/utils';
 import { Globe, MapPin } from '@psycron/components/icons';
@@ -16,11 +16,10 @@ import { RadioButtonGroup } from '@psycron/components/radio/RadioButton';
 import { Text } from '@psycron/components/text/Text';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { usePatient } from '@psycron/context/patient/PatientContext';
-import { SEOProvider } from '@psycron/context/seo/SEOContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { useAppointmentParams } from '@psycron/hooks/useAppointmentParams';
 import { useCancellationReasons } from '@psycron/hooks/useCancellationReasons';
-import { DOMAIN, PATIENTEDITAPPOINTMENT } from '@psycron/pages/urls';
+import { PATIENTEDITAPPOINTMENT } from '@psycron/pages/urls';
 import { format } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
@@ -126,7 +125,7 @@ export const AppointmentConfirmation = () => {
 
 	const { firstName, lastName } = userDetails;
 
-	const lastIcsNotification = patientDetails.notifications.at(-1);
+	// const lastIcsNotification = patientDetails.notifications;
 
 	const handleEditAppointment = (selectedSlot: ISelectedSlot) => {
 		setSelectedSlotToEdit(selectedSlot);
@@ -185,42 +184,42 @@ export const AppointmentConfirmation = () => {
 
 	const bookApointmentLink = `${therapistId}/${PATIENTEDITAPPOINTMENT}`;
 
-	const pageTitle = t('page.booking-confirmation.title-plain', {
-		therapistName: `${firstName} ${lastName}`,
-	});
+	// const pageTitle = t('page.booking-confirmation.title-plain', {
+	// 	therapistName: `${firstName} ${lastName}`,
+	// });
 
-	const pageUrl = `${DOMAIN}/${locale}/${therapistId}/${patientId}/appointment-confirmation`;
-	const imageUrl = `${DOMAIN}/psycron-meta.png`;
+	// const pageUrl = `${DOMAIN}/${locale}/${therapistId}/${patientId}/appointment-confirmation`;
+	// const imageUrl = `${DOMAIN}/psycron-meta.png`;
 
-	const appointment_confirmation_SEO = {
-		title: pageTitle,
-		description: t('page.book-appointment.description'),
-		canonicalUrl: pageUrl,
-		ogTitle: t('page.landing.seo.ogTitle'),
-		ogDescription: t('page.landing.seo.ogDescription'),
-		ogUrl: pageUrl,
-		ogType: 'website',
-		ogImage: imageUrl,
-		twitterCard: 'summary_large_image',
-		twitterTitle: t('page.landing.seo.ogTitle'),
-		twitterDescription: t('page.landing.seo.ogDescription'),
-		twitterImage: imageUrl,
-	};
+	// const appointment_confirmation_SEO = {
+	// 	title: pageTitle,
+	// 	description: t('page.book-appointment.description'),
+	// 	canonicalUrl: pageUrl,
+	// 	ogTitle: t('page.landing.seo.ogTitle'),
+	// 	ogDescription: t('page.landing.seo.ogDescription'),
+	// 	ogUrl: pageUrl,
+	// 	ogType: 'website',
+	// 	ogImage: imageUrl,
+	// 	twitterCard: 'summary_large_image',
+	// 	twitterTitle: t('page.landing.seo.ogTitle'),
+	// 	twitterDescription: t('page.landing.seo.ogDescription'),
+	// 	twitterImage: imageUrl,
+	// };
 
-	const downloadIcs = (icsContent: string, filename: string) => {
-		const blob = new Blob([icsContent], {
-			type: 'text/calendar;charset=utf-8',
-		});
-		const url = URL.createObjectURL(blob);
-		const link = document.createElement('a');
-		link.href = url;
-		link.download = filename;
-		link.click();
-		URL.revokeObjectURL(url);
-	};
+	// const downloadIcs = (icsContent: string, filename: string) => {
+	// 	const blob = new Blob([icsContent], {
+	// 		type: 'text/calendar;charset=utf-8',
+	// 	});
+	// 	const url = URL.createObjectURL(blob);
+	// 	const link = document.createElement('a');
+	// 	link.href = url;
+	// 	link.download = filename;
+	// 	link.click();
+	// 	URL.revokeObjectURL(url);
+	// };
 
 	return (
-		<SEOProvider seo={appointment_confirmation_SEO}>
+		<>
 			<ConfirmationPageWrapper>
 				{formattedSessionDates.length ? (
 					<Box pb={5}>
@@ -286,7 +285,7 @@ export const AppointmentConfirmation = () => {
 								<Text variant='caption' py={2}>
 									{t('page.booking-confirmation.advise')}
 								</Text>
-								{lastIcsNotification?.icsContent && (
+								{/* {lastIcsNotification?.icsContent && (
 									<Button
 										onClick={() =>
 											downloadIcs(
@@ -297,7 +296,7 @@ export const AppointmentConfirmation = () => {
 									>
 										{t('page.booking-confirmation.cancel-or-edit.donwload-ics')}
 									</Button>
-								)}
+								)} */}
 							</Box>
 						</Box>
 					) : (
@@ -358,6 +357,6 @@ export const AppointmentConfirmation = () => {
 					</Box>
 				</FormProvider>
 			</Modal>
-		</SEOProvider>
+		</>
 	);
 };

@@ -49,6 +49,7 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 				locale={locale}
 				intent='signin'
 				disabled={isSignInMutationLoading}
+				audience='therapist'
 			/>
 			<Divider />
 			<Box

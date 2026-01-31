@@ -13,6 +13,7 @@ export const GoogleOAuthButton = ({
 	locale,
 	disabled,
 	intent,
+	audience,
 }: GoogleOAuthButtonProps) => {
 	const { t } = useTranslation();
 
@@ -24,9 +25,10 @@ export const GoogleOAuthButton = ({
 		<StyledGoogleButton
 			onClick={() =>
 				startGoogleOAuth({
-					locale,
 					stayConnected: Boolean(stayConnected),
+					locale,
 					intent,
+					audience,
 				})
 			}
 			disabled={disabled}

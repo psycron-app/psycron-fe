@@ -178,7 +178,8 @@
 		},
 		"navbar": {
 			"dashboard": "Dashboard",
-			"user-settings": "User settings"
+			"user-settings": "User settings",
+			"test": "Tests"
 		},
 		"user-details": {
 			"edit": "Edit details",

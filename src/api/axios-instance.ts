@@ -4,6 +4,7 @@ import {
 	getRefreshToken,
 	setTokensKeepingAuthPersistence,
 } from '@psycron/context/user/auth/utils/tokenStorage';
+import { PSYCRON_BASE_API } from '@psycron/utils/variables';
 import type {
 	AxiosError,
 	AxiosInstance,
@@ -24,7 +25,7 @@ type RetryableRequestConfig = InternalAxiosRequestConfig & {
 };
 
 const apiClient: AxiosInstance = axios.create({
-	baseURL: import.meta.env.VITE_PSYCRON_BASE_API_URL as string,
+	baseURL: PSYCRON_BASE_API as string,
 	headers: {
 		'Content-Type': 'application/json',
 	},

@@ -9,9 +9,6 @@
 
 export interface EnvConfig {
 	VITE_ASSETS_CDN_URL: string;
-	VITE_GA_MEASUREMENT_ID?: string;
-	VITE_GOOGLE_MAPS_API_KEY?: string;
-	VITE_IP_GEO_KEY?: string;
 	VITE_PSYCRON_BASE_API_URL: string;
 }
 
@@ -43,11 +40,7 @@ const REQUIRED_ENV_VARS = ['VITE_PSYCRON_BASE_API_URL'] as const;
 /**
  * Optional environment variables with feature descriptions.
  */
-const OPTIONAL_ENV_VARS: Record<string, string> = {
-	VITE_IP_GEO_KEY: 'IP Geolocation (timezone detection)',
-	VITE_GOOGLE_MAPS_API_KEY: 'Google Maps (address autocomplete)',
-	VITE_GA_MEASUREMENT_ID: 'Google Analytics (usage tracking)',
-};
+const OPTIONAL_ENV_VARS: Record<string, string> = {};
 
 /**
  * Validates a URL format
@@ -183,9 +176,6 @@ export const validateEnv = (): ValidationResult => {
 export const getEnvConfig = (): EnvConfig => {
 	return {
 		VITE_PSYCRON_BASE_API_URL: import.meta.env.VITE_PSYCRON_BASE_API_URL,
-		VITE_IP_GEO_KEY: import.meta.env.VITE_IP_GEO_KEY,
-		VITE_GOOGLE_MAPS_API_KEY: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
-		VITE_GA_MEASUREMENT_ID: import.meta.env.VITE_GA_MEASUREMENT_ID,
 		VITE_ASSETS_CDN_URL: import.meta.env.VITE_ASSETS_CDN_URL,
 	};
 };

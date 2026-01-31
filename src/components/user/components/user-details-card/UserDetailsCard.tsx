@@ -73,7 +73,6 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 
 	const { firstName, lastName, authProvider, _id, patients, consent } = user;
 
-	const picture = pictureUrl ?? null;
 	const email = user.contacts?.email ?? '';
 	const phone = user.contacts?.phone ?? null;
 	const whatsapp = user.contacts?.whatsapp ?? null;
@@ -167,7 +166,7 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 			<UserDetailsCardTop isPage={isPage}>
 				<UserDestailsTopInfoWrapper>
 					<Avatar
-						src={picture}
+						src={pictureUrl}
 						large={!(isMobile || isTablet)}
 						firstName={firstName}
 						lastName={lastName}

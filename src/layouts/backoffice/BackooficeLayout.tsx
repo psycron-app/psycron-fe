@@ -16,6 +16,7 @@ import {
 	CalendarSearch,
 	Flag,
 	ScrollText,
+	TestTubeDiagonal,
 	UserRoundCog,
 	Users,
 } from 'lucide-react';
@@ -49,6 +50,7 @@ export const BackofficeLayout: FC = () => {
 		{
 			name: t('components.navbar.test'),
 			icon: <TestOff />,
+			hoverIcon: <TestTubeDiagonal />,
 			path: BACKOFFICE,
 		},
 		{ name: 'Admin access', icon: <LockKeyhole />, disabled: true },

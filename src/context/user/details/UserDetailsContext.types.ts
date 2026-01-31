@@ -23,3 +23,15 @@ export interface UserDetailsContextType {
 	// Auth/session user (from AuthContext)
 	user?: ITherapist;
 }
+
+export type UserDetailsHookReturn = {
+	clearMockUserDetails: () => void;
+	// new:
+	isMockedUserDetails: boolean;
+	isUserDetailsLoading: boolean;
+
+	isUserDetailsSucces: boolean;
+	setMockUserDetails: (user: ITherapist) => void;
+	// existing fields you already return...
+	userDetails: ITherapist | null;
+};

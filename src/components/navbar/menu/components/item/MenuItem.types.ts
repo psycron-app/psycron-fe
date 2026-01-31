@@ -1,10 +1,11 @@
-import type { ReactElement, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export interface IMenuItem {
 	closeMenu?: () => void;
 	component?: ReactNode;
 	disabled?: boolean;
-	icon: ReactElement;
+	hoverIcon?: ReactNode;
+	icon: ReactNode;
 	isFooterIcon?: boolean;
 	isFullList?: boolean;
 	name: string;

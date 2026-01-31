@@ -37,7 +37,10 @@ export const Menu = ({
 	return (
 		<>
 			{items?.map(
-				({ icon, name, path, onClick, component, disabled }, index) => {
+				(
+					{ icon, name, path, onClick, component, disabled, hoverIcon },
+					index
+				) => {
 					return (
 						<Box
 							key={`menu-${name}-${index}`}
@@ -55,6 +58,7 @@ export const Menu = ({
 										isFooterIcon={isFooterIcon}
 										isFullList={isFullList}
 										disabled={disabled}
+										hoverIcon={hoverIcon}
 									/>
 									{isFullList ? (
 										<>{index < items.length - 1 && <Divider />}</>

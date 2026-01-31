@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Button } from '@psycron/components/button/Button';
 import { Text } from '@psycron/components/text/Text';
+import { useRuntimeEnv } from '@psycron/context/runtime/RuntimeEnvContext';
 
 import {
 	SubscriptionCard,
@@ -27,6 +28,8 @@ export const SubscriptionSectionContent = ({
 	onManage,
 }: SubscriptionSectionContentProps) => {
 	const { t } = useTranslation();
+
+	const { isTestingEnv } = useRuntimeEnv();
 
 	if (model.kind === 'empty') {
 		return (
@@ -55,7 +58,13 @@ export const SubscriptionSectionContent = ({
 							)}
 				</Text>
 
-				<Button type='button' tertiary variant='outlined' onClick={onManage}>
+				<Button
+					type='button'
+					tertiary
+					variant='outlined'
+					onClick={onManage}
+					disabled={isTestingEnv}
+				>
 					{t(
 						'components.user-details.subscription.cta.manage',
 						'Manage subscription'
@@ -98,6 +107,7 @@ export const SubscriptionSectionContent = ({
 				variant='outlined'
 				onClick={onManage}
 				fullWidth
+				disabled={isTestingEnv}
 			>
 				{t(
 					'components.user-details.subscription.cta.manage',

@@ -1,6 +1,9 @@
+import { useState } from 'react';
 import { Text } from '@psycron/components/text/Text';
+import { useCanHover } from '@psycron/hooks/userCanHover';
 
 import {
+	MenuIconWrap,
 	MobileMenuIconWrapper,
 	MobileMenuItem,
 	StyledMenuItem,
@@ -13,7 +16,15 @@ export const MenuItem = ({
 	isFooterIcon,
 	isFullList,
 	disabled,
+	hoverIcon,
 }: IMenuItem) => {
+	const canHover = useCanHover();
+	const [isHovered, setIsHovered] = useState(false);
+
+	const shouldSwap = !isFullList && canHover && Boolean(hoverIcon);
+
+	const renderedIcon = shouldSwap && isHovered && hoverIcon ? hoverIcon : icon;
+
 	return (
 		<>
 			{isFullList ? (
@@ -29,7 +40,22 @@ export const MenuItem = ({
 					$disabled={disabled}
 					$isFooterIcon={isFooterIcon}
 				>
-					{icon}
+					<MenuIconWrap
+						onMouseEnter={() => {
+							if (shouldSwap) setIsHovered(true);
+						}}
+						onMouseLeave={() => {
+							if (shouldSwap) setIsHovered(false);
+						}}
+						onFocus={() => {
+							if (shouldSwap) setIsHovered(true);
+						}}
+						onBlur={() => {
+							if (shouldSwap) setIsHovered(false);
+						}}
+					>
+						{renderedIcon}
+					</MenuIconWrap>
 				</StyledMenuItem>
 			)}
 		</>

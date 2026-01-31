@@ -14,6 +14,7 @@ import {
 	updateMarketingConsent as updateMarketingConsentApi,
 } from '@psycron/api/user';
 import { buildCdnUrl } from '@psycron/api/user/upload-picture';
+import { useRuntimeEnv } from '@psycron/context/runtime/RuntimeEnvContext';
 import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import { EDITUSERPATH } from '@psycron/pages/urls';
 import { ID_TOKEN, REFRESH_TOKEN, THERAPIST_ID } from '@psycron/utils/tokens';
@@ -26,6 +27,11 @@ import type {
 	UserDetailsContextType,
 	UserDetailsProviderProps,
 } from './UserDetailsContext.types';
+import {
+	clearMockUserDetails,
+	getMockUserDetails,
+	setMockUserDetails,
+} from './userDetailsMockStorage';
 
 export const UserDetailsContext = createContext<
 	UserDetailsContextType | undefined
@@ -101,6 +107,11 @@ export const useUserDetails = (passedUserId?: string) => {
 	const queryClient = useQueryClient();
 	const { t } = useTranslation();
 
+	const { isTestingEnv } = useRuntimeEnv();
+
+	const mockedUserDetails = isTestingEnv ? getMockUserDetails() : null;
+	const isUsingMock = Boolean(mockedUserDetails);
+
 	const sessionUserId = sessionUser?._id;
 	const userId = passedUserId ?? sessionUserId ?? null;
 
@@ -118,11 +129,13 @@ export const useUserDetails = (passedUserId?: string) => {
 			if (!userId) throw new Error(t('auth.error.not-found'));
 			return getUserById(userId);
 		},
-		enabled: Boolean(userId),
+		enabled: Boolean(userId) && !isUsingMock,
 		retry: false,
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 10,
 	});
+
+	const resolvedUserDetails = mockedUserDetails ?? userDetails ?? null;
 
 	const pictureUrl = useMemo(() => {
 		if (!userDetails) return null;
@@ -226,7 +239,10 @@ export const useUserDetails = (passedUserId?: string) => {
 
 	return {
 		...context,
-		userDetails,
+		userDetails: resolvedUserDetails,
+		isMockedUserDetails: isUsingMock,
+		setMockUserDetails: (u: ITherapist) => setMockUserDetails(u),
+		clearMockUserDetails: () => clearMockUserDetails(),
 		pictureUrl,
 		isUserDetailsLoading,
 		isUserDetailsSucces,

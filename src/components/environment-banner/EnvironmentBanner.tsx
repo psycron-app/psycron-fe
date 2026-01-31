@@ -1,25 +1,20 @@
-import { type FC, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { IconButton } from '@mui/material';
 import { Button } from '@psycron/components/button/Button';
 import { Text } from '@psycron/components/text/Text';
 import { BACKOFFICE } from '@psycron/pages/urls';
-import { ChevronDown, ChevronUp, FlaskConical } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 import {
 	Actions,
 	Banner,
 	BannerHeader,
 	Content,
-	IconWrapper,
 } from './EnvironmentBanner.styles';
+import type { EnvironmentBannerProps } from './EnvironmentBanner.types';
 
-type EnvironmentBannerProps = {
-	isVisible: boolean;
-};
-
-export const EnvironmentBanner: FC<EnvironmentBannerProps> = ({
-	isVisible,
-}) => {
+export const EnvironmentBanner = ({ isVisible }: EnvironmentBannerProps) => {
 	const navigate = useNavigate();
 	const [isExpanded, setIsExpanded] = useState(true);
 
@@ -33,34 +28,30 @@ export const EnvironmentBanner: FC<EnvironmentBannerProps> = ({
 	return (
 		<Banner role='alert' aria-live='polite'>
 			<BannerHeader>
-				<IconWrapper aria-hidden='true'>
-					<FlaskConical size={18} />
-				</IconWrapper>
-
-				<Text>{'You are in testing environment.'}</Text>
+				<Text>{'Testing environment'}</Text>
 
 				<Actions>
-					<Button secondary onClick={handleBackofficeClick} small>
+					<Button onClick={handleBackofficeClick} small>
 						{'Backoffice'}
 					</Button>
 
-					<Button
-						tertiary
-						onClick={() => setIsExpanded((prev) => !prev)}
-						small
+					<IconButton
+						onMouseDown={() => setIsExpanded((prev) => !prev)}
 						aria-expanded={isExpanded}
 						aria-controls='testing-banner-content'
 					>
 						{isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-					</Button>
+					</IconButton>
 				</Actions>
 			</BannerHeader>
 
 			{isExpanded ? (
 				<Content id='testing-banner-content'>
 					<Text variant='caption'>
-						{'All actions here are scoped to the testing mode session. ' +
-							'Use the backoffice button anytime to return.'}
+						{'All actions here are scoped to the testing mode session.'}
+					</Text>
+					<Text variant='caption'>
+						{'Use the backoffice button anytime to return.'}
 					</Text>
 				</Content>
 			) : null}

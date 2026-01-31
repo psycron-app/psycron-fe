@@ -8,7 +8,19 @@ import type {
 	IPresignProfilePictureResponse,
 } from './index.types';
 
-export const buildCdnUrl = (key: string) => {
+const isAbsoluteUrl = (value: string): boolean => {
+	try {
+		const url = new URL(value);
+		return url.protocol === 'http:' || url.protocol === 'https:';
+	} catch {
+		return false;
+	}
+};
+
+export const buildCdnUrl = (key: string | null | undefined): string | null => {
+	if (!key) return null;
+	if (isAbsoluteUrl(key)) return null; // do not rewrite external URLs
+
 	const base = ASSETS_CDN_URL.replace(/\/$/, '');
 	const withoutUsersPrefix = key.replace(/^users\//, '');
 	return `${base}/${withoutUsersPrefix}`;

@@ -3,6 +3,7 @@ import type { FieldValues, Path } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { InputAdornment, TextField } from '@mui/material';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { NotVisible, Visible } from '@psycron/components/icons';
 
 import { getPathError } from '../phone/utils/getPathError';
@@ -61,6 +62,28 @@ export const PasswordInput = <T extends FieldValues>({
 			? confirmError.message
 			: undefined;
 
+	const onSetShowPassword = (): void => {
+		setShowPassword((p) => {
+			const next = !p;
+			capture('auth password visibility toggled', {
+				field: 'password',
+				visible: next,
+			});
+			return next;
+		});
+	};
+
+	const onSetShowConfirmPassword = (): void => {
+		setShowConfirm((p) => {
+			const next = !p;
+			capture('auth password visibility toggled', {
+				field: 'confirm_password',
+				visible: next,
+			});
+			return next;
+		});
+	};
+
 	return (
 		<PasswordWrapper>
 			<TextField
@@ -81,7 +104,7 @@ export const PasswordInput = <T extends FieldValues>({
 							<InputAdornment position='end'>
 								<StyledIconButton
 									disabled={!passwordValue?.length}
-									onClick={() => setShowPassword((p) => !p)}
+									onClick={onSetShowPassword}
 									edge='end'
 									aria-label={showPassword ? 'Hide password' : 'Show password'}
 								>
@@ -112,7 +135,7 @@ export const PasswordInput = <T extends FieldValues>({
 								<InputAdornment position='end'>
 									<StyledIconButton
 										disabled={!confirmValue?.length}
-										onClick={() => setShowConfirm((p) => !p)}
+										onClick={onSetShowConfirmPassword}
 										edge='end'
 										aria-label={
 											showConfirm

@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Text } from '@psycron/components/text/Text';
 import { useRuntimeEnv } from '@psycron/context/runtime/RuntimeEnvContext';
@@ -31,6 +32,17 @@ export const SubscriptionSectionContent = ({
 
 	const { isTestingEnv } = useRuntimeEnv();
 
+	const handleManage = (): void => {
+		capture('user details subscription manage clicked', {
+			state: model.kind,
+			has_stripe_customer:
+				model.kind === 'empty' ? model.hasStripeCustomer : true,
+			status: model.kind === 'subscribed' ? model.status : null,
+			disabled: isTestingEnv,
+		});
+		onManage();
+	};
+
 	if (model.kind === 'empty') {
 		return (
 			<SubscriptionEmptyState>
@@ -62,7 +74,7 @@ export const SubscriptionSectionContent = ({
 					type='button'
 					tertiary
 					variant='outlined'
-					onClick={onManage}
+					onClick={handleManage}
 					disabled={isTestingEnv}
 				>
 					{t(
@@ -105,7 +117,7 @@ export const SubscriptionSectionContent = ({
 				type='button'
 				tertiary
 				variant='outlined'
-				onClick={onManage}
+				onClick={handleManage}
 				fullWidth
 				disabled={isTestingEnv}
 			>

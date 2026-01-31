@@ -7,6 +7,7 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import {
 	deleteUserById,
 	exportUserDataById,
@@ -51,28 +52,47 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 	const navigate = useNavigate();
 	const { user } = useAuth();
 
-	const toggleUserDetails = useCallback(() => {
-		setIsUserDetailsVisible((prev) => !prev);
+	const toggleUserDetails = useCallback((): void => {
+		setIsUserDetailsVisible((prev) => {
+			const next = !prev;
+			capture(next ? 'user details opened' : 'user details closed', {
+				view: 'overlay',
+			});
+			return next;
+		});
 	}, []);
 
-	const openDeleteDialog = useCallback(() => setIsDeleteOpen(true), []);
-	const closeDeleteDialog = useCallback(() => setIsDeleteOpen(false), []);
+	const openDeleteDialog = useCallback((): void => {
+		capture('user details delete dialog opened');
+		setIsDeleteOpen(true);
+	}, []);
 
+	const closeDeleteDialog = useCallback((): void => {
+		capture('user details delete dialog closed');
+		setIsDeleteOpen(false);
+	}, []);
 	const handleClickEditUser = useCallback(
-		(id: string) => {
+		(id: string): void => {
+			capture('user details edit user clicked', { target_user_id: id });
+
 			navigate(`${EDITUSERPATH}/${id}`);
-			if (isUserDetailsVisible === false) {
-				return;
-			}
-			return toggleUserDetails();
+
+			if (isUserDetailsVisible === false) return;
+			toggleUserDetails();
 		},
 		[isUserDetailsVisible, navigate, toggleUserDetails]
 	);
 
 	const handleClickEditSession = useCallback(
-		(userId: string, session: string) => {
+		(userId: string, session: string): void => {
+			capture('user details edit session clicked', {
+				target_user_id: userId,
+				session,
+			});
+
 			const editUserPath = `${EDITUSERPATH}/${userId}`;
 			navigate(`${editUserPath}/${session}`);
+
 			toggleUserDetails();
 		},
 		[navigate, toggleUserDetails]
@@ -164,15 +184,22 @@ export const useUserDetails = (passedUserId?: string) => {
 
 	const deleteMyAccountMutation = useMutation({
 		mutationFn: async () => {
+			capture('user details delete confirmed');
+
 			if (!sessionUserId) throw new Error(t('auth.error.not-found'));
 			if (!isOwnSettings) throw new Error(t('auth.error.not-allowed'));
 			return deleteUserById(sessionUserId);
 		},
 		onSuccess: async () => {
+			capture('user details delete succeeded');
+
 			clearAuthTokens();
 			queryClient.clear();
 			closeDeleteDialog();
 			toggleUserDetails();
+		},
+		onError: (error: Error) => {
+			capture('user details delete failed', { error_message: error.message });
 		},
 	});
 
@@ -187,7 +214,7 @@ export const useUserDetails = (passedUserId?: string) => {
 			return exportUserDataById(sessionUserId);
 		},
 		onSuccess: (blob) => {
-			// avoid crashing if session user is missing
+			capture('user details data export succeeded', { bytes: blob.size });
 			const profile = userDetails ?? sessionUser;
 			const safeFirst = profile?.firstName ?? 'User';
 			const safeLast = profile?.lastName ?? 'Psycron';
@@ -203,6 +230,11 @@ export const useUserDetails = (passedUserId?: string) => {
 
 			window.URL.revokeObjectURL(url);
 		},
+		onError: (error: Error) => {
+			capture('user details data export failed', {
+				error_message: error.message,
+			});
+		},
 	});
 
 	const downloadMyData = useCallback(() => {
@@ -211,19 +243,24 @@ export const useUserDetails = (passedUserId?: string) => {
 
 	const updateMarketingConsentMutation = useMutation<void, Error, boolean>({
 		mutationFn: async (granted: boolean): Promise<void> => {
-			if (!sessionUserId) {
-				throw new Error(t('auth.error.not-found'));
-			}
+			capture('marketing consent toggle changed', { granted });
 
-			if (!isOwnSettings) {
-				throw new Error(t('auth.error.not-allowed'));
-			}
+			if (!sessionUserId) throw new Error(t('auth.error.not-found'));
+			if (!isOwnSettings) throw new Error(t('auth.error.not-allowed'));
 
 			await updateMarketingConsentApi(sessionUserId, granted);
 		},
-		onSuccess: async () => {
+		onSuccess: async (_data, granted) => {
+			capture('marketing consent toggle saved', { granted });
+
 			await queryClient.invalidateQueries({
 				queryKey: ['userDetails', sessionUserId],
+			});
+		},
+		onError: (error: Error, granted) => {
+			capture('marketing consent toggle failed', {
+				granted,
+				error_message: error.message,
 			});
 		},
 	});

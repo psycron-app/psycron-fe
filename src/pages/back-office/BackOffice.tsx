@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Link } from '@psycron/components/link/Link';
 import { Text } from '@psycron/components/text/Text';
 import { useWorker } from '@psycron/context/worker/WorkerProvider';
@@ -14,6 +16,14 @@ import {
 
 export const Backoffice = () => {
 	const { worker } = useWorker();
+
+	useEffect((): void => {
+		if (!worker?._id) return;
+
+		capture('backoffice home viewed', {
+			worker_id_present: true,
+		});
+	}, [worker?._id]);
 
 	return (
 		<BackofficePageWrapper>

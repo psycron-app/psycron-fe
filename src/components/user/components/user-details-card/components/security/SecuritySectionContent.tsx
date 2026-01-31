@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Password } from '@psycron/components/icons';
 import { Link } from '@psycron/components/link/Link';
@@ -37,6 +38,13 @@ export const SecuritySectionContent = ({
 		initialMarketingAccepted
 	);
 
+	const handleChangePassword = (): void => {
+		capture('user details change password clicked', {
+			auth_provider: authProvider,
+		});
+		onChangePassword();
+	};
+
 	return (
 		<SecurityRowsContainer>
 			<UserDetailsRow
@@ -46,7 +54,7 @@ export const SecuritySectionContent = ({
 					authProvider === 'local' && onChangePassword ? (
 						<Button
 							type='button'
-							onClick={onChangePassword}
+							onClick={handleChangePassword}
 							small
 							variant='outlined'
 							tertiary
@@ -74,8 +82,15 @@ export const SecuritySectionContent = ({
 						small
 						checked={marketingAccepted}
 						onChange={(_, next) => {
+							capture('user details marketing consent toggled', {
+								granted: next,
+							});
+
 							setMarketingAccepted(next);
 							updateMarketingConsent(next, () => {
+								capture('user details marketing consent update failed', {
+									granted: next,
+								});
 								setMarketingAccepted(!next);
 							});
 						}}
@@ -88,8 +103,28 @@ export const SecuritySectionContent = ({
 					<Trans
 						i18nKey='components.user-details.section.security.accepted'
 						components={{
-							privacyLink: <Link to={links.privacy} />,
-							termsLink: <Link to={links.terms} />,
+							privacyLink: (
+								<Link
+									to={links.privacy}
+									onClick={() =>
+										capture('user details legal link clicked', {
+											doc: 'privacy',
+											surface: 'security section',
+										})
+									}
+								/>
+							),
+							termsLink: (
+								<Link
+									to={links.terms}
+									onClick={() =>
+										capture('user details legal link clicked', {
+											doc: 'terms',
+											surface: 'security section',
+										})
+									}
+								/>
+							),
 						}}
 					/>
 					<ConsentInfo>

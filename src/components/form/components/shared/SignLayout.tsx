@@ -1,6 +1,7 @@
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { LogoColor } from '@psycron/components/icons/brand/LogoColor';
 import { Link } from '@psycron/components/link/Link';
 import { NavigateLink } from '@psycron/components/link/navigate/NavigateLink';
@@ -26,6 +27,13 @@ export const SignLayout: FC<ISignLayout> = ({
 
 	const isTestEnv = window.location.hostname.startsWith('test.');
 
+	const onClick = (): void => {
+		capture('auth switch form clicked', {
+			from: isSignin ? 'sign in' : 'sign up',
+			to: isSignin ? 'sign up' : 'sign in',
+		});
+	};
+
 	return (
 		<SignUpWrapper>
 			<LogoWrapper>
@@ -45,7 +53,11 @@ export const SignLayout: FC<ISignLayout> = ({
 										? t('components.form.signin.dont-have-acc')
 										: t('components.form.signup.already-have-acc')}
 								</Typography>
-								<Link to={`${isSignin ? SIGNUP : SIGNIN}`} firstLetterUpper>
+								<Link
+									to={`${isSignin ? SIGNUP : SIGNIN}`}
+									firstLetterUpper
+									onClick={onClick}
+								>
 									{isSignin
 										? t('components.form.signin.signup-here-link')
 										: t('components.form.signup.signin-here-link')}

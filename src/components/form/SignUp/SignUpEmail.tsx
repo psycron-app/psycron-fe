@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
 import { ChevronLeft } from '@psycron/components/icons';
@@ -41,6 +43,16 @@ export const SignUpEmail = ({
 	const email = watch('email');
 	const password = watch('password');
 	const confirmPassword = watch('confirmPassword');
+
+	const marketingAccepted = watch('consent.marketingEmailsAccepted');
+
+	useEffect((): void => {
+		if (marketingAccepted === undefined) return;
+		capture('auth marketing consent toggled', {
+			granted: Boolean(marketingAccepted),
+			surface: 'signup email',
+		});
+	}, [marketingAccepted]);
 
 	const canSubmit =
 		Boolean(firstName?.trim()) &&

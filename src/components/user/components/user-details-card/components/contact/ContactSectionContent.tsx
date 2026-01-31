@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Phone } from '@psycron/components/icons';
 
@@ -24,6 +25,14 @@ export const ContactSectionContent = ({
 
 	const preferred = getPreferredContact(whatsapp, phone);
 
+	const handleEditContacts = (): void => {
+		capture('user details contacts edit clicked', {
+			entrypoint: preferred.kind === 'empty' ? 'empty_state' : 'row_action',
+			kind: preferred.kind,
+		});
+		onEditContacts();
+	};
+
 	if (preferred.kind === 'empty') {
 		return (
 			<ContactContainer>
@@ -35,7 +44,7 @@ export const ContactSectionContent = ({
 					<ContactEmptyTitle>
 						{t('components.user-details.section.contact.title-empty')}
 					</ContactEmptyTitle>
-					<Button type='button' onClick={onEditContacts}>
+					<Button type='button' onClick={handleEditContacts}>
 						{t('components.user-details.add-contacts', {
 							contactValue: t('globals.phone'),
 						})}
@@ -62,7 +71,7 @@ export const ContactSectionContent = ({
 							type='button'
 							tertiary
 							variant='outlined'
-							onClick={onEditContacts}
+							onClick={handleEditContacts}
 						>
 							{t('components.user-details.edit-contacts')}
 						</Button>

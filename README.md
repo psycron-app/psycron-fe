@@ -1,138 +1,141 @@
 # Psycron Frontend
 
-A modern React application for therapists to manage appointments, availability, and patient scheduling.
+Frontend application for **Psycron**, a platform designed to help independent therapists manage their practice — including authentication, scheduling, patients, billing, and settings — with a strong focus on UX, privacy, and scalability.
 
-## Tech Stack
+This repository contains the **web client** used by:
 
-- **Framework:** React 18 + TypeScript
-- **Build Tool:** Vite
-- **UI Library:** Material-UI (MUI) with Emotion
-- **State Management:** React Query + React Context
-- **Forms:** React Hook Form + Yup validation
-- **Routing:** React Router v6
-- **Internationalization:** i18next
+- Therapists (main app)
+- Internal workers (backoffice & testing environment)
 
-## Getting Started
+---
 
-### Prerequisites
+## 🧠 Tech Stack
 
-- Node.js 18+
-- npm or yarn
+- **React** (18)
+- **TypeScript**
+- **Vite**
+- **React Router**
+- **React Hook Form**
+- **TanStack Query (React Query)**
+- **Material UI (MUI)**
+- **i18next**
+- **PostHog**
 
-### Installation
+---
 
-```bash
-# Clone the repository
-git clone https://github.com/psycron-app/psycron-fe.git
-cd psycron-fe
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-### Environment Setup
-
-Copy `.env.example` to `.env` and configure:
-
-```bash
-# Required
-VITE_PSYCRON_BASE_API_URL=http://localhost:8080/api/v1
-
-# Optional (features disabled if not set)
-VITE_IP_GEO_KEY=your_key_here
-VITE_GOOGLE_MAPS_API_KEY=your_key_here
-VITE_GA_MEASUREMENT_ID=G-XXXXXXXXXX
-```
-
-> **Security Note:** Never commit `.env` files. See [SECURITY.md](./SECURITY.md) for details.
-
-### Development
-
-```bash
-# Start development server
-npm run dev
-
-# Run linting
-npm run lint
-
-# Start Storybook
-npm run storybook
-```
-
-### Production Build
-
-```bash
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
-
-## Project Structure
+## 📦 Project Structure
 
 ```
 src/
-├── api/          # API modules and axios configuration
-├── components/   # Reusable UI components
-├── context/      # React Context providers
-├── hooks/        # Custom React hooks
-├── layouts/      # Page layout components
-├── pages/        # Route page components
-├── routes/       # Router configuration
-├── theme/        # MUI theme and design tokens
-└── utils/        # Utility functions
+├─ api/
+├─ components/
+├─ context/
+├─ features/
+├─ hooks/
+├─ layouts/
+├─ pages/
+├─ theme/
+├─ utils/
+├─ i18n/
+├─ App.tsx
+└─ main.tsx
 ```
 
-## Deployment
+---
 
-### Environment Variables
+## 🔐 App Areas
 
-Set these in your deployment platform (Vercel, Netlify, etc.):
+### Therapist App
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `VITE_PSYCRON_BASE_API_URL` | Yes | Backend API URL |
-| `VITE_IP_GEO_KEY` | No | IP Geolocation API key |
-| `VITE_GOOGLE_MAPS_API_KEY` | No | Google Maps API key |
-| `VITE_GA_MEASUREMENT_ID` | No | Google Analytics ID |
+- Email/password or Google OAuth
+- User settings, patients, appointments, billing
 
-### Deployment Checklist
+### Worker / Backoffice
 
-- [ ] Set all required environment variables
-- [ ] Verify API URL uses HTTPS
-- [ ] Run `npm audit` before deployment
-- [ ] Test authentication flow
-- [ ] Verify CORS configuration with backend
+- Google OAuth only
+- Internal testing & QA tooling
 
-### Backend Integration
+---
 
-Ensure the backend is configured with:
+## 📊 Analytics (PostHog)
 
-- CORS whitelist including your frontend domain
-- HTTPS enabled
-- Proper security headers (see [SECURITY.md](./SECURITY.md))
+- Explicit event tracking only
+- No autocapture
+- Identify users after authentication
+- Reset analytics on logout
 
-## Security
+Helper used across the app:
 
-See [SECURITY.md](./SECURITY.md) for:
+```ts
+export const capture = (
+	event: string,
+	props?: Record<string, string | number | boolean | null>
+): void => {
+	posthog.capture(event, props);
+};
+```
 
-- Environment variable guidelines
-- Secure development practices
-- Deployment security checklist
-- Vulnerability reporting
+---
 
-## Contributing
+## 🌍 Internationalization
 
-1. Create a feature branch from `dev`
-2. Follow the coding standards in [CLAUDE.md](./CLAUDE.md)
-3. Run `npm run lint` before committing
-4. Submit a PR with clear description
+- i18next
+- Locale in URL: `/:locale/...`
+- EN / PT supported
 
-## License
+---
 
-Proprietary - All rights reserved.
+## 🧪 Testing Environment
+
+Testing mode allows:
+
+- Mocked user data
+- Disabled destructive actions
+- Backoffice access
+
+Controlled via runtime environment flags.
+
+---
+
+## ⚙️ Environment Variables
+
+```
+VITE_API_BASE_URL=
+VITE_PUBLIC_POSTHOG_KEY=
+VITE_PUBLIC_POSTHOG_HOST=
+VITE_ENABLE_SUBSCRIPTION_MOCK=
+```
+
+Environment validation runs at startup.  
+Production build fails if required variables are missing.
+
+---
+
+## ▶️ Running the Project
+
+```bash
+npm install
+npm run dev
+```
+
+Build:
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## 🧩 Architecture Notes
+
+- Strict TypeScript (no `any`)
+- Side effects in providers/hooks
+- Feature-driven structure
+- Clear separation between therapist app and backoffice
+
+---
+
+## 📄 License
+
+Private repository — all rights reserved.

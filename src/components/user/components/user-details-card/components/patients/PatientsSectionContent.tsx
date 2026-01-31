@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Alert, Patients } from '@psycron/components/icons';
 import { Text } from '@psycron/components/text/Text';
@@ -27,6 +28,15 @@ export const PatientsSectionContent = ({
 
 	const total = useMemo(() => patients?.length ?? 0, [patients]);
 	const hasPatients = total > 0;
+
+	const handleGoToPatients = (): void => {
+		capture('user details patients cta clicked', {
+			state: hasPatients ? 'has_patients' : 'empty',
+			total,
+			disabled: isTestingEnv,
+		});
+		onGoToPatients();
+	};
 
 	if (!hasPatients) {
 		return (
@@ -56,7 +66,7 @@ export const PatientsSectionContent = ({
 					type='button'
 					tertiary
 					variant='outlined'
-					onClick={onGoToPatients}
+					onClick={handleGoToPatients}
 					fullWidth
 					disabled={isTestingEnv}
 				>
@@ -85,7 +95,7 @@ export const PatientsSectionContent = ({
 				type='button'
 				tertiary
 				variant='outlined'
-				onClick={onGoToPatients}
+				onClick={handleGoToPatients}
 				fullWidth
 				disabled={isTestingEnv}
 			>

@@ -2,6 +2,7 @@ import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 import { Box, Divider } from '@mui/material';
+import { AppAnalytics } from '@psycron/analytics/posthog/AppAnalytics';
 import { EnvironmentBanner } from '@psycron/components/environment-banner/EnvironmentBanner';
 import {
 	Calendar,
@@ -95,10 +96,14 @@ export const AppLayout: FC = () => {
 		{ name: t('globals.logout'), icon: <Logout />, path: LOGOUT },
 	];
 
+	const distinctId =
+		isAuthenticated && userDetails?._id ? userDetails._id : null;
+
 	if (sessionStatus) return sessionStatus;
 
 	return (
 		<LayoutWrapper>
+			<AppAnalytics isAuthenticated={isAuthenticated} distinctId={distinctId} />
 			<NavBarWrapper>
 				<Box>
 					<Navbar items={menuItems} footerItems={footerItems} />

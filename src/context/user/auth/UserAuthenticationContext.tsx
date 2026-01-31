@@ -8,6 +8,7 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import {
 	getSession,
 	logoutFc,
@@ -21,6 +22,7 @@ import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.ty
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { DASHBOARD, HOMEPAGE } from '@psycron/pages/urls';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import posthog from 'posthog-js';
 
 import {
 	clearAuthTokens,
@@ -33,6 +35,22 @@ import type {
 	ITherapist,
 	IUserData,
 } from './UserAuthenticationContext.types';
+
+const toAuthErrorCode = (error: CustomError): string => {
+	const msg = String(error.message ?? '').toLowerCase();
+
+	if (msg.includes('not-found')) return 'not_found';
+	if (msg.includes('not-allowed') || msg.includes('forbidden'))
+		return 'not_allowed';
+	if (msg.includes('invalid') || msg.includes('credentials'))
+		return 'invalid_credentials';
+	if (msg.includes('verify') || msg.includes('verification'))
+		return 'email_not_verified';
+	if (msg.includes('already') || msg.includes('exists'))
+		return 'already_exists';
+	if (msg.includes('network')) return 'network';
+	return 'unknown';
+};
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -77,6 +95,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			const statusCode = (err as { statusCode: number }).statusCode;
 
 			if (statusCode === 401 || statusCode === 403) {
+				capture('auth session invalidated', {
+					status_code: statusCode,
+				});
 				clearAuthTokens();
 			}
 		}
@@ -119,9 +140,20 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 				redirectTo: redirectAfterAuth ?? DASHBOARD,
 			});
 
+			capture('auth sign in succeeded', {
+				method: 'password',
+				audience: 'therapist',
+				stay_connected: persist,
+			});
+
 			setRedirectAfterAuth(null);
 		},
 		onError: (error: CustomError) => {
+			capture('auth sign in failed', {
+				method: 'password',
+				audience: 'therapist',
+				error_code: toAuthErrorCode(error),
+			});
 			showAlert({ severity: 'error', message: t(error.message) });
 		},
 	});
@@ -137,15 +169,36 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 				persist,
 				redirectTo: DASHBOARD,
 			});
+
+			capture('auth sign up succeeded', {
+				method: 'email',
+				audience: 'therapist',
+				stay_connected: persist,
+				marketing_emails_accepted: Boolean(
+					variables.consent.marketingEmailsAccepted
+				),
+			});
 		},
 		onError: (error: CustomError) => {
+			capture('auth sign up failed', {
+				method: 'email',
+				audience: 'therapist',
+				error_code: toAuthErrorCode(error),
+			});
+
 			showAlert({ severity: 'error', message: t(error.message) });
 		},
 	});
 
 	const verifyEmailMutation = useMutation({
 		mutationFn: verifyEmail,
+		onSuccess: () => {
+			capture('auth verify email succeeded');
+		},
 		onError: (error: CustomError) => {
+			capture('auth verify email failed', {
+				error_code: toAuthErrorCode(error),
+			});
 			showAlert({ severity: 'error', message: t(error.message) });
 		},
 	});
@@ -160,11 +213,17 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const logoutMutation = useMutation({
 		mutationFn: logoutFc,
 		onSuccess: async () => {
+			capture('auth logout succeeded');
+			posthog.reset();
+
 			clearAuthTokens();
 			await queryClient.removeQueries({ queryKey: ['session'] });
 			navigate(HOMEPAGE, { replace: true });
 		},
 		onError: async () => {
+			capture('auth logout failed');
+			posthog.reset();
+
 			clearAuthTokens();
 			await queryClient.removeQueries({ queryKey: ['session'] });
 			navigate(HOMEPAGE, { replace: true });

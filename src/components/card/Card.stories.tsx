@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { CardActions } from './CardActions/CardActions';
 import type { CardActionsProps } from './CardActions/CardActions.types';

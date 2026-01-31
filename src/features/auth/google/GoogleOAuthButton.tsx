@@ -1,0 +1,60 @@
+import { useWatch } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import { Google } from '@psycron/components/icons';
+
+import {
+	StyledGoogleButton,
+	StyledStyledGoogleButtonLabel,
+} from './GoogleOAuthButton.styles';
+import type { GoogleOAuthButtonProps } from './GoogleOAuthButton.types';
+import { startGoogleOAuth } from './startGoogleOAuth';
+
+export const GoogleOAuthButton = ({
+	locale,
+	disabled,
+	intent,
+	audience,
+}: GoogleOAuthButtonProps) => {
+	const { t } = useTranslation();
+
+	const stayConnected = useWatch({ name: 'stayConnected' }) as
+		| boolean
+		| undefined;
+
+	const onClick = (): void => {
+		capture(
+			`${audience === 'worker' ? 'backoffice worker' : 'app auth'} google oauth clicked`,
+			{
+				intent,
+				audience,
+				locale,
+				stay_connected: Boolean(stayConnected),
+			}
+		);
+
+		startGoogleOAuth({
+			stayConnected: Boolean(stayConnected),
+			locale,
+			intent,
+			audience,
+		});
+	};
+
+	return (
+		<StyledGoogleButton
+			onClick={onClick}
+			disabled={disabled}
+			fullWidth
+			tertiary
+			variant='outlined'
+			size='large'
+			aria-label={t('auth.continue-google')}
+		>
+			<Google />
+			<StyledStyledGoogleButtonLabel>
+				{t('auth.continue-google')}
+			</StyledStyledGoogleButtonLabel>
+		</StyledGoogleButton>
+	);
+};

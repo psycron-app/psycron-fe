@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import ReactGA from 'react-ga4';
 import { useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { Header } from '@psycron/components/header/Header';
 import { NavigateLink } from '@psycron/components/link/navigate/NavigateLink';
 import { Text } from '@psycron/components/text/Text';
 
@@ -34,7 +33,6 @@ export const NotFound = () => {
 
 	return (
 		<Box height={'100%'}>
-			<Header hideLinks />
 			<ContentBox>
 				<ContentWrapper>
 					<ImgWrapper>

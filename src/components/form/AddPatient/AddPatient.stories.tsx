@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { AddPatientForm } from './AddPatientForm';
 import type { AddPatientProps } from './AddPatientForm.types';

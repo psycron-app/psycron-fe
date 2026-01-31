@@ -1,6 +1,27 @@
 {
+	"auth": {
+		"error": {
+			"login-failed": "Invalid email or password. Please check your credentials and try again.",
+			"registration-failed": "Unable to complete registration. Please check your information and try again.",
+			"password-reset-request": "If this email is registered, you will receive password reset instructions.",
+			"password-reset-failed": "Unable to reset password. The link may have expired. Please request a new one.",
+			"session-expired": "Your session has expired. Please sign in again.",
+			"rate-limited": "Too many attempts. Please wait a moment before trying again.",
+			"generic": "Something went wrong. Please try again later.",
+			"not-found": "User ID not found",
+			"not-allowed": "You can't delete this account."
+		},
+		"success": {
+			"password-reset-request": "If this email is registered, you will receive password reset instructions shortly.",
+			"password-reset": "Your password has been changed successfully. You can now sign in.",
+			"logout": "You have been signed out successfully."
+		},
+		"continue-google": "Continue with Google",
+		"continue-email": "Continue with email"
+	},
 	"globals": {
 		"email": "Email",
+		"name": "Name",
 		"password": "Password",
 		"phone": "Phone",
 		"whatsapp": "Whatsapp",
@@ -81,23 +102,32 @@
 			"6": "Other"
 		},
 		"cancellation-other-title": "Please specify the reason",
-		"status": "Status"
+		"status": "Status",
+		"close": "Close",
+		"read-only": "Read-only",
+		"auth-method": "Auth method",
+		"privacy-policy": "Privacy Policy",
+		"terms-of-service": "Terms of Use",
+		"privacy": "Privacy"
 	},
 	"components": {
 		"form": {
 			"confirm-password": "Confirm password",
-			"keep-loggedin": "Please keep me logged in",
+			"keep-loggedin": "Keep me logged in",
 			"not-valid": "Some fields are missing",
 			"signup": {
-				"title": "Sign up",
-				"firstName": "First name",
-				"lastName": "Last name",
+				"sign-up": "Sign up",
+				"title-email": "Create your account",
+				"title": "Create your Psycron account",
+				"first-name": "First name",
+				"last-name": "Last name",
 				"already-have-acc": "Already have an account?",
 				"signin-here-link": "Sign in here"
 			},
 			"signin": {
-				"title": "Sign in",
-				"dont-have-acc": "You dont have an account yet?",
+				"sign-in": "Sign in",
+				"title": "Welcome back",
+				"dont-have-acc": "Don't have an account?",
 				"signup-here-link": "Sign up here",
 				"forgot-password": "Forgot your password?"
 			},
@@ -127,6 +157,11 @@
 			"contacts-form": {
 				"contact-via": "Contact via {{method}}?",
 				"contact-via-same": "Is phone number the same as whatsapp?"
+			},
+			"consent": {
+				"terms": "I agree to the <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Use.</termsLink>",
+				"marketing": "I consent to receive <marketingLink>marketing communications.</marketingLink>",
+				"info": "By continuing, you agree to Psycron's <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Use.</termsLink>"
 			}
 		},
 		"input": {
@@ -143,15 +178,42 @@
 		},
 		"navbar": {
 			"dashboard": "Dashboard",
-			"user-settings": "User settings"
+			"user-settings": "User settings",
+			"test": "Tests"
 		},
 		"user-details": {
 			"edit": "Edit details",
 			"edit-contacts": "Edit contacts",
+			"edit-success": "Details updated",
+			"add-contacts": "Add your {{contactValue}} number",
 			"change": "Change {{name}}",
 			"save": "Save details",
 			"address-not-found": "Address not found. Please add your info.",
-			"detail-not-found": "{{detail}} is not registered yet"
+			"detail-not-found": "{{detail}} is not registered yet",
+			"delete": {
+				"title": "Delete account",
+				"description": "Your account will be deactivated and your personal data anonymised within 30 days. You can contact support to cancel this request.",
+				"confirmation": "Delete permanently"
+			},
+			"section": {
+				"title": {
+					"account": "Account",
+					"security": "Security & Privacy",
+					"contact": "Contact",
+					"subscription": "Subscription",
+					"patients": "Patients"
+				},
+				"local": "Email & Password",
+				"security": {
+					"google-mgmt": "Managed by Google - Your password is securely handled through Google's authentication system.",
+					"accepted": "By creating your Psycron account, you agreed to our <privacyLink>Privacy Policy</privacyLink> and <termsLink>Terms of Use.</termsLink>",
+					"accepted-info": "You can review these documents at any time.",
+					"marketing": "Receive marketing communications"
+				},
+				"contact": {
+					"title-empty": "Add your phone number to enable SMS or WhatsApp notifications."
+				}
+			}
 		},
 		"dashboard": {
 			"card": {
@@ -464,5 +526,11 @@
 			"title": "Add a New Patient",
 			"sub-title": "Fill out the form below with the patient’s details"
 		}
+	},
+	"chat": {
+		"greeting": "Hi! I’m Júpiter, your assistant to help set up your appointment schedule. Let’s build it together, step by step 🧘‍♀️! Shall we?",
+		"let-start": "What types of therapy do you offer?",
+		"system-instruction": "You are a kind assistant helping therapists build their schedule, step by step. Always respond with the next question and any information extracted so far. For example, if the question is regarding the reccurencePattern, you should explain that weekly it's until the current month, and monthly is until the current year",
+		"error": "Oops! We couldn't proceed  with your chat, please try again later"
 	}
 }

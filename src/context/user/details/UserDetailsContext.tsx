@@ -1,61 +1,102 @@
-import { createContext, useContext, useMemo, useState } from 'react';
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useMemo,
+	useState,
+} from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { getUserById } from '@psycron/api/user';
-import { getAvailabilitySession } from '@psycron/api/user/availability';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import {
+	deleteUserById,
+	exportUserDataById,
+	getUserById,
+	updateMarketingConsent as updateMarketingConsentApi,
+} from '@psycron/api/user';
+import { buildCdnUrl } from '@psycron/api/user/upload-picture';
+import { useRuntimeEnv } from '@psycron/context/runtime/RuntimeEnvContext';
 import { useSecureStorage } from '@psycron/hooks/useSecureStorage';
 import { EDITUSERPATH } from '@psycron/pages/urls';
-import { THERAPIST_ID } from '@psycron/utils/tokens';
-import { useQuery } from '@tanstack/react-query';
+import { ID_TOKEN, REFRESH_TOKEN, THERAPIST_ID } from '@psycron/utils/tokens';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useAuth } from '../auth/UserAuthenticationContext';
-import type {
-	IAvailability,
-	ITherapist,
-} from '../auth/UserAuthenticationContext.types';
+import type { ITherapist } from '../auth/UserAuthenticationContext.types';
 
 import type {
 	UserDetailsContextType,
 	UserDetailsProviderProps,
 } from './UserDetailsContext.types';
+import {
+	clearMockUserDetails,
+	getMockUserDetails,
+	setMockUserDetails,
+} from './userDetailsMockStorage';
 
 export const UserDetailsContext = createContext<
 	UserDetailsContextType | undefined
 >(undefined);
 
+const clearAuthTokens = (): void => {
+	localStorage.removeItem(ID_TOKEN);
+	localStorage.removeItem(REFRESH_TOKEN);
+	localStorage.removeItem(THERAPIST_ID);
+};
+
 export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
-	const [isUserDetailsVisible, setIsUserDetailsVisible] =
-		useState<boolean>(false);
+	const [isUserDetailsVisible, setIsUserDetailsVisible] = useState(false);
+
+	const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
 	const navigate = useNavigate();
-
 	const { user } = useAuth();
 
-	const toggleUserDetails = () => {
-		setIsUserDetailsVisible((prev) => !prev);
-	};
+	const toggleUserDetails = useCallback((): void => {
+		setIsUserDetailsVisible((prev) => {
+			const next = !prev;
+			capture(next ? 'user details opened' : 'user details closed', {
+				view: 'overlay',
+			});
+			return next;
+		});
+	}, []);
 
-	const handleClickEditUser = (id: string) => {
-		navigate(`${EDITUSERPATH}/${id}`);
-		toggleUserDetails();
-	};
+	const openDeleteDialog = useCallback((): void => {
+		capture('user details delete dialog opened');
+		setIsDeleteOpen(true);
+	}, []);
 
-	const handleClickEditSession = (userId: string, session: string) => {
-		const editUserPath = `${EDITUSERPATH}/${userId}`;
+	const closeDeleteDialog = useCallback((): void => {
+		capture('user details delete dialog closed');
+		setIsDeleteOpen(false);
+	}, []);
+	const handleClickEditUser = useCallback(
+		(id: string): void => {
+			capture('user details edit user clicked', { target_user_id: id });
 
-		const specialPaths: { [hey: string]: string } = {
-			password: `${editUserPath}/password`,
-			subscription: '/subscription-manager',
-			patients: '/patients-manager',
-		};
+			navigate(`${EDITUSERPATH}/${id}`);
 
-		if (specialPaths[session]) {
-			navigate(specialPaths[session]);
-		} else {
+			if (isUserDetailsVisible === false) return;
+			toggleUserDetails();
+		},
+		[isUserDetailsVisible, navigate, toggleUserDetails]
+	);
+
+	const handleClickEditSession = useCallback(
+		(userId: string, session: string): void => {
+			capture('user details edit session clicked', {
+				target_user_id: userId,
+				session,
+			});
+
+			const editUserPath = `${EDITUSERPATH}/${userId}`;
 			navigate(`${editUserPath}/${session}`);
-		}
 
-		toggleUserDetails();
-	};
+			toggleUserDetails();
+		},
+		[navigate, toggleUserDetails]
+	);
 
 	return (
 		<UserDetailsContext.Provider
@@ -65,6 +106,9 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 				handleClickEditUser,
 				handleClickEditSession,
 				user,
+				isDeleteOpen,
+				openDeleteDialog,
+				closeDeleteDialog,
 			}}
 		>
 			{children}
@@ -77,9 +121,23 @@ export const useUserDetails = (passedUserId?: string) => {
 	if (!context) {
 		throw new Error('useUserDetails must be used within a UserDetailsProvider');
 	}
-	const { user } = context;
 
-	const userId = passedUserId ?? user?._id;
+	const { user: sessionUser, toggleUserDetails, closeDeleteDialog } = context;
+
+	const queryClient = useQueryClient();
+	const { t } = useTranslation();
+
+	const { isTestingEnv } = useRuntimeEnv();
+
+	const mockedUserDetails = isTestingEnv ? getMockUserDetails() : null;
+	const isUsingMock = Boolean(mockedUserDetails);
+
+	const sessionUserId = sessionUser?._id;
+	const userId = passedUserId ?? sessionUserId ?? null;
+
+	const isOwnSettings =
+		Boolean(sessionUserId) &&
+		(passedUserId == null || passedUserId === sessionUserId);
 
 	const {
 		data: userDetails,
@@ -87,25 +145,31 @@ export const useUserDetails = (passedUserId?: string) => {
 		isSuccess: isUserDetailsSucces,
 	} = useQuery<ITherapist>({
 		queryKey: ['userDetails', userId],
-		queryFn: () => getUserById(userId),
-		enabled: !!userId,
+		queryFn: async () => {
+			if (!userId) throw new Error(t('auth.error.not-found'));
+			return getUserById(userId);
+		},
+		enabled: Boolean(userId) && !isUsingMock,
 		retry: false,
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 10,
 	});
 
-	const latestSessionId = userDetails?.availability?.length
-		? userDetails.availability[userDetails.availability.length - 1]
-		: null;
+	const resolvedUserDetails = mockedUserDetails ?? userDetails ?? null;
 
-	const { data: sessionData, isLoading: sessionDataIsLoading } = useQuery({
-		queryKey: ['availabilitySession', latestSessionId],
-		queryFn: async () => {
-			if (!latestSessionId) return null;
-			return getAvailabilitySession(latestSessionId as Partial<IAvailability>);
-		},
-		enabled: !!latestSessionId,
-	});
+	const pictureUrl = useMemo(() => {
+		if (!userDetails) return null;
+
+		const fromUser = buildCdnUrl(userDetails.picture);
+		if (fromUser) return fromUser;
+
+		return userDetails.google?.picture ?? null;
+	}, [userDetails]);
+
+	const latestSessionId = useMemo(() => {
+		const ids = userDetails?.availability ?? [];
+		return ids.length ? ids[ids.length - 1] : null;
+	}, [userDetails?.availability]);
 
 	const therapistIdFromStorage = useSecureStorage(
 		THERAPIST_ID,
@@ -114,18 +178,125 @@ export const useUserDetails = (passedUserId?: string) => {
 		'local'
 	);
 
-	const therapistId: string = useMemo(() => {
-		return Object.is(user, null) ? userDetails?._id : therapistIdFromStorage;
-	}, [therapistIdFromStorage, user, userDetails?._id]);
+	const therapistId = useMemo(() => {
+		return sessionUserId ?? therapistIdFromStorage ?? userDetails?._id ?? '';
+	}, [sessionUserId, therapistIdFromStorage, userDetails?._id]);
+
+	const deleteMyAccountMutation = useMutation({
+		mutationFn: async () => {
+			capture('user details delete confirmed');
+
+			if (!sessionUserId) throw new Error(t('auth.error.not-found'));
+			if (!isOwnSettings) throw new Error(t('auth.error.not-allowed'));
+			return deleteUserById(sessionUserId);
+		},
+		onSuccess: async () => {
+			capture('user details delete succeeded');
+
+			clearAuthTokens();
+			queryClient.clear();
+			closeDeleteDialog();
+			toggleUserDetails();
+		},
+		onError: (error: Error) => {
+			capture('user details delete failed', { error_message: error.message });
+		},
+	});
+
+	const deleteMyAccount = useCallback(() => {
+		deleteMyAccountMutation.mutate();
+	}, [deleteMyAccountMutation]);
+
+	const downloadMyDataMutation = useMutation({
+		mutationFn: async () => {
+			if (!sessionUserId) throw new Error(t('auth.error.not-found'));
+			if (!isOwnSettings) throw new Error(t('auth.error.not-allowed'));
+			return exportUserDataById(sessionUserId);
+		},
+		onSuccess: (blob) => {
+			capture('user details data export succeeded', { bytes: blob.size });
+			const profile = userDetails ?? sessionUser;
+			const safeFirst = profile?.firstName ?? 'User';
+			const safeLast = profile?.lastName ?? 'Psycron';
+
+			const url = window.URL.createObjectURL(blob);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `${safeFirst}-${safeLast}-Psycron-data-export.json`;
+
+			document.body.appendChild(a);
+			a.click();
+			a.remove();
+
+			window.URL.revokeObjectURL(url);
+		},
+		onError: (error: Error) => {
+			capture('user details data export failed', {
+				error_message: error.message,
+			});
+		},
+	});
+
+	const downloadMyData = useCallback(() => {
+		downloadMyDataMutation.mutate();
+	}, [downloadMyDataMutation]);
+
+	const updateMarketingConsentMutation = useMutation<void, Error, boolean>({
+		mutationFn: async (granted: boolean): Promise<void> => {
+			capture('marketing consent toggle changed', { granted });
+
+			if (!sessionUserId) throw new Error(t('auth.error.not-found'));
+			if (!isOwnSettings) throw new Error(t('auth.error.not-allowed'));
+
+			await updateMarketingConsentApi(sessionUserId, granted);
+		},
+		onSuccess: async (_data, granted) => {
+			capture('marketing consent toggle saved', { granted });
+
+			await queryClient.invalidateQueries({
+				queryKey: ['userDetails', sessionUserId],
+			});
+		},
+		onError: (error: Error, granted) => {
+			capture('marketing consent toggle failed', {
+				granted,
+				error_message: error.message,
+			});
+		},
+	});
+
+	const updateMarketingConsent = useCallback(
+		(granted: boolean, onError?: () => void) => {
+			updateMarketingConsentMutation.mutate(granted, {
+				onError,
+			});
+		},
+		[updateMarketingConsentMutation]
+	);
 
 	return {
 		...context,
-		userDetails,
-		isUserDetailsLoading: isUserDetailsLoading,
+		userDetails: resolvedUserDetails,
+		isMockedUserDetails: isUsingMock,
+		setMockUserDetails: (u: ITherapist) => setMockUserDetails(u),
+		clearMockUserDetails: () => clearMockUserDetails(),
+		pictureUrl,
+		isUserDetailsLoading,
 		isUserDetailsSucces,
 		therapistId,
-		sessionData,
-		sessionDataIsLoading,
 		latestSessionId,
+		isOwnSettings,
+
+		deleteMyAccount,
+		isDeletePending: deleteMyAccountMutation.isPending,
+		deleteError: deleteMyAccountMutation.error,
+
+		downloadMyData,
+		isDownloadPending: downloadMyDataMutation.isPending,
+		downloadError: downloadMyDataMutation.error,
+
+		updateMarketingConsent,
+		isUpdatingMarketingConsent: updateMarketingConsentMutation.isPending,
+		marketingConsentError: updateMarketingConsentMutation.error,
 	};
 };

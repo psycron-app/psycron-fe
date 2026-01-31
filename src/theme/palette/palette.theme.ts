@@ -34,20 +34,20 @@ export const palette: Palette = {
 		},
 	},
 	tertiary: {
-		main: '#E4C1F9',
-		light: '#F6E7FF',
-		dark: '#733499',
-		access: '#23112E',
+		main: '#BFA7FF',
+		light: '#EFEAFF',
+		dark: '#4A2DB8',
+		access: '#1B1233',
 		action: {
-			hover: '#C0A2D1',
-			press: '#D9AAF5',
-			disabled: 'rgba(198, 185, 206, 0.75)',
+			hover: '#AB8FFF',
+			press: '#9A7BFF',
+			disabled: 'rgba(182, 171, 206, 0.75)',
 		},
 		surface: {
-			hover: '#DAC1FF',
-			press: '#ECDDFF',
-			light: '#FCFAFF',
-			disabled: 'rgba(236, 221, 255, 0.25)',
+			hover: '#DED4FF',
+			press: '#F0EBFF',
+			light: '#FCFBFF',
+			disabled: 'rgba(240, 235, 255, 0.32)',
 		},
 	},
 	text: {
@@ -56,37 +56,37 @@ export const palette: Palette = {
 		disabled: 'rgba(6, 11, 14, 0.4)',
 	},
 	success: {
-		main: '#0AFF99',
-		light: '#D3FFEC',
-		dark: '#004F13',
-		access: '#012209',
+		main: '#00C777',
+		light: '#DFFFEF',
+		dark: '#007A4A',
+		access: '#052317',
 		action: {
-			hover: '#7EE4BA',
-			press: '#C6F4E1',
-			disabled: '#E0F8EE',
+			hover: '#00B96F',
+			press: '#009D60',
+			disabled: 'rgba(0, 199, 119, 0.35)',
 		},
 		surface: {
-			hover: '#BFEFCF',
-			press: 'rgba(149, 193, 175)',
-			light: 'rgba(146, 255, 209)',
-			disabled: 'rgba(135, 173, 148)',
+			hover: 'rgba(0, 199, 119, 0.12)',
+			press: 'rgba(0, 199, 119, 0.18)',
+			light: 'rgba(0, 199, 119, 0.08)',
+			disabled: 'rgba(0, 199, 119, 0.05)',
 		},
 	},
 	info: {
-		main: '#9C79FD',
-		light: 'rgba(197, 167, 255, 0.4)',
-		dark: '#433087',
+		main: '#4F73FF',
+		light: 'rgba(142, 174, 255, 0.30)',
+		dark: '#2140B8',
 		access: '#FCFAFF',
 		action: {
-			hover: '#8D79C3',
-			press: '#DFD0F7',
-			disabled: 'rgba(192, 182, 219, 0.62)',
+			hover: '#3F63E8',
+			press: '#D3DDFF',
+			disabled: 'rgba(176, 192, 232, 0.62)',
 		},
 		surface: {
-			hover: '#E3DDF3',
-			press: '#ECDDFF',
-			light: '#F4F1FD',
-			disabled: '#C2B6D0',
+			hover: '#E3E9FF',
+			press: '#EFF3FF',
+			light: '#F6F8FF',
+			disabled: '#C2CDEA',
 		},
 	},
 	alert: {
@@ -124,7 +124,7 @@ export const palette: Palette = {
 		},
 	},
 	background: {
-		default: '#F7FAFA',
+		default: '#f7fafa',
 		paper: '#F1F7FB',
 	},
 	black: '#060B0E',
@@ -141,4 +141,30 @@ export const palette: Palette = {
 		'09': '#484C4E',
 		dark: '#363A3B',
 	},
+	brand: {
+		purple: '#683fff',
+		light: '#f0ebff',
+		dark: '#4a2db8',
+	},
+};
+
+export const hexToRgba = (hex: string, alpha: number): string => {
+	const normalized = hex.replace('#', '');
+	const full =
+		normalized.length === 3
+			? normalized
+					.split('')
+					.map((c) => c + c)
+					.join('')
+			: normalized;
+
+	if (full.length !== 6) {
+		throw new Error('Invalid hex color');
+	}
+
+	const r = Number.parseInt(full.slice(0, 2), 16);
+	const g = Number.parseInt(full.slice(2, 4), 16);
+	const b = Number.parseInt(full.slice(4, 6), 16);
+
+	return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };

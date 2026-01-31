@@ -1,5 +1,5 @@
 import { DashboardIcon } from '@psycron/components/icons';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { MenuItem } from './MenuItem';
 import type { IMenuItem } from './MenuItem.types';

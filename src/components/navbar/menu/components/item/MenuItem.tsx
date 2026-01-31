@@ -1,6 +1,13 @@
-import { Box, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Text } from '@psycron/components/text/Text';
+import { useCanHover } from '@psycron/hooks/userCanHover';
 
-import { MobileMenuItem, StyledMenuItem } from './MenuItem.styles';
+import {
+	MenuIconWrap,
+	MobileMenuIconWrapper,
+	MobileMenuItem,
+	StyledMenuItem,
+} from './MenuItem.styles';
 import type { IMenuItem } from './MenuItem.types';
 
 export const MenuItem = ({
@@ -9,28 +16,46 @@ export const MenuItem = ({
 	isFooterIcon,
 	isFullList,
 	disabled,
-	open,
+	hoverIcon,
 }: IMenuItem) => {
+	const canHover = useCanHover();
+	const [isHovered, setIsHovered] = useState(false);
+
+	const shouldSwap = !isFullList && canHover && Boolean(hoverIcon);
+
+	const renderedIcon = shouldSwap && isHovered && hoverIcon ? hoverIcon : icon;
+
 	return (
 		<>
 			{isFullList ? (
-				<MobileMenuItem p={isFooterIcon ? 1 : 4} disabled={disabled}>
-					<Box>{icon}</Box>
-					<Box px={isFooterIcon ? 1 : 3}>
-						<Typography variant='subtitle1' textTransform='capitalize'>
-							{name}
-						</Typography>
-					</Box>
+				<MobileMenuItem disabled={disabled}>
+					<MobileMenuIconWrapper>{icon}</MobileMenuIconWrapper>
+					<Text textTransform='capitalize'>{name}</Text>
 				</MobileMenuItem>
 			) : (
 				<StyledMenuItem
 					title={name}
 					placement='right'
 					disabled={disabled}
-					isFooterIcon={isFooterIcon}
-					open={open}
+					$disabled={disabled}
+					$isFooterIcon={isFooterIcon}
 				>
-					{icon}
+					<MenuIconWrap
+						onMouseEnter={() => {
+							if (shouldSwap) setIsHovered(true);
+						}}
+						onMouseLeave={() => {
+							if (shouldSwap) setIsHovered(false);
+						}}
+						onFocus={() => {
+							if (shouldSwap) setIsHovered(true);
+						}}
+						onBlur={() => {
+							if (shouldSwap) setIsHovered(false);
+						}}
+					>
+						{renderedIcon}
+					</MenuIconWrap>
 				</StyledMenuItem>
 			)}
 		</>

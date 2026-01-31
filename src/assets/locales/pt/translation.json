@@ -1,6 +1,25 @@
 {
+	"auth": {
+		"error": {
+			"login-failed": "Email ou senha inválidos. Por favor, verifique suas credenciais e tente novamente.",
+			"registration-failed": "Não foi possível completar o cadastro. Por favor, verifique suas informações e tente novamente.",
+			"password-reset-request": "Se este email estiver cadastrado, você receberá instruções para redefinir sua senha.",
+			"password-reset-failed": "Não foi possível redefinir a senha. O link pode ter expirado. Por favor, solicite um novo.",
+			"session-expired": "Sua sessão expirou. Por favor, faça login novamente.",
+			"rate-limited": "Muitas tentativas. Por favor, aguarde um momento antes de tentar novamente.",
+			"generic": "Algo deu errado. Por favor, tente novamente mais tarde."
+		},
+		"success": {
+			"password-reset-request": "Se este email estiver cadastrado, você receberá instruções para redefinir sua senha em breve.",
+			"password-reset": "Sua senha foi alterada com sucesso. Você já pode fazer login.",
+			"logout": "Você saiu com sucesso."
+		},
+		"continue-google": "Continuar com Google",
+		"continue-email": "Continue com seu e-mail"
+	},
 	"globals": {
-		"email": "E-mail",
+		"email": "Email",
+		"name": "Nome",
 		"password": "Senha",
 		"phone": "Telefone",
 		"whatsapp": "Whatsapp",
@@ -82,22 +101,31 @@
 			"7": "Outro"
 		},
 		"cancellation-other-title": "Por favor especifique o motivo",
-		"status": "Disponibilidade"
+		"status": "Disponibilidade",
+		"close": "Fechar",
+		"read-only": "Apenas leitura",
+		"auth-method": "Método de autenticação",
+		"privacy-policy": "Política de Privacidade",
+		"terms-of-service": "Termos de Uso",
+		"privacy": "Privacidade"
 	},
 	"components": {
 		"form": {
 			"confirm-password": "Confirmar senha",
-			"keep-loggedin": "Por favor, mantenha-me conectado",
+			"keep-loggedin": "Mantenha-me online",
 			"not-valid": "Alguns campos estão faltando",
 			"signup": {
-				"title": "Cadastre-se",
+				"sign-up": "Cadastra-se",
+				"title-email": "Crie sua conta ",
+				"title": "Crie a sua conta Psycron",
 				"firstName": "Nome",
 				"lastName": "Sobrenome",
 				"already-have-acc": "Você já tem uma conta?",
 				"signin-here-link": "Clique aqui para entrar"
 			},
 			"signin": {
-				"title": "Entrar",
+				"sign-in": "Entrar",
+				"title": "Olá de volta!",
 				"dont-have-acc": "Você ainda não tem uma conta?",
 				"signup-here-link": "Cadastre-se aqui",
 				"forgot-password": "Esqueceu a sua senha?"
@@ -128,6 +156,11 @@
 			"contacts-form": {
 				"contact-via": "Entrar em contato via {{method}}?",
 				"contact-via-same": "O número é o mesmo para o Whatsapp?"
+			},
+			"consent": {
+				"terms": "Eu concordo com a <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Uso</termsLink>",
+				"marketing": "Eu concordo em receber <marketingLink>comunicações de marketing.</marketingLink>",
+				"info": "Ao continuar, você automaticamente aceita as <privacyLink>Política de Privacidade</privacyLink> e os <termsLink>Termos de Uso</termsLink> da Psycron."
 			}
 		},
 		"input": {
@@ -144,15 +177,42 @@
 		},
 		"navbar": {
 			"dashboard": "Painel",
-			"user-settings": "Configurações"
+			"user-settings": "Configurações",
+			"test": "Testes"
 		},
 		"user-details": {
 			"edit": "Editar detalhes",
 			"edit-contacts": "Editar contatos",
+			"edit-success": "Dados atualizados",
+			"add-contacts": "Adicione seu {{contactValue}}",
 			"change": "Alterar {{name}}",
 			"save": "Salvar",
 			"address-not-found": "Nenhum endereço cadastrado. Adicione suas informações.",
-			"detail-not-found": "{{detail}} não cadastrado ainda"
+			"detail-not-found": "{{detail}} não cadastrado ainda",
+			"delete": {
+				"title": "Excluir conta",
+				"description": "Sua conta será desativada e seus dados ficarão anônimos dentro de 30 dias. Você pode entrar em contato com nosso suporte técnico para mais detalhes.",
+				"confirmation": "Excluir"
+			},
+			"section": {
+				"title": {
+					"account": "Conta",
+					"security": "Segurança & Privacidade",
+					"contact": "Contatos",
+					"subscription": "Assinatura",
+					"patients": "Pacientes"
+				},
+				"local": "Email e Senha",
+				"security": {
+					"google-mgmt": "Gerenciada por Google - A sua senha é seguramente guardada através do sistema de autênticação da Google e nós não tem acesso.",
+					"accepted": "Ao criar sua conta na Psycron, você concordou com nossos <privacyLink>Política de Privacidade</privacyLink> e <termsLink>Termos de Uso</termsLink>.",
+					"accepted-info": "Você pode revisar esses documentos a qualquer momento.",
+					"marketing": "Receber comunicações de marketing e news"
+				},
+				"contact": {
+					"title-empty": "Adicione seu número para receber notificações em SMS ou WhatsApp."
+				}
+			}
 		},
 		"dashboard": {
 			"card": {
@@ -465,5 +525,11 @@
 			"title": "Adicione um Novo Paciente",
 			"sub-title": "Preencha o formulário abaixo com os detalhes da pessoa"
 		}
+	},
+	"chat": {
+		"greeting": "Olá! Eu sou a Júpiter, sua assistente para configurar sua agenda de atendimentos. Vamos construir isso juntos, passo a passo 🧘‍♀️! Vamos?",
+		"let-start": "Quais tipos de terapia você oferece?",
+		"system-instruction": "Você é uma assistente gentil que ajuda terapeutas a montar sua agenda passo a passo. Sempre responda com a próxima pergunta e os dados extraídos até o momento. Por exemplo, se a pergunta for sobre reccurencePattern, você deve explicar que weekly significa até o fim do mês e monthly até o fim do ano",
+		"error": "Oops! Não foi possível continuar a conversa. Tente novamente."
 	}
 }

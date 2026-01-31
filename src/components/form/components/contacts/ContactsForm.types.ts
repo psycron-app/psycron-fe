@@ -1,8 +1,18 @@
+import type { FieldValues, Path } from 'react-hook-form';
+import type { TextFieldProps } from '@mui/material';
 import type { IContactInfo } from '@psycron/context/user/auth/UserAuthenticationContext.types';
 
-export interface ContactsFormProps {
+export type ContactsFormFields<T extends FieldValues> = {
+	email?: Path<T>;
+	hasWhatsApp?: Path<T>;
+	isPhoneWpp?: Path<T>;
+	phone?: Path<T>;
+	whatsapp?: Path<T>;
+};
+
+export type ContactsFormProps<T extends FieldValues> = {
 	defaultValues?: IContactInfo;
 	disabled?: boolean;
-	hasWpp?: boolean;
-	required: boolean;
-}
+	fields?: ContactsFormFields<T>;
+	required?: boolean;
+} & Omit<TextFieldProps, 'defaultValue' | 'required' | 'disabled'>;

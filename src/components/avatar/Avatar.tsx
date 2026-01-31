@@ -1,6 +1,4 @@
 import { Avatar as MUIAvatar } from '@mui/material';
-import useViewport from '@psycron/hooks/useViewport';
-import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import type { IAvatarProps } from './Avatar.types';
 
@@ -11,9 +9,7 @@ export const Avatar = ({
 	src,
 	...props
 }: IAvatarProps) => {
-	const { isMobile } = useViewport();
-
-	const largeSize = large ? 100 : 45;
+	const largeSize = large ? 100 : 70;
 
 	const stringToColor = (string: string) => {
 		let hash = 0;
@@ -38,9 +34,6 @@ export const Avatar = ({
 				bgcolor: stringToColor(name),
 				width: largeSize,
 				height: largeSize,
-				margin: !isMobile
-					? `0 ${largeSize ? spacing.small : spacing.space}`
-					: `0 ${largeSize ? spacing.space : spacing.xs}`,
 			},
 			children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
 		};

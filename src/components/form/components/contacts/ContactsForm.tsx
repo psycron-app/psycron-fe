@@ -1,105 +1,153 @@
-import { useEffect, useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import type { FieldValues, Path } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import type { TextFieldProps } from '@mui/material';
-import { Box, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { Switch } from '@psycron/components/switch/components/item/Switch';
 import useViewport from '@psycron/hooks/useViewport';
-import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import { PhoneInputComponent } from '../phone/PhoneInput';
 
 import {
-	EmailInputWrapper,
+	ContactsFormSwitchWrapper,
+	ContactsFormWhatsAppWrapper,
+	ContactsFormWrapper,
 	EmailPhoneWrapper,
-	PhoneWrapper,
-	WhatsappWrapper,
+	InputWrapper,
 } from './ContactsForm.styles';
 import type { ContactsFormProps } from './ContactsForm.types';
 
-export const ContactsForm = ({
+export const ContactsForm = <T extends FieldValues>({
 	defaultValues,
 	disabled,
-	required,
-}: ContactsFormProps & TextFieldProps) => {
+	required = false,
+	fields,
+	...textFieldProps
+}: ContactsFormProps<T>) => {
 	const { t } = useTranslation();
 	const { isSmallerThanTablet } = useViewport();
 
-	const {
-		register,
-		setValue,
-		formState: { errors },
-	} = useFormContext();
+	const { register, getFieldState, control, setValue } = useFormContext<T>();
 
-	const [hasWhatsApp, setHasWhatsApp] = useState<boolean>(false);
-	const [isPhoneWpp, setIsPhoneWpp] = useState<boolean>(false);
+	const emailPath = (fields?.email ?? ('contacts.email' as Path<T>)) as Path<T>;
+	const phonePath = (fields?.phone ?? ('contacts.phone' as Path<T>)) as Path<T>;
+	const whatsappPath = (fields?.whatsapp ??
+		('contacts.whatsapp' as Path<T>)) as Path<T>;
 
-	useEffect(() => {
-		setValue('hasWhatsApp', hasWhatsApp);
-	}, [hasWhatsApp, setValue]);
+	const hasWhatsAppPath = (fields?.hasWhatsApp ??
+		('contacts.hasWhatsApp' as Path<T>)) as Path<T>;
+	const isPhoneWppPath = (fields?.isPhoneWpp ??
+		('contacts.isPhoneWpp' as Path<T>)) as Path<T>;
 
-	useEffect(() => {
-		setValue('isPhoneWpp', isPhoneWpp);
-	}, [isPhoneWpp, setValue]);
+	const hasWhatsApp = Boolean(useWatch({ control, name: hasWhatsAppPath }));
+	const isPhoneWpp = Boolean(useWatch({ control, name: isPhoneWppPath }));
+
+	const emailState = getFieldState(emailPath);
+	const emailError =
+		typeof emailState.error?.message === 'string'
+			? emailState.error.message
+			: undefined;
 
 	return (
-		<Box display='flex' flexDirection='column' width='100%'>
+		<ContactsFormWrapper>
 			<EmailPhoneWrapper>
-				<PhoneWrapper>
-					<PhoneInputComponent registerName='phone' required />
-				</PhoneWrapper>
-				<EmailInputWrapper>
-					<TextField
-						label={t('globals.email')}
-						fullWidth
-						id='email'
-						defaultValue={defaultValues?.email}
-						placeholder={
-							!defaultValues?.email && t('components.input.text.email')
-						}
-						{...register('email')}
-						autoComplete='email'
-						error={!!errors?.email}
-						helperText={errors?.email?.message as string}
+				<TextField
+					{...textFieldProps}
+					label={t('globals.email')}
+					fullWidth
+					id={String(emailPath)}
+					defaultValue={defaultValues?.email ?? ''}
+					placeholder={
+						!defaultValues?.email ? t('components.input.text.email') : undefined
+					}
+					{...register(emailPath)}
+					autoComplete='email'
+					error={Boolean(emailState.error)}
+					helperText={emailError}
+					required={required}
+					disabled={disabled}
+				/>
+
+				<InputWrapper>
+					<PhoneInputComponent<T>
+						name={phonePath}
 						required={required}
 						disabled={disabled}
+						defaultValue={defaultValues?.phone ?? ''}
+						labelKey='globals.phone'
 					/>
-				</EmailInputWrapper>
+				</InputWrapper>
 			</EmailPhoneWrapper>
-			<Box>
-				<Box display='flex' pl={spacing.small}>
-					<Switch
-						small={isSmallerThanTablet}
-						onChange={() => setHasWhatsApp((prev) => !prev)}
-						value={!hasWhatsApp}
-						defaultChecked={hasWhatsApp}
-						label={t('components.form.contacts-form.contact-via', {
-							method: 'Whatsapp',
-						})}
-						disabled={disabled}
-					/>
-				</Box>
-				{hasWhatsApp ? (
-					<Box display='flex' pl={spacing.small}>
-						<Switch
-							small={isSmallerThanTablet}
-							onChange={() => setIsPhoneWpp((prev) => !prev)}
-							value={isPhoneWpp}
-							defaultChecked={isPhoneWpp}
-							label={t('components.form.contacts-form.contact-via-same')}
-						/>
-					</Box>
-				) : null}
-				<input type='hidden' {...register('isPhoneWpp')} />
-				{hasWhatsApp && !isPhoneWpp && (
-					<WhatsappWrapper>
-						<PhoneInputComponent
-							registerName='whatsapp'
+			<ContactsFormSwitchWrapper>
+				<Switch
+					small={isSmallerThanTablet}
+					checked={hasWhatsApp}
+					onChange={(_, next) => {
+						if (disabled) return;
+
+						setValue(hasWhatsAppPath, next as never, {
+							shouldDirty: true,
+							shouldTouch: true,
+						});
+
+						// If user turned WhatsApp off, reset dependent state
+						if (!next) {
+							setValue(isPhoneWppPath, false as never, {
+								shouldDirty: true,
+								shouldTouch: true,
+							});
+							setValue(whatsappPath, '' as never, {
+								shouldDirty: true,
+								shouldTouch: true,
+							});
+						}
+					}}
+					label={t('components.form.contacts-form.contact-via', {
+						method: 'Whatsapp',
+					})}
+					disabled={disabled}
+				/>
+			</ContactsFormSwitchWrapper>
+
+			{hasWhatsApp ? (
+				<Switch
+					small={isSmallerThanTablet}
+					checked={isPhoneWpp}
+					onChange={(_, next) => {
+						if (disabled) return;
+
+						setValue(isPhoneWppPath, next as never, {
+							shouldDirty: true,
+							shouldTouch: true,
+						});
+
+						if (next) {
+							setValue(whatsappPath, '' as never, {
+								shouldDirty: true,
+								shouldTouch: true,
+							});
+						}
+					}}
+					label={t('components.form.contacts-form.contact-via-same')}
+					disabled={disabled}
+				/>
+			) : null}
+
+			<input type='hidden' {...register(hasWhatsAppPath)} />
+			<input type='hidden' {...register(isPhoneWppPath)} />
+
+			<ContactsFormWhatsAppWrapper>
+				{hasWhatsApp && !isPhoneWpp ? (
+					<InputWrapper>
+						<PhoneInputComponent<T>
+							name={whatsappPath}
 							required={hasWhatsApp && !isPhoneWpp}
+							disabled={disabled}
+							defaultValue={defaultValues?.whatsapp ?? ''}
+							labelKey='globals.whatsapp'
 						/>
-					</WhatsappWrapper>
-				)}
-			</Box>
-		</Box>
+					</InputWrapper>
+				) : null}
+			</ContactsFormWhatsAppWrapper>
+		</ContactsFormWrapper>
 	);
 };

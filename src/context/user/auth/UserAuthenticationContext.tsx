@@ -1,16 +1,34 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getSession, logoutFc, signInFc, signUpFc } from '@psycron/api/auth';
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
+import { useTranslation } from 'react-i18next';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import {
+	getSession,
+	logoutFc,
+	signInFc,
+	signUpFc,
+	verifyEmail,
+} from '@psycron/api/auth';
 import type { CustomError } from '@psycron/api/error';
 import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
-import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
+import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.types';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { DASHBOARD, HOMEPAGE } from '@psycron/pages/urls';
-import { ID_TOKEN, REFRESH_TOKEN } from '@psycron/utils/tokens';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import type { JwtPayload } from 'jwt-decode';
-import { jwtDecode } from 'jwt-decode';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import posthog from 'posthog-js';
 
+import {
+	clearAuthTokens,
+	getAccessToken,
+	setTokens,
+} from './utils/tokenStorage';
 import type {
 	AuthContextType,
 	AuthProviderProps,
@@ -18,133 +36,257 @@ import type {
 	IUserData,
 } from './UserAuthenticationContext.types';
 
+const toAuthErrorCode = (error: CustomError): string => {
+	const msg = String(error.message ?? '').toLowerCase();
+
+	if (msg.includes('not-found')) return 'not_found';
+	if (msg.includes('not-allowed') || msg.includes('forbidden'))
+		return 'not_allowed';
+	if (msg.includes('invalid') || msg.includes('credentials'))
+		return 'invalid_credentials';
+	if (msg.includes('verify') || msg.includes('verification'))
+		return 'email_not_verified';
+	if (msg.includes('already') || msg.includes('exists'))
+		return 'already_exists';
+	if (msg.includes('network')) return 'network';
+	return 'unknown';
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: AuthProviderProps) => {
-	const navigate = useNavigate();
+type LocationState = { from?: { pathname?: string } };
 
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+	const { t } = useTranslation();
+	const navigate = useNavigate();
+	const location = useLocation();
+	const queryClient = useQueryClient();
 	const { showAlert } = useAlert();
 
-	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+	const [redirectAfterAuth, setRedirectAfterAuth] = useState<string | null>(
+		null
+	);
 
-	const [user, setUser] = useState<ITherapist | null>(null);
-
-	const isTokenValid = (token: string | null): boolean => {
-		if (!token) return false;
-
-		try {
-			const decoded = jwtDecode<JwtPayload>(token);
-			if (!decoded.exp) return false;
-
-			return decoded.exp * 1000 > Date.now();
-		} catch {
-			return false;
-		}
-	};
-
-	const authToken = localStorage.getItem(ID_TOKEN);
-	const isTokenStillValid = isTokenValid(authToken);
+	const accessToken = getAccessToken();
+	const hasAccessToken = Boolean(accessToken);
 
 	const {
 		data: sessionData,
 		isLoading: isSessionLoading,
 		isSuccess: isSessionSuccess,
+		isError: isSessionError,
+		error: sessionError,
 	} = useQuery<IUserData>({
 		queryKey: ['session'],
 		queryFn: getSession,
-		enabled: isTokenStillValid,
+		enabled: hasAccessToken,
 		retry: false,
 	});
 
-	useEffect(() => {
-		if (!authToken || !isTokenValid(authToken)) {
-			setIsAuthenticated(false);
-			setUser(null);
-			return;
-		}
+	const isAuthenticated = Boolean(sessionData?.isAuthenticated);
+	const user: ITherapist | null = sessionData?.user ?? null;
 
-		if (sessionData?.isAuthenticated) {
-			setIsAuthenticated(true);
-			setUser(sessionData.user);
+	useEffect(() => {
+		if (!hasAccessToken || !isSessionError) return;
+
+		const err = sessionError as unknown;
+
+		if (err && typeof err === 'object' && 'statusCode' in err) {
+			const statusCode = (err as { statusCode: number }).statusCode;
+
+			if (statusCode === 401 || statusCode === 403) {
+				capture('auth session invalidated', {
+					status_code: statusCode,
+				});
+				clearAuthTokens();
+			}
 		}
-	}, [authToken, sessionData]);
+	}, [hasAccessToken, isSessionError, sessionError]);
+
+	const handleAuthSuccess = useCallback(
+		async (args: {
+			accessToken: string;
+			persist: boolean;
+			redirectTo?: string;
+			refreshToken: string;
+		}) => {
+			if (!args.accessToken || !args.refreshToken) {
+				clearAuthTokens();
+				throw new Error('Missing auth tokens');
+			}
+
+			setTokens({
+				accessToken: args.accessToken,
+				refreshToken: args.refreshToken,
+				persist: args.persist,
+			});
+
+			await queryClient.invalidateQueries({ queryKey: ['session'] });
+
+			navigate(args.redirectTo ?? DASHBOARD, { replace: true });
+		},
+		[navigate, queryClient]
+	);
 
 	const signInMutation = useMutation({
 		mutationFn: signInFc,
-		onSuccess: (res) => {
-			if (res.token) {
-				localStorage.setItem(ID_TOKEN, res.token);
-			}
-			if (res.refreshToken) {
-				localStorage.setItem(REFRESH_TOKEN, res.refreshToken);
-			}
-			setIsAuthenticated(true);
-			navigate(DASHBOARD);
+		onSuccess: async (res, variables: ISignInForm) => {
+			const persist = Boolean(variables.stayConnected);
+
+			await handleAuthSuccess({
+				accessToken: res.token,
+				refreshToken: res.refreshToken,
+				persist,
+				redirectTo: redirectAfterAuth ?? DASHBOARD,
+			});
+
+			capture('auth sign in succeeded', {
+				method: 'password',
+				audience: 'therapist',
+				stay_connected: persist,
+			});
+
+			setRedirectAfterAuth(null);
 		},
 		onError: (error: CustomError) => {
-			showAlert({
-				severity: 'error',
-				message: error.message,
+			capture('auth sign in failed', {
+				method: 'password',
+				audience: 'therapist',
+				error_code: toAuthErrorCode(error),
 			});
+			showAlert({ severity: 'error', message: t(error.message) });
 		},
 	});
 
 	const signUpMutation = useMutation({
 		mutationFn: signUpFc,
-		onSuccess: (res) => {
-			if (res.token) {
-				localStorage.setItem(ID_TOKEN, res.token);
-			}
-			if (res.refreshToken) {
-				localStorage.setItem(REFRESH_TOKEN, res.refreshToken);
-			}
-			setIsAuthenticated(true);
-			navigate(DASHBOARD);
-		},
-		onError: (error: CustomError) => {
-			showAlert({
-				severity: 'error',
-				message: error.message,
+		onSuccess: async (res, variables: ISignUpForm) => {
+			const persist = Boolean(variables.stayConnected);
+
+			await handleAuthSuccess({
+				accessToken: res.token,
+				refreshToken: res.refreshToken,
+				persist,
+				redirectTo: DASHBOARD,
+			});
+
+			capture('auth sign up succeeded', {
+				method: 'email',
+				audience: 'therapist',
+				stay_connected: persist,
+				marketing_emails_accepted: Boolean(
+					variables.consent.marketingEmailsAccepted
+				),
 			});
 		},
+		onError: (error: CustomError) => {
+			capture('auth sign up failed', {
+				method: 'email',
+				audience: 'therapist',
+				error_code: toAuthErrorCode(error),
+			});
+
+			showAlert({ severity: 'error', message: t(error.message) });
+		},
 	});
+
+	const verifyEmailMutation = useMutation({
+		mutationFn: verifyEmail,
+		onSuccess: () => {
+			capture('auth verify email succeeded');
+		},
+		onError: (error: CustomError) => {
+			capture('auth verify email failed', {
+				error_code: toAuthErrorCode(error),
+			});
+			showAlert({ severity: 'error', message: t(error.message) });
+		},
+	});
+
+	const verifyEmailToken = useCallback(
+		async (token: string) => {
+			return verifyEmailMutation.mutateAsync(token);
+		},
+		[verifyEmailMutation]
+	);
 
 	const logoutMutation = useMutation({
 		mutationFn: logoutFc,
-		onSuccess: () => {
-			setIsAuthenticated(false);
-			setUser(null);
-			navigate(HOMEPAGE);
+		onSuccess: async () => {
+			capture('auth logout succeeded');
+			posthog.reset();
+
+			clearAuthTokens();
+			await queryClient.removeQueries({ queryKey: ['session'] });
+			navigate(HOMEPAGE, { replace: true });
+		},
+		onError: async () => {
+			capture('auth logout failed');
+			posthog.reset();
+
+			clearAuthTokens();
+			await queryClient.removeQueries({ queryKey: ['session'] });
+			navigate(HOMEPAGE, { replace: true });
 		},
 	});
 
-	const signIn = (data: ISignInForm) => signInMutation.mutate(data);
-	const signUp = (data: ISignUpForm) => signUpMutation.mutate(data);
-	const logout = () => logoutMutation.mutate();
+	const signIn = useCallback(
+		(data: ISignInForm) => {
+			const state = location.state as LocationState | null;
+			const from = state?.from?.pathname;
 
-	return (
-		<AuthContext.Provider
-			value={{
-				signIn,
-				signUp,
-				logout,
-				isAuthenticated,
-				isSessionLoading,
-				isSessionSuccess,
-				user,
-				isSignInMutationLoading: signInMutation.isPending,
-				isSignUpMutationLoading: signUpMutation.isPending,
-			}}
-		>
-			{children}
-		</AuthContext.Provider>
+			setRedirectAfterAuth(from ?? DASHBOARD);
+
+			signInMutation.mutate(data);
+		},
+		[location.state, signInMutation]
 	);
+
+	const signUp = useCallback(
+		(data: ISignUpForm) => {
+			signUpMutation.mutate(data);
+		},
+		[signUpMutation]
+	);
+
+	const logout = useCallback(() => {
+		logoutMutation.mutate();
+	}, [logoutMutation]);
+
+	const value = useMemo<AuthContextType>(
+		() => ({
+			signIn,
+			signUp,
+			logout,
+			isAuthenticated,
+			isSessionLoading,
+			isSessionSuccess,
+			user,
+			isSignInMutationLoading: signInMutation.isPending,
+			isSignUpMutationLoading: signUpMutation.isPending,
+			verifyEmailToken,
+			isVerifyEmailLoading: verifyEmailMutation.isPending,
+		}),
+		[
+			signIn,
+			signUp,
+			logout,
+			isAuthenticated,
+			isSessionLoading,
+			isSessionSuccess,
+			user,
+			signInMutation.isPending,
+			signUpMutation.isPending,
+			verifyEmailToken,
+			verifyEmailMutation.isPending,
+		]
+	);
+
+	return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = (): AuthContextType => {
 	const context = useContext(AuthContext);
-	if (!context) {
-		throw new Error('useAuth must be used within an AuthProvider');
-	}
+	if (!context) throw new Error('useAuth must be used within an AuthProvider');
 	return context;
 };

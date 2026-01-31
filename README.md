@@ -1,30 +1,141 @@
-# React + TypeScript + Vite
+# Psycron Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend application for **Psycron**, a platform designed to help independent therapists manage their practice — including authentication, scheduling, patients, billing, and settings — with a strong focus on UX, privacy, and scalability.
 
-Currently, two official plugins are available:
+This repository contains the **web client** used by:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Therapists (main app)
+- Internal workers (backoffice & testing environment)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 🧠 Tech Stack
 
-- Configure the top-level `parserOptions` property like this:
+- **React** (18)
+- **TypeScript**
+- **Vite**
+- **React Router**
+- **React Hook Form**
+- **TanStack Query (React Query)**
+- **Material UI (MUI)**
+- **i18next**
+- **PostHog**
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+---
+
+## 📦 Project Structure
+
+```
+src/
+├─ api/
+├─ components/
+├─ context/
+├─ features/
+├─ hooks/
+├─ layouts/
+├─ pages/
+├─ theme/
+├─ utils/
+├─ i18n/
+├─ App.tsx
+└─ main.tsx
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+---
+
+## 🔐 App Areas
+
+### Therapist App
+
+- Email/password or Google OAuth
+- User settings, patients, appointments, billing
+
+### Worker / Backoffice
+
+- Google OAuth only
+- Internal testing & QA tooling
+
+---
+
+## 📊 Analytics (PostHog)
+
+- Explicit event tracking only
+- No autocapture
+- Identify users after authentication
+- Reset analytics on logout
+
+Helper used across the app:
+
+```ts
+export const capture = (
+	event: string,
+	props?: Record<string, string | number | boolean | null>
+): void => {
+	posthog.capture(event, props);
+};
+```
+
+---
+
+## 🌍 Internationalization
+
+- i18next
+- Locale in URL: `/:locale/...`
+- EN / PT supported
+
+---
+
+## 🧪 Testing Environment
+
+Testing mode allows:
+
+- Mocked user data
+- Disabled destructive actions
+- Backoffice access
+
+Controlled via runtime environment flags.
+
+---
+
+## ⚙️ Environment Variables
+
+```
+VITE_API_BASE_URL=
+VITE_PUBLIC_POSTHOG_KEY=
+VITE_PUBLIC_POSTHOG_HOST=
+VITE_ENABLE_SUBSCRIPTION_MOCK=
+```
+
+Environment validation runs at startup.  
+Production build fails if required variables are missing.
+
+---
+
+## ▶️ Running the Project
+
+```bash
+npm install
+npm run dev
+```
+
+Build:
+
+```bash
+npm run build
+npm run preview
+```
+
+---
+
+## 🧩 Architecture Notes
+
+- Strict TypeScript (no `any`)
+- Side effects in providers/hooks
+- Feature-driven structure
+- Clear separation between therapist app and backoffice
+
+---
+
+## 📄 License
+
+Private repository — all rights reserved.

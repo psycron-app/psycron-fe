@@ -63,3 +63,26 @@ export const getAvailabilityByDayId = async (
 
 	return response.data;
 };
+
+export const deleteUserById = async (userId: string): Promise<IResponse> => {
+	const response = await apiClient.delete<IResponse>(`/users/delete/${userId}`);
+	return response.data;
+};
+
+export const exportUserDataById = async (userId: string): Promise<Blob> => {
+	const response = await apiClient.get(`/users/${userId}/export`, {
+		responseType: 'blob',
+	});
+
+	return response.data as Blob;
+};
+
+export const updateMarketingConsent = async (
+	userId: string,
+	granted: boolean
+) => {
+	return await apiClient.post(`/users/${userId}/consent`, {
+		consentType: 'marketingEmailsAccepted',
+		granted,
+	});
+};

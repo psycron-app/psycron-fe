@@ -1,142 +1,153 @@
-import { useEffect, useState } from 'react';
-import type { FieldError, FieldValues, Path } from 'react-hook-form';
+import { useMemo, useState } from 'react';
+import type { FieldValues, Path } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
-import type { TextFieldProps } from '@mui/material';
 import { InputAdornment, TextField } from '@mui/material';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { NotVisible, Visible } from '@psycron/components/icons';
-import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
 
-import {
-	PasswordWrapper,
-	StyledIconButton,
-	StyledInput,
-} from './PasswordInput.styles';
+import { getPathError } from '../phone/utils/getPathError';
+
+import { PasswordWrapper, StyledIconButton } from './PasswordInput.styles';
 import type { PasswordInputProps } from './PasswordInput.types';
 
 export const PasswordInput = <T extends FieldValues>({
-	hasToConfirm,
-	errors,
-	register,
-	defaultPasswordHash,
 	disabled,
-}: PasswordInputProps<T> & TextFieldProps) => {
+	hasToConfirm,
+	fields,
+	name,
+	confirmName,
+}: PasswordInputProps<T>) => {
 	const { t } = useTranslation();
+	const {
+		register,
+		formState: { errors },
+		watch,
+	} = useFormContext<T>();
 
-	const { signInError } = useAuth();
-	const { pathname } = useLocation();
+	const passwordName = useMemo<Path<T>>(() => {
+		if (fields?.password) return fields.password;
+		if (name) return name;
+		return 'password' as Path<T>;
+	}, [fields?.password, name]);
 
-	const passInputId = pathname.includes('edit/') ? 'newPassword' : 'password';
+	const confirmFieldName = useMemo<Path<T>>(() => {
+		if (fields?.confirmPassword) return fields.confirmPassword;
+		if (confirmName) return confirmName;
+		return 'confirmPassword' as Path<T>;
+	}, [fields?.confirmPassword, confirmName]);
 
-	const passwordInputId: Path<T> = passInputId as Path<T>;
-	const confirmPasswordInputId: Path<T> = 'confirmPassword' as Path<T>;
+	const passwordValue = watch(passwordName) as unknown as string | undefined;
+	const confirmValue = watch(confirmFieldName) as unknown as string | undefined;
 
-	const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-	const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
-		useState<boolean>(false);
+	const [showPassword, setShowPassword] = useState(false);
+	const [showConfirm, setShowConfirm] = useState(false);
 
-	const [passwordValue, setPasswordValue] = useState<string>('');
-	const [confirmPasswordValue, setConfirmPasswordValue] = useState<string>('');
+	const passwordError = useMemo(
+		() => getPathError(errors, String(passwordName)),
+		[errors, passwordName]
+	);
+	const confirmError = useMemo(
+		() => getPathError(errors, String(confirmFieldName)),
+		[errors, confirmFieldName]
+	);
 
-	useEffect(() => {
-		if (defaultPasswordHash) {
-			setPasswordValue(defaultPasswordHash);
-		}
-	}, [defaultPasswordHash]);
+	const passwordHelper =
+		typeof passwordError?.message === 'string'
+			? passwordError.message
+			: undefined;
 
-	const toggleVisibility = () => {
-		setIsPasswordVisible((prev) => !prev);
+	const confirmHelper =
+		typeof confirmError?.message === 'string'
+			? confirmError.message
+			: undefined;
+
+	const onSetShowPassword = (): void => {
+		setShowPassword((p) => {
+			const next = !p;
+			capture('auth password visibility toggled', {
+				field: 'password',
+				visible: next,
+			});
+			return next;
+		});
 	};
 
-	const toggleVisibilityConfirm = () => {
-		setIsConfirmPasswordVisible((prev) => !prev);
-	};
-
-	const handleInputChange = (id: Path<T>, value: string) => {
-		if (id === passwordInputId) {
-			setPasswordValue(value);
-		} else if (id === confirmPasswordInputId) {
-			setConfirmPasswordValue(value);
-		}
-	};
-
-	const getHelperText = (fieldId: Path<T>): React.ReactNode => {
-		if (typeof signInError === 'string') {
-			return signInError;
-		}
-		if (typeof errors === 'string') {
-			return errors;
-		} else if (
-			errors &&
-			errors[fieldId] &&
-			'message' in (errors[fieldId] as FieldError)
-		) {
-			return (errors[fieldId] as FieldError).message;
-		}
-		return null;
+	const onSetShowConfirmPassword = (): void => {
+		setShowConfirm((p) => {
+			const next = !p;
+			capture('auth password visibility toggled', {
+				field: 'confirm_password',
+				visible: next,
+			});
+			return next;
+		});
 	};
 
 	return (
 		<PasswordWrapper>
-			<StyledInput
+			<TextField
 				label={t('globals.password')}
-				id={passwordInputId}
+				id={String(passwordName)}
 				fullWidth
-				type={!isPasswordVisible ? 'password' : 'text'}
-				{...register(passwordInputId)}
-				error={!!getHelperText(passwordInputId)}
-				helperText={getHelperText(passwordInputId)}
-				value={passwordValue}
-				autoComplete='password'
-				onChange={(e) => {
-					handleInputChange(passwordInputId, e.target.value);
-				}}
+				variant='outlined'
+				type={showPassword ? 'text' : 'password'}
+				{...register(passwordName)}
+				error={Boolean(passwordHelper)}
+				helperText={passwordHelper}
+				autoComplete='current-password'
 				disabled={disabled}
 				required
-				InputProps={{
-					endAdornment: (
-						<InputAdornment position='end'>
-							<StyledIconButton
-								disabled={!passwordValue?.length}
-								onMouseEnter={() => toggleVisibility()}
-								onMouseLeave={() => toggleVisibility()}
-								edge='end'
-							>
-								{!isPasswordVisible ? <NotVisible /> : <Visible />}
-							</StyledIconButton>
-						</InputAdornment>
-					),
+				slotProps={{
+					input: {
+						endAdornment: (
+							<InputAdornment position='end'>
+								<StyledIconButton
+									disabled={!passwordValue?.length}
+									onClick={onSetShowPassword}
+									edge='end'
+									aria-label={showPassword ? 'Hide password' : 'Show password'}
+								>
+									{showPassword ? <Visible /> : <NotVisible />}
+								</StyledIconButton>
+							</InputAdornment>
+						),
+					},
 				}}
-				hasToConfirm={hasToConfirm}
 			/>
+
 			{hasToConfirm ? (
 				<TextField
 					label={t('components.form.confirm-password')}
 					fullWidth
-					id={confirmPasswordInputId}
-					type={!isConfirmPasswordVisible ? 'password' : 'text'}
-					{...register(confirmPasswordInputId)}
-					error={!!getHelperText(confirmPasswordInputId)}
-					helperText={getHelperText(confirmPasswordInputId)}
-					value={confirmPasswordValue}
-					autoComplete='confirm-password'
-					onChange={(e) => {
-						handleInputChange(confirmPasswordInputId, e.target.value);
-					}}
-					required={hasToConfirm}
-					InputProps={{
-						endAdornment: (
-							<InputAdornment position='end'>
-								<StyledIconButton
-									disabled={!confirmPasswordValue?.length}
-									onMouseEnter={() => toggleVisibilityConfirm()}
-									onMouseLeave={() => toggleVisibilityConfirm()}
-									edge='end'
-								>
-									{!isConfirmPasswordVisible ? <NotVisible /> : <Visible />}
-								</StyledIconButton>
-							</InputAdornment>
-						),
+					id={String(confirmFieldName)}
+					variant='outlined'
+					type={showConfirm ? 'text' : 'password'}
+					{...register(confirmFieldName)}
+					error={Boolean(confirmHelper)}
+					helperText={confirmHelper}
+					autoComplete='new-password'
+					disabled={disabled}
+					required
+					slotProps={{
+						input: {
+							endAdornment: (
+								<InputAdornment position='end'>
+									<StyledIconButton
+										disabled={!confirmValue?.length}
+										onClick={onSetShowConfirmPassword}
+										edge='end'
+										aria-label={
+											showConfirm
+												? 'Hide confirm password'
+												: 'Show confirm password'
+										}
+									>
+										{showConfirm ? <Visible /> : <NotVisible />}
+									</StyledIconButton>
+								</InputAdornment>
+							),
+						},
 					}}
 				/>
 			) : null}

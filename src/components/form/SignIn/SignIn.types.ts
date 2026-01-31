@@ -1,8 +1,4 @@
-import type {
-	FieldErrors,
-	UseFormHandleSubmit,
-	UseFormRegister,
-} from 'react-hook-form';
+import type { SubmitHandler } from 'react-hook-form';
 
 export interface ISignInForm {
 	email: string;
@@ -11,10 +7,7 @@ export interface ISignInForm {
 }
 
 export type SignInFormTypes = {
-	errors: FieldErrors<ISignInForm>;
-	handleSubmit: UseFormHandleSubmit<ISignInForm, undefined>;
-	onSubmit: (data: ISignInForm) => void;
-	register: UseFormRegister<ISignInForm>;
+	onSubmit: SubmitHandler<ISignInForm>;
 };
 
 export interface ISignInResponse {
@@ -29,4 +22,9 @@ export interface ISignInResponse {
 export interface IRefreshToken {
 	accessToken: string;
 	refreshToken: string;
+}
+
+export interface IVerifyEmailResponse {
+	message: string;
+	status: 'success' | 'error';
 }

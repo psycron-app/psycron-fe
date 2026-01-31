@@ -288,7 +288,7 @@ export const BigCalendar = ({
 					onGoToNextWeek={() => handleNextWeek()}
 					onGoToPreviousWeek={() => handlePreviousWeek()}
 					onGoToToday={() => setDayFromCalendar(daySelectedFromCalendar.date)}
-					onGoToMonthView={() => console.log('Open month view')}
+					// TODO: Implement month view - onGoToMonthView={() => console.log('Open month view')}
 					disableNext={disableNext || isFetchingNextPage}
 					disablePrevious={disablePrevious || isFetchingPreviousPage}
 					mode={mode}

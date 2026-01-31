@@ -1,5 +1,5 @@
 import headCell from '@psycron/assets/mock/table/mockedHeadItems.json';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { TableHead } from './TableHead';
 import type { ITableHeadProps } from './TableHead.types';

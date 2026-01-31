@@ -1,9 +1,31 @@
+import type { ChangeEvent, ReactNode } from 'react';
 import type { UseFormRegisterReturn } from 'react-hook-form';
 
-export interface ICheckboxProps {
-	checked?: boolean;
+type Uncontrolled = {
+	checked?: never;
+	onChange?: never;
+	register?: UseFormRegisterReturn;
+};
+
+type Controlled = {
+	checked: boolean;
+	onChange: (event: ChangeEvent<HTMLInputElement>, checked: boolean) => void;
+	register?: never;
+};
+
+type WithLabelNode = {
+	label: ReactNode;
+	labelKey?: never;
+};
+
+type WithLabelKey = {
+	// i18n key
+	label?: never;
 	labelKey: string;
-	onChange?: () => void;
-	register: UseFormRegisterReturn | null;
-	shouldBold?: boolean;
-}
+};
+
+export type ICheckboxProps = (Uncontrolled | Controlled) &
+	(WithLabelNode | WithLabelKey) & {
+		required?: boolean;
+		shouldBold?: boolean;
+	};

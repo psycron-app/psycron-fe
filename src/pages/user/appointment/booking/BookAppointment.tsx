@@ -5,10 +5,8 @@ import { BigCalendar } from '@psycron/components/calendar/big-calendar/BigCalend
 import { Loader } from '@psycron/components/loader/Loader';
 import { Text } from '@psycron/components/text/Text';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
-import { SEOProvider } from '@psycron/context/seo/SEOContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 import { useAppointmentParams } from '@psycron/hooks/useAppointmentParams';
-import { DOMAIN } from '@psycron/pages/urls';
 import { format, parseISO } from 'date-fns';
 
 import {
@@ -24,7 +22,7 @@ export const BookAppointment = () => {
 	const titleRef = useRef<HTMLDivElement | null>(null);
 
 	const {
-		locale,
+		// locale,
 		userId: therapistId,
 		selectedDate,
 		selectedSlotId,
@@ -95,27 +93,27 @@ export const BookAppointment = () => {
 		return null;
 	}, [availabilityData]);
 
-	const pageUrl = `${DOMAIN}/${locale}/${therapistId}/book-appointment`;
-	const imageUrl = `${DOMAIN}/empty-appointments.png`;
+	// const pageUrl = `${DOMAIN}/${locale}/${therapistId}/book-appointment`;
+	// const imageUrl = `${DOMAIN}/empty-appointments.png`;
 
 	const pageTitle = t('page.book-appointment.title', {
 		therapisName: userDetails?.firstName,
 	});
 
-	const homepageSEO = {
-		title: pageTitle,
-		description: t('page.book-appointment.description'),
-		canonicalUrl: pageUrl,
-		ogTitle: t('page.landing.seo.ogTitle'),
-		ogDescription: t('page.landing.seo.ogDescription'),
-		ogUrl: pageUrl,
-		ogType: 'website',
-		ogImage: imageUrl,
-		twitterCard: 'summary_large_image',
-		twitterTitle: t('page.landing.seo.ogTitle'),
-		twitterDescription: t('page.landing.seo.ogDescription'),
-		twitterImage: imageUrl,
-	};
+	// const homepageSEO = {
+	// 	title: pageTitle,
+	// 	description: t('page.book-appointment.description'),
+	// 	canonicalUrl: pageUrl,
+	// 	ogTitle: t('page.landing.seo.ogTitle'),
+	// 	ogDescription: t('page.landing.seo.ogDescription'),
+	// 	ogUrl: pageUrl,
+	// 	ogType: 'website',
+	// 	ogImage: imageUrl,
+	// 	twitterCard: 'summary_large_image',
+	// 	twitterTitle: t('page.landing.seo.ogTitle'),
+	// 	twitterDescription: t('page.landing.seo.ogDescription'),
+	// 	twitterImage: imageUrl,
+	// };
 
 	if (
 		isUserDetailsLoading ||
@@ -140,7 +138,7 @@ export const BookAppointment = () => {
 	};
 
 	return (
-		<SEOProvider seo={homepageSEO}>
+		<>
 			<StyledBookAppointmentPgWrapper>
 				<BookingAppointmentTitleWrapper ref={titleRef}>
 					<BookingAppointmentTitle>{pageTitle}</BookingAppointmentTitle>
@@ -150,6 +148,6 @@ export const BookAppointment = () => {
 					<BigCalendar daySelectedFromCalendar={currentDay} mode={mode} />
 				</StyledBookingAgendaWrapper>
 			</StyledBookAppointmentPgWrapper>
-		</SEOProvider>
+		</>
 	);
 };

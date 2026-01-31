@@ -1,65 +1,107 @@
+import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { Box } from '@mui/material';
+import { useParams } from 'react-router-dom';
+import { Box, TextField } from '@mui/material';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
+import { Divider } from '@psycron/components/divider/Divider';
 import { Link } from '@psycron/components/link/Link';
 import { Text } from '@psycron/components/text/Text';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
+import { GoogleOAuthButton } from '@psycron/features/auth/google/GoogleOAuthButton';
 import { REQPASSRESET } from '@psycron/pages/urls';
+import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 import { PasswordInput } from '../components/password/PasswordInput';
 import { SignLayout } from '../components/shared/SignLayout';
-import { InputFields } from '../components/shared/styles';
 
-import type { SignInFormTypes } from './SignIn.types';
+import { SignInConsentWrapper } from './Signin.styles';
+import type { ISignInForm, SignInFormTypes } from './SignIn.types';
 
-export const SignIn = ({
-	handleSubmit,
-	errors,
-	onSubmit,
-	register,
-}: SignInFormTypes) => {
+export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 	const { t } = useTranslation();
 
 	const { isSignInMutationLoading } = useAuth();
+	const { locale } = useParams<{ locale: string }>();
+
+	const {
+		register,
+		handleSubmit,
+		watch,
+		formState: { errors },
+	} = useFormContext<ISignInForm>();
+
+	const email = watch('email');
+	const password = watch('password');
+
+	const canSubmit =
+		Boolean(email?.trim()) &&
+		Boolean(password?.trim()) &&
+		!isSignInMutationLoading;
 
 	return (
-		<SignLayout isSignin isLoading={isSignInMutationLoading}>
-			<Box component='form' onSubmit={handleSubmit(onSubmit)}>
-				<InputFields
+		<SignLayout
+			isSignin
+			isLoading={isSignInMutationLoading}
+			title={t('components.form.signin.title')}
+		>
+			<GoogleOAuthButton
+				locale={locale}
+				intent='signin'
+				disabled={isSignInMutationLoading}
+				audience='therapist'
+			/>
+			<Divider />
+			<Box
+				component='form'
+				gap={spacing.small}
+				display='flex'
+				flexDirection={'column'}
+				onSubmit={handleSubmit(onSubmit)}
+			>
+				<TextField
 					label={t('globals.email')}
 					fullWidth
+					variant='outlined'
 					id='email'
 					{...register('email')}
 					autoComplete='email'
 					error={!!errors.email}
 					helperText={errors.email?.message}
-					maxWidth='100%'
 				/>
-				<PasswordInput errors={errors} register={register} />
+				<PasswordInput<ISignInForm> />
 				<Box
 					display='flex'
 					flexDirection='column'
 					justifyContent='center'
 					alignItems='center'
-					pt={4}
 				>
-					<Button type='submit' fullWidth>
-						{t('components.form.signin.title')}
+					<Button
+						type='submit'
+						fullWidth
+						size='large'
+						disabled={!canSubmit || isSignInMutationLoading}
+					>
+						{t('components.form.signin.sign-in')}
 					</Button>
-					<Box>
+					<SignInConsentWrapper>
 						<Checkbox
-							labelKey={t('components.form.keep-loggedin')}
+							labelKey={'components.form.keep-loggedin'}
 							register={register('stayConnected')}
 						/>
-					</Box>
-					<Box>
-						<Link to={REQPASSRESET}>
-							<Text variant='caption'>
-								{t('components.form.signin.forgot-password')}
-							</Text>
+						<Link
+							to={REQPASSRESET}
+							onClick={() =>
+								capture('auth forgot password clicked', {
+									audience: 'therapist',
+									method: 'password',
+								})
+							}
+						>
+							<Text>{t('components.form.signin.forgot-password')}</Text>
 						</Link>
-					</Box>
+					</SignInConsentWrapper>
 				</Box>
 			</Box>
 		</SignLayout>

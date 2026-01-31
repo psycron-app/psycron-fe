@@ -48,6 +48,8 @@ export const AppointmentsList = () => {
 	if (isPatientDetailsLoading) {
 		return <Loader />;
 	}
+	// TODO: latestSessionId will be used when cancel action is implemented
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { _id: latestSessionId, sessions } = latestSession;
 
 	const headItems: ITableCellProps[] = [
@@ -150,17 +152,18 @@ export const AppointmentsList = () => {
 	);
 
 	const handleCancelAction = () => {
-		const data = {
-			data: {
-				date: selectedSession?.date,
-				startTime: selectedSession?.slots[0].startTime,
-				sessionId: selectedSession?._id,
-				slotId: selectedSession?.slots[0]._id,
-			},
-			sessionDateId: latestSessionId,
-			therapistId: String(patientDetails?.createdBy),
-		};
-		console.log('🚀 ~ handleCancelAction ~ data:', data);
+		// TODO: Implement cancel action
+		// const data = {
+		// 	data: {
+		// 		date: selectedSession?.date,
+		// 		startTime: selectedSession?.slots[0].startTime,
+		// 		sessionId: selectedSession?._id,
+		// 		slotId: selectedSession?.slots[0]._id,
+		// 	},
+		// 	sessionDateId: latestSessionId,
+		// 	therapistId: String(patientDetails?.createdBy),
+		// };
+		// console.log('🚀 ~ handleCancelAction ~ data:', data);
 		// cancelAppointmentMttn(data);
 	};
 
@@ -181,7 +184,7 @@ export const AppointmentsList = () => {
 				openModal={openEditModal}
 				cardActionsProps={{
 					actionName: t('components.link.navigate.next'),
-					onClick: () => console.log('clicou'),
+					// TODO: Implement edit action - onClick: () => console.log('clicou'),
 					hasSecondAction: true,
 					secondActionName: t('components.link.navigate.back'),
 					secondAction: () => closeModals(),

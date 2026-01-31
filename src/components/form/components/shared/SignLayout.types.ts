@@ -5,4 +5,5 @@ export interface ISignLayout {
 	isLoading?: boolean;
 	isReset?: boolean;
 	isSignin?: boolean;
+	title?: string;
 }

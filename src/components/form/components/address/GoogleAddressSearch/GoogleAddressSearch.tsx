@@ -16,7 +16,7 @@ export const GoogleAddressSearch = ({
 	const { t } = useTranslation();
 
 	const { isLoaded, loadError } = useLoadScript({
-		googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+		googleMapsApiKey: GOOGLE_MAPS_API_KEY ?? null,
 		libraries: LIBRARIES,
 	});
 

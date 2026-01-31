@@ -3,15 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@psycron/components/button/Button';
 
 import { EditUserButtonWrapper, EditUserFooter } from './FormFooter.styles';
+import type { FormFooterProps } from './FormFooter.types';
 
-export const FormFooter = () => {
+export const FormFooter = ({ disabled }: FormFooterProps) => {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	return (
-		<EditUserFooter component='footer' zIndex={10}>
+		<EditUserFooter as='footer' zIndex={10}>
 			<EditUserButtonWrapper>
-				<Button type='submit'>{t('components.user-details.save')}</Button>
+				<Button type='submit' disabled={disabled}>
+					{t('components.user-details.save')}
+				</Button>
 				<Button secondary onClick={() => navigate(-1)}>
 					{t('globals.cancel')}
 				</Button>

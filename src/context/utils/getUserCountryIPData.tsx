@@ -4,6 +4,7 @@ import type { CountryDataFull } from '../geolocation/CountryContext.types';
 
 export const getUserCountryIPData =
 	async (): Promise<CountryDataFull | null> => {
+		if (!IP_GEO_KEY) return null;
 		try {
 			const response = await fetch(`${IP_GEO_URL}?apiKey=${IP_GEO_KEY}`);
 			const data = await response.json();

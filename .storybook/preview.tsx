@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import {
 	INITIAL_VIEWPORTS,
 	MINIMAL_VIEWPORTS,
-} from '@storybook/addon-viewport';
+} from 'storybook/viewport';
 
 import theme from '../src/theme';
 
@@ -45,7 +45,7 @@ const preview = {
 			},
 		},
 		viewport: {
-			viewports: {
+			options: {
 				...INITIAL_VIEWPORTS,
 				...MINIMAL_VIEWPORTS,
 			},

@@ -10,13 +10,14 @@ import { Calendar } from '@psycron/components/calendar/Calendar';
 import { Close } from '@psycron/components/icons';
 import { useAvailability } from '@psycron/context/appointment/availability/AvailabilityContext';
 import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
+import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 import { startOfToday } from 'date-fns';
 import { enGB, ptBR } from 'date-fns/locale';
 
 import { AVAILABILITYWIZARD } from '../urls';
 
-import { StyledPaperModal } from './Dashboard.styled';
+import { StyledPaperModal } from './Dashboard.styles';
 
 export const Dashboard = () => {
 	const { t } = useTranslation();
@@ -54,11 +55,10 @@ export const Dashboard = () => {
 	}, [availabilityData?.dates]);
 
 	return (
-		<>
+		<PageLayout title='Dashboard' isLoading={false}>
 			<Grid
 				container
 				columns={12}
-				height='100%'
 				p={spacing.medium}
 				columnSpacing={spacing.medium}
 			>
@@ -112,6 +112,6 @@ export const Dashboard = () => {
 					</Box>
 				</StyledPaperModal>
 			</Modal>
-		</>
+		</PageLayout>
 	);
 };

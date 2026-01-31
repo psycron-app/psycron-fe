@@ -1,8 +1,28 @@
 import { Box, css, styled } from '@mui/material';
-import { isBiggerThanTabletMedia } from '@psycron/theme/media-queries/mediaQueries';
+import { Text } from '@psycron/components/text/Text';
+import {
+	isBiggerThanTabletMedia,
+	isMobileMedia,
+} from '@psycron/theme/media-queries/mediaQueries';
 import { palette } from '@psycron/theme/palette/palette.theme';
 import { shadowPress } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
+
+export const EditUserFormContainer = styled(Box)`
+	display: flex;
+	flex-direction: column;
+	gap: ${spacing.medium};
+	max-width: 60%;
+
+	min-height: 0;
+
+	${isMobileMedia} {
+		overflow-y: auto;
+		max-height: calc(100dvh - 16.2rem);
+		min-width: 100%;
+		margin-bottom: ${spacing.mediumLarge};
+	}
+`;
 
 export const EditUserWrapper = styled(Box)`
 	width: 100%;
@@ -36,5 +56,47 @@ export const EditButton = styled(Box)`
 
 	${isBiggerThanTabletMedia} {
 		justify-content: flex-end;
+	}
+`;
+
+export const EditUserDetailsAvatarWrapper = styled(Box)`
+	display: flex;
+	align-items: center;
+	gap: ${spacing.small};
+`;
+
+export const EditUserDetailsMarketingConsentLabel = styled(Text)`
+	display: flex;
+	white-space: normal;
+	overflow-wrap: anywhere;
+
+	${isMobileMedia} {
+		flex-direction: column;
+		justify-content: center;
+		width: 100%;
+		align-items: center;
+	}
+`;
+
+export const EditUserDetailsMarketingConsentWrapper = styled(Box)`
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: ${spacing.small};
+`;
+
+export const EditUserDetailsMarketingSwitcher = styled(Box)`
+	display: flex;
+	padding-left: ${spacing.small};
+
+	${isMobileMedia} {
+		width: 100%;
+		& label {
+			width: 100%;
+
+			.MuiFormControlLabel-label {
+				width: 100%;
+			}
+		}
 	}
 `;

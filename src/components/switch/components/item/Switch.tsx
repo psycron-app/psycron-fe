@@ -4,7 +4,7 @@ import { SwitchControlLabel } from '../../SwitchGroup.styles';
 import type { ISwitchProps } from '../../SwitchGroup.types';
 
 export const Switch = ({
-	defaultChecked,
+	checked,
 	small,
 	disabled,
 	required,
@@ -15,7 +15,7 @@ export const Switch = ({
 		<SwitchControlLabel
 			control={
 				<MUISwitch
-					checked={defaultChecked}
+					checked={checked}
 					disabled={disabled}
 					required={required}
 					size={small ? 'small' : 'medium'}

@@ -1,16 +1,15 @@
-/* eslint-disable indent */
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box } from '@mui/material';
 import { Link } from '@psycron/components/link/Link';
-import { Localization } from '@psycron/components/localization/Localization';
 import { Text } from '@psycron/components/text/Text';
 import useViewport from '@psycron/hooks/useViewport';
-import { DOMAIN, SIGNIN, SIGNUP } from '@psycron/pages/urls';
+import { SIGNIN, SIGNUP } from '@psycron/pages/urls';
 
 import { Button } from '../button/Button';
+import { NavigateLink } from '../link/navigate/NavigateLink';
 
-import { BrandLink, BrandWrapper, HeaderWrapper } from './Header.styles';
+import { HeaderWrapper } from './Header.styles';
 import type { IHeaderProps } from './Header.types';
 
 export const Header = ({ hideLinks = false }: IHeaderProps) => {
@@ -25,41 +24,20 @@ export const Header = ({ hideLinks = false }: IHeaderProps) => {
 	const isSignInPage = location.pathname.includes(SIGNIN);
 
 	const links = [
-		{
-			name: t('components.header.benefits'),
-			to: '#benefits',
-		},
-		{
-			name: t('components.header.join'),
-			to: '#join-now',
-		},
-		{
-			name: t('components.header.contact'),
-			to: '#contact',
-		},
 		isSignInPage
 			? {
-					name: t('components.form.signup.title'),
+					name: t('components.form.signup.sign-up'),
 					to: SIGNUP,
 				}
 			: {
-					name: t('components.form.signin.title'),
+					name: t('components.form.signin.sign-in'),
 					to: SIGNIN,
 				},
 	];
 
 	return (
 		<HeaderWrapper>
-			<BrandWrapper>
-				<BrandLink href={DOMAIN} aria-label='Go to homepage'>
-					<img
-						src='/images/og-image.png'
-						width={'auto'}
-						height={'100%'}
-						alt='Psycron logo'
-					/>
-				</BrandLink>
-			</BrandWrapper>
+			<NavigateLink isBack />
 			<Box display='flex' alignItems='center'>
 				{!notShowLinks && !isMobile ? (
 					<>
@@ -82,7 +60,6 @@ export const Header = ({ hideLinks = false }: IHeaderProps) => {
 						})}
 					</>
 				) : null}
-				<Localization hasMargin />
 			</Box>
 		</HeaderWrapper>
 	);

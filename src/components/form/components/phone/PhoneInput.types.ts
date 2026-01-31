@@ -1,6 +1,15 @@
-export interface PhoneInputProps {
+import type { FieldValues, Path } from 'react-hook-form';
+
+export type PhoneInputComponentProps<T extends FieldValues> = {
 	defaultValue?: string;
 	disabled?: boolean;
-	registerName: 'phone' | 'whatsapp';
-	required: boolean;
-}
+	labelKey?: string;
+	name: Path<T>;
+	required?: boolean;
+};
+
+export type StyledPhoneInputProps = {
+	hasError?: boolean;
+	isDisabled?: boolean;
+	isFocused?: boolean;
+};

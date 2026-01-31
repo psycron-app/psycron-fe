@@ -2,8 +2,9 @@ import type {
 	IRefreshToken,
 	ISignInForm,
 	ISignInResponse,
+	IVerifyEmailResponse,
 } from '@psycron/components/form/SignIn/SignIn.types';
-import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUp.types';
+import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.types';
 import type {
 	IResetPass,
 	IResetPassResponse,
@@ -12,23 +13,27 @@ import type {
 	IEmailForm,
 	IEmailResponse,
 } from '@psycron/pages/auth/password/ResetPassword.types';
-import { ENCRYPTION_KEY, ID_TOKEN } from '@psycron/utils/tokens';
 
 import apiClient from '../axios-instance';
 
-import type { IEncryptionKeyResponse } from './index.types';
+import { mapSignUpFormToRegisterPayload } from './utils/auth-utils';
+import type { RegisterResponse, SessionResponse } from './index.types';
 
-export const signInFc = async (data: ISignInForm): Promise<ISignInResponse> => {
-	const response = await apiClient.post<ISignInResponse>('/users/login', data);
+export const signUpFc = async (
+	data: ISignUpForm
+): Promise<RegisterResponse> => {
+	const payload = mapSignUpFormToRegisterPayload(data);
+
+	const response = await apiClient.post<RegisterResponse>(
+		'/users/register',
+		payload
+	);
+
 	return response.data;
 };
 
-export const signUpFc = async (data: ISignUpForm): Promise<ISignInResponse> => {
-	const response = await apiClient.post<ISignInResponse>(
-		'/users/register',
-		data
-	);
-
+export const signInFc = async (data: ISignInForm): Promise<ISignInResponse> => {
+	const response = await apiClient.post<ISignInResponse>('/users/login', data);
 	return response.data;
 };
 
@@ -36,15 +41,8 @@ export const logoutFc = async (): Promise<void> => {
 	await apiClient.post('/users/logout');
 };
 
-export const getSession = async (): Promise<{ isAuthenticated: boolean }> => {
-	const token = localStorage.getItem(ID_TOKEN);
-
-	const response = await apiClient.get('/users/session', {
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
-
+export const getSession = async (): Promise<SessionResponse> => {
+	const response = await apiClient.get<SessionResponse>('/users/session');
 	return response.data;
 };
 
@@ -70,31 +68,28 @@ export const resetPassword = async (
 export const refreshTokenService = async (
 	refreshToken: string
 ): Promise<IRefreshToken> => {
-	const { data } = await apiClient.post('/token/refresh-token', {
+	const { data } = await apiClient.post<IRefreshToken>('/token/refresh-token', {
 		refreshToken,
 	});
 
 	return data;
 };
 
-export const getEncryptionKey = async (): Promise<string | null> => {
-	const cachedKey = sessionStorage.getItem(ENCRYPTION_KEY);
-	if (cachedKey) return cachedKey;
-
-	const response = await apiClient.get<IEncryptionKeyResponse>(
-		'token/encryption-key',
+export const verifyEmail = async (
+	token: string
+): Promise<IVerifyEmailResponse> => {
+	const { data } = await apiClient.post<IVerifyEmailResponse>(
+		'/users/verify-email',
 		{
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem(ID_TOKEN)}`,
-			},
+			token,
 		}
 	);
 
-	const encryptionKey = response.data.key;
-
-	if (encryptionKey) {
-		sessionStorage.setItem(ENCRYPTION_KEY, encryptionKey);
-	}
-
-	return encryptionKey;
+	return data;
 };
+
+/**
+ * @deprecated getEncryptionKey removed for security (P1.3)
+ * The encryption key endpoint was removed from the backend.
+ * Use useSecureStorage without encryption for non-sensitive IDs.
+ */

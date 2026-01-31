@@ -3,14 +3,12 @@ import type { StorybookConfig } from '@storybook/react-vite';
 const config: StorybookConfig = {
 	stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx|mdx)'],
 	addons: [
-		'@storybook/addon-links',
-		'@storybook/addon-essentials',
-		'@chromatic-com/storybook',
-		'@storybook/addon-interactions',
-		'@storybook/addon-themes',
-		'storybook-react-i18next',
-		'@storybook/addon-viewport',
-	],
+        '@storybook/addon-links',
+        '@chromatic-com/storybook',
+        '@storybook/addon-themes',
+        'storybook-react-i18next',
+        '@storybook/addon-docs'
+    ],
 	docs: {},
 	framework: '@storybook/react-vite',
 	previewHead: (head) => `

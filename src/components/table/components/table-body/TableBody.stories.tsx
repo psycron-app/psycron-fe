@@ -1,5 +1,5 @@
 import bodyCells from '@psycron/assets/mock/table/mockedBodyItems.json';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import {
 	patientsTablerowsData,

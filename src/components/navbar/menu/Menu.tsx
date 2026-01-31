@@ -37,32 +37,37 @@ export const Menu = ({
 	return (
 		<>
 			{items?.map(
-				({ icon, name, path, onClick, component, disabled, open }, index) => (
-					<Box
-						key={`menu-${name}-${index}`}
-						onClick={() => !disabled && handleClick(path, onClick)}
-					>
-						{component ? (
-							<Box key={`component-${name}-${index}`}>{component}</Box>
-						) : (
-							<>
-								<MenuItem
-									key={`item-${name}-${index}`}
-									icon={icon}
-									name={name}
-									path={path}
-									isFooterIcon={isFooterIcon}
-									isFullList={isFullList}
-									disabled={disabled}
-									open={open}
-								/>
-								{isFullList ? (
-									<>{index < items.length - 1 && <Divider />}</>
-								) : null}
-							</>
-						)}
-					</Box>
-				)
+				(
+					{ icon, name, path, onClick, component, disabled, hoverIcon },
+					index
+				) => {
+					return (
+						<Box
+							key={`menu-${name}-${index}`}
+							onClick={() => !disabled && handleClick(path, onClick)}
+						>
+							{component ? (
+								<Box key={`component-${name}-${index}`}>{component}</Box>
+							) : (
+								<>
+									<MenuItem
+										key={`item-${name}-${index}`}
+										icon={icon}
+										name={name}
+										path={path}
+										isFooterIcon={isFooterIcon}
+										isFullList={isFullList}
+										disabled={disabled}
+										hoverIcon={hoverIcon}
+									/>
+									{isFullList ? (
+										<>{index < items.length - 1 && <Divider />}</>
+									) : null}
+								</>
+							)}
+						</Box>
+					);
+				}
 			)}
 		</>
 	);

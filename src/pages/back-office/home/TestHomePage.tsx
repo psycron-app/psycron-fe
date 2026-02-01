@@ -16,6 +16,7 @@ export const TestHomePage = () => {
 	const { locale } = useParams<{ locale: string }>();
 	const navigate = useNavigate();
 
+	const safeLocale = locale ?? 'en';
 	const { isTestingEnv } = useRuntimeEnv();
 
 	const methods = useForm({
@@ -26,30 +27,32 @@ export const TestHomePage = () => {
 	const { isSignInMutationLoading } = useAuth();
 
 	useEffect((): void => {
-		capture('backoffice test home viewed', {
-			locale: locale ?? 'unknown',
+		capture('backoffice home viewed', {
+			locale: safeLocale,
 			is_testing_env: isTestingEnv,
 		});
-	}, [locale, isTestingEnv]);
+	}, [safeLocale, isTestingEnv]);
 
 	useEffect((): void => {
 		if (!isTestingEnv) {
-			capture('backoffice test home redirected', {
+			capture('backoffice home redirected', {
 				reason: 'not_testing_env',
 			});
-			navigate(SIGNIN);
+			navigate(`/${safeLocale}/${SIGNIN}`, { replace: true });
 		}
-	}, [isTestingEnv, navigate]);
+	}, [isTestingEnv, navigate, safeLocale]);
+
+	if (!isTestingEnv) return null;
 
 	return (
 		<AuthPageWrapper>
 			<SignLayout title={t('components.form.signin.title')}>
 				<FormProvider {...methods}>
 					<GoogleOAuthButton
-						locale={locale}
+						locale={safeLocale}
 						intent='signin'
 						disabled={isSignInMutationLoading}
-						audience={'worker'}
+						audience='worker'
 					/>
 				</FormProvider>
 			</SignLayout>

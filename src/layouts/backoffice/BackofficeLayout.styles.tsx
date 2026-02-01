@@ -82,3 +82,21 @@ export const BackofficeFooterEmail = styled(Text)`
 	color: ${palette.brand.purple};
 	font-weight: 500;
 `;
+
+export const BackOfficeErrorWrapper = styled(Box)`
+	display: flex;
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+`;
+
+export const BackOfficeNoWorkerError = styled(Box)`
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+
+	gap: ${spacing.small};
+`;

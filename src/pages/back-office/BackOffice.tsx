@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import { Button } from '@psycron/components/button/Button';
 import { Link } from '@psycron/components/link/Link';
+import { Loader } from '@psycron/components/loader/Loader';
 import { Text } from '@psycron/components/text/Text';
 import { useWorker } from '@psycron/context/worker/WorkerProvider';
 import { SIGNIN } from '@psycron/pages/urls';
@@ -15,15 +17,41 @@ import {
 } from './BackOffice.styles';
 
 export const Backoffice = () => {
-	const { worker } = useWorker();
+	const { worker, isLoading, error, isAuthenticated, logout } = useWorker();
 
-	useEffect((): void => {
+	useEffect(() => {
 		if (!worker?._id) return;
-
-		capture('backoffice home viewed', {
-			worker_id_present: true,
-		});
+		capture('backoffice home viewed', { worker_id_present: true });
 	}, [worker?._id]);
+
+	if (!isAuthenticated) {
+		return (
+			<Text>
+				You are not signed in. <Link to={`${SIGNIN}`}>Go to sign in</Link>
+			</Text>
+		);
+	}
+
+	if (isLoading) return <Loader />;
+
+	if (error || !worker) {
+		return (
+			<Text>
+				Failed to load session.{' '}
+				<Link
+					to={`${SIGNIN}`}
+					onClick={() => {
+						capture('Worker failed to load at backoffice');
+					}}
+				>
+					Sign in again
+				</Link>
+				<Button type='button' onClick={logout}>
+					Clear session
+				</Button>
+			</Text>
+		);
+	}
 
 	return (
 		<BackofficePageWrapper>

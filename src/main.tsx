@@ -49,10 +49,15 @@ if (!envValidation.isValid) {
 
 const queryClient = new QueryClient();
 
-posthog.init(import.meta.env.VITE_PUBLIC_POSTHOG_KEY, {
-	api_host: import.meta.env.VITE_PUBLIC_POSTHOG_HOST,
-	defaults: '2025-11-30',
-});
+const phKey = import.meta.env.VITE_PUBLIC_POSTHOG_KEY;
+const phHost = import.meta.env.VITE_PUBLIC_POSTHOG_HOST;
+
+if (phKey) {
+	posthog.init(phKey, { api_host: phHost, defaults: '2025-11-30' });
+} else {
+	// eslint-disable-next-line no-console
+	console.warn('[PostHog] Missing key');
+}
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>

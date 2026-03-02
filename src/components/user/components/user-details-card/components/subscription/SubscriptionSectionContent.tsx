@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import { capture } from '@psycron/analytics/posthog/events';
+import { PostHogEvent } from '@psycron/analytics/posthog/types';
 import { Button } from '@psycron/components/button/Button';
 import { Text } from '@psycron/components/text/Text';
 import { useRuntimeEnv } from '@psycron/context/runtime/RuntimeEnvContext';
+import { useUserDetails } from '@psycron/context/user/details/UserDetailsContext';
 
 import {
 	SubscriptionCard,
@@ -29,16 +31,14 @@ export const SubscriptionSectionContent = ({
 	onManage,
 }: SubscriptionSectionContentProps) => {
 	const { t } = useTranslation();
+	const { user } = useUserDetails();
 
 	const { isTestingEnv } = useRuntimeEnv();
 
 	const handleManage = (): void => {
-		capture('user details subscription manage clicked', {
-			state: model.kind,
-			has_stripe_customer:
-				model.kind === 'empty' ? model.hasStripeCustomer : true,
-			status: model.kind === 'subscribed' ? model.status : null,
-			disabled: isTestingEnv,
+		capture(PostHogEvent.UserDetailsEditSessionClicked, {
+			session: 'subscription',
+			target_user_id: user?._id,
 		});
 		onManage();
 	};

@@ -7,7 +7,8 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import { capture } from '@psycron/analytics/posthog/events';
+import { PostHogEvent } from '@psycron/analytics/posthog/types';
 import {
 	deleteUserById,
 	exportUserDataById,
@@ -34,6 +35,17 @@ import {
 	setMockUserDetails,
 } from './userDetailsMockStorage';
 
+const toUserDetailsErrorCode = (error: unknown): string => {
+	if (error instanceof Error) {
+		const msg = error.message.toLowerCase();
+		if (msg.includes('not-found')) return 'not_found';
+		if (msg.includes('not-allowed') || msg.includes('forbidden'))
+			return 'not_allowed';
+		if (msg.includes('network')) return 'network';
+	}
+	return 'unknown';
+};
+
 export const UserDetailsContext = createContext<
 	UserDetailsContextType | undefined
 >(undefined);
@@ -55,25 +67,28 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 	const toggleUserDetails = useCallback((): void => {
 		setIsUserDetailsVisible((prev) => {
 			const next = !prev;
-			capture(next ? 'user details opened' : 'user details closed', {
-				view: 'overlay',
-			});
+			capture(
+				next ? PostHogEvent.UserDetailsOpened : PostHogEvent.UserDetailsClosed,
+				{
+					view: 'overlay',
+				}
+			);
 			return next;
 		});
 	}, []);
 
 	const openDeleteDialog = useCallback((): void => {
-		capture('user details delete dialog opened');
+		capture(PostHogEvent.UserDetailsDeleteDialogOpened);
 		setIsDeleteOpen(true);
 	}, []);
 
 	const closeDeleteDialog = useCallback((): void => {
-		capture('user details delete dialog closed');
+		capture(PostHogEvent.UserDetailsDeleteDialogClosed);
 		setIsDeleteOpen(false);
 	}, []);
 	const handleClickEditUser = useCallback(
 		(id: string): void => {
-			capture('user details edit user clicked', { target_user_id: id });
+			capture(PostHogEvent.UserDetailsEditUserClicked, { target_user_id: id });
 
 			navigate(`${EDITUSERPATH}/${id}`);
 
@@ -85,7 +100,7 @@ export const UserDetailsProvider = ({ children }: UserDetailsProviderProps) => {
 
 	const handleClickEditSession = useCallback(
 		(userId: string, session: string): void => {
-			capture('user details edit session clicked', {
+			capture(PostHogEvent.UserDetailsEditSessionClicked, {
 				target_user_id: userId,
 				session,
 			});
@@ -184,14 +199,14 @@ export const useUserDetails = (passedUserId?: string) => {
 
 	const deleteMyAccountMutation = useMutation({
 		mutationFn: async () => {
-			capture('user details delete confirmed');
+			capture(PostHogEvent.UserDetailsDeleteConfirmed);
 
 			if (!sessionUserId) throw new Error(t('auth.error.not-found'));
 			if (!isOwnSettings) throw new Error(t('auth.error.not-allowed'));
 			return deleteUserById(sessionUserId);
 		},
 		onSuccess: async () => {
-			capture('user details delete succeeded');
+			capture(PostHogEvent.UserDetailsDeleteSucceeded);
 
 			clearAuthTokens();
 			queryClient.clear();
@@ -199,7 +214,9 @@ export const useUserDetails = (passedUserId?: string) => {
 			toggleUserDetails();
 		},
 		onError: (error: Error) => {
-			capture('user details delete failed', { error_message: error.message });
+			capture(PostHogEvent.UserDetailsDeleteFailed, {
+				error_code: toUserDetailsErrorCode(error),
+			});
 		},
 	});
 
@@ -214,7 +231,9 @@ export const useUserDetails = (passedUserId?: string) => {
 			return exportUserDataById(sessionUserId);
 		},
 		onSuccess: (blob) => {
-			capture('user details data export succeeded', { bytes: blob.size });
+			capture(PostHogEvent.UserDetailsDataExportSucceeded, {
+				bytes: blob.size,
+			});
 			const profile = userDetails ?? sessionUser;
 			const safeFirst = profile?.firstName ?? 'User';
 			const safeLast = profile?.lastName ?? 'Psycron';
@@ -231,8 +250,8 @@ export const useUserDetails = (passedUserId?: string) => {
 			window.URL.revokeObjectURL(url);
 		},
 		onError: (error: Error) => {
-			capture('user details data export failed', {
-				error_message: error.message,
+			capture(PostHogEvent.UserDetailsDataExportFailed, {
+				error_code: toUserDetailsErrorCode(error),
 			});
 		},
 	});
@@ -243,7 +262,7 @@ export const useUserDetails = (passedUserId?: string) => {
 
 	const updateMarketingConsentMutation = useMutation<void, Error, boolean>({
 		mutationFn: async (granted: boolean): Promise<void> => {
-			capture('marketing consent toggle changed', { granted });
+			capture(PostHogEvent.MarketingConsentToggleChanged, { granted });
 
 			if (!sessionUserId) throw new Error(t('auth.error.not-found'));
 			if (!isOwnSettings) throw new Error(t('auth.error.not-allowed'));
@@ -251,16 +270,16 @@ export const useUserDetails = (passedUserId?: string) => {
 			await updateMarketingConsentApi(sessionUserId, granted);
 		},
 		onSuccess: async (_data, granted) => {
-			capture('marketing consent toggle saved', { granted });
+			capture(PostHogEvent.MarketingConsentToggleSaved, { granted });
 
 			await queryClient.invalidateQueries({
 				queryKey: ['userDetails', sessionUserId],
 			});
 		},
 		onError: (error: Error, granted) => {
-			capture('marketing consent toggle failed', {
+			capture(PostHogEvent.MarketingConsentToggleFailed, {
 				granted,
-				error_message: error.message,
+				error_code: toUserDetailsErrorCode(error),
 			});
 		},
 	});

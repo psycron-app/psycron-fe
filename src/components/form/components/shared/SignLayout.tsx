@@ -1,7 +1,8 @@
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Typography } from '@mui/material';
-import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import { capture } from '@psycron/analytics/posthog/events';
+import { PostHogEvent } from '@psycron/analytics/posthog/types';
 import { LogoColor } from '@psycron/components/icons/brand/LogoColor';
 import { Link } from '@psycron/components/link/Link';
 import { NavigateLink } from '@psycron/components/link/navigate/NavigateLink';
@@ -28,7 +29,7 @@ export const SignLayout: FC<ISignLayout> = ({
 	const isTestEnv = window.location.hostname.startsWith('test.');
 
 	const onClick = (): void => {
-		capture('auth switch form clicked', {
+		capture(PostHogEvent.AuthSwitchFormClicked, {
 			from: isSignin ? 'sign in' : 'sign up',
 			to: isSignin ? 'sign up' : 'sign in',
 		});

@@ -8,7 +8,13 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import { resetPostHog } from '@psycron/analytics/posthog/config';
+import { capture } from '@psycron/analytics/posthog/events';
+import { PostHogEvent } from '@psycron/analytics/posthog/types';
+import {
+	clearSentryUser,
+	setSentryUser,
+} from '@psycron/analytics/sentry/sentry';
 import {
 	getSession,
 	logoutFc,
@@ -22,7 +28,6 @@ import type { ISignUpForm } from '@psycron/components/form/SignUp/SignUpEmail.ty
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { DASHBOARD, HOMEPAGE } from '@psycron/pages/urls';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import posthog from 'posthog-js';
 
 import {
 	clearAuthTokens,
@@ -95,13 +100,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			const statusCode = (err as { statusCode: number }).statusCode;
 
 			if (statusCode === 401 || statusCode === 403) {
-				capture('auth session invalidated', {
+				capture(PostHogEvent.AuthSessionInvalidated, {
 					status_code: statusCode,
 				});
 				clearAuthTokens();
+				clearSentryUser();
 			}
 		}
 	}, [hasAccessToken, isSessionError, sessionError]);
+
+	useEffect(() => {
+		if (isAuthenticated && user?._id) {
+			setSentryUser(user._id, { area: 'therapist', role: 'therapist' });
+		} else {
+			clearSentryUser();
+		}
+	}, [isAuthenticated, user?._id]);
 
 	const handleAuthSuccess = useCallback(
 		async (args: {
@@ -140,7 +154,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 				redirectTo: redirectAfterAuth ?? DASHBOARD,
 			});
 
-			capture('auth sign in succeeded', {
+			capture(PostHogEvent.AuthSignInSucceeded, {
 				method: 'password',
 				audience: 'therapist',
 				stay_connected: persist,
@@ -149,7 +163,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			setRedirectAfterAuth(null);
 		},
 		onError: (error: CustomError) => {
-			capture('auth sign in failed', {
+			capture(PostHogEvent.AuthSignInFailed, {
 				method: 'password',
 				audience: 'therapist',
 				error_code: toAuthErrorCode(error),
@@ -170,7 +184,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 				redirectTo: DASHBOARD,
 			});
 
-			capture('auth sign up succeeded', {
+			capture(PostHogEvent.AuthSignUpSucceeded, {
 				method: 'email',
 				audience: 'therapist',
 				stay_connected: persist,
@@ -180,7 +194,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			});
 		},
 		onError: (error: CustomError) => {
-			capture('auth sign up failed', {
+			capture(PostHogEvent.AuthSignUpFailed, {
 				method: 'email',
 				audience: 'therapist',
 				error_code: toAuthErrorCode(error),
@@ -193,10 +207,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const verifyEmailMutation = useMutation({
 		mutationFn: verifyEmail,
 		onSuccess: () => {
-			capture('auth verify email succeeded');
+			capture(PostHogEvent.AuthVerifyEmailSucceeded);
 		},
 		onError: (error: CustomError) => {
-			capture('auth verify email failed', {
+			capture(PostHogEvent.AuthVerifyEmailFailed, {
 				error_code: toAuthErrorCode(error),
 			});
 			showAlert({ severity: 'error', message: t(error.message) });
@@ -213,18 +227,15 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 	const logoutMutation = useMutation({
 		mutationFn: logoutFc,
 		onSuccess: async () => {
-			capture('auth logout succeeded');
-			posthog.reset();
-
-			clearAuthTokens();
-			await queryClient.removeQueries({ queryKey: ['session'] });
-			navigate(HOMEPAGE, { replace: true });
+			capture(PostHogEvent.AuthLogoutSucceeded);
 		},
 		onError: async () => {
-			capture('auth logout failed');
-			posthog.reset();
-
+			capture(PostHogEvent.AuthLogoutFailed);
+		},
+		onSettled: async () => {
+			resetPostHog();
 			clearAuthTokens();
+			clearSentryUser();
 			await queryClient.removeQueries({ queryKey: ['session'] });
 			navigate(HOMEPAGE, { replace: true });
 		},
@@ -236,7 +247,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 			const from = state?.from?.pathname;
 
 			setRedirectAfterAuth(from ?? DASHBOARD);
-
 			signInMutation.mutate(data);
 		},
 		[location.state, signInMutation]

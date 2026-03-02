@@ -1,6 +1,7 @@
 import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import { capture } from '@psycron/analytics/posthog/events';
+import { PostHogEvent } from '@psycron/analytics/posthog/types';
 import { Google } from '@psycron/components/icons';
 
 import {
@@ -23,15 +24,13 @@ export const GoogleOAuthButton = ({
 		| undefined;
 
 	const onClick = (): void => {
-		capture(
-			`${audience === 'worker' ? 'backoffice worker' : 'app auth'} google oauth clicked`,
-			{
-				intent,
-				audience,
-				locale,
-				stay_connected: Boolean(stayConnected),
-			}
-		);
+		capture(PostHogEvent.AuthGoogleOAuthClicked, {
+			intent,
+			audience,
+			locale,
+			stay_connected: Boolean(stayConnected),
+			area: audience === 'worker' ? 'backoffice' : 'therapist',
+		});
 
 		startGoogleOAuth({
 			stayConnected: Boolean(stayConnected),

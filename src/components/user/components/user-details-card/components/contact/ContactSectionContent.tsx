@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next';
-import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Phone } from '@psycron/components/icons';
 
@@ -26,10 +25,6 @@ export const ContactSectionContent = ({
 	const preferred = getPreferredContact(whatsapp, phone);
 
 	const handleEditContacts = (): void => {
-		capture('user details contacts edit clicked', {
-			entrypoint: preferred.kind === 'empty' ? 'empty_state' : 'row_action',
-			kind: preferred.kind,
-		});
 		onEditContacts();
 	};
 

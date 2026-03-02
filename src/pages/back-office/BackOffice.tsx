@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import { capture } from '@psycron/analytics/posthog/events';
+import { PostHogEvent } from '@psycron/analytics/posthog/types';
 import { Button } from '@psycron/components/button/Button';
 import { Link } from '@psycron/components/link/Link';
 import { Loader } from '@psycron/components/loader/Loader';
@@ -21,7 +22,9 @@ export const Backoffice = () => {
 
 	useEffect(() => {
 		if (!worker?._id) return;
-		capture('backoffice home viewed', { worker_id_present: true });
+		capture(PostHogEvent.BackofficeWorkerSessionFailed, {
+			reason: 'missing_worker',
+		});
 	}, [worker?._id]);
 
 	if (!isAuthenticated) {
@@ -37,11 +40,13 @@ export const Backoffice = () => {
 	if (error || !worker) {
 		return (
 			<Text>
-				Failed to load session.{' '}
+				Failed to load session.
 				<Link
 					to={`${SIGNIN}`}
 					onClick={() => {
-						capture('Worker failed to load at backoffice');
+						capture(PostHogEvent.BackofficeWorkerSessionFailed, {
+							reason: 'missing_worker',
+						});
 					}}
 				>
 					Sign in again

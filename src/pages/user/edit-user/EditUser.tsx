@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { capture } from '@psycron/analytics/posthog/events';
-import { PostHogEvent } from '@psycron/analytics/posthog/types';
+import {
+	capture,
+	toEditUserErrorCode,
+} from '@psycron/analytics/posthog/AppAnalytics';
 import type { CustomError } from '@psycron/api/error';
 import { editUserById } from '@psycron/api/user';
 import type { IEditUser } from '@psycron/api/user/index.types';
@@ -56,6 +58,11 @@ export const EditUser = () => {
 
 	useEffect((): void => {
 		if (!userDetails?._id) return;
+
+		capture('edit user viewed', {
+			session: session ?? 'default',
+			auth_provider: userDetails.authProvider,
+		});
 	}, [session, userDetails?._id, userDetails?.authProvider]);
 
 	const canEdit = {
@@ -105,6 +112,9 @@ export const EditUser = () => {
 	const editUserMutation = useMutation({
 		mutationFn: (payload: IEditUser) => editUserById(payload),
 		onSuccess: () => {
+			capture('edit user succeeded', {
+				session: session ?? 'default',
+			});
 			showAlert({
 				message: t('components.user-details.edit-success'),
 				severity: 'success',
@@ -112,6 +122,10 @@ export const EditUser = () => {
 			navigate(-1);
 		},
 		onError: (error: CustomError) => {
+			capture('edit user failed', {
+				error_code: toEditUserErrorCode(error),
+				session: session ?? 'default',
+			});
 			showAlert({
 				message: error.message || t('globals.error.internal-server-error'),
 				severity: 'error',
@@ -139,6 +153,10 @@ export const EditUser = () => {
 			!effectiveEnabled.contacts &&
 			!effectiveEnabled.password
 		) {
+			capture('edit user submit blocked', {
+				reason: 'no_sections_selected',
+				session: session ?? 'default',
+			});
 			showAlert({
 				message: t(
 					'components.user-details.no-changes',
@@ -156,17 +174,12 @@ export const EditUser = () => {
 			original: originalDefaults,
 		});
 
-		capture(PostHogEvent.EditUserSubmitted, {
-			session: (session ?? 'default') as
-				| 'default'
-				| 'name'
-				| 'contacts'
-				| 'password',
-			sections: [
-				effectiveEnabled.name ? 'name' : null,
-				effectiveEnabled.contacts ? 'contacts' : null,
-				effectiveEnabled.password ? 'password' : null,
-			].filter((s): s is 'name' | 'contacts' | 'password' => s != null),
+		capture('edit user submitted', {
+			session: session ?? 'default',
+			enabled_name: Boolean(effectiveEnabled.name),
+			enabled_contacts: Boolean(effectiveEnabled.contacts),
+			enabled_password: Boolean(effectiveEnabled.password),
+			auth_provider: authProvider,
 		});
 		editUserMutation.mutate(payload);
 	};
@@ -192,6 +205,10 @@ export const EditUser = () => {
 						isEnabled={enabled.name}
 						onToggle={() => {
 							const next = !enabled.name;
+							capture('edit user section toggled', {
+								section: 'name',
+								enabled: next,
+							});
 							setEnabled((s) => ({ ...s, name: next }));
 						}}
 					>
@@ -208,6 +225,10 @@ export const EditUser = () => {
 						isEnabled={enabled.contacts}
 						onToggle={() => {
 							const next = !enabled.contacts;
+							capture('edit user section toggled', {
+								section: 'contacts',
+								enabled: next,
+							});
 							setEnabled((s) => ({ ...s, contacts: next }));
 						}}
 					>
@@ -230,6 +251,11 @@ export const EditUser = () => {
 						disabled={!canEdit.password}
 						onToggle={() => {
 							const next = !enabled.password;
+							capture('edit user section toggled', {
+								section: 'password',
+								enabled: next,
+								disabled: !canEdit.password,
+							});
 							setEnabled((s) => ({ ...s, password: next }));
 						}}
 					>
@@ -254,13 +280,23 @@ export const EditUser = () => {
 											i18nKey='components.form.consent.marketing'
 											components={{
 												marketingLink: (
-													<Link to={externalUrls(i18n.language).MARKETING} />
+													<Link
+														to={externalUrls(i18n.language).MARKETING}
+														onClick={() =>
+															capture('edit user legal link clicked', {
+																doc: 'marketing',
+															})
+														}
+													/>
 												),
 											}}
 										/>
 									</EditUserDetailsMarketingConsentLabel>
 								}
 								onChange={(_, next) => {
+									capture('edit user marketing consent toggled', {
+										granted: next,
+									});
 									setMarketingAccepted(next);
 									updateMarketingConsent(next, () => {
 										setMarketingAccepted(!next);

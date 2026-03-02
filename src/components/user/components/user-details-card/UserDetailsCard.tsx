@@ -2,8 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Box, Dialog, DialogTitle } from '@mui/material';
-import { capture } from '@psycron/analytics/posthog/events';
-import { PostHogEvent } from '@psycron/analytics/posthog/types';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Avatar } from '@psycron/components/avatar/Avatar';
 import { Button } from '@psycron/components/button/Button';
 import {
@@ -85,6 +84,11 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 
 		if (wasVisibleRef.current) return;
 		wasVisibleRef.current = true;
+
+		capture('user details viewed', {
+			surface: isPage ? 'page' : 'overlay',
+			is_own_settings: isOwnSettings,
+		});
 	}, [isPage, isUserDetailsVisible, isOwnSettings]);
 
 	const { firstName, lastName, authProvider, _id, patients, consent } = user;
@@ -133,8 +137,9 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 				<PatientsSectionContent
 					patients={patients}
 					onGoToPatients={() => {
-						capture(PostHogEvent.UserDetailsPatientsNavigationClicked, {
-							view: isPage ? 'page' : 'overlay',
+						capture('user details patients go to clicked', {
+							surface: isPage ? 'page' : 'overlay',
+							patients_count: patients.length,
 						});
 						navigate(PATIENTS);
 						toggleUserDetails();
@@ -174,6 +179,7 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 
 	useClickOutside(userDetailsCardRef, () => {
 		if (!isDeleteOpen) {
+			capture('user details dismissed', { method: 'click_outside' });
 			toggleUserDetails();
 		}
 	});
@@ -203,6 +209,9 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 				<UserDetailsTopActionsWrapper>
 					<UserDetailsTopActionButton
 						onClick={() => {
+							capture('user details edit clicked', {
+								surface: isPage ? 'page' : 'overlay',
+							});
 							handleClickEditUser(_id);
 						}}
 					>
@@ -216,6 +225,7 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 					{!isPage ? (
 						<UserDetailsTopActionButton
 							onClick={() => {
+								capture('user details close clicked', { surface: 'overlay' });
 								toggleUserDetails();
 							}}
 						>
@@ -244,6 +254,9 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 							color='error'
 							small
 							onClick={() => {
+								capture('user details delete dialog opened', {
+									surface: isPage ? 'page' : 'overlay',
+								});
 								openDeleteDialog();
 							}}
 						>
@@ -256,6 +269,12 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 					onClose={(_e, reason) => {
 						if (isDeletePending) return;
 						if (reason === 'backdropClick') return;
+
+						capture('user details delete dialog closed', {
+							reason,
+							surface: isPage ? 'page' : 'overlay',
+						});
+
 						closeDeleteDialog();
 					}}
 				>
@@ -269,6 +288,9 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 						<DownloadWrapper
 							as='button'
 							onClick={() => {
+								capture('user details data export clicked', {
+									surface: isPage ? 'page' : 'overlay',
+								});
 								downloadMyData();
 							}}
 							disabled={isDownloadPending || isDeletePending}
@@ -279,6 +301,9 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 					<DeleteDialogActions>
 						<Button
 							onClick={() => {
+								capture('user details delete dialog cancelled', {
+									surface: isPage ? 'page' : 'overlay',
+								});
 								closeDeleteDialog();
 							}}
 							disabled={isDeletePending}
@@ -287,6 +312,9 @@ export const UserDetailsCard = ({ user, isPage }: IUserDetailsCardProps) => {
 						</Button>
 						<Button
 							onClick={() => {
+								capture('user details delete confirmed', {
+									surface: isPage ? 'page' : 'overlay',
+								});
 								deleteMyAccount();
 							}}
 							color='error'

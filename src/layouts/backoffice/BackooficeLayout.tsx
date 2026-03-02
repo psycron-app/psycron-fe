@@ -1,8 +1,7 @@
 import { type FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
-import { capture } from '@psycron/analytics/posthog/events';
-import { PostHogEvent } from '@psycron/analytics/posthog/types';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Avatar } from '@psycron/components/avatar/Avatar';
 import { Button } from '@psycron/components/button/Button';
 import { Divider } from '@psycron/components/divider/Divider';
@@ -56,9 +55,7 @@ export const BackofficeLayout: FC = () => {
 					<Link
 						to={`${SIGNIN}`}
 						onClick={() => {
-							capture(PostHogEvent.BackofficeWorkerSessionFailed, {
-								reason: 'not_authenticated',
-							});
+							capture('Worker failed to load at backoffice');
 						}}
 					>
 						Go to sign in
@@ -78,9 +75,7 @@ export const BackofficeLayout: FC = () => {
 						<Link
 							to={`${SIGNIN}`}
 							onClick={() => {
-								capture(PostHogEvent.BackofficeWorkerSessionFailed, {
-									reason: 'missing_worker',
-								});
+								capture('Worker failed to load at backoffice');
 							}}
 						>
 							Sign in again

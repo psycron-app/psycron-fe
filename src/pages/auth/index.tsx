@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Loader } from '@psycron/components/loader/Loader';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
 import i18n from '@psycron/i18n';
@@ -19,6 +20,7 @@ export const AuthPage = () => {
 
 	useEffect((): void => {
 		if (!isSignIn) return;
+		capture('auth sign in viewed');
 	}, [isSignIn]);
 
 	if (isSessionLoading) return <Loader />;

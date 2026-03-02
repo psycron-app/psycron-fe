@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { capture } from '@psycron/analytics/posthog/events';
-import { PostHogEvent } from '@psycron/analytics/posthog/types';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Alert, Patients } from '@psycron/components/icons';
 import { Text } from '@psycron/components/text/Text';
@@ -31,8 +30,10 @@ export const PatientsSectionContent = ({
 	const hasPatients = total > 0;
 
 	const handleGoToPatients = (): void => {
-		capture(PostHogEvent.UserDetailsPatientsCtaClicked, {
-			view: 'overlay',
+		capture('user details patients cta clicked', {
+			state: hasPatients ? 'has_patients' : 'empty',
+			total,
+			disabled: isTestingEnv,
 		});
 		onGoToPatients();
 	};

@@ -1,6 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { capture } from '@psycron/analytics/posthog/AppAnalytics';
+import { capture } from '@psycron/analytics/posthog/events';
+import { PostHogEvent } from '@psycron/analytics/posthog/types';
 import { Button } from '@psycron/components/button/Button';
 import { Divider } from '@psycron/components/divider/Divider';
 import { SignLayout } from '@psycron/components/form/components/shared/SignLayout';
@@ -35,7 +36,7 @@ export const SignUpStart = ({ onContinueWithEmail }: SignUpStartProps) => {
 								<Link
 									to={externalUrls(i18n.language).PRIVACY}
 									onClick={() =>
-										capture('auth legal link clicked', {
+										capture(PostHogEvent.AuthLegalLinkClicked, {
 											doc: 'privacy',
 											surface: 'signup start',
 										})
@@ -46,7 +47,7 @@ export const SignUpStart = ({ onContinueWithEmail }: SignUpStartProps) => {
 								<Link
 									to={externalUrls(i18n.language).TERMS}
 									onClick={() =>
-										capture('auth legal link clicked', {
+										capture(PostHogEvent.AuthLegalLinkClicked, {
 											doc: 'terms',
 											surface: 'signup start',
 										})

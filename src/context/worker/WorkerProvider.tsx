@@ -5,6 +5,10 @@ import React, {
 	useMemo,
 	useState,
 } from 'react';
+import {
+	clearSentryUser,
+	setSentryUser,
+} from '@psycron/analytics/sentry/sentry';
 import { getWorkerMe } from '@psycron/api/worker';
 import type { IWorker } from '@psycron/api/worker/index.types';
 import { useQuery } from '@tanstack/react-query';
@@ -58,10 +62,12 @@ export const WorkerProvider: React.FC<React.PropsWithChildren> = ({
 			name,
 			email: worker.email ?? null,
 		});
+		setSentryUser(worker._id, { area: 'backoffice', role: 'worker' });
 	}, [worker?._id, worker?.firstName, worker?.lastName, worker?.email]);
 
 	const logout = (): void => {
 		clearWorkerTokens();
+		clearSentryUser();
 		posthog.reset();
 		setVersion((v) => v + 1);
 	};

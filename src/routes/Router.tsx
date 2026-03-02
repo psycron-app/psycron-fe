@@ -7,7 +7,7 @@ import { BackofficeLayout } from '@psycron/layouts/backoffice/BackooficeLayout';
 import { LanguageLayout } from '@psycron/layouts/language-layout/LanguageLayout';
 import { WorkerAppProviders } from '@psycron/layouts/providers/WorkerAppProviders';
 import { PublicLayout } from '@psycron/layouts/public-layout/PublicLayout';
-import { NotFound } from '@psycron/pages/error/NotFound';
+import { NotFound } from '@psycron/pages/error/not-found/NotFound';
 
 import privateRoutes from './PrivateRoutes';
 import publicRoutes from './PublicRoutes';

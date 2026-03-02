@@ -2,8 +2,7 @@ import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Box, TextField } from '@mui/material';
-import { capture } from '@psycron/analytics/posthog/events';
-import { PostHogEvent } from '@psycron/analytics/posthog/types';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
 import { Divider } from '@psycron/components/divider/Divider';
@@ -94,7 +93,7 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 						<Link
 							to={REQPASSRESET}
 							onClick={() =>
-								capture(PostHogEvent.AuthForgotPasswordClicked, {
+								capture('auth forgot password clicked', {
 									audience: 'therapist',
 									method: 'password',
 								})

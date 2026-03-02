@@ -3,8 +3,7 @@ import type { FieldValues, Path } from 'react-hook-form';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { InputAdornment, TextField } from '@mui/material';
-import { capture } from '@psycron/analytics/posthog/events';
-import { PostHogEvent } from '@psycron/analytics/posthog/types';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { NotVisible, Visible } from '@psycron/components/icons';
 
 import { getPathError } from '../phone/utils/getPathError';
@@ -66,7 +65,7 @@ export const PasswordInput = <T extends FieldValues>({
 	const onSetShowPassword = (): void => {
 		setShowPassword((p) => {
 			const next = !p;
-			capture(PostHogEvent.AuthPasswordVisibilityToggled, {
+			capture('auth password visibility toggled', {
 				field: 'password',
 				visible: next,
 			});
@@ -77,6 +76,10 @@ export const PasswordInput = <T extends FieldValues>({
 	const onSetShowConfirmPassword = (): void => {
 		setShowConfirm((p) => {
 			const next = !p;
+			capture('auth password visibility toggled', {
+				field: 'confirm_password',
+				visible: next,
+			});
 			return next;
 		});
 	};
@@ -103,11 +106,7 @@ export const PasswordInput = <T extends FieldValues>({
 									disabled={!passwordValue?.length}
 									onClick={onSetShowPassword}
 									edge='end'
-									aria-label={
-										showPassword
-											? t('auth.hide-password')
-											: t('auth.show-password')
-									}
+									aria-label={showPassword ? 'Hide password' : 'Show password'}
 								>
 									{showPassword ? <Visible /> : <NotVisible />}
 								</StyledIconButton>

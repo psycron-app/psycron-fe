@@ -1,9 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Trans, useTranslation } from 'react-i18next';
 import { Box } from '@mui/material';
-import { capture } from '@psycron/analytics/posthog/events';
-import { PostHogEvent } from '@psycron/analytics/posthog/types';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Checkbox } from '@psycron/components/checkbox/Checkbox';
 import { ChevronLeft } from '@psycron/components/icons';
@@ -47,17 +46,9 @@ export const SignUpEmail = ({
 
 	const marketingAccepted = watch('consent.marketingEmailsAccepted');
 
-	const hasTrackedInitialMarketingValue = useRef(false);
-
 	useEffect((): void => {
 		if (marketingAccepted === undefined) return;
-
-		if (!hasTrackedInitialMarketingValue.current) {
-			hasTrackedInitialMarketingValue.current = true;
-			return;
-		}
-
-		capture(PostHogEvent.AuthMarketingConsentToggled, {
+		capture('auth marketing consent toggled', {
 			granted: Boolean(marketingAccepted),
 			surface: 'signup email',
 		});

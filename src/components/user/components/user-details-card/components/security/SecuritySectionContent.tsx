@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { capture } from '@psycron/analytics/posthog/events';
-import { PostHogEvent } from '@psycron/analytics/posthog/types';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { Button } from '@psycron/components/button/Button';
 import { Password } from '@psycron/components/icons';
 import { Link } from '@psycron/components/link/Link';
@@ -40,6 +39,9 @@ export const SecuritySectionContent = ({
 	);
 
 	const handleChangePassword = (): void => {
+		capture('user details change password clicked', {
+			auth_provider: authProvider,
+		});
 		onChangePassword();
 	};
 
@@ -80,8 +82,15 @@ export const SecuritySectionContent = ({
 						small
 						checked={marketingAccepted}
 						onChange={(_, next) => {
+							capture('user details marketing consent toggled', {
+								granted: next,
+							});
+
 							setMarketingAccepted(next);
 							updateMarketingConsent(next, () => {
+								capture('user details marketing consent update failed', {
+									granted: next,
+								});
 								setMarketingAccepted(!next);
 							});
 						}}
@@ -98,7 +107,7 @@ export const SecuritySectionContent = ({
 								<Link
 									to={links.privacy}
 									onClick={() =>
-										capture(PostHogEvent.SettingsLegalLinkClicked, {
+										capture('user details legal link clicked', {
 											doc: 'privacy',
 											surface: 'security section',
 										})
@@ -109,7 +118,7 @@ export const SecuritySectionContent = ({
 								<Link
 									to={links.terms}
 									onClick={() =>
-										capture(PostHogEvent.SettingsLegalLinkClicked, {
+										capture('user details legal link clicked', {
 											doc: 'terms',
 											surface: 'security section',
 										})

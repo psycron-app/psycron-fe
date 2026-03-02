@@ -1,5 +1,6 @@
 import type { SubmitHandler } from 'react-hook-form';
 import { FormProvider, useForm } from 'react-hook-form';
+import { capture } from '@psycron/analytics/posthog/AppAnalytics';
 import { SignIn } from '@psycron/components/form/SignIn/SignIn';
 import type { ISignInForm } from '@psycron/components/form/SignIn/SignIn.types';
 import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
@@ -20,6 +21,11 @@ export const SignInContainer = () => {
 	});
 
 	const onSubmit: SubmitHandler<ISignInForm> = (data) => {
+		capture('auth sign in started', {
+			method: 'password',
+			audience: 'therapist',
+			stay_connected: data.stayConnected,
+		});
 		signIn(data);
 	};
 

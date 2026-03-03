@@ -16,6 +16,15 @@ interface ImportMetaEnv {
 
 	/** Backend API URL (required) */
 	readonly VITE_PSYCRON_BASE_API_URL: string;
+
+	/** Host used when redirecting into the testing area */
+	readonly VITE_PSYCRON_BASE_URL?: string;
+
+	/** Runtime environment for analytics/error monitoring */
+	readonly VITE_RUNTIME_ENV?: 'dev' | 'staging' | 'prod';
+
+	/** Optional test-mode override: true/false, 1/0, test/app */
+	readonly VITE_TEST_MODE?: string;
 }
 
 interface ImportMeta {

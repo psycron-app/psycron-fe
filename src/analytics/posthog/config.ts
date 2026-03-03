@@ -6,12 +6,23 @@ const POSTHOG_HOST =
 	(import.meta.env.VITE_POSTHOG_HOST as string | undefined) ??
 	'https://eu.posthog.com';
 
-const APP_ENV =
-	(import.meta.env.VITE_APP_ENV as
-		| 'development'
-		| 'staging'
-		| 'production'
-		| undefined) ?? 'development';
+type RuntimeEnv = 'dev' | 'staging' | 'prod';
+type AppEnv = 'development' | 'staging' | 'production';
+
+const parseRuntimeEnv = (rawEnv: string | undefined): RuntimeEnv => {
+	if (rawEnv === 'prod' || rawEnv === 'staging' || rawEnv === 'dev') {
+		return rawEnv;
+	}
+	return 'dev';
+};
+
+const mapToAppEnv = (runtimeEnv: RuntimeEnv): AppEnv => {
+	if (runtimeEnv === 'prod') return 'production';
+	if (runtimeEnv === 'staging') return 'staging';
+	return 'development';
+};
+
+const APP_ENV = mapToAppEnv(parseRuntimeEnv(import.meta.env.VITE_RUNTIME_ENV));
 
 let isInitialized = false;
 

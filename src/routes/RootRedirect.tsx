@@ -13,6 +13,13 @@ export const RootRedirect = () => {
 		const host = window.location.hostname.toLowerCase();
 
 		if (!host.startsWith('test.')) {
+			if (!PSYCRON_HOST) {
+				// eslint-disable-next-line no-console
+				console.warn(
+					'[RootRedirect] Missing VITE_PSYCRON_BASE_URL while test mode is enabled'
+				);
+				return;
+			}
 			const target = `${window.location.protocol}//${PSYCRON_HOST}/${locale}`;
 			window.location.assign(target);
 		}

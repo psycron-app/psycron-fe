@@ -1,9 +1,23 @@
-type RuntimeEnv = 'test' | 'app';
+type RuntimeArea = 'test' | 'app';
 
-export const getRuntimeEnv = (): RuntimeEnv => {
-	const forced = import.meta.env.VITE_RUNTIME_ENV as RuntimeEnv | undefined;
+const parseTestModeOverride = (value: string | undefined): RuntimeArea | null => {
+	if (!value) return null;
 
-	if (forced) return forced;
+	const normalized = value.trim().toLowerCase();
+	if (normalized === 'test' || normalized === 'true' || normalized === '1') {
+		return 'test';
+	}
+	if (normalized === 'app' || normalized === 'false' || normalized === '0') {
+		return 'app';
+	}
+
+	return null;
+};
+
+export const getRuntimeEnv = (): RuntimeArea => {
+	const forced = parseTestModeOverride(import.meta.env.VITE_TEST_MODE);
+
+	if (forced !== null) return forced;
 
 	const host = window.location.hostname.toLowerCase();
 	if (host.startsWith('test.')) return 'test';

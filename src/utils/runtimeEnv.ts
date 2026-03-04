@@ -15,12 +15,12 @@ const parseTestModeOverride = (value: string | undefined): RuntimeArea | null =>
 };
 
 export const getRuntimeEnv = (): RuntimeArea => {
-	const forced = parseTestModeOverride(import.meta.env.VITE_TEST_MODE);
-
-	if (forced !== null) return forced;
-
 	const host = window.location.hostname.toLowerCase();
 	if (host.startsWith('test.')) return 'test';
+
+	const forced = parseTestModeOverride(import.meta.env.VITE_TEST_MODE);
+	if (forced !== null) return forced;
+
 	return 'app';
 };
 

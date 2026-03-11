@@ -8,8 +8,8 @@ const float = keyframes`
 `;
 
 export const SceneContainer = styled(Box)`
-	width: 200px;
-	height: 300px;
+	width: 350px;
+	height: 350px;
 	position: relative;
 	animation: ${float} 4s ease-in-out infinite;
 	will-change: transform;

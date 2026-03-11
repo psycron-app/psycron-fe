@@ -24,7 +24,9 @@ const blink = (splineApp: Application) => {
 	setTimeout(open, BLINK_DURATION);
 };
 
-const scheduleNextBlink = (splineApp: Application): ReturnType<typeof setTimeout> => {
+const scheduleNextBlink = (
+	splineApp: Application
+): ReturnType<typeof setTimeout> => {
 	// Random interval between 2s and 5s
 	const delay = 2000 + Math.random() * 3000;
 	return setTimeout(() => {
@@ -39,7 +41,12 @@ export const JupiterScene = () => {
 	const blinkTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 	const targetRotation = useRef({ x: 0, y: 0 });
 	const currentRotation = useRef({ x: 0, y: 0 });
-	const eyeOrigin = useRef<{ lx: number; ly: number; rx: number; ry: number } | null>(null);
+	const eyeOrigin = useRef<{
+		lx: number;
+		ly: number;
+		rx: number;
+		ry: number;
+	} | null>(null);
 
 	const onLoad = (splineApp: Application) => {
 		splineRef.current = splineApp;
@@ -61,15 +68,19 @@ export const JupiterScene = () => {
 		const handleMouseMove = (e: MouseEvent) => {
 			const { innerWidth, innerHeight } = window;
 			targetRotation.current = {
-				x: ((e.clientY / innerHeight) - 0.5) * 0.6,
-				y: ((e.clientX / innerWidth) - 0.5) * 0.6,
+				x: (e.clientY / innerHeight - 0.5) * 1.2,
+				y: (e.clientX / innerWidth - 0.5) * 1.2,
 			};
 		};
 
 		const animate = () => {
 			if (splineRef.current) {
-				currentRotation.current.x += (targetRotation.current.x - currentRotation.current.x) * 0.05;
-				currentRotation.current.y += (targetRotation.current.y - currentRotation.current.y) * 0.05;
+				const t = Date.now() / 1000;
+
+				currentRotation.current.x +=
+					(targetRotation.current.x - currentRotation.current.x) * 0.05;
+				currentRotation.current.y +=
+					(targetRotation.current.y - currentRotation.current.y) * 0.05;
 
 				const head = splineRef.current.findObjectByName('Group');
 				if (head) {
@@ -80,7 +91,6 @@ export const JupiterScene = () => {
 				if (eyeOrigin.current) {
 					const eyeL = splineRef.current.findObjectByName('EyeL');
 					const eyeR = splineRef.current.findObjectByName('EyeR');
-					// Move eyes slightly toward cursor (max 4 units)
 					const offsetX = currentRotation.current.y * 8;
 					const offsetY = -currentRotation.current.x * 8;
 					if (eyeL) {
@@ -91,6 +101,21 @@ export const JupiterScene = () => {
 						eyeR.position.x = eyeOrigin.current.rx + offsetX;
 						eyeR.position.y = eyeOrigin.current.ry + offsetY;
 					}
+				}
+
+				// Cat ear twitching — each ear on a slightly different sine wave
+				const earL = splineRef.current.findObjectByName('EarL');
+				const earR = splineRef.current.findObjectByName('EarR');
+				if (earL) {
+					// Slow idle sway + occasional quick flick via a faster sine
+					earL.rotation.z = Math.sin(t * 0.8) * 0.08 + Math.sin(t * 3.5) * 0.04;
+				}
+				if (earR) {
+					// Offset phase so they don't move in perfect sync
+					earR.rotation.z = -(
+						Math.sin(t * 0.8 + 1.2) * 0.08 +
+						Math.sin(t * 3.5 + 0.8) * 0.04
+					);
 				}
 			}
 			animFrameRef.current = requestAnimationFrame(animate);
@@ -117,5 +142,3 @@ export const JupiterScene = () => {
 		</SceneContainer>
 	);
 };
-
-export default JupiterScene;

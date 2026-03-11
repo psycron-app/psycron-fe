@@ -6,7 +6,6 @@ import {
 	CharacterWrapper,
 	GradientText,
 	GreettingText,
-	SpeechBubble,
 	SpeechBubbleWrapper,
 	StartButton,
 	SubtitleText,
@@ -24,9 +23,7 @@ export const JupiterWelcome = ({ onStart }: JupiterWelcomeProps) => {
 	return (
 		<WelcomeContainer>
 			<CharacterWrapper>
-				<SpeechBubbleWrapper>
-					<SpeechBubble>{t('chat.jupiter.welcome.hello')}</SpeechBubble>
-				</SpeechBubbleWrapper>
+				<SpeechBubbleWrapper></SpeechBubbleWrapper>
 				<JupiterScene />
 			</CharacterWrapper>
 

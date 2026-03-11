@@ -1,4 +1,5 @@
-import { Box, styled } from '@mui/material';
+import styled from '@emotion/styled';
+import { Box } from '@mui/material';
 
 export const PublicLayoutWrapper = styled(Box)`
 	display: flex;

@@ -42,3 +42,6 @@ dist-ssr
 *.p12
 secrets/
 .secrets/
+
+# Claude Code local config
+.claude/

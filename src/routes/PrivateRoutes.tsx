@@ -28,6 +28,8 @@ const privateRoutes = [
 	{ path: EDITUSER, element: <EditUser /> },
 	{ path: EDITUSERBYSESSION, element: <EditUser /> },
 	{ path: CHANGEPASSWORD, element: <EditPassword /> },
+	{ path: 'availability', element: <div>this is the page</div> },
+
 	// { path: APPOINTMENTS, element: <AppointmentPage /> },
 	{ path: AVAILABILITYGENERATE, element: <GenerateAvailability /> },
 	// { path: AVAILABILITY, element: <SetAvailabilityPage /> },

@@ -49,7 +49,9 @@ export const AvailabilityPreviewCard = ({
 			{
 				dotColor: palette.success.main,
 				label: t('jupiter.preview.label-session-type'),
-				value: answers.sessionType ?? '—',
+				value: answers.sessionType
+				? t(`jupiter.session-type.${answers.sessionType}`)
+				: '—',
 			},
 			{
 				dotColor: palette.info.main,

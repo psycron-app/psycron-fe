@@ -1,12 +1,16 @@
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { useCallback, useState } from 'react';
+import { ChevronLeft, Send } from '@psycron/components/icons';
 
 import {
 	ChipButton,
 	ChipsContainer,
 	ChipsFadeOut,
 	ContinueButton,
+	OtherBackButton,
 	OtherInput,
+	OtherInputRow,
+	OtherSendButton,
 } from './ChatChips.styles';
 import type { IMultiSelectChipsProps } from './ChatChips.types';
 
@@ -51,11 +55,16 @@ export const MultiSelectChips = ({
 	const handleOtherKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
 		if (e.key === 'Enter' && !e.shiftKey && otherValue.trim()) {
 			e.preventDefault();
-			setSubmitted(true);
-			setTimeout(() => {
-				onOtherSubmit?.(otherValue.trim());
-			}, 200);
+			submitOther();
 		}
+	};
+
+	const submitOther = () => {
+		if (!otherValue.trim()) return;
+		setSubmitted(true);
+		setTimeout(() => {
+			onOtherSubmit?.(otherValue.trim());
+		}, 200);
 	};
 
 	if (submitted) {
@@ -96,14 +105,31 @@ export const MultiSelectChips = ({
 			)}
 
 			{showOther && (
-				<OtherInput
-					size='small'
-					placeholder={otherPlaceholder}
-					value={otherValue}
-					onChange={(e) => setOtherValue(e.target.value)}
-					onKeyDown={handleOtherKeyDown}
-					autoFocus
-				/>
+				<OtherInputRow>
+					<OtherBackButton
+						onClick={() => {
+							setShowOther(false);
+							setOtherValue('');
+						}}
+					>
+						<ChevronLeft />
+					</OtherBackButton>
+					<OtherInput
+						size='small'
+						placeholder={otherPlaceholder}
+						value={otherValue}
+						onChange={(e) => setOtherValue(e.target.value)}
+						onKeyDown={handleOtherKeyDown}
+						autoFocus
+					/>
+					<OtherSendButton
+						hasValue={!!otherValue.trim()}
+						disabled={!otherValue.trim()}
+						onClick={submitOther}
+					>
+						<Send />
+					</OtherSendButton>
+				</OtherInputRow>
 			)}
 		</>
 	);

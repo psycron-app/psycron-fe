@@ -2,6 +2,7 @@ import { css } from '@emotion/react';
 import { Box, styled, Typography } from '@mui/material';
 import { Button } from '@psycron/components/button/Button';
 import { palette } from '@psycron/theme/palette/palette.theme';
+import { smallShadow } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 // ─── Shared styles ────────────────────────────────────────────────────────────
@@ -13,11 +14,12 @@ const buttonTransition = css`
 // ─── Components ───────────────────────────────────────────────────────────────
 
 export const PreviewCardWrapper = styled(Box)`
-	border: 2px solid ${palette.brand.light};
 	border-radius: ${spacing.small};
 	padding: ${spacing.mediumSmall};
 	width: 100%;
 	align-self: center;
+
+	box-shadow: ${smallShadow};
 
 	@keyframes previewSlideIn {
 		from {

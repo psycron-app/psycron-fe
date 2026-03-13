@@ -7,7 +7,8 @@ export type JupiterStep =
 	| 'timezone'
 	| 'preview'
 	| 'google-permissions'
-	| 'google-success';
+	| 'google-success'
+	| 'done';
 
 export interface JupiterAnswers {
 	calendarChoice?: 'google' | 'manual';

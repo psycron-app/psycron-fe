@@ -1,17 +1,19 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { parseJupiterInput } from '@psycron/api/jupiter';
 import { OtherInput } from '@psycron/components/chat/chips/ChatChips.styles';
 import type { IChipOption } from '@psycron/components/chat/chips/ChatChips.types';
 import { MultiSelectChips } from '@psycron/components/chat/chips/MultiSelectChips';
 import { SingleSelectChips } from '@psycron/components/chat/chips/SingleSelectChips';
 import { Divider } from '@psycron/components/divider/Divider';
-import { Jupiter } from '@psycron/components/icons';
+import { ChevronLeft, Jupiter, Send } from '@psycron/components/icons';
 
 import { AvailabilityPreviewCard } from '../availability-preview-card/AvailabilityPreviewCard';
 import { GoogleCalendarPermissions } from '../google-calendar-path/GoogleCalendarPermissions';
 import { GoogleCalendarSuccess } from '../google-calendar-path/GoogleCalendarSuccess';
 
 import {
+	BackButton,
 	BotBubble,
 	BotMessageGroup,
 	CardHeader,
@@ -21,6 +23,9 @@ import {
 	ChipsInline,
 	ConversationContainer,
 	IconRow,
+	InputRow,
+	SendButton,
+	ThinkingBubble,
 	UserBubble,
 	UserMessageGroup,
 } from './JupiterConversation.styles';
@@ -32,16 +37,20 @@ export const JupiterConversation = () => {
 
 	const [customInputFor, setCustomInputFor] = useState<string | null>(null);
 	const [customValue, setCustomValue] = useState('');
+	const [isParsing, setIsParsing] = useState(false);
 
 	const {
 		step,
 		answers,
 		messages,
 		isPublishing,
+		workingDaysKey,
 		detectedTimezone,
 		initFlow,
 		handleCalendarChoice,
 		handleWorkingDays,
+		handleWorkingDaysFromText,
+		retryWorkingDays,
 		handleTimeRange,
 		handleSessionDuration,
 		handleSessionType,
@@ -53,6 +62,21 @@ export const JupiterConversation = () => {
 		handleGoogleBack,
 		handleGooglePostConnect,
 	} = useJupiterFlow();
+
+	const handleWorkingDaysOtherSubmit = useCallback(
+		async (raw: string) => {
+			setIsParsing(true);
+			const result = await parseJupiterInput('working-days', raw);
+			setIsParsing(false);
+
+			if (result.valid && Array.isArray(result.parsed)) {
+				handleWorkingDaysFromText(result.parsed);
+			} else {
+				retryWorkingDays();
+			}
+		},
+		[handleWorkingDaysFromText, retryWorkingDays]
+	);
 
 	useEffect(() => {
 		initFlow();
@@ -123,8 +147,29 @@ export const JupiterConversation = () => {
 		[t]
 	);
 
+	const submitCustomInput = useCallback(
+		async (
+			stepKey: 'time-range' | 'session-duration',
+			onValue: (label: string) => void
+		) => {
+			const raw = customValue.trim();
+			if (!raw || isParsing) return;
+			setIsParsing(true);
+			const result = await parseJupiterInput(stepKey, raw);
+			setIsParsing(false);
+			if (result.valid && typeof result.parsed === 'string') {
+				onValue(result.parsed);
+				setCustomInputFor(null);
+				setCustomValue('');
+			} else {
+				setCustomValue('');
+			}
+		},
+		[customValue, isParsing]
+	);
+
 	const renderSelectWithCustom = (
-		stepKey: string,
+		stepKey: 'time-range' | 'session-duration',
 		options: IChipOption[],
 		onValue: (label: string) => void,
 		placeholder: string
@@ -132,20 +177,42 @@ export const JupiterConversation = () => {
 		if (customInputFor === stepKey) {
 			return (
 				<ChipsInline>
-					<OtherInput
-						autoFocus
-						size='small'
-						placeholder={placeholder}
-						value={customValue}
-						onChange={(e) => setCustomValue(e.target.value)}
-						onKeyDown={(e) => {
-							if (e.key === 'Enter' && customValue.trim()) {
-								onValue(customValue.trim());
+					<InputRow>
+						<BackButton
+							onClick={() => {
 								setCustomInputFor(null);
 								setCustomValue('');
-							}
-						}}
-					/>
+							}}
+						>
+							<ChevronLeft />
+						</BackButton>
+						<OtherInput
+							autoFocus
+							size='small'
+							placeholder={placeholder}
+							value={customValue}
+							disabled={isParsing}
+							onChange={(e) => setCustomValue(e.target.value)}
+							onKeyDown={(e) => {
+								if (e.key === 'Enter') submitCustomInput(stepKey, onValue);
+							}}
+							sx={{ mt: 0 }}
+						/>
+						<SendButton
+							hasValue={!!customValue.trim()}
+							disabled={!customValue.trim() || isParsing}
+							onClick={() => submitCustomInput(stepKey, onValue)}
+						>
+							<Send />
+						</SendButton>
+					</InputRow>
+					{isParsing && (
+						<ThinkingBubble>
+							<span />
+							<span />
+							<span />
+						</ThinkingBubble>
+					)}
 				</ChipsInline>
 			);
 		}
@@ -185,11 +252,20 @@ export const JupiterConversation = () => {
 				return (
 					<ChipsInline>
 						<MultiSelectChips
+							key={workingDaysKey}
 							options={chipOptions.days}
 							onConfirm={handleWorkingDays}
 							confirmLabel={t('jupiter.working-days.continue')}
 							otherPlaceholder={t('jupiter.working-days.other-placeholder')}
+							onOtherSubmit={handleWorkingDaysOtherSubmit}
 						/>
+						{isParsing && (
+							<ThinkingBubble>
+								<span />
+								<span />
+								<span />
+							</ThinkingBubble>
+						)}
 					</ChipsInline>
 				);
 
@@ -224,19 +300,34 @@ export const JupiterConversation = () => {
 				if (answers.timezoneConfirmed === false) {
 					return (
 						<ChipsInline>
-							<OtherInput
-								autoFocus
-								size='small'
-								placeholder={detectedTimezone}
-								value={customValue}
-								onChange={(e) => setCustomValue(e.target.value)}
-								onKeyDown={(e) => {
-									if (e.key === 'Enter' && customValue.trim()) {
-										handleTimezoneSelect(customValue.trim());
-										setCustomValue('');
-									}
-								}}
-							/>
+							<InputRow>
+								<OtherInput
+									autoFocus
+									size='small'
+									placeholder={detectedTimezone}
+									value={customValue}
+									onChange={(e) => setCustomValue(e.target.value)}
+									onKeyDown={(e) => {
+										if (e.key === 'Enter' && customValue.trim()) {
+											handleTimezoneSelect(customValue.trim());
+											setCustomValue('');
+										}
+									}}
+									sx={{ mt: 0 }}
+								/>
+								<SendButton
+									hasValue={!!customValue.trim()}
+									disabled={!customValue.trim()}
+									onClick={() => {
+										if (customValue.trim()) {
+											handleTimezoneSelect(customValue.trim());
+											setCustomValue('');
+										}
+									}}
+								>
+									<Send />
+								</SendButton>
+							</InputRow>
 						</ChipsInline>
 					);
 				}
@@ -271,6 +362,9 @@ export const JupiterConversation = () => {
 
 			case 'google-success':
 				return <GoogleCalendarSuccess onSelect={handleGooglePostConnect} />;
+
+			case 'done':
+				return null;
 
 			default:
 				return null;

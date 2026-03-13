@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { getGoogleCalendarConnectUrl } from '@psycron/api/auth';
+import { generateJupiterAvailability } from '@psycron/api/jupiter';
+import { useAlert } from '@psycron/context/alert/AlertContext';
+import { AVAILABILITYGENERATE, AVAILABILITYPATH } from '@psycron/pages/urls';
 
 import type {
 	JupiterAnswers,
@@ -9,13 +14,22 @@ import type {
 
 const STORAGE_KEY = 'jupiter-flow';
 
+const VALID_SESSION_TYPE_KEYS = new Set(['chip-online', 'chip-in-person', 'chip-both']);
+
 const loadSaved = (): {
 	answers: JupiterAnswers;
 	step: JupiterStep;
 } | null => {
 	try {
 		const raw = localStorage.getItem(STORAGE_KEY);
-		return raw ? JSON.parse(raw) : null;
+		if (!raw) return null;
+		const data = JSON.parse(raw) as { answers: JupiterAnswers; step: JupiterStep };
+		// Migrate: if sessionType is a translated label (pre-chip-key era), clear it
+		if (data.answers?.sessionType && !VALID_SESSION_TYPE_KEYS.has(data.answers.sessionType)) {
+			data.answers = { ...data.answers, sessionType: undefined };
+			if (data.step === 'preview') data.step = 'session-type';
+		}
+		return data;
 	} catch {
 		return null;
 	}
@@ -26,7 +40,7 @@ const STEP_QUESTION_KEY: Partial<Record<JupiterStep, string>> = {
 	'session-duration': 'jupiter.session-duration.response',
 	'session-type': 'jupiter.session-type.response',
 	'time-range': 'jupiter.time-range.response',
-	'timezone': 'jupiter.timezone.response',
+	timezone: 'jupiter.timezone.response',
 	'working-days': 'jupiter.working-days.response',
 };
 
@@ -40,17 +54,35 @@ const WEEKDAY_KEY_MAP: Record<string, string> = {
 	'chip-wed': 'WEDNESDAY',
 };
 
+const CANONICAL_TO_CHIP: Record<string, string> = {
+	FRIDAY: 'chip-fri',
+	MONDAY: 'chip-mon',
+	SATURDAY: 'chip-sat',
+	SUNDAY: 'chip-sun',
+	THURSDAY: 'chip-thu',
+	TUESDAY: 'chip-tue',
+	WEDNESDAY: 'chip-wed',
+};
+
 export const useJupiterFlow = () => {
-	const { t } = useTranslation();
+	const { t, i18n } = useTranslation();
+	const navigate = useNavigate();
+	const { showAlert } = useAlert();
 
 	const saved = useMemo(() => loadSaved(), []);
 
+	const isCalendarConnected = useMemo(() => {
+		const params = new URLSearchParams(window.location.search);
+		return params.get('calendar') === 'connected';
+	}, []);
+
 	const [step, setStep] = useState<JupiterStep>(
-		saved?.step ?? 'calendar-choice'
+		isCalendarConnected ? 'google-success' : (saved?.step ?? 'calendar-choice')
 	);
 	const [answers, setAnswers] = useState<JupiterAnswers>(saved?.answers ?? {});
 	const [messages, setMessages] = useState<JupiterMessage[]>([]);
 	const [isPublishing, setIsPublishing] = useState(false);
+	const [workingDaysKey, setWorkingDaysKey] = useState(0);
 
 	const hasInitialized = useRef(false);
 
@@ -97,6 +129,18 @@ export const useJupiterFlow = () => {
 		},
 		[addUserMessage, advance]
 	);
+
+	// ─── Google OAuth return handler ───────────────────────────────────────────
+
+	useEffect(() => {
+		if (!isCalendarConnected) return;
+
+		const url = new URL(window.location.href);
+		url.searchParams.delete('calendar');
+		window.history.replaceState({}, '', url.toString());
+
+		hasInitialized.current = true;
+	}, [isCalendarConnected]);
 
 	// ─── Flow initialization ───────────────────────────────────────────────────
 
@@ -152,6 +196,24 @@ export const useJupiterFlow = () => {
 		[addUserMessage, advance, t]
 	);
 
+	// Accepts canonical day names (e.g. ["MONDAY","FRIDAY"]) from AI-parsed text
+	const handleWorkingDaysFromText = useCallback(
+		(canonicalDays: string[]) => {
+			const chipKeys = canonicalDays
+				.map((d) => CANONICAL_TO_CHIP[d])
+				.filter(Boolean) as string[];
+			if (chipKeys.length > 0) {
+				handleWorkingDays(chipKeys);
+			}
+		},
+		[handleWorkingDays]
+	);
+
+	const retryWorkingDays = useCallback(() => {
+		addBotMessage(t('jupiter.errors.invalid-input'));
+		setWorkingDaysKey((k) => k + 1);
+	}, [addBotMessage, t]);
+
 	// Receives the resolved display label (from chip option or free text input)
 	const handleTimeRange = useCallback(
 		(label: string) =>
@@ -181,7 +243,13 @@ export const useJupiterFlow = () => {
 	const handleSessionType = useCallback(
 		(key: string) => {
 			const label = t(`jupiter.session-type.${key}`);
-			commit(label, 'sessionType', label, 'jupiter.timezone.response', 'timezone');
+			commit(
+				label,
+				'sessionType',
+				key,
+				'jupiter.timezone.response',
+				'timezone'
+			);
 		},
 		[commit, t]
 	);
@@ -217,27 +285,62 @@ export const useJupiterFlow = () => {
 	// ─── Publish / Reset ───────────────────────────────────────────────────────
 
 	const handlePublish = useCallback(async () => {
+		if (
+			!answers.workingDays?.length ||
+			!answers.timeRange ||
+			!answers.sessionDuration ||
+			!answers.sessionType ||
+			!answers.timezone
+		)
+			return;
+
 		setIsPublishing(true);
-		// TODO: integrate with actual availability API
-		setIsPublishing(false);
-	}, []);
+		try {
+			await generateJupiterAvailability({
+				workingDays: answers.workingDays,
+				timeRange: answers.timeRange,
+				sessionDuration: answers.sessionDuration,
+				sessionType: answers.sessionType,
+				timezone: answers.timezone,
+			});
+			localStorage.removeItem(STORAGE_KEY);
+			showAlert({ message: t('jupiter.post-publish.success-toast'), severity: 'success' });
+			showAlert({ message: t('jupiter.post-publish.welcome-toast'), severity: 'success' });
+			navigate(`/${i18n.language}/${AVAILABILITYPATH}`);
+		} catch {
+			addBotMessage(t('jupiter.errors.save-fail'));
+		} finally {
+			setIsPublishing(false);
+		}
+	}, [answers, addBotMessage, i18n.language, navigate, showAlert, t]);
 
 	const handleReset = useCallback(() => {
 		localStorage.removeItem(STORAGE_KEY);
 		setStep('calendar-choice');
 		setAnswers({});
 		setMessages([
-			{ content: t('jupiter.calendar-choice.msg2'), sender: 'bot', showIcon: true },
+			{
+				content: t('jupiter.calendar-choice.msg2'),
+				sender: 'bot',
+				showIcon: true,
+			},
 		]);
 		hasInitialized.current = true;
 	}, [t]);
 
 	// ─── Google Calendar path ──────────────────────────────────────────────────
 
-	const handleGoogleContinue = useCallback(() => {
-		// TODO: trigger Google OAuth flow
-		setStep('google-success');
-	}, []);
+	const handleGoogleContinue = useCallback(async () => {
+		try {
+			const { url } = await getGoogleCalendarConnectUrl({
+				locale: i18n.language,
+				returnTo: `/${AVAILABILITYGENERATE}?calendar=connected`,
+			});
+			window.location.assign(url);
+		} catch {
+			addBotMessage(t('jupiter.errors.google-oauth-fail'));
+		}
+	}, [addBotMessage, i18n.language, t]);
 
 	const handleGoogleBack = useCallback(() => setStep('calendar-choice'), []);
 
@@ -260,10 +363,13 @@ export const useJupiterFlow = () => {
 		answers,
 		messages,
 		isPublishing,
+		workingDaysKey,
 		detectedTimezone,
 		initFlow,
 		handleCalendarChoice,
 		handleWorkingDays,
+		handleWorkingDaysFromText,
+		retryWorkingDays,
 		handleTimeRange,
 		handleSessionDuration,
 		handleSessionType,

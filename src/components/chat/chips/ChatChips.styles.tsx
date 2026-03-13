@@ -151,7 +151,6 @@ export const ContinueButton = styled(Button)`
 `;
 
 export const OtherInput = styled(TextField)`
-	margin-top: ${spacing.xs};
 	width: 100%;
 
 	& .MuiOutlinedInput-root {
@@ -169,6 +168,72 @@ export const OtherInput = styled(TextField)`
 		&.Mui-focused fieldset {
 			border-color: ${palette.brand.purple};
 		}
+	}
+`;
+
+export const OtherInputRow = styled(Box)`
+	display: flex;
+	align-items: center;
+	gap: ${spacing.xs};
+	width: 100%;
+	margin-top: ${spacing.xs};
+`;
+
+export const OtherSendButton = styled('button', {
+	shouldForwardProp: (prop) => prop !== 'hasValue',
+})<{ hasValue?: boolean }>`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 36px;
+	height: 36px;
+	border: none;
+	border-radius: ${spacing.extraSmall};
+	background: ${palette.brand.purple};
+	color: ${palette.background.default};
+	cursor: pointer;
+	transition: opacity 0.15s;
+
+	&:disabled {
+		opacity: 0.4;
+		cursor: not-allowed;
+	}
+
+	&:hover:not(:disabled) {
+		opacity: 0.85;
+	}
+
+	& svg {
+		width: 16px;
+		height: 16px;
+		transition: transform 0.2s ease;
+		transform: rotate(${({ hasValue }) => (hasValue ? '-45deg' : '0deg')});
+	}
+`;
+
+export const OtherBackButton = styled('button')`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	width: 30px;
+	height: 30px;
+	border: none;
+	border-radius: ${spacing.extraSmall};
+	background: transparent;
+	color: ${palette.brand.purple};
+	cursor: pointer;
+	opacity: 0.7;
+	transition: opacity 0.15s;
+
+	&:hover {
+		opacity: 1;
+	}
+
+	& svg {
+		width: 16px;
+		height: 16px;
 	}
 `;
 

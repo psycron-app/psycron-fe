@@ -56,6 +56,8 @@ export const CardWrapper = styled(Box)`
 	width: 100%;
 	flex: 1;
 
+	padding: ${spacing.small};
+
 	${isBiggerThanMediumMedia} {
 		flex: none;
 		width: 640px;
@@ -69,7 +71,7 @@ export const CardWrapper = styled(Box)`
 `;
 
 export const CardHeader = styled(Box)`
-	padding: ${spacing.small};
+	padding: ${spacing.small} 0;
 	display: flex;
 	flex-direction: column;
 	gap: ${spacing.xxs};
@@ -94,12 +96,8 @@ export const ConversationContainer = styled(Box)`
 	flex-direction: column;
 	flex: 1;
 	overflow-y: auto;
-	padding: ${spacing.mediumSmall} ${spacing.medium};
+	padding: ${spacing.small};
 	gap: ${spacing.xs};
-
-	${isMobileMedia} {
-		padding: ${spacing.small} ${spacing.xs};
-	}
 `;
 
 export const BotMessageGroup = styled(Box)`
@@ -162,4 +160,54 @@ export const ChipsInline = styled(Box)`
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
+`;
+
+export {
+	OtherBackButton as BackButton,
+	OtherInputRow as InputRow,
+	OtherSendButton as SendButton,
+} from '@psycron/components/chat/chips/ChatChips.styles';
+
+export const ThinkingBubble = styled(Box)`
+	${bubbleBase}
+
+	background: linear-gradient(
+		90deg,
+		${hexToRgba(palette.secondary.main, 0.2)} 0%,
+		${hexToRgba(palette.primary.main, 0.4)} 100%
+	);
+	align-self: flex-start;
+	margin-top: ${spacing.xs};
+
+	@keyframes thinking {
+		0%,
+		80%,
+		100% {
+			opacity: 0.2;
+			transform: scale(0.8);
+		}
+		40% {
+			opacity: 1;
+			transform: scale(1);
+		}
+	}
+
+	& span {
+		display: inline-block;
+		width: 6px;
+		height: 6px;
+		border-radius: 50%;
+		background: currentColor;
+		margin: 0 2px;
+
+		&:nth-of-type(1) {
+			animation: thinking 1.2s infinite 0s;
+		}
+		&:nth-of-type(2) {
+			animation: thinking 1.2s infinite 0.2s;
+		}
+		&:nth-of-type(3) {
+			animation: thinking 1.2s infinite 0.4s;
+		}
+	}
 `;

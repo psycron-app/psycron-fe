@@ -540,7 +540,7 @@
 			"cta": "Configurar minha agenda"
 		},
 		"calendar-choice": {
-			"msg1": "Olá! Eu sou o Júpiter, seu assistente de agendamento. Estou aqui para te ajudar a configurar sua disponibilidade de forma simples e natural.",
+			"msg1": "Olá! Eu sou a Júpiter, sua assistente de agendamento via IA. Estou aqui para te ajudar a configurar sua disponibilidade de forma simples e natural.",
 			"msg2": "Vamos começar configurando sua agenda. Como você prefere?",
 			"chip-google": "Conectar Google Agenda",
 			"chip-manual": "Criar manualmente"
@@ -595,7 +595,8 @@
 			"label-timezone": "Fuso horário:",
 			"footer": "Você pode editar sua disponibilidade a qualquer momento no painel.",
 			"cta": "Publicar Disponibilidade",
-			"loading": "Publicando..."
+			"loading": "Publicando...",
+			"reset": "Recomeçar"
 		},
 		"post-publish": {
 			"page-title": "Disponibilidade",
@@ -656,6 +657,16 @@
 			"no-timezone": "Não consegui detectar seu fuso horário automaticamente. Por favor, selecione abaixo.",
 			"publish-success": "Tudo certo! Sua disponibilidade está no ar.",
 			"publish-redirect": "Redirecionando para seu painel..."
+		},
+		"subtitle": "Seu assistente de agendamento",
+		"days": {
+			"MONDAY": "Segunda-feira",
+			"TUESDAY": "Terça-feira",
+			"WEDNESDAY": "Quarta-feira",
+			"THURSDAY": "Quinta-feira",
+			"FRIDAY": "Sexta-feira",
+			"SATURDAY": "Sábado",
+			"SUNDAY": "Domingo"
 		}
 	}
 }

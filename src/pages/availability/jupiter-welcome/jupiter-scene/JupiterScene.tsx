@@ -1,4 +1,5 @@
 import { Suspense, useEffect, useRef } from 'react';
+import { Loader } from '@psycron/components/loader/Loader';
 import Spline from '@splinetool/react-spline';
 import type { Application } from '@splinetool/runtime';
 
@@ -133,7 +134,7 @@ export const JupiterScene = () => {
 
 	return (
 		<SceneContainer>
-			<Suspense fallback={null}>
+			<Suspense fallback={<Loader />}>
 				<Spline
 					scene='https://prod.spline.design/lEJJWzHhKj7t3vE4/scene.splinecode'
 					onLoad={onLoad}

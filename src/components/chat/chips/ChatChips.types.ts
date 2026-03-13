@@ -1,7 +1,7 @@
 export interface IChipOption {
 	key: string;
 	label: string;
-	variant?: 'primary' | 'secondary' | 'outline' | 'danger';
+	variant?: 'primary' | 'secondary' | 'outline' | 'danger' | 'success';
 }
 
 export interface ISingleSelectChipsProps {

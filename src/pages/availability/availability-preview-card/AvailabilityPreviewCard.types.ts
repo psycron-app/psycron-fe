@@ -5,4 +5,5 @@ export interface IAvailabilityPreviewCardProps {
 	detectedTimezone: string;
 	isPublishing: boolean;
 	onPublish: () => void;
+	onReset: () => void;
 }

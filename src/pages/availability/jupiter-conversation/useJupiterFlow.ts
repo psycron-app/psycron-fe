@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import type {
@@ -7,46 +7,120 @@ import type {
 	JupiterStep,
 } from './JupiterConversation.types';
 
+const STORAGE_KEY = 'jupiter-flow';
+
+const loadSaved = (): {
+	answers: JupiterAnswers;
+	step: JupiterStep;
+} | null => {
+	try {
+		const raw = localStorage.getItem(STORAGE_KEY);
+		return raw ? JSON.parse(raw) : null;
+	} catch {
+		return null;
+	}
+};
+
+const STEP_QUESTION_KEY: Partial<Record<JupiterStep, string>> = {
+	'calendar-choice': 'jupiter.calendar-choice.msg2',
+	'session-duration': 'jupiter.session-duration.response',
+	'session-type': 'jupiter.session-type.response',
+	'time-range': 'jupiter.time-range.response',
+	'timezone': 'jupiter.timezone.response',
+	'working-days': 'jupiter.working-days.response',
+};
+
 const WEEKDAY_KEY_MAP: Record<string, string> = {
-	'chip-mon': 'MONDAY',
-	'chip-tue': 'TUESDAY',
-	'chip-wed': 'WEDNESDAY',
-	'chip-thu': 'THURSDAY',
 	'chip-fri': 'FRIDAY',
+	'chip-mon': 'MONDAY',
 	'chip-sat': 'SATURDAY',
 	'chip-sun': 'SUNDAY',
+	'chip-thu': 'THURSDAY',
+	'chip-tue': 'TUESDAY',
+	'chip-wed': 'WEDNESDAY',
 };
 
 export const useJupiterFlow = () => {
 	const { t } = useTranslation();
-	const [step, setStep] = useState<JupiterStep>('calendar-choice');
-	const [answers, setAnswers] = useState<JupiterAnswers>({});
+
+	const saved = useMemo(() => loadSaved(), []);
+
+	const [step, setStep] = useState<JupiterStep>(
+		saved?.step ?? 'calendar-choice'
+	);
+	const [answers, setAnswers] = useState<JupiterAnswers>(saved?.answers ?? {});
 	const [messages, setMessages] = useState<JupiterMessage[]>([]);
 	const [isPublishing, setIsPublishing] = useState(false);
+
+	const hasInitialized = useRef(false);
 
 	const detectedTimezone = useMemo(
 		() => Intl.DateTimeFormat().resolvedOptions().timeZone,
 		[]
 	);
 
-	const addBotMessage = useCallback(
-		(content: string, showIcon = true) => {
-			setMessages((prev) => [...prev, { content, sender: 'bot', showIcon }]);
-		},
-		[]
-	);
+	useEffect(() => {
+		localStorage.setItem(STORAGE_KEY, JSON.stringify({ step, answers }));
+	}, [step, answers]);
+
+	const addBotMessage = useCallback((content: string, showIcon = true) => {
+		setMessages((prev) => [...prev, { content, sender: 'bot', showIcon }]);
+	}, []);
 
 	const addUserMessage = useCallback((content: string) => {
 		setMessages((prev) => [...prev, { content, sender: 'user' }]);
 	}, []);
 
-	const initFlow = useCallback(() => {
-		addBotMessage(t('jupiter.calendar-choice.msg1'));
+	// ─── Core transition helpers ───────────────────────────────────────────────
 
-		setTimeout(() => {
-			addBotMessage(t('jupiter.calendar-choice.msg2'), false);
-		}, 300);
-	}, [addBotMessage, t]);
+	const advance = useCallback(
+		(botKey: string, nextStep: JupiterStep, delay = 300) => {
+			setTimeout(() => {
+				addBotMessage(t(botKey));
+				setStep(nextStep);
+			}, delay);
+		},
+		[addBotMessage, t]
+	);
+
+	const commit = useCallback(
+		<K extends keyof JupiterAnswers>(
+			userMessage: string,
+			field: K,
+			value: JupiterAnswers[K],
+			botKey: string,
+			nextStep: JupiterStep
+		) => {
+			addUserMessage(userMessage);
+			setAnswers((prev) => ({ ...prev, [field]: value }));
+			advance(botKey, nextStep);
+		},
+		[addUserMessage, advance]
+	);
+
+	// ─── Flow initialization ───────────────────────────────────────────────────
+
+	const initFlow = useCallback(() => {
+		if (hasInitialized.current) return;
+		hasInitialized.current = true;
+
+		if (saved) {
+			addBotMessage(t('jupiter.errors.session-timeout'));
+			const questionKey = STEP_QUESTION_KEY[saved.step];
+			if (questionKey) {
+				setTimeout(() => addBotMessage(t(questionKey), false), 500);
+			}
+			return;
+		}
+
+		addBotMessage(t('jupiter.calendar-choice.msg1'));
+		setTimeout(
+			() => addBotMessage(t('jupiter.calendar-choice.msg2'), false),
+			500
+		);
+	}, [addBotMessage, saved, t]);
+
+	// ─── Step handlers ─────────────────────────────────────────────────────────
 
 	const handleCalendarChoice = useCallback(
 		(key: string) => {
@@ -57,14 +131,10 @@ export const useJupiterFlow = () => {
 			} else {
 				addUserMessage(t('jupiter.calendar-choice.chip-manual'));
 				setAnswers((prev) => ({ ...prev, calendarChoice: 'manual' }));
-
-				setTimeout(() => {
-					addBotMessage(t('jupiter.working-days.response'));
-					setStep('working-days');
-				}, 300);
+				advance('jupiter.working-days.response', 'working-days', 500);
 			}
 		},
-		[addBotMessage, addUserMessage, t]
+		[addUserMessage, advance, t]
 	);
 
 	const handleWorkingDays = useCallback(
@@ -72,92 +142,48 @@ export const useJupiterFlow = () => {
 			const dayLabels = selectedKeys
 				.map((key) => t(`jupiter.working-days.${key}`))
 				.join(', ');
-
 			const canonicalDays = selectedKeys.map(
 				(key) => WEEKDAY_KEY_MAP[key] ?? key
 			);
-
 			addUserMessage(dayLabels);
 			setAnswers((prev) => ({ ...prev, workingDays: canonicalDays }));
-
-			setTimeout(() => {
-				addBotMessage(t('jupiter.time-range.response'));
-				setStep('time-range');
-			}, 300);
+			advance('jupiter.time-range.response', 'time-range');
 		},
-		[addBotMessage, addUserMessage, t]
+		[addUserMessage, advance, t]
 	);
 
+	// Receives the resolved display label (from chip option or free text input)
 	const handleTimeRange = useCallback(
-		(key: string) => {
-			const label =
-				key === 'custom'
-					? key
-					: t(`jupiter.time-range.${key}`);
-
-			addUserMessage(label);
-			setAnswers((prev) => ({ ...prev, timeRange: label }));
-
-			setTimeout(() => {
-				addBotMessage(t('jupiter.session-duration.response'));
-				setStep('session-duration');
-			}, 300);
-		},
-		[addBotMessage, addUserMessage, t]
+		(label: string) =>
+			commit(
+				label,
+				'timeRange',
+				label,
+				'jupiter.session-duration.response',
+				'session-duration'
+			),
+		[commit]
 	);
 
-	const handleTimeRangeCustom = useCallback(
-		(text: string) => {
-			addUserMessage(text);
-			setAnswers((prev) => ({ ...prev, timeRange: text }));
-
-			setTimeout(() => {
-				addBotMessage(t('jupiter.session-duration.response'));
-				setStep('session-duration');
-			}, 300);
-		},
-		[addBotMessage, addUserMessage, t]
-	);
-
+	// Receives the resolved display label (from chip option or free text input)
 	const handleSessionDuration = useCallback(
-		(key: string) => {
-			const label = t(`jupiter.session-duration.${key}`);
-			addUserMessage(label);
-			setAnswers((prev) => ({ ...prev, sessionDuration: label }));
-
-			setTimeout(() => {
-				addBotMessage(t('jupiter.session-type.response'));
-				setStep('session-type');
-			}, 300);
-		},
-		[addBotMessage, addUserMessage, t]
-	);
-
-	const handleSessionDurationCustom = useCallback(
-		(text: string) => {
-			addUserMessage(text);
-			setAnswers((prev) => ({ ...prev, sessionDuration: text }));
-
-			setTimeout(() => {
-				addBotMessage(t('jupiter.session-type.response'));
-				setStep('session-type');
-			}, 300);
-		},
-		[addBotMessage, addUserMessage, t]
+		(label: string) =>
+			commit(
+				label,
+				'sessionDuration',
+				label,
+				'jupiter.session-type.response',
+				'session-type'
+			),
+		[commit]
 	);
 
 	const handleSessionType = useCallback(
 		(key: string) => {
 			const label = t(`jupiter.session-type.${key}`);
-			addUserMessage(label);
-			setAnswers((prev) => ({ ...prev, sessionType: label }));
-
-			setTimeout(() => {
-				addBotMessage(t('jupiter.timezone.response'));
-				setStep('timezone');
-			}, 300);
+			commit(label, 'sessionType', label, 'jupiter.timezone.response', 'timezone');
 		},
-		[addBotMessage, addUserMessage, t]
+		[commit, t]
 	);
 
 	const handleTimezone = useCallback(
@@ -166,20 +192,14 @@ export const useJupiterFlow = () => {
 				addUserMessage(t('jupiter.timezone.chip-yes'));
 				setAnswers((prev) => ({
 					...prev,
-					timezoneConfirmed: true,
 					timezone: detectedTimezone,
+					timezoneConfirmed: true,
 				}));
-
-				setTimeout(() => {
-					setStep('preview');
-				}, 300);
+				setTimeout(() => setStep('preview'), 300);
 			} else {
 				addUserMessage(t('jupiter.timezone.chip-no'));
 				addBotMessage(t('jupiter.timezone.follow-up'));
-				setAnswers((prev) => ({
-					...prev,
-					timezoneConfirmed: false,
-				}));
+				setAnswers((prev) => ({ ...prev, timezoneConfirmed: false }));
 			}
 		},
 		[addBotMessage, addUserMessage, detectedTimezone, t]
@@ -189,29 +209,37 @@ export const useJupiterFlow = () => {
 		(tz: string) => {
 			addUserMessage(tz);
 			setAnswers((prev) => ({ ...prev, timezone: tz }));
-
-			setTimeout(() => {
-				setStep('preview');
-			}, 300);
+			setTimeout(() => setStep('preview'), 300);
 		},
 		[addUserMessage]
 	);
 
+	// ─── Publish / Reset ───────────────────────────────────────────────────────
+
 	const handlePublish = useCallback(async () => {
 		setIsPublishing(true);
 		// TODO: integrate with actual availability API
-		// await completeSessionAvailability(answers);
 		setIsPublishing(false);
 	}, []);
+
+	const handleReset = useCallback(() => {
+		localStorage.removeItem(STORAGE_KEY);
+		setStep('calendar-choice');
+		setAnswers({});
+		setMessages([
+			{ content: t('jupiter.calendar-choice.msg2'), sender: 'bot', showIcon: true },
+		]);
+		hasInitialized.current = true;
+	}, [t]);
+
+	// ─── Google Calendar path ──────────────────────────────────────────────────
 
 	const handleGoogleContinue = useCallback(() => {
 		// TODO: trigger Google OAuth flow
 		setStep('google-success');
 	}, []);
 
-	const handleGoogleBack = useCallback(() => {
-		setStep('calendar-choice');
-	}, []);
+	const handleGoogleBack = useCallback(() => setStep('calendar-choice'), []);
 
 	const handleGooglePostConnect = useCallback(
 		(key: string) => {
@@ -221,14 +249,10 @@ export const useJupiterFlow = () => {
 				setStep('preview');
 			} else {
 				addUserMessage(t('jupiter.google-calendar.chip-define-hours'));
-
-				setTimeout(() => {
-					addBotMessage(t('jupiter.working-days.response'));
-					setStep('working-days');
-				}, 300);
+				advance('jupiter.working-days.response', 'working-days');
 			}
 		},
-		[addBotMessage, addUserMessage, t]
+		[addUserMessage, advance, t]
 	);
 
 	return {
@@ -241,13 +265,12 @@ export const useJupiterFlow = () => {
 		handleCalendarChoice,
 		handleWorkingDays,
 		handleTimeRange,
-		handleTimeRangeCustom,
 		handleSessionDuration,
-		handleSessionDurationCustom,
 		handleSessionType,
 		handleTimezone,
 		handleTimezoneSelect,
 		handlePublish,
+		handleReset,
 		handleGoogleContinue,
 		handleGoogleBack,
 		handleGooglePostConnect,

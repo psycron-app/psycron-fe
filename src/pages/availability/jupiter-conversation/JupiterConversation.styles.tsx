@@ -1,6 +1,93 @@
+import { css } from '@emotion/react';
 import { Box, styled } from '@mui/material';
-import { isMobileMedia } from '@psycron/theme/media-queries/mediaQueries';
+import { Text } from '@psycron/components/text/Text';
+import {
+	isBiggerThanMediumMedia,
+	isMobileMedia,
+} from '@psycron/theme/media-queries/mediaQueries';
+import { hexToRgba, palette } from '@psycron/theme/palette/palette.theme';
+import { shadowMain, smallShadow } from '@psycron/theme/shadow/shadow.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
+
+// ─── Shared animations ────────────────────────────────────────────────────────
+
+const messageFadeIn = css`
+	@keyframes messageFadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	animation: messageFadeIn 300ms ease-out;
+`;
+
+// ─── Shared base styles ───────────────────────────────────────────────────────
+
+const bubbleBase = css`
+	border-radius: ${spacing.small};
+	padding: ${spacing.extraSmall} ${spacing.small};
+	font-size: 14px;
+	line-height: 1.5;
+	box-shadow: ${smallShadow};
+
+	${messageFadeIn}
+`;
+
+const messageGroupBase = css`
+	display: flex;
+	flex-direction: column;
+	max-width: 80%;
+
+	${isMobileMedia} {
+		max-width: 90%;
+	}
+`;
+
+// ─── Components ───────────────────────────────────────────────────────────────
+
+export const CardWrapper = styled(Box)`
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	flex: 1;
+
+	${isBiggerThanMediumMedia} {
+		flex: none;
+		width: 640px;
+		min-height: 350px;
+		max-height: 500px;
+		box-shadow: ${shadowMain};
+		border-radius: ${spacing.largeXl};
+		background: ${palette.background.paper};
+		overflow: hidden;
+	}
+`;
+
+export const CardHeader = styled(Box)`
+	padding: ${spacing.small};
+	display: flex;
+	flex-direction: column;
+	gap: ${spacing.xxs};
+	flex-shrink: 0;
+	align-items: flex-start;
+`;
+
+export const CardTitle = styled(Text)`
+	font-weight: 700;
+	font-size: 20px;
+	line-height: 1.2;
+`;
+
+export const CardSubtitle = styled(Text)`
+	font-size: 14px;
+	opacity: 0.5;
+	line-height: 1.4;
+`;
 
 export const ConversationContainer = styled(Box)`
 	display: flex;
@@ -16,80 +103,63 @@ export const ConversationContainer = styled(Box)`
 `;
 
 export const BotMessageGroup = styled(Box)`
-	display: flex;
-	flex-direction: column;
-	gap: ${spacing.xs};
+	${messageGroupBase}
 	align-self: flex-start;
-	max-width: 80%;
-
-	${isMobileMedia} {
-		max-width: 90%;
-	}
+	gap: ${spacing.xs};
 `;
 
 export const UserMessageGroup = styled(Box)`
-	display: flex;
-	flex-direction: column;
+	${messageGroupBase}
 	align-self: flex-end;
-	max-width: 80%;
-
-	${isMobileMedia} {
-		max-width: 90%;
-	}
+	padding-bottom: ${spacing.small};
 `;
 
-export const BotBubble = styled(Box)`
-	background-color: rgba(139, 92, 246, 0.06);
-	border-radius: 16px;
-	border-bottom-left-radius: 4px;
-	padding: 12px 16px;
-	font-size: 14px;
-	line-height: 1.5;
+export const BotBubble = styled(Box, {
+	shouldForwardProp: (prop) => prop !== 'isFirst',
+})<{ isFirst: boolean }>`
+	${bubbleBase}
+
+	background: linear-gradient(
+		90deg,
+		${hexToRgba(palette.secondary.main, 0.2)} 0%,
+		${hexToRgba(palette.primary.main, 0.4)} 100%
+	);
 	color: inherit;
+	text-align: left;
 
-	@keyframes messageFadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(8px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
-
-	animation: messageFadeIn 300ms ease-out;
+	${({ isFirst }) =>
+		isFirst &&
+		css`
+			border-top-left-radius: 0;
+		`}
 `;
 
 export const UserBubble = styled(Box)`
-	background-color: rgba(139, 92, 246, 0.12);
-	border-radius: 16px;
-	border-bottom-right-radius: 4px;
-	padding: 12px 16px;
-	font-size: 14px;
-	line-height: 1.5;
+	${bubbleBase}
+
+	background-color: ${palette.brand.light};
+	border-top-right-radius: 0;
 	align-self: flex-end;
-
-	animation: messageFadeIn 300ms ease-out;
-
-	@keyframes messageFadeIn {
-		from {
-			opacity: 0;
-			transform: translateY(8px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
-		}
-	}
+	text-align: right;
 `;
 
-export const IconRow = styled(Box)`
+export const IconRow = styled(Box, {
+	shouldForwardProp: (prop) => prop !== 'showIcon',
+})<{ showIcon: boolean }>`
 	display: flex;
 	align-items: flex-start;
 	gap: ${spacing.xs};
+
+	& svg {
+		visibility: ${({ showIcon }) => (showIcon ? 'visible' : 'hidden')};
+		color: ${palette.brand.purple};
+		flex-shrink: 0;
+	}
 `;
 
 export const ChipsInline = styled(Box)`
-	padding-left: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
 `;

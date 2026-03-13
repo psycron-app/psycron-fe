@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { AnimatedBackground } from '@psycron/components/animated-background/AnimatedBackground';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
 
 import { JupiterConversation } from './jupiter-conversation/JupiterConversation';
@@ -8,8 +7,18 @@ import { GenerateAvailabilityContentWrapper } from './GenerateAvailability.style
 
 type JupiterPhase = 'welcome' | 'conversation';
 
+const hasSavedFlow = (): boolean => {
+	try {
+		return !!localStorage.getItem('jupiter-flow');
+	} catch {
+		return false;
+	}
+};
+
 export const GenerateAvailability = () => {
-	const [phase, setPhase] = useState<JupiterPhase>('welcome');
+	const [phase, setPhase] = useState<JupiterPhase>(
+		hasSavedFlow() ? 'conversation' : 'welcome'
+	);
 
 	const handleStart = () => {
 		setPhase('conversation');
@@ -27,7 +36,6 @@ export const GenerateAvailability = () => {
 		<PageLayout title='' isLoading={false}>
 			<GenerateAvailabilityContentWrapper>
 				<JupiterConversation />
-				<AnimatedBackground />
 			</GenerateAvailabilityContentWrapper>
 		</PageLayout>
 	);

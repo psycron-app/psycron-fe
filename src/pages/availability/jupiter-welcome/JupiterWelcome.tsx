@@ -6,7 +6,6 @@ import {
 	CharacterWrapper,
 	GradientText,
 	GreettingText,
-	SpeechBubbleWrapper,
 	StartButton,
 	SubtitleText,
 	TitleText,
@@ -23,31 +22,24 @@ export const JupiterWelcome = ({ onStart }: JupiterWelcomeProps) => {
 	return (
 		<WelcomeContainer>
 			<CharacterWrapper>
-				<SpeechBubbleWrapper></SpeechBubbleWrapper>
 				<JupiterScene />
 			</CharacterWrapper>
 
 			<TitleText>
-				<Box display='flex'>
-					<GreettingText>
-						{t('chat.jupiter.welcome.title-prefix')}
-					</GreettingText>
-					<GreettingText fontWeight={600} px={1}>
-						{t('chat.jupiter.welcome.title-name') + ','}
-					</GreettingText>
-				</Box>
-				<Box display='flex'>
-					<GreettingText>{t('chat.jupiter.welcome.title-your')}</GreettingText>
-					<GradientText px={2}>
-						{t('chat.jupiter.welcome.title-highlight')}
+				<GreettingText>
+					{t('jupiter.welcome.title-line1')}
+				</GreettingText>
+				<Box display='flex' gap={1}>
+					<GradientText>
+						{t('jupiter.welcome.title-line2')}
 					</GradientText>
 				</Box>
 			</TitleText>
 
-			<SubtitleText>{t('chat.jupiter.welcome.subtitle')}</SubtitleText>
+			<SubtitleText>{t('jupiter.welcome.subtitle')}</SubtitleText>
 
 			<StartButton onClick={onStart}>
-				{t('chat.jupiter.welcome.cta')}
+				{t('jupiter.welcome.cta')}
 			</StartButton>
 		</WelcomeContainer>
 	);

@@ -530,19 +530,133 @@
 	"chat": {
 		"greeting": "Hi! I’m Júpiter, your assistant to help set up your appointment schedule. Let’s build it together, step by step 🧘‍♀️! Shall we?",
 		"let-start": "What types of therapy do you offer?",
-		"system-instruction": "You are a kind assistant helping therapists build their schedule, step by step. Always respond with the next question and any information extracted so far. For example, if the question is regarding the reccurencePattern, you should explain that weekly it's until the current month, and monthly is until the current year",
-		"error": "Oops! We couldn't proceed  with your chat, please try again later",
-		"jupiter": {
-			"welcome": {
-				"hello": "Hello!",
-				"title-prefix": "I am ",
-				"title-name": "Jupiter",
-				"title-comma": ",",
-				"title-your": "your ",
-				"title-highlight": "Smart Assistant",
-				"subtitle": "I'll help you set up your availability in just a few moments. Let's make scheduling feel effortless.",
-				"cta": "Get started"
-			}
+		"system-instruction": "You are a kind assistant helping therapists build their schedule, step by step. Always respond with the next question and any information extracted so far. For example, if the question is regarding the reccurencePattern, you should explain that weekly it’s until the current month, and monthly is until the current year",
+		"error": "Oops! We couldn’t proceed  with your chat, please try again later"
+	},
+	"jupiter": {
+		"welcome": {
+			"title-line1": "I am Jupiter,",
+			"title-line2": "your Smart Assistant",
+			"subtitle": "I’ll help you set up your availability in just a few moments. Let’s make scheduling feel effortless.",
+			"cta": "Set up my schedule"
+		},
+		"calendar-choice": {
+			"msg1": "Hi! I’m Júpiter, your scheduling assistant. I’m here to help you set up your availability in a way that feels natural and effortless.",
+			"msg2": "Let’s start by setting up your calendar. How would you like to begin?",
+			"chip-google": "Connect Google Calendar",
+			"chip-manual": "Create manually"
+		},
+		"working-days": {
+			"response": "Great! Which days do you usually work with your clients?",
+			"chip-mon": "Mon",
+			"chip-tue": "Tue",
+			"chip-wed": "Wed",
+			"chip-thu": "Thu",
+			"chip-fri": "Fri",
+			"chip-sat": "Sat",
+			"chip-sun": "Sun",
+			"back": "← Back",
+			"continue": "Continue",
+			"other-placeholder": "Or type your schedule..."
+		},
+		"time-range": {
+			"response": "Perfect! What time range works best for you on those days?",
+			"chip-1": "9:00 AM – 5:00 PM",
+			"chip-2": "10:00 AM – 6:00 PM",
+			"chip-3": "12:00 PM – 8:00 PM",
+			"chip-custom": "Custom",
+			"other-placeholder": "e.g. 8:30 AM – 4:00 PM"
+		},
+		"session-duration": {
+			"response": "How long is a typical session? You can always edit this later.",
+			"chip-45": "45 min",
+			"chip-60": "60 min",
+			"chip-custom": "Custom",
+			"other-placeholder": "e.g. 90 minutes"
+		},
+		"session-type": {
+			"response": "How do you usually conduct your sessions?",
+			"chip-online": "Online only",
+			"chip-in-person": "In person only",
+			"chip-both": "Both online and in person"
+		},
+		"timezone": {
+			"response": "One last thing — I’ll use your device’s timezone to schedule appointments accurately. This helps ensure your clients book at the right time for you. Sound good?",
+			"chip-yes": "Yes",
+			"chip-no": "No",
+			"follow-up": "No problem! Please select your timezone:",
+			"search-placeholder": "Search timezone..."
+		},
+		"preview": {
+			"title": "Your Availability Preview",
+			"label-days": "Working days:",
+			"label-hours": "Hours:",
+			"label-duration": "Duration:",
+			"label-session-type": "Session type:",
+			"label-timezone": "Timezone:",
+			"footer": "You can edit your availability anytime from your dashboard.",
+			"cta": "Publish Availability",
+			"loading": "Publishing..."
+		},
+		"post-publish": {
+			"page-title": "Availability",
+			"page-subtitle": "Manage your availability and scheduling preferences",
+			"success-toast": "Your availability is now live. Clients can start booking sessions with you right away.",
+			"welcome-toast": "Welcome to Psycron!",
+			"tip-title": "Jupiter’s tip",
+			"tip-text": "Your availability looks great. Adding a cancellation policy helps reduce no-shows and sets clear expectations with clients.",
+			"tip-cta": "Set cancellation policy",
+			"status-active-hours": "Active hours",
+			"status-bookings": "Upcoming bookings",
+			"status-this-week": "This week",
+			"status-booked-label": "{{percent}}% Booked",
+			"checklist-title": "Complete your availability",
+			"checklist-subtitle": "Enhance your scheduling setup for a better experience",
+			"checklist-session-types": "Define session types",
+			"checklist-session-types-desc": "Create different appointment types and durations",
+			"checklist-price": "Add session price",
+			"checklist-price-desc": "Set your consultation rates and payment terms",
+			"checklist-price-badge": "Recommended",
+			"checklist-buffer": "Add buffer time",
+			"checklist-buffer-desc": "Set time between appointments for preparation",
+			"checklist-cancel-policy": "Configure cancellation policy",
+			"checklist-cancel-desc": "Define how clients can cancel or reschedule",
+			"checklist-calendar-sync": "Sync with your existing calendar",
+			"checklist-calendar-desc": "Connect your calendar to prevent conflicts",
+			"help-title": "Need help?",
+			"help-text": "Jupiter can guide you through completing your setup",
+			"help-cta": "Talk to Jupiter"
+		},
+		"google-calendar": {
+			"permissions-intro": "We’ll securely connect to your Google Calendar to:",
+			"permission-1": "Read your busy times",
+			"permission-2": "Prevent double bookings",
+			"permission-3": "Keep everything in sync",
+			"privacy-note": "We never edit or delete events without your permission.",
+			"back": "← Back",
+			"continue": "Continue",
+			"success-line1": "Perfect! 🎉",
+			"success-line2": "Your Google Calendar is now connected.",
+			"success-line3": "I’ll automatically block times when you’re already busy.",
+			"next-choice": "Would you like to:",
+			"chip-use-existing": "Use my existing schedule as availability",
+			"chip-define-hours": "Define specific working hours"
+		},
+		"errors": {
+			"network": "Something went wrong. Let’s try that again.",
+			"retry": "Try again",
+			"google-oauth-fail": "I couldn’t connect to Google Calendar. Please try again or set up manually.",
+			"google-oauth-cancel": "No problem! You can always connect your calendar later. Let’s set things up manually.",
+			"save-fail": "I couldn’t save your availability. Please try again.",
+			"session-timeout": "It looks like you’ve been away. Your progress is saved — pick up where you left off.",
+			"empty-days": "Please select at least one working day to continue.",
+			"invalid-time-range": "The end time must be after the start time.",
+			"invalid-input": "I didn’t quite get that. Could you try again?",
+			"ai-fallback": "Thanks! Let me process that for you.",
+			"ai-thinking": "Thinking...",
+			"no-timezone": "I couldn’t detect your timezone automatically. Please select it below.",
+			"publish-success": "All set! Your availability is live.",
+			"publish-redirect": "Redirecting to your dashboard..."
 		}
 	}
 }

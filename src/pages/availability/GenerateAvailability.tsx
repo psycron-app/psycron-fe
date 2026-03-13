@@ -1,30 +1,18 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { AnimatedBackground } from '@psycron/components/animated-background/AnimatedBackground';
-import { ChatMessageList } from '@psycron/components/chat/message-list/ChatMessageList';
-import { Prompt } from '@psycron/components/chat/prompt/Prompt';
-import { useAvailabilityAssistant } from '@psycron/hooks/availability/useAvailabilityAssistant';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
-import { AVAILABILITY_THREAD_ID } from '@psycron/utils/tokens';
 
+import { JupiterConversation } from './jupiter-conversation/JupiterConversation';
 import { JupiterWelcome } from './jupiter-welcome/JupiterWelcome';
 import { GenerateAvailabilityContentWrapper } from './GenerateAvailability.styles';
 
-type JupiterPhase = 'welcome' | 'chat';
+type JupiterPhase = 'welcome' | 'conversation';
 
 export const GenerateAvailability = () => {
-	const hasExistingThread = useMemo(
-		() => !!localStorage.getItem(AVAILABILITY_THREAD_ID),
-		[]
-	);
-
-	const [phase, setPhase] = useState<JupiterPhase>(
-		hasExistingThread ? 'chat' : 'welcome'
-	);
-
-	const { messages, sendMessage, isSending } = useAvailabilityAssistant();
+	const [phase, setPhase] = useState<JupiterPhase>('welcome');
 
 	const handleStart = () => {
-		setPhase('chat');
+		setPhase('conversation');
 	};
 
 	if (phase === 'welcome') {
@@ -36,12 +24,11 @@ export const GenerateAvailability = () => {
 	}
 
 	return (
-		<PageLayout title='Generate your Availability' isLoading={false}>
+		<PageLayout title='' isLoading={false}>
 			<GenerateAvailabilityContentWrapper>
-				<ChatMessageList messages={messages} isSending={isSending} />
+				<JupiterConversation />
 				<AnimatedBackground />
 			</GenerateAvailabilityContentWrapper>
-			<Prompt onSubmit={sendMessage} />
 		</PageLayout>
 	);
 };

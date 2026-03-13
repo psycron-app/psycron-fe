@@ -32,34 +32,6 @@ export const CharacterWrapper = styled(Box)`
 	}
 `;
 
-export const SpeechBubble = styled(Box)`
-	top: ${spacing.mediumSmall};
-	background-color: ${palette.background.default};
-	border-radius: 999px;
-	font-size: 32px;
-	font-weight: 700;
-	color: ${palette.text.primary};
-	line-height: 1;
-	box-shadow: ${shadowPress};
-	padding: ${spacing.extraSmall};
-
-	${isMobileMedia} {
-		font-size: 28px;
-	}
-`;
-
-export const SpeechBubbleWrapper = styled(Box)`
-	display: flex;
-	width: 100%;
-
-	padding-left: 0;
-
-	${isMobileMedia} {
-		font-size: 28px;
-		padding-left: ${spacing.small};
-	}
-`;
-
 export const TitleText = styled(Box)`
 	margin-bottom: ${spacing.extraSmall};
 	display: flex;

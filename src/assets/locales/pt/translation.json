@@ -530,18 +530,132 @@
 		"greeting": "Olá! Eu sou a Júpiter, sua assistente para configurar sua agenda de atendimentos. Vamos construir isso juntos, passo a passo 🧘‍♀️! Vamos?",
 		"let-start": "Quais tipos de terapia você oferece?",
 		"system-instruction": "Você é uma assistente gentil que ajuda terapeutas a montar sua agenda passo a passo. Sempre responda com a próxima pergunta e os dados extraídos até o momento. Por exemplo, se a pergunta for sobre reccurencePattern, você deve explicar que weekly significa até o fim do mês e monthly até o fim do ano",
-		"error": "Oops! Não foi possível continuar a conversa. Tente novamente.",
-		"jupiter": {
-			"welcome": {
-				"hello": "Olá!",
-				"title-prefix": "Eu sou ",
-				"title-name": "Júpiter",
-				"title-comma": ",",
-				"title-your": "sua ",
-				"title-highlight": "Assistente Inteligente",
-				"subtitle": "Vou te ajudar a configurar sua disponibilidade em poucos momentos. Vamos tornar o agendamento mais simples.",
-				"cta": "Começar"
-			}
+		"error": "Oops! Não foi possível continuar a conversa. Tente novamente."
+	},
+	"jupiter": {
+		"welcome": {
+			"title-line1": "Eu sou o Júpiter,",
+			"title-line2": "seu Assistente Inteligente",
+			"subtitle": "Vou te ajudar a configurar sua disponibilidade em poucos momentos. Vamos tornar o agendamento simples e rápido.",
+			"cta": "Configurar minha agenda"
+		},
+		"calendar-choice": {
+			"msg1": "Olá! Eu sou o Júpiter, seu assistente de agendamento. Estou aqui para te ajudar a configurar sua disponibilidade de forma simples e natural.",
+			"msg2": "Vamos começar configurando sua agenda. Como você prefere?",
+			"chip-google": "Conectar Google Agenda",
+			"chip-manual": "Criar manualmente"
+		},
+		"working-days": {
+			"response": "Ótimo! Em quais dias você costuma atender seus clientes?",
+			"chip-mon": "Seg",
+			"chip-tue": "Ter",
+			"chip-wed": "Qua",
+			"chip-thu": "Qui",
+			"chip-fri": "Sex",
+			"chip-sat": "Sáb",
+			"chip-sun": "Dom",
+			"back": "← Voltar",
+			"continue": "Continuar",
+			"other-placeholder": "Ou digite sua rotina..."
+		},
+		"time-range": {
+			"response": "Perfeito! Qual faixa de horário funciona melhor para você nesses dias?",
+			"chip-1": "09:00 – 17:00",
+			"chip-2": "10:00 – 18:00",
+			"chip-3": "12:00 – 20:00",
+			"chip-custom": "Personalizado",
+			"other-placeholder": "ex: 08:30 – 16:00"
+		},
+		"session-duration": {
+			"response": "Qual a duração de uma sessão? Você pode alterar isso depois.",
+			"chip-45": "45 min",
+			"chip-60": "60 min",
+			"chip-custom": "Personalizado",
+			"other-placeholder": "ex: 90 minutos"
+		},
+		"session-type": {
+			"response": "Como você costuma realizar suas sessões?",
+			"chip-online": "Apenas online",
+			"chip-in-person": "Apenas presencial",
+			"chip-both": "Online e presencial"
+		},
+		"timezone": {
+			"response": "Uma última coisa — vou usar o fuso horário do seu dispositivo para agendar consultas com precisão. Assim, seus clientes sempre vão agendar no horário certo. Tudo bem?",
+			"chip-yes": "Sim",
+			"chip-no": "Não",
+			"follow-up": "Sem problema! Selecione seu fuso horário:",
+			"search-placeholder": "Buscar fuso horário..."
+		},
+		"preview": {
+			"title": "Resumo da sua Disponibilidade",
+			"label-days": "Dias de atendimento:",
+			"label-hours": "Horário:",
+			"label-duration": "Duração:",
+			"label-session-type": "Tipo de sessão:",
+			"label-timezone": "Fuso horário:",
+			"footer": "Você pode editar sua disponibilidade a qualquer momento no painel.",
+			"cta": "Publicar Disponibilidade",
+			"loading": "Publicando..."
+		},
+		"post-publish": {
+			"page-title": "Disponibilidade",
+			"page-subtitle": "Gerencie sua disponibilidade e preferências de agendamento",
+			"success-toast": "Sua disponibilidade está ativa. Seus clientes já podem agendar sessões com você.",
+			"welcome-toast": "Bem-vindo ao Psycron!",
+			"tip-title": "Dica do Júpiter",
+			"tip-text": "Sua disponibilidade está ótima. Adicionar uma política de cancelamento ajuda a reduzir faltas e define expectativas claras com seus clientes.",
+			"tip-cta": "Configurar política de cancelamento",
+			"status-active-hours": "Horas ativas",
+			"status-bookings": "Agendamentos futuros",
+			"status-this-week": "Esta semana",
+			"status-booked-label": "{{percent}}% Agendado",
+			"checklist-title": "Complete sua disponibilidade",
+			"checklist-subtitle": "Melhore sua configuração de agendamento para uma experiência melhor",
+			"checklist-session-types": "Definir tipos de sessão",
+			"checklist-session-types-desc": "Crie diferentes tipos e durações de consultas",
+			"checklist-price": "Adicionar preço da sessão",
+			"checklist-price-desc": "Defina seus valores e condições de pagamento",
+			"checklist-price-badge": "Recomendado",
+			"checklist-buffer": "Adicionar intervalo entre sessões",
+			"checklist-buffer-desc": "Defina um tempo entre consultas para preparação",
+			"checklist-cancel-policy": "Configurar política de cancelamento",
+			"checklist-cancel-desc": "Defina como clientes podem cancelar ou remarcar",
+			"checklist-calendar-sync": "Sincronizar com sua agenda existente",
+			"checklist-calendar-desc": "Conecte sua agenda para evitar conflitos",
+			"help-title": "Precisa de ajuda?",
+			"help-text": "O Júpiter pode te ajudar a completar sua configuração",
+			"help-cta": "Falar com o Júpiter"
+		},
+		"google-calendar": {
+			"permissions-intro": "Vamos conectar sua Google Agenda com segurança para:",
+			"permission-1": "Ler seus horários ocupados",
+			"permission-2": "Evitar agendamentos duplicados",
+			"permission-3": "Manter tudo sincronizado",
+			"privacy-note": "Nós nunca editamos ou excluímos eventos sem sua permissão.",
+			"back": "← Voltar",
+			"continue": "Continuar",
+			"success-line1": "Perfeito! 🎉",
+			"success-line2": "Sua Google Agenda está conectada.",
+			"success-line3": "Vou bloquear automaticamente os horários em que você já estiver ocupado.",
+			"next-choice": "Você gostaria de:",
+			"chip-use-existing": "Usar minha agenda atual como disponibilidade",
+			"chip-define-hours": "Definir horários de trabalho específicos"
+		},
+		"errors": {
+			"network": "Algo deu errado. Vamos tentar de novo.",
+			"retry": "Tentar novamente",
+			"google-oauth-fail": "Não consegui conectar à Google Agenda. Tente novamente ou configure manualmente.",
+			"google-oauth-cancel": "Sem problema! Você pode conectar sua agenda depois. Vamos configurar manualmente.",
+			"save-fail": "Não consegui salvar sua disponibilidade. Tente novamente.",
+			"session-timeout": "Parece que você se ausentou. Seu progresso foi salvo — continue de onde parou.",
+			"empty-days": "Selecione pelo menos um dia de atendimento para continuar.",
+			"invalid-time-range": "O horário final deve ser depois do horário inicial.",
+			"invalid-input": "Não entendi bem. Pode tentar de novo?",
+			"ai-fallback": "Obrigado! Deixa eu processar isso para você.",
+			"ai-thinking": "Pensando...",
+			"no-timezone": "Não consegui detectar seu fuso horário automaticamente. Por favor, selecione abaixo.",
+			"publish-success": "Tudo certo! Sua disponibilidade está no ar.",
+			"publish-redirect": "Redirecionando para seu painel..."
 		}
 	}
 }

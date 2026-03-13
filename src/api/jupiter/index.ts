@@ -3,8 +3,8 @@ import apiClient from '../axios-instance';
 export type ParseField = 'working-days' | 'time-range' | 'session-duration';
 
 export type ParseInputResult =
-	| { valid: true; parsed: string[] }
-	| { valid: true; parsed: string }
+	| { parsed: string[], valid: true; }
+	| { parsed: string, valid: true; }
 	| { valid: false };
 
 export const parseJupiterInput = async (
@@ -19,11 +19,11 @@ export const parseJupiterInput = async (
 };
 
 export interface JupiterPublishPayload {
-	workingDays: string[];
-	timeRange: string;
 	sessionDuration: string;
 	sessionType: string;
+	timeRange: string;
 	timezone: string;
+	workingDays: string[];
 }
 
 export const generateJupiterAvailability = async (

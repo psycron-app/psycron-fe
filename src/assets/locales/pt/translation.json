@@ -543,7 +543,8 @@
       "msg1": "Olá! Eu sou a Júpiter, sua assistente de agendamento via IA. Estou aqui para te ajudar a configurar sua disponibilidade de forma simples e natural.",
       "msg2": "Vamos começar configurando sua agenda. Como você prefere?",
       "chip-google": "Conectar Google Agenda",
-      "chip-manual": "Criar manualmente"
+      "chip-manual": "Criar manualmente",
+      "google-already-connected": "Sua Google Agenda já está conectada! Você gostaria de importar sua agenda dela?"
     },
     "working-days": {
       "response": "Ótimo! Em quais dias você costuma atender seus clientes?",
@@ -640,7 +641,11 @@
       "success-line3": "Vou bloquear automaticamente os horários em que você já estiver ocupado.",
       "next-choice": "Você gostaria de:",
       "chip-use-existing": "Usar minha agenda atual como disponibilidade",
-      "chip-define-hours": "Definir horários de trabalho específicos"
+      "chip-define-hours": "Definir horários de trabalho específicos",
+      "define-hours-fallback": "Entendido! A importação do Google Agenda estará disponível em breve. Por enquanto, vamos definir seus horários manualmente.",
+      "importing": "Um momento — estou importando sua agenda do Google Agenda...",
+      "imported": "Pronto! Encontrei seus dias e horários de trabalho. Só mais algumas configurações.",
+      "import-failed": "Não consegui ler sua agenda. Vamos definir seus horários de trabalho manualmente."
     },
     "errors": {
       "network": "Algo deu errado. Vamos tentar de novo.",

@@ -2,9 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { getGoogleCalendarConnectUrl } from '@psycron/api/auth';
+import type { IAvailabilityRecord } from '@psycron/api/availability/index.types';
 import { generateJupiterAvailability } from '@psycron/api/jupiter';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { AVAILABILITYGENERATE, AVAILABILITYPATH } from '@psycron/pages/urls';
+import { useQueryClient } from '@tanstack/react-query';
 
 import type {
 	JupiterAnswers,
@@ -12,7 +14,7 @@ import type {
 	JupiterStep,
 } from './JupiterConversation.types';
 
-const STORAGE_KEY = 'jupiter-flow';
+export const STORAGE_KEY = 'jupiter-flow';
 
 const VALID_SESSION_TYPE_KEYS = new Set(['chip-online', 'chip-in-person', 'chip-both']);
 
@@ -64,10 +66,11 @@ const CANONICAL_TO_CHIP: Record<string, string> = {
 	WEDNESDAY: 'chip-wed',
 };
 
-export const useJupiterFlow = () => {
+export const useJupiterFlow = (initialAnswers?: JupiterAnswers) => {
 	const { t, i18n } = useTranslation();
 	const navigate = useNavigate();
 	const { showAlert } = useAlert();
+	const queryClient = useQueryClient();
 
 	const saved = useMemo(() => loadSaved(), []);
 
@@ -79,7 +82,9 @@ export const useJupiterFlow = () => {
 	const [step, setStep] = useState<JupiterStep>(
 		isCalendarConnected ? 'google-success' : (saved?.step ?? 'calendar-choice')
 	);
-	const [answers, setAnswers] = useState<JupiterAnswers>(saved?.answers ?? {});
+	const [answers, setAnswers] = useState<JupiterAnswers>(
+		initialAnswers ?? saved?.answers ?? {}
+	);
 	const [messages, setMessages] = useState<JupiterMessage[]>([]);
 	const [isPublishing, setIsPublishing] = useState(false);
 	const [workingDaysKey, setWorkingDaysKey] = useState(0);
@@ -296,7 +301,7 @@ export const useJupiterFlow = () => {
 
 		setIsPublishing(true);
 		try {
-			await generateJupiterAvailability({
+			const { availabilityId } = await generateJupiterAvailability({
 				workingDays: answers.workingDays,
 				timeRange: answers.timeRange,
 				sessionDuration: answers.sessionDuration,
@@ -304,6 +309,14 @@ export const useJupiterFlow = () => {
 				timezone: answers.timezone,
 			});
 			localStorage.removeItem(STORAGE_KEY);
+			queryClient.setQueryData<IAvailabilityRecord>(['availability'], {
+				availabilityId,
+				sessionDuration: answers.sessionDuration!,
+				sessionType: answers.sessionType!,
+				timeRange: answers.timeRange!,
+				timezone: answers.timezone!,
+				workingDays: answers.workingDays!,
+			});
 			showAlert({ message: t('jupiter.post-publish.success-toast'), severity: 'success' });
 			showAlert({ message: t('jupiter.post-publish.welcome-toast'), severity: 'success' });
 			navigate(`/${i18n.language}/${AVAILABILITYPATH}`);
@@ -312,7 +325,7 @@ export const useJupiterFlow = () => {
 		} finally {
 			setIsPublishing(false);
 		}
-	}, [answers, addBotMessage, i18n.language, navigate, showAlert, t]);
+	}, [answers, addBotMessage, i18n.language, navigate, queryClient, showAlert, t]);
 
 	const handleReset = useCallback(() => {
 		localStorage.removeItem(STORAGE_KEY);

@@ -5,7 +5,7 @@ import { JupiterScene } from './jupiter-scene/JupiterScene';
 import {
 	CharacterWrapper,
 	GradientText,
-	GreettingText,
+	GreetingText,
 	StartButton,
 	SubtitleText,
 	TitleText,
@@ -26,9 +26,9 @@ export const JupiterWelcome = ({ onStart }: JupiterWelcomeProps) => {
 			</CharacterWrapper>
 
 			<TitleText>
-				<GreettingText>
+				<GreetingText>
 					{t('jupiter.welcome.title-line1')}
-				</GreettingText>
+				</GreetingText>
 				<Box display='flex' gap={1}>
 					<GradientText>
 						{t('jupiter.welcome.title-line2')}

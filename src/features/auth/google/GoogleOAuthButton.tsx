@@ -1,4 +1,3 @@
-import { useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { capture } from '@psycron/analytics/posthog/events';
 import { PostHogEvent } from '@psycron/analytics/posthog/types';
@@ -19,21 +18,17 @@ export const GoogleOAuthButton = ({
 }: GoogleOAuthButtonProps) => {
 	const { t } = useTranslation();
 
-	const stayConnected = useWatch({ name: 'stayConnected' }) as
-		| boolean
-		| undefined;
-
 	const onClick = (): void => {
 		capture(PostHogEvent.AuthGoogleOAuthClicked, {
 			intent,
 			audience,
 			locale,
-			stay_connected: Boolean(stayConnected),
+			stay_connected: true,
 			area: audience === 'worker' ? 'backoffice' : 'therapist',
 		});
 
 		startGoogleOAuth({
-			stayConnected: Boolean(stayConnected),
+			stayConnected: true,
 			locale,
 			intent,
 			audience,

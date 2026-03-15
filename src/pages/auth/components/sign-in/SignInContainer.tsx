@@ -7,7 +7,7 @@ import { useAuth } from '@psycron/context/user/auth/UserAuthenticationContext';
 const defaultValues: ISignInForm = {
 	email: '',
 	password: '',
-	stayConnected: false,
+	stayConnected: true,
 };
 
 export const SignInContainer = () => {

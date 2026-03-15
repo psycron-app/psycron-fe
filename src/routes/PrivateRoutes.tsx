@@ -1,3 +1,4 @@
+import { AvailabilitySettings } from '@psycron/pages/availability/AvailabilitySettings';
 import { GenerateAvailability } from '@psycron/pages/availability/GenerateAvailability';
 import { Dashboard } from '@psycron/pages/dashboard/Dashboard';
 import {
@@ -5,6 +6,7 @@ import {
 	// APPOINTMENTS,
 	// AVAILABILITY,
 	AVAILABILITYGENERATE,
+	AVAILABILITYPATH,
 	CHANGEPASSWORD,
 	DASHBOARD,
 	EDITUSER,
@@ -28,7 +30,7 @@ const privateRoutes = [
 	{ path: EDITUSER, element: <EditUser /> },
 	{ path: EDITUSERBYSESSION, element: <EditUser /> },
 	{ path: CHANGEPASSWORD, element: <EditPassword /> },
-	{ path: 'availability', element: <div>this is the page</div> },
+	{ path: AVAILABILITYPATH, element: <AvailabilitySettings /> },
 
 	// { path: APPOINTMENTS, element: <AppointmentPage /> },
 	{ path: AVAILABILITYGENERATE, element: <GenerateAvailability /> },

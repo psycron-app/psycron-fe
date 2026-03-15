@@ -1,4 +1,4 @@
-import type { ChatMessageRole } from '@psycron/api/openai/index.types';
+export type ChatMessageRole = 'assistant' | 'system' | 'user';
 
 export interface IChatMessage {
 	bot?: boolean;

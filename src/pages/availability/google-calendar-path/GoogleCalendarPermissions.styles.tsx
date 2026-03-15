@@ -1,10 +1,11 @@
-import { Box, Button, styled, Typography } from '@mui/material';
-import { palette } from '@psycron/theme/palette/palette.theme';
+import { Box, styled, Typography } from '@mui/material';
+import { Button } from '@psycron/components/button/Button';
+import { hexToRgba, palette } from '@psycron/theme/palette/palette.theme';
 import { spacing } from '@psycron/theme/spacing/spacing.theme';
 
 export const PermissionsCard = styled(Box)`
-	background-color: rgba(139, 92, 246, 0.06);
-	border: 1px solid rgba(139, 92, 246, 0.15);
+	background-color: ${hexToRgba(palette.brand.purple, 0.06)};
+	border: 1px solid ${hexToRgba(palette.brand.purple, 0.15)};
 	border-radius: 16px;
 	padding: ${spacing.mediumSmall};
 	max-width: 400px;
@@ -63,25 +64,25 @@ export const ButtonRow = styled(Box)`
 
 export const BackButton = styled(Button)`
 	border-radius: 20px;
-	padding: 8px 16px;
+	padding: ${spacing.xs} ${spacing.small};
 	font-size: 13px;
 	font-weight: 500;
 	text-transform: none;
 	color: ${palette.text.secondary};
 
 	&:hover {
-		background-color: rgba(0, 0, 0, 0.04);
+		background-color: ${hexToRgba(palette.text.primary, 0.04)};
 	}
 `;
 
 export const ContinueBtn = styled(Button)`
 	border-radius: 20px;
-	padding: 8px 20px;
+	padding: ${spacing.xs} ${spacing.mediumSmall};
 	font-size: 14px;
 	font-weight: 600;
 	text-transform: none;
 	background-color: ${palette.brand.purple};
-	color: #fff;
+	color: ${palette.background.default};
 	flex: 1;
 
 	&:hover {

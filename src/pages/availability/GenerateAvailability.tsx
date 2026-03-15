@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
 
 import { JupiterConversation } from './jupiter-conversation/JupiterConversation';
+import { STORAGE_KEY } from './jupiter-conversation/useJupiterFlow';
 import { JupiterWelcome } from './jupiter-welcome/JupiterWelcome';
 import { GenerateAvailabilityContentWrapper } from './GenerateAvailability.styles';
 
@@ -9,7 +10,7 @@ type JupiterPhase = 'welcome' | 'conversation';
 
 const hasSavedFlow = (): boolean => {
 	try {
-		return !!localStorage.getItem('jupiter-flow');
+		return !!localStorage.getItem(STORAGE_KEY);
 	} catch {
 		return false;
 	}

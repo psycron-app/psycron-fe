@@ -669,5 +669,12 @@
       "SATURDAY": "Saturday",
       "SUNDAY": "Sunday"
     }
+  },
+  "availability": {
+    "settings": {
+      "live-alert": "Your availability is now live. Clients can start booking sessions with you right away.",
+      "page-title": "Availability",
+      "talk-to-jupiter": "Edit with Jupiter"
+    }
   }
 }

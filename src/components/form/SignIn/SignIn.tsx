@@ -30,11 +30,13 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 		register,
 		handleSubmit,
 		watch,
+		setValue,
 		formState: { errors },
 	} = useFormContext<ISignInForm>();
 
 	const email = watch('email');
 	const password = watch('password');
+	const stayConnected = watch('stayConnected');
 
 	const canSubmit =
 		Boolean(email?.trim()) &&
@@ -89,7 +91,8 @@ export const SignIn = ({ onSubmit }: SignInFormTypes) => {
 					<SignInConsentWrapper>
 						<Checkbox
 							labelKey={'components.form.keep-loggedin'}
-							register={register('stayConnected')}
+							checked={stayConnected ?? true}
+							onChange={(e) => setValue('stayConnected', e.target.checked)}
 						/>
 						<Link
 							to={REQPASSRESET}

@@ -86,6 +86,6 @@ export const StartButton = styled(Button)`
 	}
 `;
 
-export const GreettingText = styled(Text)`
+export const GreetingText = styled(Text)`
 	font-size: 32px;
 `;

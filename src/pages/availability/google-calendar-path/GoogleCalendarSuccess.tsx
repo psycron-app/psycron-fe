@@ -34,32 +34,32 @@ export const GoogleCalendarSuccess = ({
 	return (
 		<>
 			<BotMessageGroup>
-				<IconRow>
-					<BotBubble>
+				<IconRow showIcon={false}>
+					<BotBubble isFirst={false}>
 						{t('jupiter.google-calendar.success-line1')}
 					</BotBubble>
 				</IconRow>
 			</BotMessageGroup>
 
 			<BotMessageGroup>
-				<IconRow>
-					<BotBubble>
+				<IconRow showIcon={false}>
+					<BotBubble isFirst={false}>
 						{t('jupiter.google-calendar.success-line2')}
 					</BotBubble>
 				</IconRow>
 			</BotMessageGroup>
 
 			<BotMessageGroup>
-				<IconRow>
-					<BotBubble>
+				<IconRow showIcon={false}>
+					<BotBubble isFirst={false}>
 						{t('jupiter.google-calendar.success-line3')}
 					</BotBubble>
 				</IconRow>
 			</BotMessageGroup>
 
 			<BotMessageGroup>
-				<IconRow>
-					<BotBubble>
+				<IconRow showIcon={false}>
+					<BotBubble isFirst={false}>
 						{t('jupiter.google-calendar.next-choice')}
 					</BotBubble>
 				</IconRow>

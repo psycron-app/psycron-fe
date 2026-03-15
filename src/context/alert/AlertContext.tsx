@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from 'react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 import { Alert, Snackbar } from '@mui/material';
 
 import type { AlertContextProps, IAlertProps } from './AlertContext.types';
@@ -15,32 +15,52 @@ export const useAlert = () => {
 };
 
 export const AlertProvider: FC<{ children: ReactNode }> = ({ children }) => {
-	const [alert, setAlert] = useState<IAlertProps | null>(null);
-	const [open, setOpen] = useState<boolean>(false);
+	const [queue, setQueue] = useState<IAlertProps[]>([]);
+	const [current, setCurrent] = useState<IAlertProps | null>(null);
+	const [open, setOpen] = useState(false);
 
-	const showAlert = ({ message, severity, resetCallback }: IAlertProps) => {
-		setAlert({ message, severity, resetCallback });
-		setOpen(true);
-	};
-
-	const handleClose = () => {
-		setOpen(false);
-		if (alert?.resetCallback) {
-			return alert.resetCallback();
+	// Whenever the queue has items and nothing is shown, pop the next alert
+	useEffect(() => {
+		if (!open && !current && queue.length > 0) {
+			const [next, ...rest] = queue;
+			setQueue(rest);
+			setCurrent(next);
+			setOpen(true);
 		}
-	};
+	}, [open, current, queue]);
+
+	const showAlert = useCallback(({ message, severity, resetCallback }: IAlertProps) => {
+		setQueue((prev) => [...prev, { message, severity, resetCallback }]);
+	}, []);
+
+	const handleClose = useCallback(() => {
+		setOpen(false);
+		if (current?.resetCallback) {
+			current.resetCallback();
+		}
+	}, [current]);
+
+	// After the exit animation, clear current so the next queued alert can show
+	const handleExited = useCallback(() => {
+		setCurrent(null);
+	}, []);
 
 	return (
 		<AlertContext.Provider value={{ showAlert }}>
 			{children}
-			<Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-				{alert && (
+			<Snackbar
+				open={open}
+				autoHideDuration={6000}
+				onClose={handleClose}
+				TransitionProps={{ onExited: handleExited }}
+			>
+				{current && (
 					<Alert
 						onClose={handleClose}
-						severity={alert.severity}
+						severity={current.severity}
 						sx={{ width: '100%' }}
 					>
-						{alert.message}
+						{current.message}
 					</Alert>
 				)}
 			</Snackbar>

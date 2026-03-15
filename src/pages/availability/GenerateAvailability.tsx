@@ -1,22 +1,43 @@
-import { AnimatedBackground } from '@psycron/components/animated-background/AnimatedBackground';
-import { ChatMessageList } from '@psycron/components/chat/message-list/ChatMessageList';
-import { Prompt } from '@psycron/components/chat/prompt/Prompt';
-import { useAvailabilityAssistant } from '@psycron/hooks/availability/useAvailabilityAssistant';
+import { useState } from 'react';
 import { PageLayout } from '@psycron/layouts/app/pages-layout/PageLayout';
 
+import { JupiterConversation } from './jupiter-conversation/JupiterConversation';
+import { STORAGE_KEY } from './jupiter-conversation/useJupiterFlow';
+import { JupiterWelcome } from './jupiter-welcome/JupiterWelcome';
 import { GenerateAvailabilityContentWrapper } from './GenerateAvailability.styles';
 
+type JupiterPhase = 'welcome' | 'conversation';
+
+const hasSavedFlow = (): boolean => {
+	try {
+		return !!localStorage.getItem(STORAGE_KEY);
+	} catch {
+		return false;
+	}
+};
+
 export const GenerateAvailability = () => {
-	const { messages, sendMessage } = useAvailabilityAssistant();
-	// TODO: Remove debug log - console.log('🚀 ~ GenerateAvailability ~ messages:', messages);
+	const [phase, setPhase] = useState<JupiterPhase>(
+		hasSavedFlow() ? 'conversation' : 'welcome'
+	);
+
+	const handleStart = () => {
+		setPhase('conversation');
+	};
+
+	if (phase === 'welcome') {
+		return (
+			<PageLayout title='' isLoading={false}>
+				<JupiterWelcome onStart={handleStart} />
+			</PageLayout>
+		);
+	}
 
 	return (
-		<PageLayout title={'Generate your Availability'} isLoading={false}>
+		<PageLayout title='' isLoading={false}>
 			<GenerateAvailabilityContentWrapper>
-				<ChatMessageList messages={messages} />
-				<AnimatedBackground />
+				<JupiterConversation />
 			</GenerateAvailabilityContentWrapper>
-			<Prompt onSubmit={sendMessage} />
 		</PageLayout>
 	);
 };

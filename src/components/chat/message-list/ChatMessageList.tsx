@@ -1,15 +1,12 @@
 import { useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { useAvailabilityAssistant } from '@psycron/hooks/availability/useAvailabilityAssistant';
 
 import { ChatMessage } from '../message/ChatMessage';
 
 import { ChatMessageListWrapper, OuterBox } from './ChatMessageList.styles';
 import type { IChatMessageList } from './ChatMessageList.types';
 
-export const ChatMessageList = ({ messages }: IChatMessageList) => {
-	const { isSending } = useAvailabilityAssistant();
-	// TODO: Remove debug log - console.log('isSending:', isSending);
+export const ChatMessageList = ({ messages, isSending = false }: IChatMessageList) => {
 	const bottomRef = useRef<HTMLDivElement | null>(null);
 
 	useEffect(() => {

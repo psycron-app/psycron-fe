@@ -88,6 +88,17 @@ export const verifyEmail = async (
 	return data;
 };
 
+export const getGoogleCalendarConnectUrl = async (params: {
+	locale: string;
+	returnTo: string;
+}): Promise<{ url: string }> => {
+	const response = await apiClient.get<{ url: string }>(
+		'/auth/google/calendar',
+		{ params }
+	);
+	return response.data;
+};
+
 /**
  * @deprecated getEncryptionKey removed for security (P1.3)
  * The encryption key endpoint was removed from the backend.

@@ -1,9 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { getGoogleCalendarConnectUrl } from '@psycron/api/auth';
+import { getGoogleCalendarConnectUrl, getGoogleCalendarStatus } from '@psycron/api/auth';
 import type { IAvailabilityRecord } from '@psycron/api/availability/index.types';
-import { generateJupiterAvailability } from '@psycron/api/jupiter';
+import {
+	generateJupiterAvailability,
+	importGoogleCalendarSchedule,
+} from '@psycron/api/jupiter';
 import { useAlert } from '@psycron/context/alert/AlertContext';
 import { AVAILABILITYGENERATE, AVAILABILITYPATH } from '@psycron/pages/urls';
 import { useQueryClient } from '@tanstack/react-query';
@@ -87,6 +90,7 @@ export const useJupiterFlow = (initialAnswers?: JupiterAnswers) => {
 	);
 	const [messages, setMessages] = useState<JupiterMessage[]>([]);
 	const [isPublishing, setIsPublishing] = useState(false);
+	const [isImporting, setIsImporting] = useState(false);
 	const [workingDaysKey, setWorkingDaysKey] = useState(0);
 
 	const hasInitialized = useRef(false);
@@ -172,10 +176,23 @@ export const useJupiterFlow = (initialAnswers?: JupiterAnswers) => {
 	// ─── Step handlers ─────────────────────────────────────────────────────────
 
 	const handleCalendarChoice = useCallback(
-		(key: string) => {
+		async (key: string) => {
 			if (key === 'google') {
 				addUserMessage(t('jupiter.calendar-choice.chip-google'));
 				setAnswers((prev) => ({ ...prev, calendarChoice: 'google' }));
+
+				try {
+					const status = await getGoogleCalendarStatus();
+					if (status.connected) {
+						// Already connected — skip OAuth, go straight to google-success
+						addBotMessage(t('jupiter.calendar-choice.google-already-connected'));
+						setTimeout(() => setStep('google-success'), 300);
+						return;
+					}
+				} catch {
+					// Status check failed — fall through to normal OAuth flow
+				}
+
 				setStep('google-permissions');
 			} else {
 				addUserMessage(t('jupiter.calendar-choice.chip-manual'));
@@ -183,7 +200,7 @@ export const useJupiterFlow = (initialAnswers?: JupiterAnswers) => {
 				advance('jupiter.working-days.response', 'working-days', 500);
 			}
 		},
-		[addUserMessage, advance, t]
+		[addBotMessage, addUserMessage, advance, t]
 	);
 
 	const handleWorkingDays = useCallback(
@@ -358,23 +375,50 @@ export const useJupiterFlow = (initialAnswers?: JupiterAnswers) => {
 	const handleGoogleBack = useCallback(() => setStep('calendar-choice'), []);
 
 	const handleGooglePostConnect = useCallback(
-		(key: string) => {
+		async (key: string) => {
+			addUserMessage(
+				key === 'chip-use-existing'
+					? t('jupiter.google-calendar.chip-use-existing')
+					: t('jupiter.google-calendar.chip-define-hours')
+			);
+
 			if (key === 'chip-use-existing') {
-				addUserMessage(t('jupiter.google-calendar.chip-use-existing'));
-				// TODO: import from Google Calendar
-				setStep('preview');
+				setIsImporting(true);
+				addBotMessage(t('jupiter.google-calendar.importing'));
+
+				const schedule = await importGoogleCalendarSchedule();
+
+				setIsImporting(false);
+
+				if (schedule && schedule.workingDays.length > 0) {
+					const timeRange = `${schedule.startTime} - ${schedule.endTime}`;
+					setAnswers((prev) => ({
+						...prev,
+						workingDays: schedule.workingDays,
+						timeRange,
+					}));
+					setTimeout(() => {
+						addBotMessage(t('jupiter.google-calendar.imported'), false);
+						setStep('session-duration');
+					}, 300);
+				} else {
+					setTimeout(() => {
+						addBotMessage(t('jupiter.google-calendar.import-failed'), false);
+						setStep('working-days');
+					}, 300);
+				}
 			} else {
-				addUserMessage(t('jupiter.google-calendar.chip-define-hours'));
 				advance('jupiter.working-days.response', 'working-days');
 			}
 		},
-		[addUserMessage, advance, t]
+		[addBotMessage, addUserMessage, advance, setAnswers, t]
 	);
 
 	return {
 		step,
 		answers,
 		messages,
+		isImporting,
 		isPublishing,
 		workingDaysKey,
 		detectedTimezone,

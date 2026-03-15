@@ -544,7 +544,8 @@
       "msg1": "Hi! I’m Júpiter, your scheduling assistant. I’m here to help you set up your availability in a way that feels natural and effortless.",
       "msg2": "Let’s start by setting up your calendar. How would you like to begin?",
       "chip-google": "Connect Google Calendar",
-      "chip-manual": "Create manually"
+      "chip-manual": "Create manually",
+      "google-already-connected": "Your Google Calendar is already connected! Would you like to import your schedule from it?"
     },
     "working-days": {
       "response": "Great! Which days do you usually work with your clients?",
@@ -641,7 +642,11 @@
       "success-line3": "I’ll automatically block times when you’re already busy.",
       "next-choice": "Would you like to:",
       "chip-use-existing": "Use my existing schedule as availability",
-      "chip-define-hours": "Define specific working hours"
+      "chip-define-hours": "Define specific working hours",
+      "define-hours-fallback": "Got it! Google Calendar import is coming soon. Let’s set your working hours manually for now.",
+      "importing": "Give me a moment — I’m importing your schedule from Google Calendar...",
+      "imported": "Done! I found your working days and hours. Just a couple more things to set up.",
+      "import-failed": "I couldn’t read your calendar schedule. Let’s set your working hours manually."
     },
     "errors": {
       "network": "Something went wrong. Let’s try that again.",

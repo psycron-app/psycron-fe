@@ -35,3 +35,21 @@ export const generateJupiterAvailability = async (
 	);
 	return response.data;
 };
+
+export interface GoogleCalendarSchedule {
+	endTime: string;
+	startTime: string;
+	workingDays: string[];
+}
+
+export const importGoogleCalendarSchedule =
+	async (): Promise<GoogleCalendarSchedule | null> => {
+		try {
+			const response = await apiClient.get<GoogleCalendarSchedule>(
+				'/jupiter/availability/google-calendar/import'
+			);
+			return response.data;
+		} catch {
+			return null;
+		}
+	};

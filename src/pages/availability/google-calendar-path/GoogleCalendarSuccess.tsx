@@ -10,10 +10,12 @@ import {
 } from '../jupiter-conversation/JupiterConversation.styles';
 
 interface GoogleCalendarSuccessProps {
+	isImporting?: boolean;
 	onSelect: (key: string) => void;
 }
 
 export const GoogleCalendarSuccess = ({
+	isImporting = false,
 	onSelect,
 }: GoogleCalendarSuccessProps) => {
 	const { t } = useTranslation();
@@ -65,12 +67,14 @@ export const GoogleCalendarSuccess = ({
 				</IconRow>
 			</BotMessageGroup>
 
-			<ChipsInline>
-				<SingleSelectChips
-					options={postConnectOptions}
-					onSelect={onSelect}
-				/>
-			</ChipsInline>
+			{!isImporting && (
+				<ChipsInline>
+					<SingleSelectChips
+						options={postConnectOptions}
+						onSelect={onSelect}
+					/>
+				</ChipsInline>
+			)}
 		</>
 	);
 };

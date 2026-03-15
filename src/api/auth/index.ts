@@ -99,6 +99,17 @@ export const getGoogleCalendarConnectUrl = async (params: {
 	return response.data;
 };
 
+export const getGoogleCalendarStatus = async (): Promise<{
+	connected: boolean;
+	syncEnabled: boolean;
+}> => {
+	const response = await apiClient.get<{
+		connected: boolean;
+		syncEnabled: boolean;
+	}>('/auth/google/calendar/status');
+	return response.data;
+};
+
 /**
  * @deprecated getEncryptionKey removed for security (P1.3)
  * The encryption key endpoint was removed from the backend.

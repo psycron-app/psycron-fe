@@ -43,6 +43,7 @@ export const JupiterConversation = () => {
 		step,
 		answers,
 		messages,
+		isImporting,
 		isPublishing,
 		workingDaysKey,
 		detectedTimezone,
@@ -361,7 +362,12 @@ export const JupiterConversation = () => {
 				);
 
 			case 'google-success':
-				return <GoogleCalendarSuccess onSelect={handleGooglePostConnect} />;
+				return (
+					<GoogleCalendarSuccess
+						isImporting={isImporting}
+						onSelect={handleGooglePostConnect}
+					/>
+				);
 
 			case 'done':
 				return null;
